@@ -8,7 +8,7 @@ lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
   .settings(
     majorVersion                     := 0,
-    libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test
+    libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test ++ AppDependencies.it
   )
   .settings(publishingSettings: _*)
   .configs(IntegrationTest)
