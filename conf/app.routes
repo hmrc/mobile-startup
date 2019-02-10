@@ -1,3 +1,5 @@
 # microservice specific routes
 
-GET        /hello-world             uk.gov.hmrc.mobilestartup.controllers.MicroserviceHelloWorld.hello
+GET        /hello-world                         uk.gov.hmrc.mobilestartup.controllers.LiveStartupController.hello
+
+GET        /mobile-startup/:nino/startup        uk.gov.hmrc.mobilestartup.controllers.LiveStartupController.startup(nino: String)

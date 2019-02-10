@@ -16,23 +16,24 @@
 
 package uk.gov.hmrc.mobilestartup.controllers
 
+import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Matchers, WordSpec}
 import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class MicroserviceHelloWorldControllerSpec extends WordSpec with Matchers {
+class LiveStartupControllerSpec extends WordSpec with Matchers with MockFactory {
 
   val fakeRequest = FakeRequest("GET", "/")
 
   "GET /" should {
     "return 200" in {
-      val controller = new MicroserviceHelloWorld(stubControllerComponents())
+      val controller = new LiveStartupController(mock[GenericConnector], stubControllerComponents())
       val result     = controller.hello()(fakeRequest)
       status(result) shouldBe Status.OK
     }
   }
-
 }
