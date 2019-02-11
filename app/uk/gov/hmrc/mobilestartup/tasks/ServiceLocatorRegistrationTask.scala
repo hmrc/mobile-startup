@@ -31,7 +31,7 @@ class ServiceLocatorRegistrationTask @Inject()(actorSystem: ActorSystem, connect
                                               (implicit executionContext: ExecutionContext) {
   actorSystem.scheduler.scheduleOnce(delay = FiniteDuration(10, SECONDS)) {
     register
-    ()
+    () // explicitly return unit to keep compiler happy
   }
 
   def register: Future[Boolean] = {

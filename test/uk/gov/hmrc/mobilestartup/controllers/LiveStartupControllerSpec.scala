@@ -19,20 +19,28 @@ package uk.gov.hmrc.mobilestartup.controllers
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Matchers, WordSpec}
 import play.api.http.Status
+import play.api.libs.json.JsObject
+import play.api.libs.json.Json._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.mobilestartup.services.StartupService
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class LiveStartupControllerSpec extends WordSpec with Matchers with MockFactory {
 
-  val fakeRequest = FakeRequest("GET", "/")
+  private val fakeRequest = FakeRequest("GET", "/")
+  private val stubStartupService = new StartupService {
+    override def startup(nino: String, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[JsObject] =
+      Future.successful(obj())
+  }
 
   "GET /" should {
     "return 200" in {
-      val controller = new LiveStartupController(mock[GenericConnector], stubControllerComponents())
-      val result     = controller.hello()(fakeRequest)
+      val controller = new LiveStartupController(stubStartupService, stubControllerComponents())
+      val result     = controller.startup("nino", None)(fakeRequest)
       status(result) shouldBe Status.OK
     }
   }
