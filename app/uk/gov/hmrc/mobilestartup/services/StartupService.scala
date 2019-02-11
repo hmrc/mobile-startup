@@ -15,7 +15,7 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import cats.Monoid
+import cats.Semigroup
 import cats.implicits._
 import com.google.inject.ImplementedBy
 import javax.inject.Inject
@@ -36,26 +36,26 @@ trait StartupService {
 
 class LiveStartupService @Inject()(connector: GenericConnector)(implicit ec: ExecutionContext) extends StartupService {
 
-  implicit val jsonObjectMonoid: Monoid[JsObject] = new Monoid[JsObject] {
-    override def empty: JsObject = obj()
+  implicit val jsonObjectSemigroup: Semigroup[JsObject] = new Semigroup[JsObject] {
     override def combine(x: JsObject, y: JsObject): JsObject = x ++ y
   }
+
+  override def startup(nino: String, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[JsObject] =
+    callService("helpToSave")(mhtsStartup) |+|
+      callService("taxCreditRenewals")(tcrStartup(journeyId)) |+|
+      callService("taxSummary")(taxSummaryStartup(nino, TaxYear.current.currentYear, journeyId))
+
+  private def buildJourneyQueryParam(journeyId: Option[String]): String =
+    journeyId.fold("")(id => s"?journeyId=$id")
+
+  private def logJourneyId(journeyId: Option[String]) =
+    s"Native Error - ${journeyId.fold("no Journey id supplied")(id => id)}"
 
   private def callService(name: String)(f: => Future[Option[JsValue]]): Future[JsObject] =
     f.map { result =>
       val json: JsValue = result.getOrElse(obj())
       obj(name -> json)
     }
-
-  override def startup(nino: String, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[JsObject] =
-    List(
-      callService("helpToSave")(mhtsStartup),
-      callService("taxCreditRenewals")(tcrStartup(journeyId)),
-      callService("taxSummary")(taxSummaryStartup(nino, TaxYear.current.currentYear, journeyId))
-    ).foldMapM(identity)
-
-  def buildJourneyQueryParam(journeyId: Option[String]): String = journeyId.fold("")(id => s"?journeyId=$id")
-  def logJourneyId(journeyId:           Option[String]) = s"Native Error - ${journeyId.fold("no Journey id supplied")(id => id)}"
 
   private def mhtsStartup(implicit hc: HeaderCarrier): Future[Option[JsValue]] =
     connector
