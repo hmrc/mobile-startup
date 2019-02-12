@@ -22,6 +22,7 @@ import javax.inject.Inject
 import play.api.libs.json.JsValue
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.http._
+import uk.gov.hmrc.mobilestartup.config.WSHttpImpl
 import uk.gov.hmrc.play.http.ws.WSHttp
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,7 +33,7 @@ trait GenericConnector {
 }
 
 @Singleton
-class GenericConnectorImpl @Inject()(configuration: Configuration, wSHttp: WSHttp) extends GenericConnector {
+class GenericConnectorImpl @Inject()(configuration: Configuration, wSHttp: WSHttpImpl) extends GenericConnector {
 
   def protocol(serviceName: String): String = getServiceConfig(serviceName).getOptional[String]("protocol").getOrElse("https")
 
