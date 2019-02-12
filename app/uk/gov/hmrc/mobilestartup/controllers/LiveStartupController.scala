@@ -38,11 +38,10 @@ class LiveStartupController @Inject()(
 ) extends BackendBaseController
     with AuthorisedFunctions {
 
-  def startup(journeyId: Option[String]): Action[AnyContent] = Action.async { implicit request =>
-    withAuth { nino =>
-      service.startup(nino, journeyId).map(Ok(_))
+  def startup(journeyId: Option[String]): Action[AnyContent] =
+    Action.async { implicit request =>
+      withAuth(service.startup(_, journeyId).map(Ok(_)))
     }
-  }
 
   private def withAuth(f: String => Future[Result])(implicit hc: HeaderCarrier): Future[Result] = {
     lazy val ninoNotFoundOnAccount = new NinoNotFoundOnAccount
