@@ -16,22 +16,44 @@
 
 package uk.gov.hmrc.mobilestartup.controllers
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{Inject, Named, Singleton}
 import play.api.mvc._
+import uk.gov.hmrc.auth.core.retrieve.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, Enrolment}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.services.StartupService
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton()
 class LiveStartupController @Inject()(
-  service:                  StartupService,
-  val controllerComponents: ControllerComponents
+  service:                                             StartupService,
+  val controllerComponents:                            ControllerComponents,
+  override val authConnector:                          AuthConnector,
+  @Named("controllers.confidenceLevel") val confLevel: Int
 )(
   implicit ec: ExecutionContext
-) extends BackendBaseController {
+) extends BackendBaseController
+    with AuthorisedFunctions {
 
-  def startup(nino: String, journeyId: Option[String]): Action[AnyContent] = Action.async { implicit request =>
-    service.startup(nino, journeyId).map(Ok(_))
+  def startup(journeyId: Option[String]): Action[AnyContent] = Action.async { implicit request =>
+    withAuth { nino =>
+      service.startup(nino, journeyId).map(Ok(_))
+    }
+  }
+
+  private def withAuth(f: String => Future[Result])(implicit hc: HeaderCarrier): Future[Result] = {
+    lazy val ninoNotFoundOnAccount = new NinoNotFoundOnAccount
+    lazy val lowConfidenceLevel    = new AccountWithLowCL
+
+    authorised(Enrolment("HMRC-NI", Nil, "Activated", None))
+      .retrieve(nino and confidenceLevel) {
+        case Some(foundNino) ~ foundConfidenceLevel =>
+          if (foundNino.isEmpty) throw ninoNotFoundOnAccount
+          if (confLevel > foundConfidenceLevel.level) throw lowConfidenceLevel
+          f(foundNino)
+      }
   }
 }

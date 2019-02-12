@@ -23,11 +23,14 @@ import play.api.libs.json.JsObject
 import play.api.libs.json.Json._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
+import uk.gov.hmrc.auth.core.{AuthConnector, ConfidenceLevel}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.services.StartupService
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class LiveStartupControllerSpec extends WordSpec with Matchers with MockFactory {
 
@@ -37,10 +40,20 @@ class LiveStartupControllerSpec extends WordSpec with Matchers with MockFactory 
       Future.successful(obj())
   }
 
+  private def authConnector(stubbedRetrievalResult: Future[_]): AuthConnector = new AuthConnector {
+    def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
+      stubbedRetrievalResult.map(_.asInstanceOf[A])
+  }
+
   "GET /" should {
     "return 200" in {
-      val controller = new LiveStartupController(stubStartupService, stubControllerComponents())
-      val result     = controller.startup("nino", None)(fakeRequest)
+      val controller = new LiveStartupController(
+        stubStartupService,
+        stubControllerComponents(),
+        authConnector(Future.successful(new ~(Some("nino"), ConfidenceLevel.L200))),
+        200
+      )
+      val result = controller.startup(None)(fakeRequest)
       status(result) shouldBe Status.OK
     }
   }

@@ -1,3 +1,3 @@
 # microservice specific routes
 
-GET        /mobile-startup/:nino/startup        uk.gov.hmrc.mobilestartup.controllers.LiveStartupController.startup(nino: String, journeyId: Option[String])
+GET        /mobile-startup/startup        uk.gov.hmrc.mobilestartup.controllers.LiveStartupController.startup(journeyId: Option[String])
