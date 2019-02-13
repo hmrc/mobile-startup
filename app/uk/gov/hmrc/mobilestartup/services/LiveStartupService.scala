@@ -78,7 +78,7 @@ class LiveStartupService @Inject()(
 
   private def taxSummaryStartup(nino: String, year: Int, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[Option[JsValue]] =
     connector
-      .doGet("personal-income", s"/income/$nino/tax-summary/$year${buildJourneyQueryParam(journeyId)}", hc)
+      .doGet("mobile-paye", s"/nino/$nino/tax-year/$year/summary${buildJourneyQueryParam(journeyId)}", hc)
       .map(Some(_))
       .recover {
         case ex: Exception =>

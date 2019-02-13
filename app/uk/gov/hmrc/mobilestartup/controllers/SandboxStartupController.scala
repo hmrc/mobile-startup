@@ -16,13 +16,23 @@
 
 package uk.gov.hmrc.mobilestartup.controllers
 import javax.inject.Inject
+import play.api.libs.json.Json
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.api.sandbox.FileResource
+import uk.gov.hmrc.mobilestartup.services.LiveStartupService
+import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
 import scala.concurrent.ExecutionContext
 
 class SandboxStartupController @Inject()(
-
+  val controllerComponents: ControllerComponents,
+  service:                  LiveStartupService
 )(
-  implicit ec:ExecutionContext
-){
+  implicit ec: ExecutionContext
+) extends BackendBaseController
+    with FileResource {
 
+  def startup(journeyId: Option[String]): Action[AnyContent] = Action { _ =>
+    Ok(Json.parse(findResource("/sandbox/startup.json").getOrElse("{}")))
+  }
 }

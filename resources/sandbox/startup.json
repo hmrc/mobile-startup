@@ -1,0 +1,39 @@
+{
+  "taxSummary": {},
+  "taxCreditRenewals": {
+    "submissionsState": "open"
+  },
+  "feature": [
+    {
+      "name": "payAsYouEarnV2",
+      "enabled": false
+    },
+    {
+      "name": "ssoEnabled",
+      "enabled": false
+    }
+  ],
+  "helpToSave": {
+    "shuttering": {
+      "shuttered": false,
+      "title": "/",
+      "message": "/"
+    },
+    "supportFormEnabled": true,
+    "enabled": true,
+    "balanceEnabled": true,
+    "paidInThisMonthEnabled": true,
+    "firstBonusEnabled": true,
+    "savingRemindersEnabled": true,
+    "transactionsEnabled": true,
+    "savingsGoalsEnabled": true,
+    "infoUrl": "https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme",
+    "accessAccountUrl": "/",
+    "user": {
+      "state": "NotEnrolled"
+    }
+  },
+  "status": {
+    "code": "complete"
+  }
+}
