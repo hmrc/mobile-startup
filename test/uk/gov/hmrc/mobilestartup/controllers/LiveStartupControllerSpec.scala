@@ -50,7 +50,7 @@ class LiveStartupControllerSpec extends WordSpec with Matchers with MockFactory 
       val controller = new LiveStartupController(
         stubStartupService,
         stubControllerComponents(),
-        authConnector(Future.successful(new ~(Some("nino"), ConfidenceLevel.L200))),
+        authConnector(Future.successful(Some("nino"))),
         200
       )
       val result = controller.startup(None)(fakeRequest)
