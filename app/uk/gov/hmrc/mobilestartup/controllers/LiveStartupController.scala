@@ -18,9 +18,8 @@ package uk.gov.hmrc.mobilestartup.controllers
 
 import javax.inject.{Inject, Named, Singleton}
 import play.api.mvc._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals._
-import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, Enrolment}
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.services.StartupService
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
@@ -43,16 +42,16 @@ class LiveStartupController @Inject()(
       withAuth(service.startup(_, journeyId).map(Ok(_)))
     }
 
-  private def withAuth(f: String => Future[Result])(implicit hc: HeaderCarrier): Future[Result] = {
-    lazy val ninoNotFoundOnAccount = new NinoNotFoundOnAccount
-    lazy val lowConfidenceLevel    = new AccountWithLowCL
-
-    authorised(Enrolment("HMRC-NI", Nil, "Activated", None))
-      .retrieve(nino and confidenceLevel) {
-        case Some(foundNino) ~ foundConfidenceLevel =>
-          if (foundNino.isEmpty) throw ninoNotFoundOnAccount
-          if (confLevel > foundConfidenceLevel.level) throw lowConfidenceLevel
-          f(foundNino)
+  private def withAuth(f: String => Future[Result])(implicit hc: HeaderCarrier): Future[Result] =
+    authConnector
+      .authorise(ConfidenceLevel.L200, Retrievals.nino)
+      .flatMap {
+        case Some(nino) => f(nino)
+        case None       => Future.successful(Unauthorized("Authorization failure [user is not enrolled for NI]"))
       }
-  }
+      .recover {
+        case e: NoActiveSession        => Unauthorized(s"Authorisation failure [${e.reason}]")
+        case e: GrantAccessException   => Unauthorized(s"Authorisation failure [${e.message}]")
+        case e: AuthorisationException => Forbidden(s"Authorisation failure [${e.reason}]")
+      }
 }
