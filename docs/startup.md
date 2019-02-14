@@ -1,4 +1,4 @@
-Retrieve startup informaion
+Retrieve startup information
 ----
 
 
