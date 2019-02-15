@@ -64,7 +64,6 @@ case class VersionRange(
   *
   * All versions must have all 3 numbers, 1.0 is not supported for example
   *
-  * @throws IllegalArgumentException when an illegal format is used
   */
 object VersionRange {
   import scala.language.implicitConversions
