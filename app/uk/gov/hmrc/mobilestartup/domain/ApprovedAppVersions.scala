@@ -48,8 +48,8 @@ trait ValidateAppVersion extends ApprovedAppVersions {
 
   def upgrade(deviceVersion: DeviceVersion): Future[Boolean] = {
     val outsideValidRange = deviceVersion.os match {
-      case `iOS`   => appVersion.ios.excluded(Version(deviceVersion.version))
-      case Android => appVersion.android.excluded(Version(deviceVersion.version))
+      case `iOS`   => appVersion.ios.excluded(Version.fromString(deviceVersion.version))
+      case Android => appVersion.android.excluded(Version.fromString(deviceVersion.version))
     }
     Future.successful(outsideValidRange)
   }

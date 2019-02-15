@@ -12,10 +12,11 @@ object AppDependencies {
   )
 
   val test: Seq[ModuleID] = Seq(
-    "org.scalamock"     %% "scalamock" % "4.1.0" % "test",
-    "org.scalatest"     %% "scalatest" % "3.0.5" % "test",
-    "com.typesafe.play" %% "play-test" % current % "test",
-    "org.pegdown"       % "pegdown"    % "1.6.0" % "test, it"
+    "org.scalamock"     %% "scalamock"  % "4.1.0"  % "test",
+    "org.scalatest"     %% "scalatest"  % "3.0.5"  % "test",
+    "com.typesafe.play" %% "play-test"  % current  % "test",
+    "org.pegdown"       % "pegdown"     % "1.6.0"  % "test, it",
+    "org.scalacheck"    %% "scalacheck" % "1.14.0" % "test, it"
   )
 
   val it: Seq[ModuleID] = Seq(

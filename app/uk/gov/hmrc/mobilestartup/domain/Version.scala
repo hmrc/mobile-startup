@@ -67,7 +67,7 @@ case class VersionRange(
   */
 object VersionRange {
   import scala.language.implicitConversions
-  implicit def toVersion(v: String): Version = Version(v)
+  implicit def toVersion(v: String): Version = Version.fromString(v)
 
   val ValidFixedVersion:          Regex = """^\[(\d+\.\d+.\d+)\]""".r
   val ValidVersionRangeLeftOpen:  Regex = """^\(,?(\d+\.\d+.\d+)[\]\)]""".r
@@ -90,8 +90,7 @@ object Version {
 
   private def isAllDigits(x: String) = x forall Character.isDigit
 
-  def apply(st: String): Version = {
-
+  def fromString(st: String): Version = {
     val split = st.split("[-_]", 2)
     val vv    = toVer(split.lift(0).getOrElse("0"))
     val boq   = toBoq(split.lift(1))
@@ -122,6 +121,10 @@ object Version {
   }
 }
 
+/**
+  * We need to distinguish between string and numeric values of `buildOrQualifier` when
+  * comparing `Version`s.
+  */
 case class Version(major: Int, minor: Int, revision: Int, buildOrQualifier: Option[Either[Long, String]] = None) extends Comparable[Version] {
 
   def isBefore(version: Version): Boolean = this.compareTo(version) < 0
