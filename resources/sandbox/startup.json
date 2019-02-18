@@ -5,7 +5,7 @@
   },
   "feature": [
     {
-      "name": "payAsYouEarnV2",
+      "name": "payAsYouEarnOnDemand",
       "enabled": false
     },
     {
@@ -32,8 +32,5 @@
     "user": {
       "state": "NotEnrolled"
     }
-  },
-  "status": {
-    "code": "complete"
   }
 }

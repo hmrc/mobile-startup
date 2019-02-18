@@ -23,23 +23,21 @@ uses:
   types: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/types.raml
 
 /mobile-startup:
-  /{nino}:
-    /startup:
-      uriParameters:
-        nino:
-          description: The NINO for the individual.
-          type: string
-          example: NS123456B
-      get:
-        displayName: Get startup data
-        description: This endpoint retrieves the startup data for mobile apps.
-        is: [headers.acceptHeader]
-        (annotations.scope): "read:native-apps-api-orchestration"
-        securedBy: [ sec.oauth_2_0: { scopes: [ "read:native-apps-api-orchestration" ] } ]
-        responses:
-          200:
-            body:
-              application/json:
-                examples:
-                  example-1:
-                    value: !include examples/startup1.json
+  /startup:
+    get:
+      displayName: Get startup data
+      description: This endpoint retrieves the startup data that the mobile apps use to initialize themselves. The service
+                   will use the authentication token to identify the NINO for the user that using the app. The json response
+                   will contain keys for `helpToSave`, `taxCreditsRenewals` and `taxSummary`. The values for each of
+                   these is the json returned from the relevant service. The response will also contain a `features`
+                   key that references a set of feature flags.
+      is: [headers.acceptHeader]
+      (annotations.scope): "read:native-apps-api-orchestration"
+      securedBy: [ sec.oauth_2_0: { scopes: [ "read:native-apps-api-orchestration" ] } ]
+      responses:
+        200:
+          body:
+            application/json:
+              examples:
+                example-1:
+                  value: !include examples/startup-1.json
