@@ -40,4 +40,29 @@ uses:
             application/json:
               examples:
                 example-1:
-                  value: !include examples/startup-1.json
+                  value: !include examples/startup-example-1.json
+  /version-check
+    post:
+      displayName: Check if the user needs to update their app
+      description: The app can post its current version to this endpoint and the response will say whether the user
+                   must update to a new version of the app before they can use it. This provides a mechansim to do
+                   "forced upgrades" when something significant changes on the service side that breaks compatibility
+                   with older app versions.
+      body:
+        application/json:
+          examples:
+            example-1:
+              value: !include examples/version-check-body-example-1.json
+      (annotations.scope): "read:native-apps-api-orchestration"
+      securedBy: [ sec.oauth_2_0: { scopes: [ "read:native-apps-api-orchestration" ] } ]
+      queryParameters:
+        journeyId:
+          type: string
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              examples:
+                example-1:
+                  value: !include examples/version-check-example-1.json
