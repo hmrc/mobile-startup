@@ -18,9 +18,10 @@ package uk.gov.hmrc.mobilestartup
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{Matchers, WordSpecLike}
+import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.http.HeaderCarrier
 
-trait BaseSpec extends WordSpecLike with Matchers with MockFactory with ScalaFutures {
+trait BaseSpec extends WordSpecLike with Matchers with MockFactory with FutureAwaits with DefaultAwaitTimeout with OptionValues {
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 }

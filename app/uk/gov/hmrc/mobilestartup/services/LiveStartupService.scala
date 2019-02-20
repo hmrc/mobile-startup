@@ -15,7 +15,6 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import cats.Semigroup
 import cats.implicits._
 import javax.inject.Inject
 import play.api.Logger
@@ -34,9 +33,7 @@ class LiveStartupService @Inject()(
   implicit ec: ExecutionContext
 ) extends StartupService {
 
-  implicit val jsonObjectSemigroup: Semigroup[JsObject] = new Semigroup[JsObject] {
-    override def combine(x: JsObject, y: JsObject): JsObject = x ++ y
-  }
+
 
   override def startup(nino: String, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[JsObject] =
     callService("helpToSave")(mhtsStartup) |+|
