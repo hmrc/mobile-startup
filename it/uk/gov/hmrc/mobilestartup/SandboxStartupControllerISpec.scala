@@ -20,7 +20,7 @@ class SandboxStartupControllerISpec extends WordSpec with Matchers with ServiceS
 
       implicit val wsClient: WSClient = app.injector.instanceOf[WSClient]
 
-      val response = wsUrl("/mobile-startup/startup").addHttpHeaders(mobileHeader).get.futureValue
+      val response = wsUrl("/mobile-startup").addHttpHeaders(mobileHeader).get.futureValue
       response.status shouldBe 200
 
     }

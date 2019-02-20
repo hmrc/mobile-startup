@@ -20,11 +20,7 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Matchers, WordSpecLike}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mobilestartup.domain.DeviceVersion
-import uk.gov.hmrc.mobilestartup.domain.NativeOS.iOS
 
 trait BaseSpec extends WordSpecLike with Matchers with MockFactory with ScalaFutures {
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
-  val iOSVersion = DeviceVersion(iOS, "0.1")
-  val journeyId  = "journeyId"
 }

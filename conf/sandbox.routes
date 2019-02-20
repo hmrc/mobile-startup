@@ -1,5 +1,3 @@
 # microservice specific routes
 
-GET         /startup              uk.gov.hmrc.mobilestartup.controllers.SandboxStartupController.startup(journeyId: Option[String])
-
-POST        /version-check        uk.gov.hmrc.mobilestartup.controllers.SandboxVersionCheckController.versionCheck(journeyId: Option[String])
+GET         /              uk.gov.hmrc.mobilestartup.controllers.SandboxStartupController.startup(journeyId: Option[String])

@@ -16,16 +16,10 @@
 
 package uk.gov.hmrc.mobilestartup.controllers
 
-import play.api.libs.json.JsValue
-import play.api.libs.json.Json.toJson
-import play.api.test.FakeRequest
 import uk.gov.hmrc.mobilestartup.BaseSpec
 
 trait BaseControllerSpec extends BaseSpec {
-  val iOSVersionJson:             JsValue              = toJson(iOSVersion)
-  val acceptJsonHeader:           (String, String)     = "Accept" -> "application/vnd.hmrc.1.0+json"
-  val iOSRequest:                 FakeRequest[JsValue] = FakeRequest().withBody(iOSVersionJson)
-  val iOSRequestWithValidHeaders: FakeRequest[JsValue] = FakeRequest().withBody(iOSVersionJson).withHeaders(acceptJsonHeader)
+  val acceptJsonHeader: (String, String) = "Accept" -> "application/vnd.hmrc.1.0+json"
   val upgradeNotRequiredResult = s"""{"upgradeRequired":false}"""
   val upgradeRequiredResult    = s"""{"upgradeRequired":true}"""
 }
