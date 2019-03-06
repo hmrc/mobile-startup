@@ -489,30 +489,7 @@
     "infoUrl": "https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme",
     "accessAccountUrl": "/",
     "user": {
-      "state": "Enrolled",
-      "account": {
-        "number": "1100000112057",
-        "isClosed": false,
-        "balance": 220.5,
-        "paidInThisMonth": 20.5,
-        "canPayInThisMonth": 29.5,
-        "maximumPaidInThisMonth": 50,
-        "thisMonthEndDate": "2018-07-31",
-        "bonusTerms": [
-          {
-            "bonusEstimate": 110.25,
-            "bonusPaid": 0,
-            "endDate": "2019-12-31",
-            "bonusPaidOnOrAfterDate": "2020-01-01"
-          },
-          {
-            "bonusEstimate": 0,
-            "bonusPaid": 0,
-            "endDate": "2021-12-31",
-            "bonusPaidOnOrAfterDate": "2022-01-01"
-          }
-        ]
-      }
+      "state": "Enrolled"
     }
   },
   "feature": {
