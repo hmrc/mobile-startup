@@ -38,6 +38,6 @@ class DocumentationController @Inject()(
     extends uk.gov.hmrc.api.controllers.DocumentationController(controllerComponents, assets, errorHandler) {
 
   override def definition(): Action[AnyContent] = Action {
-    Ok(txt.definition(apiAccess)).withHeaders("Content-Type" -> "application/json")
+    Ok(txt.definition(apiAccess)).as(JSON)
   }
 }

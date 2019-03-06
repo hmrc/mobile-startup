@@ -17,7 +17,6 @@
 package uk.gov.hmrc.mobilestartup
 
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.http.HeaderCarrier

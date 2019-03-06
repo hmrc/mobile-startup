@@ -1,12 +1,12 @@
 package uk.gov.hmrc.mobilestartup.support
 
-import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import org.scalatestplus.play.WsScalaTestClient
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.integration.ServiceSpec
 
 class BaseISpec
@@ -17,7 +17,8 @@ class BaseISpec
     with WsScalaTestClient
     with GuiceOneServerPerSuite
     with WireMockSupport
-    with ScalaFutures {
+    with FutureAwaits
+    with DefaultAwaitTimeout {
 
   override implicit lazy val app: Application = appBuilder.build()
 
