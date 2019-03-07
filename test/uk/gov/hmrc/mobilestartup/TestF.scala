@@ -15,11 +15,27 @@
  */
 
 package uk.gov.hmrc.mobilestartup
-import cats.Semigroup
-import play.api.libs.json.JsObject
 
-package object services {
-  implicit val jsonObjectSemigroup: Semigroup[JsObject] = new Semigroup[JsObject] {
-    override def combine(x: JsObject, y: JsObject): JsObject = x ++ y
+import cats.MonadError
+import cats.instances.try_._
+
+import scala.util.{Failure, Try}
+
+/**
+  * Defines a type constructor that can be used in tests to instantiate components that have a type constructor
+  * parameter. All tests can just use `TestF` to construct the services, and `F` to generate values (e.g.
+  * `F.pure(a)` or `F.raiseError(t)`
+  */
+trait TestF {
+  type TestF[A] = Try[A]
+
+  implicit val F: MonadError[TestF, Throwable] = MonadError[TestF, Throwable]
+
+  implicit class ErrorSyntax(t: Throwable) {
+    def error[A]: Try[A] = Failure(t)
+  }
+
+  implicit class ValueSyntax[A](v: Try[A]) {
+    def unsafeGet: A = v.get
   }
 }

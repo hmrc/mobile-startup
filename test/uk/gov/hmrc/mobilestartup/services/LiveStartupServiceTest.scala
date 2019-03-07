@@ -15,16 +15,14 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
+import cats.implicits._
 import play.api.libs.json.Json._
 import play.api.libs.json.{JsObject, JsString, JsValue}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mobilestartup.BaseSpec
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import uk.gov.hmrc.mobilestartup.{BaseSpec, TestF}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
-
-class LiveStartupServiceTest extends BaseSpec {
+class LiveStartupServiceTest extends BaseSpec with TestF {
 
   private val helpToSave         = "helpToSave"
   private val taxCreditsRenewals = "taxCreditRenewals"
@@ -36,25 +34,25 @@ class LiveStartupServiceTest extends BaseSpec {
   private val tsSuccessResponse:  JsValue = successfulResponse
 
   private def dummyConnector(
-    htsResponse:        Future[JsValue] = Future.successful(htsSuccessResponse),
-    tcrResponse:        Future[JsValue] = Future.successful(tcrSuccessResponse),
-    taxSummaryResponse: Future[JsValue] = Future.successful(tsSuccessResponse)
-  ): GenericConnector =
-    new GenericConnector {
-      override def doGet(serviceName: String, path: String, hc: HeaderCarrier)(implicit ec: ExecutionContext): Future[JsValue] =
+    htsResponse:        TestF[JsValue] = htsSuccessResponse.pure[TestF],
+    tcrResponse:        TestF[JsValue] = tcrSuccessResponse.pure[TestF],
+    taxSummaryResponse: TestF[JsValue] = tsSuccessResponse.pure[TestF]
+  ): GenericConnector[TestF] =
+    new GenericConnector[TestF] {
+      override def doGet(serviceName: String, path: String, hc: HeaderCarrier): TestF[JsValue] =
         serviceName match {
           case "mobile-help-to-save"        => htsResponse
           case "mobile-tax-credits-renewal" => tcrResponse
           case "mobile-paye"                => taxSummaryResponse
-          case _                            => Future.successful(obj())
+          case _                            => obj().pure[TestF]
         }
     }
 
   "a fully successful response" should {
     "contain success entries for each service" in {
-      val sut = new LiveStartupService(dummyConnector())
+      val sut = new StartupServiceImpl[TestF](dummyConnector(), false)
 
-      val result: JsObject = await(sut.startup("nino", None)(HeaderCarrier()))
+      val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
@@ -63,10 +61,20 @@ class LiveStartupServiceTest extends BaseSpec {
   }
 
   "a response" should {
-    "contain an empty-object entry for help-to-save" in {
-      val sut = new LiveStartupService(dummyConnector(htsResponse = Future.failed(new Exception("hts failed"))))
+    "not contain a taxSummary section if the payAsYouEarnOnDemand flag is set to true" in {
+      val sut = new StartupServiceImpl[TestF](dummyConnector(), true)
 
-      val result: JsObject = await(sut.startup("nino", None)(HeaderCarrier()))
+      val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
+
+      (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
+      (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
+      (result \ taxSummary).toOption               shouldBe None
+    }
+
+    "contain an empty-object entry for help-to-save" in {
+      val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error), false)
+
+      val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value         shouldBe obj()
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
@@ -74,9 +82,9 @@ class LiveStartupServiceTest extends BaseSpec {
     }
 
     "contain an error entry for tcr" in {
-      val sut = new LiveStartupService(dummyConnector(tcrResponse = Future.failed(new Exception("tcr failed"))))
+      val sut = new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error), false)
 
-      val result: JsObject = await(sut.startup("nino", None)(HeaderCarrier()))
+      val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe obj("submissionsState" -> "error")
@@ -84,9 +92,10 @@ class LiveStartupServiceTest extends BaseSpec {
     }
 
     "contain an empty-object entry for tax summary" in {
-      val sut = new LiveStartupService(dummyConnector(taxSummaryResponse = Future.failed(new Exception("tax summary failed"))))
+      val sut =
+        new StartupServiceImpl[TestF](dummyConnector(taxSummaryResponse = new Exception("tax summary failed").error), false)
 
-      val result: JsObject = await(sut.startup("nino", None)(HeaderCarrier()))
+      val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse

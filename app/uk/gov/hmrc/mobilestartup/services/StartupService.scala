@@ -15,15 +15,9 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import com.google.inject.ImplementedBy
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
-
-@ImplementedBy(classOf[LiveStartupService])
-trait StartupService {
-  def startup(nino: String, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[JsObject]
+trait StartupService[F[_]] {
+  def startup(nino: String, journeyId: Option[String])(implicit hc: HeaderCarrier): F[JsObject]
 }
-
-

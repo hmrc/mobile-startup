@@ -28,7 +28,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton()
 class LiveStartupController @Inject()(
-  service:                                             StartupService,
+  service:                                             StartupService[Future],
   val controllerComponents:                            ControllerComponents,
   override val authConnector:                          AuthConnector,
   @Named("controllers.confidenceLevel") val confLevel: Int

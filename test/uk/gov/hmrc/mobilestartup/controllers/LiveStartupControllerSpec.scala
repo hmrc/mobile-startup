@@ -33,9 +33,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class LiveStartupControllerSpec extends WordSpec with Matchers with MockFactory {
-
   private val fakeRequest = FakeRequest("GET", "/")
-  private val stubStartupService = new StartupService {
+  private val stubStartupService = new StartupService[Future] {
     override def startup(nino: String, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[JsObject] =
       Future.successful(obj())
   }

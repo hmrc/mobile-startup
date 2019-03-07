@@ -19,14 +19,12 @@ import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.api.sandbox.FileResource
-import uk.gov.hmrc.mobilestartup.services.LiveStartupService
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
 import scala.concurrent.ExecutionContext
 
 class SandboxStartupController @Inject()(
-  val controllerComponents: ControllerComponents,
-  service:                  LiveStartupService
+  val controllerComponents: ControllerComponents
 )(
   implicit ec: ExecutionContext
 ) extends BackendBaseController

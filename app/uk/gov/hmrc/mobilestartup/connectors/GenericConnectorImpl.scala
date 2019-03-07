@@ -23,17 +23,20 @@ import play.api.libs.json.JsValue
 import play.api.{Configuration, Logger}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.mobilestartup.config.WSHttpImpl
-import uk.gov.hmrc.play.http.ws.WSHttp
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@ImplementedBy(classOf[GenericConnectorImpl])
-trait GenericConnector {
-  def doGet(serviceName: String, path: String, hc: HeaderCarrier)(implicit ec: ExecutionContext): Future[JsValue]
+trait GenericConnector[F[_]] {
+  def doGet(serviceName: String, path: String, hc: HeaderCarrier): F[JsValue]
 }
 
 @Singleton
-class GenericConnectorImpl @Inject()(configuration: Configuration, wSHttp: WSHttpImpl) extends GenericConnector {
+class GenericConnectorImpl @Inject()(
+  configuration: Configuration,
+  wSHttp:        WSHttpImpl
+)(
+  implicit ec: ExecutionContext
+) extends GenericConnector[Future] {
 
   def protocol(serviceName: String): String = getServiceConfig(serviceName).getOptional[String]("protocol").getOrElse("https")
 
@@ -45,7 +48,7 @@ class GenericConnectorImpl @Inject()(configuration: Configuration, wSHttp: WSHtt
 
   def logHC(hc: HeaderCarrier, path: String): Unit = Logger.info(s"transport: HC received is ${hc.authorization} for path $path")
 
-  def doGet(serviceName: String, path: String, hc: HeaderCarrier)(implicit ec: ExecutionContext): Future[JsValue] = {
+  def doGet(serviceName: String, path: String, hc: HeaderCarrier): Future[JsValue] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
     logHC(hc, path)
     http.GET[JsValue](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path))

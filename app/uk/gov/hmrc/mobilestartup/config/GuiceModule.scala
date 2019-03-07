@@ -16,19 +16,22 @@
 
 package uk.gov.hmrc.mobilestartup.config
 
-import com.google.inject.AbstractModule
 import com.google.inject.name.Names.named
+import com.google.inject.{AbstractModule, TypeLiteral}
 import javax.inject.Inject
 import play.api.{Configuration, Environment, Logger, LoggerLike}
 import uk.gov.hmrc.api.connector.{ApiServiceLocatorConnector, ServiceLocatorConnector}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.http.{CoreGet, CorePost}
+import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorImpl}
 import uk.gov.hmrc.mobilestartup.controllers.api.ApiAccess
+import uk.gov.hmrc.mobilestartup.services.{LiveStartupService, StartupService}
 import uk.gov.hmrc.mobilestartup.tasks.ServiceLocatorRegistrationTask
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
 import scala.collection.JavaConverters._
+import scala.concurrent.Future
 
 class GuiceModule @Inject()(environment: Environment, configuration: Configuration) extends AbstractModule {
 
@@ -38,6 +41,7 @@ class GuiceModule @Inject()(environment: Environment, configuration: Configurati
 
     bindConfigInt("controllers.confidenceLevel")
     bindConfigString("appUrl", "appUrl")
+    bindConfigBoolean("feature.payAsYouEarnOnDemand")
     bind(classOf[LoggerLike]).toInstance(Logger)
 
     bind(classOf[ServiceLocatorConnector]).to(classOf[ApiServiceLocatorConnector])
@@ -45,6 +49,9 @@ class GuiceModule @Inject()(environment: Environment, configuration: Configurati
     bind(classOf[CoreGet]).to(classOf[WSHttpImpl])
     bind(classOf[CorePost]).to(classOf[WSHttpImpl])
     bind(classOf[ServiceLocatorRegistrationTask]).asEagerSingleton()
+
+    bind(new TypeLiteral[GenericConnector[Future]] {}).to(classOf[GenericConnectorImpl])
+    bind(new TypeLiteral[StartupService[Future]] {}).to(classOf[LiveStartupService])
 
     bind(classOf[ApiAccess]).toInstance(ApiAccess("PRIVATE", configuration.underlying.getStringList("api.access.white-list.applicationIds").asScala))
   }
@@ -58,4 +65,7 @@ class GuiceModule @Inject()(environment: Environment, configuration: Configurati
 
   private def bindConfigString(name: String, path: String): Unit =
     bindConstant().annotatedWith(named(name)).to(configuration.underlying.getString(path))
+
+  private def bindConfigBoolean(path: String): Unit =
+    bindConstant().annotatedWith(named(path)).to(configuration.underlying.getBoolean(path))
 }
