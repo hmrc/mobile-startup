@@ -17,6 +17,7 @@
 package uk.gov.hmrc.mobilestartup.services
 import java.util.UUID.randomUUID
 
+import cats.implicits._
 import javax.inject.{Inject, Named}
 import play.api.Logger
 import play.api.libs.functional.syntax._
@@ -98,11 +99,10 @@ class PreflightService @Inject()(
     with Auditor {
 
   def preFlight(request: PreFlightRequest, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[PreFlightCheckResponse] =
-    for {
-      accounts      <- getAccounts(journeyId)
-      versionUpdate <- getVersion(request, journeyId)
-    } yield {
-      PreFlightCheckResponse(versionUpdate, accounts.copy())
+    withAudit("preFlightCheck", Map.empty) {
+      (getAccounts(journeyId), getVersion(request, journeyId)).mapN { (accounts, versionUpdate) =>
+        PreFlightCheckResponse(versionUpdate, accounts.copy())
+      }
     }
 
   def getAccounts(journeyId: Option[String])(implicit hc: HeaderCarrier): Future[Accounts] =

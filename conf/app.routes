@@ -1,5 +1,5 @@
 # microservice specific routes
 
-GET         /                       uk.gov.hmrc.mobilestartup.controllers.LiveStartupController.startup(journeyId: Option[String])
+GET         /startup                uk.gov.hmrc.mobilestartup.controllers.LiveStartupController.startup(journeyId: Option[String])
 
 POST        /preflight-check        uk.gov.hmrc.mobilestartup.controllers.LivePreflightController.preFlightCheck(journeyId: Option[String])
