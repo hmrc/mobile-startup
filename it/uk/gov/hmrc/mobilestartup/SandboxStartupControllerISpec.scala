@@ -1,15 +1,11 @@
 package uk.gov.hmrc.mobilestartup
 
-import org.scalatest.{Matchers, WordSpec}
-import org.scalatestplus.play.WsScalaTestClient
 import play.api.libs.ws.WSClient
-import uk.gov.hmrc.integration.ServiceSpec
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
+import utils.BaseISpec
 
-class SandboxStartupControllerISpec extends WordSpec with Matchers with ServiceSpec with WsScalaTestClient {
+class SandboxStartupControllerISpec extends BaseISpec with FutureAwaits with DefaultAwaitTimeout {
 
-  def externalServices: Seq[String] = Seq("datastream", "auth")
-
-  override def additionalConfig: Map[String, _] = Map("auditing.consumer.baseUri.port" -> externalServicePorts("datastream"))
   val mobileHeader = "X-MOBILE-USER-ID" -> "208606423740"
 
   "This integration test" should {
@@ -17,7 +13,7 @@ class SandboxStartupControllerISpec extends WordSpec with Matchers with ServiceS
 
       implicit val wsClient: WSClient = app.injector.instanceOf[WSClient]
 
-      val response = wsUrl("/mobile-startup").addHttpHeaders(mobileHeader).get.futureValue
+      val response = await(wsUrl("/").addHttpHeaders(mobileHeader).get)
       response.status shouldBe 200
 
     }
