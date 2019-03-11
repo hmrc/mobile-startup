@@ -17,7 +17,7 @@
 package uk.gov.hmrc.mobilestartup.connectors
 
 import cats.instances.future._
-import com.google.inject.{ImplementedBy, Singleton}
+import com.google.inject.Singleton
 import javax.inject.Inject
 import play.api.libs.json.JsValue
 import play.api.{Configuration, Logger}
@@ -27,7 +27,8 @@ import uk.gov.hmrc.mobilestartup.config.WSHttpImpl
 import scala.concurrent.{ExecutionContext, Future}
 
 trait GenericConnector[F[_]] {
-  def doGet(serviceName: String, path: String, hc: HeaderCarrier): F[JsValue]
+  def doGet(serviceName: String, path:         String, hc:   HeaderCarrier): F[JsValue]
+  def doPost[T](json:    JsValue, serviceName: String, path: String, hc: HeaderCarrier)(implicit rds: HttpReads[T]): F[T]
 }
 
 @Singleton
@@ -52,6 +53,12 @@ class GenericConnectorImpl @Inject()(
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
     logHC(hc, path)
     http.GET[JsValue](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path))
+  }
+
+  def doPost[T](json: JsValue, serviceName: String, path: String, hc: HeaderCarrier)(implicit rds: HttpReads[T]): Future[T] = {
+    implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
+    logHC(hc, path)
+    http.POST[JsValue, T](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path), json)
   }
 
   private def addAPIHeaders(hc: HeaderCarrier): HeaderCarrier = hc.withExtraHeaders("Accept" -> "application/vnd.hmrc.1.0+json")

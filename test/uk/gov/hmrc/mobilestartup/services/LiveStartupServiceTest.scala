@@ -18,7 +18,7 @@ package uk.gov.hmrc.mobilestartup.services
 import cats.implicits._
 import play.api.libs.json.Json._
 import play.api.libs.json.{JsObject, JsString, JsValue}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.{BaseSpec, TestF}
 
@@ -46,6 +46,8 @@ class LiveStartupServiceTest extends BaseSpec with TestF {
           case "mobile-paye"                => taxSummaryResponse
           case _                            => obj().pure[TestF]
         }
+
+      override def doPost[T](json: JsValue, serviceName: String, path: String, hc: HeaderCarrier)(implicit rds: HttpReads[T]): TestF[T] = ???
     }
 
   "a fully successful response" should {
