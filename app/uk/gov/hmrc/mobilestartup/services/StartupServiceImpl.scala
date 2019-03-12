@@ -76,7 +76,7 @@ class StartupServiceImpl[F[_]] @Inject()(
       .map(_.some)
       .recover {
         case NonFatal(e) =>
-          Logger.warn(s"""Exception thrown by "/mobile-help-to-save/startup", not returning any helpToSave result""", e)
+          Logger.warn(s"""Exception thrown by "/mobile-help-to-save/startup", not returning any helpToSave result: ${e.getMessage}""")
           obj().some
       }
 
