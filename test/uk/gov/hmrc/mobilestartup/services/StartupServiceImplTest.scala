@@ -22,7 +22,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.{BaseSpec, TestF}
 
-class LiveStartupServiceTest extends BaseSpec with TestF {
+class StartupServiceImplTest extends BaseSpec with TestF {
 
   private val helpToSave         = "helpToSave"
   private val taxCreditsRenewals = "taxCreditRenewals"
@@ -73,7 +73,7 @@ class LiveStartupServiceTest extends BaseSpec with TestF {
       (result \ taxSummary).toOption               shouldBe None
     }
 
-    "contain an empty-object entry for help-to-save" in {
+    "contain an empty-object entry for help-to-save when the hts call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error), false)
 
       val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
@@ -83,7 +83,7 @@ class LiveStartupServiceTest extends BaseSpec with TestF {
       (result \ taxSummary).toOption.value         shouldBe tsSuccessResponse
     }
 
-    "contain an error entry for tcr" in {
+    "contain an error entry for tcr when the tcr call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error), false)
 
       val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
@@ -93,7 +93,7 @@ class LiveStartupServiceTest extends BaseSpec with TestF {
       (result \ taxSummary).toOption.value         shouldBe tsSuccessResponse
     }
 
-    "contain an empty-object entry for tax summary" in {
+    "contain an empty-object entry for tax summary when the tax summary call fails" in {
       val sut =
         new StartupServiceImpl[TestF](dummyConnector(taxSummaryResponse = new Exception("tax summary failed").error), false)
 

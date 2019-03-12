@@ -15,16 +15,9 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import cats.implicits._
-import com.google.inject.name.Named
-import javax.inject.Inject
-import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.mobilestartup.controllers.DeviceVersion
 
-import scala.concurrent.{ExecutionContext, Future}
-
-class LiveStartupService @Inject()(
-  connector:                                                   GenericConnector[Future],
-  @Named("feature.payAsYouEarnOnDemand") payAsYouEarnOnDemand: Boolean
-)(
-  implicit ec: ExecutionContext
-) extends StartupServiceImpl[Future](connector, payAsYouEarnOnDemand)
+trait PreflightService[F[_]] {
+  def preFlight(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): F[PreFlightCheckResponse]
+}

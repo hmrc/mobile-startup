@@ -20,7 +20,6 @@ import java.util.UUID.randomUUID
 import cats.implicits._
 import javax.inject.{Inject, Named}
 import play.api.Logger
-import play.api.libs.functional.syntax._
 import play.api.libs.json.Json.toJson
 import play.api.libs.json._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals._
@@ -29,54 +28,11 @@ import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, UnsupportedAut
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
-import uk.gov.hmrc.mobilestartup.controllers.PreFlightRequest
+import uk.gov.hmrc.mobilestartup.controllers.{Accounts, DeviceVersion}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.service.Auditor
 
 import scala.concurrent.{ExecutionContext, Future}
-
-case class Accounts(
-  nino:                         Option[Nino],
-  saUtr:                        Option[SaUtr],
-  routeToIV:                    Boolean,
-  journeyId:                    String,
-  credId:                       String,
-  affinityGroup:                String,
-  @Deprecated routeToTwoFactor: Boolean = false)
-
-object Accounts {
-  implicit val reads: Reads[Accounts] = (
-    (JsPath \ "nino").readNullable[Nino] and
-      (JsPath \ "saUtr").readNullable[SaUtr] and
-      (JsPath \ "routeToIV").read[Boolean] and
-      (JsPath \ "journeyId").read[String] and
-      (JsPath \ "credId").read[String] and
-      (JsPath \ "affinityGroup").read[String] and
-      (JsPath \ "routeToTwoFactor").read[Boolean]
-  )(Accounts.apply _)
-
-  implicit val writes: Writes[Accounts] = new Writes[Accounts] {
-    def withNino(nino: Option[Nino]): JsObject = nino.fold(Json.obj()) { found =>
-      Json.obj("nino" -> found.value)
-    }
-
-    def withSaUtr(saUtr: Option[SaUtr]): JsObject = saUtr.fold(Json.obj()) { found =>
-      Json.obj("saUtr" -> found.value)
-    }
-
-    def writes(accounts: Accounts): JsObject =
-      withNino(accounts.nino) ++ withSaUtr(accounts.saUtr) ++ Json
-        .obj("routeToIV" -> accounts.routeToIV, "routeToTwoFactor" -> accounts.routeToTwoFactor, "journeyId" -> accounts.journeyId)
-  }
-
-  implicit val formats: Format[Accounts] = Format(reads, writes)
-}
-
-case class DeviceVersion(os: String, version: String)
-
-object DeviceVersion {
-  implicit val formats: Format[DeviceVersion] = Json.format[DeviceVersion]
-}
 
 case class PreFlightCheckResponse(upgradeRequired: Boolean, accounts: Accounts)
 
@@ -87,7 +43,7 @@ object PreFlightCheckResponse {
   implicit val preFlightCheckResponseFmt: OFormat[PreFlightCheckResponse] = Json.format[PreFlightCheckResponse]
 }
 
-class PreflightService @Inject()(
+class LivePreflightService @Inject()(
   genericConnector:                                    GenericConnector[Future],
   val auditConnector:                                  AuditConnector,
   val authConnector:                                   AuthConnector,
@@ -96,9 +52,10 @@ class PreflightService @Inject()(
 )(
   implicit ec: ExecutionContext
 ) extends AuthorisedFunctions
+    with PreflightService[Future]
     with Auditor {
 
-  def preFlight(request: PreFlightRequest, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[PreFlightCheckResponse] =
+  def preFlight(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[PreFlightCheckResponse] =
     withAudit("preFlightCheck", Map.empty) {
       (getAccounts(journeyId), getVersion(request, journeyId)).mapN { (accounts, versionUpdate) =>
         PreFlightCheckResponse(versionUpdate, accounts.copy())
@@ -122,16 +79,15 @@ class PreflightService @Inject()(
               foundAffinityGroup.get.toString))
       }
 
-  def getVersion(request: PreFlightRequest, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[Boolean] = {
+  def getVersion(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[Boolean] = {
     def buildJourney: String = journeyId.fold("")(id => s"?journeyId=$id")
 
-    val device = DeviceVersion(request.os, request.version)
-    val path   = s"/mobile-version-check$buildJourney"
+    val path = s"/mobile-version-check$buildJourney"
 
     if (request.os.toLowerCase.contains("windows")) Future successful true
     else {
       genericConnector
-        .doPost[JsValue](toJson(device), "mobile-version-check", path, hc)
+        .doPost[JsValue](toJson(request), "mobile-version-check", path, hc)
         .map { resp =>
           (resp \ "upgradeRequired").as[Boolean]
         }

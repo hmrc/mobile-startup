@@ -39,15 +39,25 @@ class LiveStartupController @Inject()(
 
   def startup(journeyId: Option[String]): Action[AnyContent] =
     Action.async { implicit request =>
-      withAuth(service.startup(_, journeyId).map(Ok(_)))
+      withNinoFromAuth { verifiedNino =>
+        service.startup(verifiedNino, journeyId).map(Ok(_))
+      }
     }
 
-  private def withAuth(f: String => Future[Result])(implicit hc: HeaderCarrier): Future[Result] =
+  /**
+    * Check that the user is authorized to at least a confidence level of 200 and retrieve the NINO associated
+    * with their account. Run the supplied function with that NINO.
+    *
+    * Various failure scenarios are translated to appropriate Play `Result` types.
+    *
+    * @param f - the function to be run with the NINO, if it is successfully retrieved from the auth data
+    */
+  private def withNinoFromAuth(f: String => Future[Result])(implicit hc: HeaderCarrier): Future[Result] =
     authConnector
       .authorise(ConfidenceLevel.L200, Retrievals.nino)
       .flatMap {
-        case Some(nino) => f(nino)
-        case None       => Future.successful(Unauthorized("Authorization failure [user is not enrolled for NI]"))
+        case Some(ninoFromAuth) => f(ninoFromAuth)
+        case None               => Future.successful(Unauthorized("Authorization failure [user is not enrolled for NI]"))
       }
       .recover {
         case e: NoActiveSession        => Unauthorized(s"Authorisation failure [${e.reason}]")
