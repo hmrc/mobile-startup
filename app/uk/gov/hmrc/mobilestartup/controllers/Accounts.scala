@@ -17,34 +17,22 @@
 package uk.gov.hmrc.mobilestartup.controllers
 import play.api.libs.json._
 import uk.gov.hmrc.domain.{Nino, SaUtr}
-import play.api.libs.functional.syntax._
 
-case class Accounts(nino: Option[Nino], saUtr: Option[SaUtr], routeToIV: Boolean, journeyId: String, credId: String,
-  affinityGroup: String, @Deprecated routeToTwoFactor: Boolean = false)
+case class Accounts(nino: Option[Nino], saUtr: Option[SaUtr], routeToIV: Boolean, journeyId: String)
 
 object Accounts {
-  implicit val reads: Reads[Accounts] = (
-    (JsPath \ "nino").readNullable[Nino] and
-      (JsPath \ "saUtr").readNullable[SaUtr] and
-      (JsPath \ "routeToIV").read[Boolean] and
-      (JsPath \ "journeyId").read[String] and
-      (JsPath \ "credId").read[String] and
-      (JsPath \ "affinityGroup").read[String] and
-      (JsPath \ "routeToTwoFactor").read[Boolean]
-    ) (Accounts.apply _)
-
   implicit val writes: Writes[Accounts] = new Writes[Accounts] {
-    def withNino(nino: Option[Nino]): JsObject = nino.fold(Json.obj()) { found => Json.obj("nino" -> found.value) }
-
-    def withSaUtr(saUtr: Option[SaUtr]): JsObject = saUtr.fold(Json.obj()) { found => Json.obj("saUtr" -> found.value) }
-
-    def writes(accounts: Accounts): JsObject = {
-      withNino(accounts.nino) ++ withSaUtr(accounts.saUtr) ++ Json.obj(
-        "routeToIV" -> accounts.routeToIV,
-        "routeToTwoFactor" -> accounts.routeToTwoFactor,
-        "journeyId" -> accounts.journeyId)
+    def withNino(nino: Option[Nino]): JsObject = nino.fold(Json.obj()) { found =>
+      Json.obj("nino" -> found.value)
     }
+
+    def withSaUtr(saUtr: Option[SaUtr]): JsObject = saUtr.fold(Json.obj()) { found =>
+      Json.obj("saUtr" -> found.value)
+    }
+
+    def writes(accounts: Accounts): JsObject =
+      withNino(accounts.nino) ++ withSaUtr(accounts.saUtr) ++ Json
+        .obj("routeToIV" -> accounts.routeToIV, "journeyId" -> accounts.journeyId)
   }
 
-  implicit val formats: Format[Accounts] = Format(reads, writes)
 }

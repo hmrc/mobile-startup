@@ -38,9 +38,9 @@ case class PreFlightCheckResponse(upgradeRequired: Boolean, accounts: Accounts)
 
 object PreFlightCheckResponse {
 
-  implicit val accountsFmt: Format[Accounts] = Accounts.formats
+  implicit val accountsFmt: Writes[Accounts] = Accounts.writes
 
-  implicit val preFlightCheckResponseFmt: OFormat[PreFlightCheckResponse] = Json.format[PreFlightCheckResponse]
+  implicit val preFlightCheckResponseFmt: Writes[PreFlightCheckResponse] = Json.writes[PreFlightCheckResponse]
 }
 
 class LivePreflightService @Inject()(
@@ -64,19 +64,12 @@ class LivePreflightService @Inject()(
 
   def getAccounts(journeyId: Option[String])(implicit hc: HeaderCarrier): Future[Accounts] =
     authorised()
-      .retrieve(nino and saUtr and affinityGroup and credentials and confidenceLevel) {
-        case foundNino ~ foundSaUtr ~ foundAffinityGroup ~ foundCredentials ~ foundConfidenceLevel =>
+      .retrieve(nino and saUtr and credentials and confidenceLevel) {
+        case foundNino ~ foundSaUtr ~ foundCredentials ~ foundConfidenceLevel =>
           val routeToIV         = confLevel > foundConfidenceLevel.level
           val journeyIdentifier = journeyId.filter(id => id.length > 0).getOrElse(randomUUID().toString)
           if (foundCredentials.providerType != "GovernmentGateway") throw new UnsupportedAuthProvider
-          Future.successful(
-            Accounts(
-              foundNino.map(Nino(_)),
-              foundSaUtr.map(SaUtr(_)),
-              routeToIV,
-              journeyIdentifier,
-              foundCredentials.providerId,
-              foundAffinityGroup.get.toString))
+          Future.successful(Accounts(foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), routeToIV, journeyIdentifier))
       }
 
   def getVersion(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[Boolean] = {
