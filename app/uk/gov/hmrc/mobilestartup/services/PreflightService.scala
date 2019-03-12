@@ -15,9 +15,13 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
+import com.google.inject.ImplementedBy
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.controllers.DeviceVersion
 
-trait PreflightService[F[_]] {
-  def preFlight(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): F[PreFlightCheckResponse]
+import scala.concurrent.Future
+
+@ImplementedBy(classOf[LivePreflightService])
+trait PreflightService {
+  def preFlight(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[PreFlightCheckResponse]
 }

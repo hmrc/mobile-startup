@@ -50,17 +50,17 @@ class LivePreflightService @Inject()(
   @Named("appName") val appName:                       String,
   @Named("controllers.confidenceLevel") val confLevel: Int
 )(
-  implicit ec: ExecutionContext
-) extends AuthorisedFunctions
-    with PreflightService[Future]
+  implicit executionContext: ExecutionContext
+) extends PreflightService
+    with AuthorisedFunctions
     with Auditor {
 
-  def preFlight(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[PreFlightCheckResponse] =
-    withAudit("preFlightCheck", Map.empty) {
-      (getAccounts(journeyId), getVersion(request, journeyId)).mapN { (accounts, versionUpdate) =>
-        PreFlightCheckResponse(versionUpdate, accounts.copy())
-      }
+  def preFlight(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[PreFlightCheckResponse] = {
+    audit("preFlightCheck", Map.empty)
+    (getAccounts(journeyId), getVersion(request, journeyId)).mapN { (accounts, versionUpdate) =>
+      PreFlightCheckResponse(versionUpdate, accounts.copy())
     }
+  }
 
   def getAccounts(journeyId: Option[String])(implicit hc: HeaderCarrier): Future[Accounts] =
     authorised()
@@ -69,7 +69,7 @@ class LivePreflightService @Inject()(
           val routeToIV         = confLevel > foundConfidenceLevel.level
           val journeyIdentifier = journeyId.filter(id => id.length > 0).getOrElse(randomUUID().toString)
           if (foundCredentials.providerType != "GovernmentGateway") throw new UnsupportedAuthProvider
-          Future(
+          Future.successful(
             Accounts(
               foundNino.map(Nino(_)),
               foundSaUtr.map(SaUtr(_)),
@@ -84,7 +84,7 @@ class LivePreflightService @Inject()(
 
     val path = s"/mobile-version-check$buildJourney"
 
-    if (request.os.toLowerCase.contains("windows")) Future successful true
+    if (request.os.toLowerCase.contains("windows")) Future.successful(true)
     else {
       genericConnector
         .doPost[JsValue](toJson(request), "mobile-version-check", path, hc)

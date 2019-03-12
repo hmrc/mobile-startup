@@ -7,11 +7,9 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
-import uk.gov.hmrc.integration.ServiceSpec
 
 class BaseISpec
     extends WordSpecLike
-    with ServiceSpec
     with Matchers
     with OptionValues
     with WsScalaTestClient
@@ -34,6 +32,5 @@ class BaseISpec
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)
 
-  protected implicit lazy val wsClient: WSClient    = app.injector.instanceOf[WSClient]
-  override def externalServices:        Seq[String] = Seq()
+  protected implicit lazy val wsClient: WSClient = app.injector.instanceOf[WSClient]
 }

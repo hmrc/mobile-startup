@@ -23,7 +23,7 @@ import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.mobilestartup.services.PreflightService
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 case class DeviceVersion(os: String, version: String)
 
@@ -33,7 +33,7 @@ object DeviceVersion {
 
 class LivePreflightController @Inject()(
   val controllerComponents:   ControllerComponents,
-  preflightService:           PreflightService[Future],
+  preflightService:           PreflightService,
   override val authConnector: AuthConnector
 )(
   implicit override val executionContext: ExecutionContext
