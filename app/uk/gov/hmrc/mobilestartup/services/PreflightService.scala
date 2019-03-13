@@ -16,12 +16,20 @@
 
 package uk.gov.hmrc.mobilestartup.services
 import com.google.inject.ImplementedBy
+import play.api.libs.json.{Json, Writes}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mobilestartup.controllers.DeviceVersion
+import uk.gov.hmrc.mobilestartup.controllers.{Accounts, DeviceVersion}
 
-import scala.concurrent.Future
+case class PreFlightCheckResponse(upgradeRequired: Boolean, accounts: Accounts)
+
+object PreFlightCheckResponse {
+
+  implicit val accountsFmt: Writes[Accounts] = Accounts.writes
+
+  implicit val preFlightCheckResponseFmt: Writes[PreFlightCheckResponse] = Json.writes[PreFlightCheckResponse]
+}
 
 @ImplementedBy(classOf[LivePreflightService])
-trait PreflightService {
-  def preFlight(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[PreFlightCheckResponse]
+trait PreflightService[F[_]] {
+  def preFlight(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): F[PreFlightCheckResponse]
 }

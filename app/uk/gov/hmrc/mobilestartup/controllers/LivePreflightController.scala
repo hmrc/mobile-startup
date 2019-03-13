@@ -23,7 +23,7 @@ import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.mobilestartup.services.PreflightService
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 case class DeviceVersion(os: String, version: String)
 
@@ -33,7 +33,7 @@ object DeviceVersion {
 
 class LivePreflightController @Inject()(
   val controllerComponents:   ControllerComponents,
-  preflightService:           PreflightService,
+  preflightService:           PreflightService[Future],
   override val authConnector: AuthConnector
 )(
   implicit override val executionContext: ExecutionContext
@@ -44,8 +44,6 @@ class LivePreflightController @Inject()(
   override def parser: BodyParser[AnyContent] = controllerComponents.parsers.anyContent
 
   private val authToken = "AuthToken"
-
-  private val authenticationFailure = new Exception("Failed to resolve authentication from HC!")
 
   def preFlightCheck(journeyId: Option[String]): Action[DeviceVersion] =
     validateAccept(acceptHeaderValidationRules).async(controllerComponents.parsers.json[DeviceVersion]) { implicit request =>

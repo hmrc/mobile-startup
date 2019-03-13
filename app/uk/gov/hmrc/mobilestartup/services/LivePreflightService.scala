@@ -15,33 +15,19 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import java.util.UUID.randomUUID
-
 import cats.implicits._
 import javax.inject.{Inject, Named}
-import play.api.Logger
-import play.api.libs.json.Json.toJson
-import play.api.libs.json._
+import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals._
-import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, UnsupportedAuthProvider}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, ~}
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
-import uk.gov.hmrc.mobilestartup.controllers.{Accounts, DeviceVersion}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.service.Auditor
 
 import scala.concurrent.{ExecutionContext, Future}
-
-case class PreFlightCheckResponse(upgradeRequired: Boolean, accounts: Accounts)
-
-object PreFlightCheckResponse {
-
-  implicit val accountsFmt: Writes[Accounts] = Accounts.writes
-
-  implicit val preFlightCheckResponseFmt: Writes[PreFlightCheckResponse] = Json.writes[PreFlightCheckResponse]
-}
 
 class LivePreflightService @Inject()(
   genericConnector:                                    GenericConnector[Future],
@@ -51,45 +37,20 @@ class LivePreflightService @Inject()(
   @Named("controllers.confidenceLevel") val confLevel: Int
 )(
   implicit executionContext: ExecutionContext
-) extends PreflightService
+) extends PreflightServiceImpl[Future](genericConnector, confLevel)
     with AuthorisedFunctions
     with Auditor {
 
-  def preFlight(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[PreFlightCheckResponse] = {
-    audit("preFlightCheck", Map.empty)
-    (getAccounts(journeyId), getVersion(request, journeyId)).mapN { (accounts, versionUpdate) =>
-      PreFlightCheckResponse(versionUpdate, accounts.copy())
+  // Just adapting from `F` to `Future` here
+  override def auditing[T](service: String, details: Map[String, String])(f: => Future[T])(implicit hc: HeaderCarrier): Future[T] =
+    withAudit(service, details)(f)
+
+  // The retrieval function is really hard to dummy out in tests because of it's polymorphic nature, and the `~` trick doesn't
+  // help, but isolating it here and adapting to the concrete tuple of results we are expecting makes testing of the logic in
+  // `PreflightServiceImpl` much easier.
+  override def retrieveAccounts(implicit hc: HeaderCarrier): Future[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)] =
+    authConnector.authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel).map {
+      case foundNino ~ foundSaUtr ~ creds ~ conf =>
+        (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf)
     }
-  }
-
-  def getAccounts(journeyId: Option[String])(implicit hc: HeaderCarrier): Future[Accounts] =
-    authorised()
-      .retrieve(nino and saUtr and credentials and confidenceLevel) {
-        case foundNino ~ foundSaUtr ~ foundCredentials ~ foundConfidenceLevel =>
-          val routeToIV         = confLevel > foundConfidenceLevel.level
-          val journeyIdentifier = journeyId.filter(id => id.length > 0).getOrElse(randomUUID().toString)
-          if (foundCredentials.providerType != "GovernmentGateway") throw new UnsupportedAuthProvider
-          Future.successful(Accounts(foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), routeToIV, journeyIdentifier))
-      }
-
-  def getVersion(request: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[Boolean] = {
-    def buildJourney: String = journeyId.fold("")(id => s"?journeyId=$id")
-
-    val path = s"/mobile-version-check$buildJourney"
-
-    if (request.os.toLowerCase.contains("windows")) Future.successful(true)
-    else {
-      genericConnector
-        .doPost[JsValue](toJson(request), "mobile-version-check", path, hc)
-        .map { resp =>
-          (resp \ "upgradeRequired").as[Boolean]
-        }
-        .recover {
-          // Default to false - i.e. no upgrade required.
-          case exception: Exception =>
-            Logger.warn(s"Native Error - failure with processing version check. Exception is $exception")
-            false
-        }
-    }
-  }
 }
