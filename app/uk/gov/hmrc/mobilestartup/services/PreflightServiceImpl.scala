@@ -41,6 +41,11 @@ abstract class PreflightServiceImpl[F[_]](genericConnector: GenericConnector[F],
 
   def preFlight(deviceVersion: DeviceVersion, journeyId: Option[String])(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
     auditing("preFlightCheck", Map.empty) {
+      // `mapN` is not inherently parallel. I.e. the two functions won't get run concurrently. However,
+      // the tuple will evaluate the two functions eagerly. Knowing that the concrete implementation
+      // will use `Future`s means we know that the live system will, in practice, give us concurrency
+      // of the two calls. Because of this it's not worth the extra complexity of using `parMapN`, even
+      // that that would give a more correct description of what's going on.
       (getAccounts(journeyId), getVersion(deviceVersion, journeyId)).mapN { (accounts, versionUpdate) =>
         PreFlightCheckResponse(versionUpdate, accounts.copy())
       }
