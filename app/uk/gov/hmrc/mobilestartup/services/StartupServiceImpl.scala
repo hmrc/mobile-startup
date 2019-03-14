@@ -53,7 +53,7 @@ class StartupServiceImpl[F[_]] @Inject()(
       featureFlags.pure[F]).mapN((a, b, c, d) => a ++ b ++ c ++ d)
 
   private val featureFlags: JsObject =
-    obj("feature" -> List(FeatureFlag("payAsYouEarnOnDeman", payAsYouEarnOnDemand)))
+    obj("feature" -> List(FeatureFlag("payAsYouEarnOnDemand", payAsYouEarnOnDemand)))
 
   private def buildJourneyQueryParam(journeyId: Option[String]): String =
     journeyId.fold("")(id => s"?journeyId=$id")
