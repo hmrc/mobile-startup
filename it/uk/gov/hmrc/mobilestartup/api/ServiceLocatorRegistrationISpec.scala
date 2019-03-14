@@ -20,7 +20,7 @@ import org.scalatest.concurrent.Eventually
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.time.{Millis, Span}
 import uk.gov.hmrc.mobilestartup.stubs.ServiceLocatorStub
-import utils.BaseISpec
+import uk.gov.hmrc.mobilestartup.support.BaseISpec
 
 class ServiceLocatorRegistrationISpec extends BaseISpec with Eventually {
 
