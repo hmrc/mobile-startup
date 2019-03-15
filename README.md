@@ -14,7 +14,7 @@ API
 
 | *Task* | *Supported Methods* | *Description* |
 |--------|----|----|
-| ```/version-check``` | POST | Check if the user needs to update to a new version of the app. [More...](docs/version-check.md) |
+| ```/preflight-check``` | POST | Check if the user needs to update to a new version of the app and return account identifiers. [More...](docs/preflight-check.md) |
 | ```/startup``` | GET | Retrieve the startup information for various parts of the app, including feature flags. [More...](docs/startup.md) |
 
 ### License
