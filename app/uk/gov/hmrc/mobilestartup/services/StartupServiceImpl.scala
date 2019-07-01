@@ -40,7 +40,7 @@ object FeatureFlag {
   */
 class StartupServiceImpl[F[_]] @Inject()(
   connector:            GenericConnector[F],
-  payAsYouEarnOnDemand: Boolean
+  userPanelSignUp: Boolean
 )(
   implicit F: MonadError[F, Throwable]
 ) extends StartupService[F] {
@@ -53,7 +53,7 @@ class StartupServiceImpl[F[_]] @Inject()(
       featureFlags.pure[F]).mapN((a, b, c, d) => a ++ b ++ c ++ d)
 
   private val featureFlags: JsObject =
-    obj("feature" -> List(FeatureFlag("payAsYouEarnOnDemand", payAsYouEarnOnDemand)))
+    obj("feature" -> List(FeatureFlag("userPanelSignUp", userPanelSignUp)))
 
   private def buildJourneyQueryParam(journeyId: Option[String]): String =
     journeyId.fold("")(id => s"?journeyId=$id")
@@ -92,7 +92,7 @@ class StartupServiceImpl[F[_]] @Inject()(
       }
 
   private def taxSummaryStartup(nino: String, year: Int, journeyId: Option[String])(implicit hc: HeaderCarrier): F[Option[JsValue]] =
-    if (payAsYouEarnOnDemand) none[JsValue].pure[F]
+    if (userPanelSignUp) none[JsValue].pure[F]
     else
       connector
         .doGet("mobile-paye", s"/nino/$nino/tax-year/$year/summary${buildJourneyQueryParam(journeyId)}", hc)

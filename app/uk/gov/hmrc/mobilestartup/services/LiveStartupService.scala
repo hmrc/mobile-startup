@@ -24,7 +24,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class LiveStartupService @Inject()(
   connector:                                                   GenericConnector[Future],
-  @Named("feature.payAsYouEarnOnDemand") payAsYouEarnOnDemand: Boolean
+  @Named("feature.userPanelSignUp") userPanelSignUp: Boolean
 )(
   implicit ec: ExecutionContext
-) extends StartupServiceImpl[Future](connector, payAsYouEarnOnDemand)
+) extends StartupServiceImpl[Future](connector, userPanelSignUp)

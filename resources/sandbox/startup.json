@@ -5,7 +5,7 @@
   },
   "feature": [
     {
-      "name": "payAsYouEarnOnDemand",
+      "name": "userPanelSignUp",
       "enabled": false
     },
     {

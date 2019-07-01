@@ -63,7 +63,7 @@ class StartupServiceImplTest extends BaseSpec with TestF {
   }
 
   "a response" should {
-    "not contain a taxSummary section if the payAsYouEarnOnDemand flag is set to true" in {
+    "not contain a taxSummary section if the userPanelSignUp flag is set to true" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(), true)
 
       val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet

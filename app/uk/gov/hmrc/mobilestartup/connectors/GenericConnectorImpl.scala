@@ -47,17 +47,13 @@ class GenericConnectorImpl @Inject()(
 
   def http: CorePost with CoreGet = wSHttp
 
-  def logHC(hc: HeaderCarrier, path: String): Unit = Logger.info(s"transport: HC received is ${hc.authorization} for path $path")
-
   def doGet(serviceName: String, path: String, hc: HeaderCarrier): Future[JsValue] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
-    logHC(hc, path)
     http.GET[JsValue](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path))
   }
 
   def doPost[T](json: JsValue, serviceName: String, path: String, hc: HeaderCarrier)(implicit rds: HttpReads[T]): Future[T] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
-    logHC(hc, path)
     http.POST[JsValue, T](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path), json)
   }
 
