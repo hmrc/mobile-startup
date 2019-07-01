@@ -55,16 +55,7 @@ class SandboxPreflightControllerISpec extends BaseISpec {
       (response.json \ "accounts" \ "routeToIV").as[Boolean]        shouldBe true
     }
 
-    "return routeToTwoFactor = true when SANDBOX-CONTROL header = ROUTE-TO-TWO-FACTOR" in {
-      val response = await(
-        wsUrl(s"/preflight-check?${withJourneyParam(journeyId)}")
-          .addHttpHeaders(headerThatSucceeds ++ withSandboxControl("ROUTE-TO-TWO-FACTOR"): _*)
-          .post(versionPostRequest))
-      response.status                                               shouldBe 200
-      (response.json \ "upgradeRequired").as[Boolean]               shouldBe false
-      (response.json \ "accounts" \ "nino").as[String]              shouldBe nino
-      (response.json \ "accounts" \ "routeToIV").as[Boolean]        shouldBe false
-    }
+
 
     "return unauthorized when SANDBOX-CONTROL header = ERROR-401" in {
       val response = await(

@@ -20,13 +20,11 @@ import com.google.inject.name.Names.named
 import com.google.inject.{AbstractModule, TypeLiteral}
 import javax.inject.Inject
 import play.api.{Configuration, Environment, Logger, LoggerLike}
-import uk.gov.hmrc.api.connector.{ApiServiceLocatorConnector, ServiceLocatorConnector}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.http.{CoreGet, CorePost}
 import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorImpl}
 import uk.gov.hmrc.mobilestartup.controllers.api.ApiAccess
 import uk.gov.hmrc.mobilestartup.services.{LivePreflightService, LiveStartupService, PreflightService, StartupService}
-import uk.gov.hmrc.mobilestartup.tasks.ServiceLocatorRegistrationTask
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
@@ -44,11 +42,9 @@ class GuiceModule @Inject()(environment: Environment, configuration: Configurati
     bindConfigBoolean("feature.userPanelSignUp")
     bind(classOf[LoggerLike]).toInstance(Logger)
 
-    bind(classOf[ServiceLocatorConnector]).to(classOf[ApiServiceLocatorConnector])
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
     bind(classOf[CoreGet]).to(classOf[WSHttpImpl])
     bind(classOf[CorePost]).to(classOf[WSHttpImpl])
-    bind(classOf[ServiceLocatorRegistrationTask]).asEagerSingleton()
 
     bind(new TypeLiteral[GenericConnector[Future]] {}).to(classOf[GenericConnectorImpl])
     bind(new TypeLiteral[StartupService[Future]] {}).to(classOf[LiveStartupService])
