@@ -12,6 +12,15 @@ The upgrade status is determined using the supplied POST data.
 
   `/mobile-startup/preflight-check`
 
+* **Headers:**
+
+    **Accept** -> `application/vnd.hmrc.1.0+json`
+
+    **Authorization** -> `Bearer Token`
+
+    **Content-Type** -> `application/json`
+
+
 * **Method:**
   
   `POST`
