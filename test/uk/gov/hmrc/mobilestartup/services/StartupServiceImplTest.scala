@@ -63,16 +63,6 @@ class StartupServiceImplTest extends BaseSpec with TestF {
   }
 
   "a response" should {
-    "not contain a taxSummary section if the userPanelSignUp flag is set to true" in {
-      val sut = new StartupServiceImpl[TestF](dummyConnector(), true)
-
-      val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
-
-      (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
-      (result \ taxSummary).toOption               shouldBe None
-    }
-
     "contain an empty-object entry for help-to-save when the hts call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error), false)
 
