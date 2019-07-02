@@ -493,6 +493,6 @@
     }
   },
   "feature": {
-    "payAsYouEarnOnDemand": "false"
+    "userPanelSignUp": "false"
   }
 }

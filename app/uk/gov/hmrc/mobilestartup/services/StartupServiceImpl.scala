@@ -40,7 +40,7 @@ object FeatureFlag {
   */
 class StartupServiceImpl[F[_]] @Inject()(
   connector:            GenericConnector[F],
-  payAsYouEarnOnDemand: Boolean
+  userPanelSignUp: Boolean
 )(
   implicit F: MonadError[F, Throwable]
 ) extends StartupService[F] {
@@ -53,7 +53,7 @@ class StartupServiceImpl[F[_]] @Inject()(
       featureFlags.pure[F]).mapN((a, b, c, d) => a ++ b ++ c ++ d)
 
   private val featureFlags: JsObject =
-    obj("feature" -> List(FeatureFlag("payAsYouEarnOnDemand", payAsYouEarnOnDemand)))
+    obj("feature" -> List(FeatureFlag("userPanelSignUp", userPanelSignUp)))
 
   private def buildJourneyQueryParam(journeyId: Option[String]): String =
     journeyId.fold("")(id => s"?journeyId=$id")
@@ -62,12 +62,12 @@ class StartupServiceImpl[F[_]] @Inject()(
     s"Native Error - ${journeyId.fold("no Journey id supplied")(id => id)}"
 
   private def callService(name: String)(f: => F[Option[JsValue]]): F[JsObject] =
-    // If the service call returns a valid result or an error then map it into the object against
-    // the supplied name, but if the result is None then just return an empty object so that the
-    // services section will not appear in the final result at all.
+  // If the service call returns a valid result or an error then map it into the object against
+  // the supplied name, but if the result is None then just return an empty object so that the
+  // services section will not appear in the final result at all.
     f.map {
       case Some(json) => obj(name -> json)
-      case None       => obj()
+      case None => obj()
     }
 
   private def mhtsStartup(implicit hc: HeaderCarrier): F[Option[JsValue]] =
@@ -92,15 +92,13 @@ class StartupServiceImpl[F[_]] @Inject()(
       }
 
   private def taxSummaryStartup(nino: String, year: Int, journeyId: Option[String])(implicit hc: HeaderCarrier): F[Option[JsValue]] =
-    if (payAsYouEarnOnDemand) none[JsValue].pure[F]
-    else
-      connector
-        .doGet("mobile-paye", s"/nino/$nino/tax-year/$year/summary${buildJourneyQueryParam(journeyId)}", hc)
-        .map(_.some)
-        .recover {
-          case ex: Exception =>
-            Logger.warn(s"${logJourneyId(journeyId)} - Failed to retrieve the tax-summary data and exception is ${ex.getMessage}!")
-            // An empty JSON object indicates failed to retrieve the tax-summary.
-            obj().some
-        }
+    connector
+      .doGet("mobile-paye", s"/nino/$nino/tax-year/$year/summary${buildJourneyQueryParam(journeyId)}", hc)
+      .map(_.some)
+      .recover {
+        case ex: Exception =>
+          Logger.warn(s"${logJourneyId(journeyId)} - Failed to retrieve the tax-summary data and exception is ${ex.getMessage}!")
+          // An empty JSON object indicates failed to retrieve the tax-summary.
+          obj().some
+      }
 }

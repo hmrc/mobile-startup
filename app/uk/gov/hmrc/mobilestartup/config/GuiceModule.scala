@@ -39,7 +39,7 @@ class GuiceModule @Inject()(environment: Environment, configuration: Configurati
 
     bindConfigInt("controllers.confidenceLevel")
     bindConfigString("appUrl", "appUrl")
-    bindConfigBoolean("feature.payAsYouEarnOnDemand")
+    bindConfigBoolean("feature.userPanelSignUp")
     bind(classOf[LoggerLike]).toInstance(Logger)
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])

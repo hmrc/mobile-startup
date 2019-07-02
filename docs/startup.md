@@ -8,6 +8,13 @@ about the user's help-to-save-account (if they have one) and any global feature 
 
   `/startup`
   
+* **Headers:**  
+  
+    **Accept** -> `application/vnd.hmrc.1.0+json`
+  
+    **Authorization** -> `Bearer Token`
+    
+    
 * **Method:**
 
 `GET`
@@ -510,7 +517,7 @@ about the user's help-to-save-account (if they have one) and any global feature 
     }
   },
   "feature": {
-    "payAsYouEarnOnDemand": "false"
+    "userPanelSignUp": "false"
   }
 }
 ```
