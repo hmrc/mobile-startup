@@ -96,9 +96,8 @@ class StartupServiceImpl[F[_]] @Inject()(
       .doGet("mobile-paye", s"/nino/$nino/tax-year/$year/summary${buildJourneyQueryParam(journeyId)}", hc)
       .map(_.some)
       .recover {
-        case ex: Exception =>
+        case NonFatal(ex) =>
           Logger.warn(s"${logJourneyId(journeyId)} - Failed to retrieve the tax-summary data and exception is ${ex.getMessage}!")
-          // An empty JSON object indicates failed to retrieve the tax-summary.
-          obj().some
+          None
       }
 }

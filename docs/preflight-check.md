@@ -53,7 +53,7 @@ Current version information of the application. The "os" attribute can be either
 ```json
 {
   "upgradeRequired": false,
-  "account": {
+  "accounts": {
     "nino": "WX772755B",
     "saUtr": "618567",
     "routeToIV": false,

@@ -91,7 +91,7 @@ class StartupServiceImplTest extends BaseSpec with TestF {
 
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
-      (result \ taxSummary).toOption.value         shouldBe obj()
+      (result \ taxSummary).isEmpty         shouldBe true
     }
   }
 }
