@@ -16,24 +16,18 @@
 
 package uk.gov.hmrc.mobilestartup.controllers
 import javax.inject.Inject
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, BodyParser, ControllerComponents}
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
-import uk.gov.hmrc.mobilestartup.services.PreflightService
+import uk.gov.hmrc.mobilestartup.services.PreFlightService
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class DeviceVersion(os: String, version: String)
-
-object DeviceVersion {
-  implicit val formats: Format[DeviceVersion] = Json.format[DeviceVersion]
-}
-
-class LivePreflightController @Inject()(
+class LivePreFlightController @Inject()(
   val controllerComponents:   ControllerComponents,
-  preflightService:           PreflightService[Future],
+  preflightService:           PreFlightService[Future],
   override val authConnector: AuthConnector
 )(
   implicit override val executionContext: ExecutionContext
@@ -45,9 +39,9 @@ class LivePreflightController @Inject()(
 
   private val authToken = "AuthToken"
 
-  def preFlightCheck(journeyId: Option[String]): Action[DeviceVersion] =
-    validateAccept(acceptHeaderValidationRules).async(controllerComponents.parsers.json[DeviceVersion]) { implicit request =>
-      preflightService.preFlight(request.body, journeyId).map { response =>
+  def preFlightCheck(journeyId: Option[String]): Action[AnyContent] =
+    validateAccept(acceptHeaderValidationRules).async { implicit request =>
+      preflightService.preFlight(journeyId).map { response =>
         hc.authorization match {
           case Some(auth) => Ok(Json.toJson(response)).addingToSession(authToken -> auth.value)
           case _          => Unauthorized("Failed to resolve authentication from HC!")

@@ -29,7 +29,7 @@ import uk.gov.hmrc.service.Auditor
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class LivePreflightService @Inject()(
+class LivePreFlightService @Inject()(
   genericConnector:                                    GenericConnector[Future],
   val auditConnector:                                  AuditConnector,
   val authConnector:                                   AuthConnector,
@@ -37,7 +37,7 @@ class LivePreflightService @Inject()(
   @Named("controllers.confidenceLevel") val confLevel: Int
 )(
   implicit executionContext: ExecutionContext
-) extends PreflightServiceImpl[Future](genericConnector, confLevel)
+) extends PreFlightServiceImpl[Future](genericConnector, confLevel)
     with AuthorisedFunctions
     with Auditor {
 
@@ -47,7 +47,7 @@ class LivePreflightService @Inject()(
 
   // The retrieval function is really hard to dummy out in tests because of it's polymorphic nature, and the `~` trick doesn't
   // help, but isolating it here and adapting to the concrete tuple of results we are expecting makes testing of the logic in
-  // `PreflightServiceImpl` much easier.
+  // `PreFlightServiceImpl` much easier.
   override def retrieveAccounts(implicit hc: HeaderCarrier): Future[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)] =
     authConnector.authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel).map {
       case foundNino ~ foundSaUtr ~ creds ~ conf =>

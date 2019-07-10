@@ -15,8 +15,6 @@
  */
 
 package uk.gov.hmrc.mobilestartup.controllers
-import java.util.UUID.randomUUID
-
 import javax.inject.Inject
 import play.api.libs.json.Json.toJson
 import play.api.mvc._
@@ -28,7 +26,7 @@ import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SandboxPreflightController @Inject()(
+class SandboxPreFlightController @Inject()(
   val controllerComponents: ControllerComponents
 )(
   implicit val executionContext: ExecutionContext
@@ -38,8 +36,8 @@ class SandboxPreflightController @Inject()(
 
   override def parser: BodyParser[AnyContent] = controllerComponents.parsers.anyContent
 
-  def preFlightCheck(journeyId: Option[String]): Action[DeviceVersion] =
-    validateAccept(acceptHeaderValidationRules).async(controllerComponents.parsers.json[DeviceVersion]) { implicit request =>
+  def preFlightCheck(journeyId: Option[String]): Action[AnyContent] =
+    validateAccept(acceptHeaderValidationRules).async { implicit request =>
       val sandboxControl: Option[String] = request.headers.get("SANDBOX-CONTROL")
 
       Future.successful {
@@ -49,7 +47,6 @@ class SandboxPreflightController @Inject()(
           case Some("ERROR-500") => InternalServerError
           case _ =>
             val (upgrade, toIV) = sandboxControl match {
-              case Some("UPGRADE-REQUIRED")    => (true, false)
               case Some("ROUTE-TO-IV")         => (false, true)
               case Some("ROUTE-TO-TWO-FACTOR") => (false, false)
               case _                           => (false, false)
@@ -61,5 +58,5 @@ class SandboxPreflightController @Inject()(
     }
 
   def buildPreFlightResponse(upgrade: Boolean, toIV: Boolean): PreFlightCheckResponse =
-    PreFlightCheckResponse(upgradeRequired = upgrade, Accounts(Some(Nino("CS700100A")), None, toIV, randomUUID().toString))
+    PreFlightCheckResponse(Some(Nino("CS700100A")), None, toIV)
 }
