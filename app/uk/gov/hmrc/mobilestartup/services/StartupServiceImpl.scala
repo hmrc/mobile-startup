@@ -23,7 +23,6 @@ import play.api.libs.json.Json._
 import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
-import uk.gov.hmrc.time.TaxYear
 
 import scala.util.control.NonFatal
 
@@ -49,8 +48,7 @@ class StartupServiceImpl[F[_]] @Inject()(
     (
       callService("helpToSave")(mhtsStartup),
       callService("taxCreditRenewals")(tcrStartup(journeyId)),
-      callService("taxSummary")(taxSummaryStartup(nino, TaxYear.current.currentYear, journeyId)),
-      featureFlags.pure[F]).mapN((a, b, c, d) => a ++ b ++ c ++ d)
+      featureFlags.pure[F]).mapN((a, b, c) => a ++ b ++ c)
 
   private val featureFlags: JsObject =
     obj("feature" -> List(FeatureFlag("userPanelSignUp", userPanelSignUp)))
@@ -91,13 +89,4 @@ class StartupServiceImpl[F[_]] @Inject()(
           obj("submissionsState" -> JsString("error")).some
       }
 
-  private def taxSummaryStartup(nino: String, year: Int, journeyId: Option[String])(implicit hc: HeaderCarrier): F[Option[JsValue]] =
-    connector
-      .doGet("mobile-paye", s"/nino/$nino/tax-year/$year/summary${buildJourneyQueryParam(journeyId)}", hc)
-      .map(_.some)
-      .recover {
-        case NonFatal(ex) =>
-          Logger.warn(s"${logJourneyId(journeyId)} - Failed to retrieve the tax-summary data and exception is ${ex.getMessage}!")
-          None
-      }
 }

@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.mobilestartup.connectors
 
-import cats.instances.future._
 import com.google.inject.Singleton
 import javax.inject.Inject
+import play.api.Configuration
 import play.api.libs.json.JsValue
-import play.api.{Configuration, Logger}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.mobilestartup.config.WSHttpImpl
 

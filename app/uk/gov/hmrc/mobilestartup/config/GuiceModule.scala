@@ -24,7 +24,7 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.http.{CoreGet, CorePost}
 import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorImpl}
 import uk.gov.hmrc.mobilestartup.controllers.api.ApiAccess
-import uk.gov.hmrc.mobilestartup.services.{LivePreflightService, LiveStartupService, PreflightService, StartupService}
+import uk.gov.hmrc.mobilestartup.services.{LivePreFlightService, LiveStartupService, PreFlightService, StartupService}
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 
@@ -48,7 +48,7 @@ class GuiceModule @Inject()(environment: Environment, configuration: Configurati
 
     bind(new TypeLiteral[GenericConnector[Future]] {}).to(classOf[GenericConnectorImpl])
     bind(new TypeLiteral[StartupService[Future]] {}).to(classOf[LiveStartupService])
-    bind(new TypeLiteral[PreflightService[Future]] {}).to(classOf[LivePreflightService])
+    bind(new TypeLiteral[PreFlightService[Future]] {}).to(classOf[LivePreFlightService])
 
     bind(classOf[ApiAccess]).toInstance(ApiAccess("PRIVATE", configuration.underlying.getStringList("api.access.white-list.applicationIds").asScala))
   }

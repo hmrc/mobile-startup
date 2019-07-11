@@ -28,7 +28,7 @@ uses:
       displayName: Get startup data
       description: This endpoint retrieves the startup data that the mobile apps use to initialize themselves. The service
                    will use the authentication token to identify the NINO for the user that using the app. The json response
-                   will contain keys for `helpToSave`, `taxCreditsRenewals` and `taxSummary`. The values for each of
+                   will contain keys for `helpToSave` and `taxCreditsRenewals`. The values for each of
                    these is the json returned from the relevant service. The response will also contain a `features`
                    key that references a set of feature flags.
       is: [headers.acceptHeader]
@@ -43,8 +43,8 @@ uses:
                   value: !include examples/startup-example-1.json
   /preflight-check:
     post:
-      displayName: Check version and return account identifiers for user
-      description: This endpoint retrieves the accounts associated with the auth record, and validates the app version
+      displayName: Return account identifiers for the user
+      description: This endpoint retrieves the account identifiers associated with the auth record
       is: [headers.acceptHeader]
       (annotations.scope): "read:native-apps-api-orchestration"
       securedBy: [ sec.oauth_2_0: { scopes: [ "read:native-apps-api-orchestration" ] } ]
@@ -61,5 +61,3 @@ uses:
                   value: !include examples/preflight-check-example-1.json
                 example-2:
                   value: !include examples/preflight-check-example-2.json
-                example-4:
-                  value: !include examples/preflight-check-example-4.json
