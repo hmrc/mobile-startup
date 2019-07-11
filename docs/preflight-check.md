@@ -12,9 +12,6 @@ The response to this service includes a set of account identifiers for the user.
 
     **Authorization** -> `Bearer Token`
 
-    **Content-Type** -> `application/json`
-
-
 * **Method:**
   
   `GET`
