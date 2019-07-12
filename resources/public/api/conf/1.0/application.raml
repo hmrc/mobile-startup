@@ -42,7 +42,7 @@ uses:
                 example-1:
                   value: !include examples/startup-example-1.json
   /preflight-check:
-    post:
+    get:
       displayName: Return account identifiers for the user
       description: This endpoint retrieves the account identifiers associated with the auth record
       is: [headers.acceptHeader]
