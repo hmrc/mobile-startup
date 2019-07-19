@@ -1,7 +1,7 @@
 Retrieve startup information
 ----
 
-The response will include tax summary details, a flag to say if the tax credits window is open or closed, basic information
+The response will include a flag to say if the tax credits window is open or closed, basic information
 about the user's help-to-save-account (if they have one) and any global feature flags for the application.
 
 * **URL**
