@@ -29,7 +29,7 @@ import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 
 class PreFlightServiceImplSpec extends FreeSpecLike with Matchers with TestF with GeneratorDrivenPropertyChecks with NinoGen {
 
-  private def dummyConnector(versionCheckResult: Boolean): GenericConnector[TestF] =
+  private def dummyConnector: GenericConnector[TestF] =
     new GenericConnector[TestF] {
       override def doGet(serviceName: String, path: String, hc: HeaderCarrier): TestF[JsValue] = ???
 
@@ -52,12 +52,12 @@ class PreFlightServiceImplSpec extends FreeSpecLike with Matchers with TestF wit
     "should" - {
       "return a response" - {
         "with the expected nino" in forAll { nino: Nino =>
-          val sut = service(Some(nino), None, Credentials("", "GovernmentGateway"), ConfidenceLevel.L200, dummyConnector(false))
+          val sut = service(Some(nino), None, Credentials("", "GovernmentGateway"), ConfidenceLevel.L200, dummyConnector)
           sut.preFlight(None)(HeaderCarrier()).unsafeGet.nino shouldBe Some(nino)
         }
 
         "with the expected utr" in forAll { utr: String =>
-          val sut = service(None, Some(SaUtr(utr)), Credentials("", "GovernmentGateway"), ConfidenceLevel.L200, dummyConnector(false))
+          val sut = service(None, Some(SaUtr(utr)), Credentials("", "GovernmentGateway"), ConfidenceLevel.L200, dummyConnector)
           sut.preFlight(None)(HeaderCarrier()).unsafeGet.saUtr shouldBe Some(SaUtr(utr))
         }
 
@@ -66,7 +66,7 @@ class PreFlightServiceImplSpec extends FreeSpecLike with Matchers with TestF wit
             Arbitrary(Gen.oneOf(ConfidenceLevel.L200, ConfidenceLevel.L300, ConfidenceLevel.L500))
 
           "routeToIV should be false if the confidence level is 200 or above" in forAll { confidenceLevel: ConfidenceLevel =>
-            val sut = service(None, None, Credentials("", "GovernmentGateway"), confidenceLevel, dummyConnector(false))
+            val sut = service(None, None, Credentials("", "GovernmentGateway"), confidenceLevel, dummyConnector)
             sut.preFlight(None)(HeaderCarrier()).unsafeGet.routeToIV shouldBe false
           }
         }
@@ -76,14 +76,14 @@ class PreFlightServiceImplSpec extends FreeSpecLike with Matchers with TestF wit
             Arbitrary(Gen.oneOf(ConfidenceLevel.L50, ConfidenceLevel.L0))
 
           "routeToIV should be true if the confidence level is below 200" in forAll { confidenceLevel: ConfidenceLevel =>
-            val sut = service(None, None, Credentials("", "GovernmentGateway"), confidenceLevel, dummyConnector(false))
+            val sut = service(None, None, Credentials("", "GovernmentGateway"), confidenceLevel, dummyConnector)
             sut.preFlight(None)(HeaderCarrier()).unsafeGet.routeToIV shouldBe true
           }
         }
 
         "and if the auth provided is not 'GovernmentGateway'" - {
           "it should throw an UnsupportedAuthProvider exception" in {
-            val sut = service(None, None, Credentials("", "NotGovernmentGateway!"), ConfidenceLevel.L200, dummyConnector(false))
+            val sut = service(None, None, Credentials("", "NotGovernmentGateway!"), ConfidenceLevel.L200, dummyConnector)
             intercept[UnsupportedAuthProvider](sut.preFlight(None)(HeaderCarrier()).unsafeGet)
           }
         }
