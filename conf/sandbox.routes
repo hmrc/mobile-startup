@@ -1,5 +1,5 @@
 # microservice specific routes
 
-GET        /startup                uk.gov.hmrc.mobilestartup.controllers.SandboxStartupController.startup(journeyId: Option[String])
+GET        /startup                uk.gov.hmrc.mobilestartup.controllers.SandboxStartupController.startup(journeyId: String)
 
-GET        /preflight-check        uk.gov.hmrc.mobilestartup.controllers.SandboxPreFlightController.preFlightCheck(journeyId:Option[String])
+GET        /preflight-check        uk.gov.hmrc.mobilestartup.controllers.SandboxPreFlightController.preFlightCheck(journeyId: String)

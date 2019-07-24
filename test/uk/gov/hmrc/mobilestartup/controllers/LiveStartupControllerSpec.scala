@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LiveStartupControllerSpec extends WordSpec with Matchers with MockFactory {
   private val fakeRequest = FakeRequest("GET", "/")
   private val stubStartupService = new StartupService[Future] {
-    override def startup(nino: String, journeyId: Option[String])(implicit hc: HeaderCarrier): Future[JsObject] =
+    override def startup(nino: String, journeyId: String)(implicit hc: HeaderCarrier): Future[JsObject] =
       Future.successful(obj())
   }
 
@@ -52,7 +52,7 @@ class LiveStartupControllerSpec extends WordSpec with Matchers with MockFactory 
         authConnector(Future.successful(Some("nino"))),
         200
       )
-      val result = controller.startup(None)(fakeRequest)
+      val result = controller.startup("journeyId")(fakeRequest)
       status(result) shouldBe Status.OK
     }
   }

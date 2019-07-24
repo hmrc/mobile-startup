@@ -12,7 +12,7 @@ class SandboxStartupControllerISpec extends BaseISpec {
 
       implicit val wsClient: WSClient = app.injector.instanceOf[WSClient]
 
-      val response = await(wsUrl("/startup").addHttpHeaders(mobileHeader).get)
+      val response = await(wsUrl("/startup?journeyId=journeyId").addHttpHeaders(mobileHeader).get)
       response.status shouldBe 200
 
     }
