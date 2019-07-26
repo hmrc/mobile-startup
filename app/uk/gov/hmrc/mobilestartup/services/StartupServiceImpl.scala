@@ -74,7 +74,7 @@ class StartupServiceImpl[F[_]] @Inject()(
 
   private def tcrStartup(journeyId: String)(implicit hc: HeaderCarrier): F[Option[JsValue]] =
     connector
-      .doGet("mobile-tax-credits-renewal", s"/income/tax-credits/submission/state/enabled${journeyId}", hc)
+      .doGet("mobile-tax-credits-renewal", s"/income/tax-credits/submission/state/enabled?journeyId=${journeyId}", hc)
       .map[Option[JsValue]](res => obj("submissionsState" -> JsString((res \ "submissionsState").as[String])).some)
       .recover {
         case NonFatal(e) =>
