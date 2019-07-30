@@ -44,7 +44,7 @@ class StartupServiceImpl[F[_]] @Inject()(
   implicit F: MonadError[F, Throwable]
 ) extends StartupService[F] {
 
-  override def startup(nino: String, journeyId: Option[String])(implicit hc: HeaderCarrier): F[JsObject] =
+  override def startup(nino: String, journeyId: String)(implicit hc: HeaderCarrier): F[JsObject] =
     (
       callService("helpToSave")(mhtsStartup),
       callService("taxCreditRenewals")(tcrStartup(journeyId)),
@@ -52,12 +52,6 @@ class StartupServiceImpl[F[_]] @Inject()(
 
   private val featureFlags: JsObject =
     obj("feature" -> List(FeatureFlag("userPanelSignUp", userPanelSignUp)))
-
-  private def buildJourneyQueryParam(journeyId: Option[String]): String =
-    journeyId.fold("")(id => s"?journeyId=$id")
-
-  private def logJourneyId(journeyId: Option[String]) =
-    s"Native Error - ${journeyId.fold("no Journey id supplied")(id => id)}"
 
   private def callService(name: String)(f: => F[Option[JsValue]]): F[JsObject] =
   // If the service call returns a valid result or an error then map it into the object against
@@ -78,14 +72,14 @@ class StartupServiceImpl[F[_]] @Inject()(
           obj().some
       }
 
-  private def tcrStartup(journeyId: Option[String])(implicit hc: HeaderCarrier): F[Option[JsValue]] =
+  private def tcrStartup(journeyId: String)(implicit hc: HeaderCarrier): F[Option[JsValue]] =
     connector
-      .doGet("mobile-tax-credits-renewal", s"/income/tax-credits/submission/state/enabled${buildJourneyQueryParam(journeyId)}", hc)
+      .doGet("mobile-tax-credits-renewal", s"/income/tax-credits/submission/state/enabled?journeyId=${journeyId}", hc)
       .map[Option[JsValue]](res => obj("submissionsState" -> JsString((res \ "submissionsState").as[String])).some)
       .recover {
         case NonFatal(e) =>
           Logger.warn(
-            s"${logJourneyId(journeyId)} - Failed to retrieve TaxCreditsRenewals and exception is ${e.getMessage}! Default of submissionsState is error!")
+            s"${journeyId} - Failed to retrieve TaxCreditsRenewals and exception is ${e.getMessage}! Default of submissionsState is error!")
           obj("submissionsState" -> JsString("error")).some
       }
 

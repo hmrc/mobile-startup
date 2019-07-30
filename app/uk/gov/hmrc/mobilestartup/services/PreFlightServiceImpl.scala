@@ -32,12 +32,12 @@ abstract class PreFlightServiceImpl[F[_]](genericConnector: GenericConnector[F],
   def retrieveAccounts(implicit hc: HeaderCarrier): F[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)]
   def auditing[T](service:          String, details: Map[String, String])(f: => F[T])(implicit hc: HeaderCarrier): F[T]
 
-  def preFlight(journeyId: Option[String])(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
+  def preFlight(journeyId: String)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
     auditing("preFlightCheck", Map.empty) {
       getPreFlightCheckResponse(journeyId)
     }
 
-  private def getPreFlightCheckResponse(journeyId: Option[String])(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
+  private def getPreFlightCheckResponse(journeyId: String)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
     retrieveAccounts.map {
       case (nino, saUtr, credentials, confidenceLevel) =>
         if (credentials.providerType != "GovernmentGateway") throw new UnsupportedAuthProvider

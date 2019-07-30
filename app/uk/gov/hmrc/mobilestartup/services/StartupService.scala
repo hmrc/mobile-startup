@@ -19,5 +19,5 @@ import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.HeaderCarrier
 
 trait StartupService[F[_]] {
-  def startup(nino: String, journeyId: Option[String])(implicit hc: HeaderCarrier): F[JsObject]
+  def startup(nino: String, journeyId: String)(implicit hc: HeaderCarrier): F[JsObject]
 }

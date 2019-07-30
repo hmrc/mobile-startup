@@ -37,7 +37,7 @@ class LiveStartupController @Inject()(
 ) extends BackendBaseController
     with AuthorisedFunctions {
 
-  def startup(journeyId: Option[String]): Action[AnyContent] =
+  def startup(journeyId: String): Action[AnyContent] =
     Action.async { implicit request =>
       withNinoFromAuth { verifiedNino =>
         service.startup(verifiedNino, journeyId).map(Ok(_))

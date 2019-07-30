@@ -40,5 +40,5 @@ object PreFlightCheckResponse {
 
 @ImplementedBy(classOf[LivePreFlightService])
 trait PreFlightService[F[_]] {
-  def preFlight(journeyId: Option[String])(implicit hc: HeaderCarrier): F[PreFlightCheckResponse]
+  def preFlight(journeyId: String)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse]
 }

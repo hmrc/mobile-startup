@@ -30,7 +30,7 @@ class SandboxStartupController @Inject()(
 ) extends BackendBaseController
     with FileResource {
 
-  def startup(journeyId: Option[String]): Action[AnyContent] = Action { _ =>
+  def startup(journeyId: String): Action[AnyContent] = Action { _ =>
     Ok(Json.parse(findResource("/sandbox/startup.json").getOrElse("{}")))
   }
 }

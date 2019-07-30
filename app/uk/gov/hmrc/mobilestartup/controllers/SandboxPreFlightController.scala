@@ -36,7 +36,7 @@ class SandboxPreFlightController @Inject()(
 
   override def parser: BodyParser[AnyContent] = controllerComponents.parsers.anyContent
 
-  def preFlightCheck(journeyId: Option[String]): Action[AnyContent] =
+  def preFlightCheck(journeyId: String): Action[AnyContent] =
     validateAccept(acceptHeaderValidationRules).async { implicit request =>
       val sandboxControl: Option[String] = request.headers.get("SANDBOX-CONTROL")
 

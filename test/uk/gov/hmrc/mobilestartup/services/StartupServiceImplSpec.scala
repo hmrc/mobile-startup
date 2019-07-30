@@ -50,7 +50,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain success entries for each service" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(), false)
 
-      val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", "journeyId")(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
@@ -61,7 +61,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain an empty-object entry for help-to-save when the hts call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error), false)
 
-      val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", "journeyId")(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value         shouldBe obj()
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
@@ -70,7 +70,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain an error entry for tcr when the tcr call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error), false)
 
-      val result: JsObject = sut.startup("nino", None)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", "journeyId")(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe obj("submissionsState" -> "error")

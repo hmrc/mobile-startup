@@ -39,7 +39,7 @@ class LivePreFlightController @Inject()(
 
   private val authToken = "AuthToken"
 
-  def preFlightCheck(journeyId: Option[String]): Action[AnyContent] =
+  def preFlightCheck(journeyId: String): Action[AnyContent] =
     validateAccept(acceptHeaderValidationRules).async { implicit request =>
       preflightService.preFlight(journeyId).map { response =>
         hc.authorization match {
