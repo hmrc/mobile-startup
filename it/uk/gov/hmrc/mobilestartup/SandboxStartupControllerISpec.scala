@@ -16,5 +16,13 @@ class SandboxStartupControllerISpec extends BaseISpec {
       response.status shouldBe 200
 
     }
+    "return 400 if journeyId not supplied" in {
+
+      implicit val wsClient: WSClient = app.injector.instanceOf[WSClient]
+
+      val response = await(wsUrl("/startup").addHttpHeaders(mobileHeader).get)
+      response.status shouldBe 400
+
+    }
   }
 }

@@ -63,5 +63,11 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
 
       response.status shouldBe 500
     }
+
+    "return 400 if journeyId not supplied" in {
+      val response = await(wsUrl("/preflight-check").addHttpHeaders(headerThatSucceeds: _*).get)
+
+      response.status shouldBe 400
+    }
   }
 }
