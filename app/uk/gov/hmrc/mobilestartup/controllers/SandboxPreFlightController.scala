@@ -58,5 +58,5 @@ class SandboxPreFlightController @Inject()(
     }
 
   def buildPreFlightResponse(upgrade: Boolean, toIV: Boolean): PreFlightCheckResponse =
-    PreFlightCheckResponse(Some(Nino("CS700100A")), Some(SaUtr("4739456215")), toIV)
+    PreFlightCheckResponse(Some(Nino("CS700100A")), Some(SaUtr("1234567890")), toIV)
 }
