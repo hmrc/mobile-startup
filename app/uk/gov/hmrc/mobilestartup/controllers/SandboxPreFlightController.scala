@@ -20,7 +20,7 @@ import play.api.libs.json.Json.toJson
 import play.api.mvc._
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.api.sandbox.FileResource
-import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.mobilestartup.services.PreFlightCheckResponse
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
@@ -58,5 +58,5 @@ class SandboxPreFlightController @Inject()(
     }
 
   def buildPreFlightResponse(upgrade: Boolean, toIV: Boolean): PreFlightCheckResponse =
-    PreFlightCheckResponse(Some(Nino("CS700100A")), None, toIV)
+    PreFlightCheckResponse(Some(Nino("CS700100A")), Some(SaUtr("1234567890")), toIV)
 }
