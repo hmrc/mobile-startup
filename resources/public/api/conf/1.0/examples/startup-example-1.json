@@ -19,7 +19,14 @@
       "state": "Enrolled"
     }
   },
-  "feature": {
-    "userPanelSignUp": "false"
-  }
+  "feature": [
+    {
+      "name": "userPanelSignUp",
+      "enabled": false
+    },
+    {
+      "name": "helpToSaveEnableBadge",
+      "enabled": true
+    }
+  ]
 }
