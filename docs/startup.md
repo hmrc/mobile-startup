@@ -43,8 +43,19 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "state": "Enrolled"
     }
   },
-  "feature": {
-    "userPanelSignUp": "false"
-  }
+  "feature": [
+    {
+      "name": "userPanelSignUp",
+      "enabled": false
+    },
+    {
+      "name": "ssoEnabled",
+      "enabled": false
+    },
+    {
+      "name": "helpToSaveEnableBadge",
+      "enabled": true
+    }
+  ]
 }
 ```
