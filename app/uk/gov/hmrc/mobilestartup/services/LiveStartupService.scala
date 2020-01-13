@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,9 @@ import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import scala.concurrent.{ExecutionContext, Future}
 
 class LiveStartupService @Inject()(
-  connector:                                                   GenericConnector[Future],
-  @Named("feature.userPanelSignUp") userPanelSignUp: Boolean
+  connector:                                                      GenericConnector[Future],
+  @Named("feature.userPanelSignUp") userPanelSignUp:              Boolean,
+  @Named("feature.helpToSave.enableBadge") helpToSaveEnableBadge: Boolean
 )(
   implicit ec: ExecutionContext
-) extends StartupServiceImpl[Future](connector, userPanelSignUp)
+) extends StartupServiceImpl[Future](connector, userPanelSignUp, helpToSaveEnableBadge)
