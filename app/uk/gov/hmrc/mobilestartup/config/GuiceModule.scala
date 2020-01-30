@@ -31,7 +31,10 @@ import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
-class GuiceModule @Inject()(environment: Environment, configuration: Configuration) extends AbstractModule {
+class GuiceModule @Inject() (
+  environment:   Environment,
+  configuration: Configuration)
+    extends AbstractModule {
 
   val servicesConfig: ServicesConfig = new ServicesConfig(configuration, new RunMode(configuration, environment.mode))
 
@@ -51,7 +54,9 @@ class GuiceModule @Inject()(environment: Environment, configuration: Configurati
     bind(new TypeLiteral[StartupService[Future]] {}).to(classOf[LiveStartupService])
     bind(new TypeLiteral[PreFlightService[Future]] {}).to(classOf[LivePreFlightService])
 
-    bind(classOf[ApiAccess]).toInstance(ApiAccess("PRIVATE", configuration.underlying.getStringList("api.access.white-list.applicationIds").asScala))
+    bind(classOf[ApiAccess]).toInstance(
+      ApiAccess("PRIVATE", configuration.underlying.getStringList("api.access.white-list.applicationIds").asScala)
+    )
   }
 
   /**
@@ -61,7 +66,10 @@ class GuiceModule @Inject()(environment: Environment, configuration: Configurati
   private def bindConfigInt(path: String): Unit =
     bindConstant().annotatedWith(named(path)).to(configuration.underlying.getInt(path))
 
-  private def bindConfigString(name: String, path: String): Unit =
+  private def bindConfigString(
+    name: String,
+    path: String
+  ): Unit =
     bindConstant().annotatedWith(named(name)).to(configuration.underlying.getString(path))
 
   private def bindConfigBoolean(path: String): Unit =

@@ -21,22 +21,22 @@ import play.api.mvc._
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.api.sandbox.FileResource
 import uk.gov.hmrc.domain.{Nino, SaUtr}
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.PreFlightCheckResponse
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SandboxPreFlightController @Inject()(
-  val controllerComponents: ControllerComponents
-)(
-  implicit val executionContext: ExecutionContext
-) extends BackendBaseController
+class SandboxPreFlightController @Inject() (
+  val controllerComponents:      ControllerComponents
+)(implicit val executionContext: ExecutionContext)
+    extends BackendBaseController
     with FileResource
     with HeaderValidator {
 
   override def parser: BodyParser[AnyContent] = controllerComponents.parsers.anyContent
 
-  def preFlightCheck(journeyId: String): Action[AnyContent] =
+  def preFlightCheck(journeyId: JourneyId): Action[AnyContent] =
     validateAccept(acceptHeaderValidationRules).async { implicit request =>
       val sandboxControl: Option[String] = request.headers.get("SANDBOX-CONTROL")
 
@@ -57,6 +57,9 @@ class SandboxPreFlightController @Inject()(
       }
     }
 
-  def buildPreFlightResponse(upgrade: Boolean, toIV: Boolean): PreFlightCheckResponse =
+  def buildPreFlightResponse(
+    upgrade: Boolean,
+    toIV:    Boolean
+  ): PreFlightCheckResponse =
     PreFlightCheckResponse(Some(Nino("CS700100A")), Some(SaUtr("1234567890")), toIV)
 }

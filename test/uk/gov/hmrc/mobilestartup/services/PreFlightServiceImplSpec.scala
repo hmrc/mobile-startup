@@ -17,8 +17,8 @@
 package uk.gov.hmrc.mobilestartup.services
 import cats.implicits._
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{FreeSpecLike, Matchers}
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.auth.core.retrieve.Credentials
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, UnsupportedAuthProvider}
@@ -26,14 +26,35 @@ import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.mobilestartup.TestF
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 
-class PreFlightServiceImplSpec extends FreeSpecLike with Matchers with TestF with GeneratorDrivenPropertyChecks with NinoGen {
+import eu.timepit.refined.auto._
+
+class PreFlightServiceImplSpec
+    extends FreeSpecLike
+    with TestF
+    with ScalaCheckDrivenPropertyChecks
+    with NinoGen
+    with Matchers {
+
+  val journeyId: JourneyId = "7f1b5289-5f4d-4150-93a3-ff02dda28375"
 
   private def dummyConnector: GenericConnector[TestF] =
     new GenericConnector[TestF] {
-      override def doGet(serviceName: String, path: String, hc: HeaderCarrier): TestF[JsValue] = ???
 
-      override def doPost[T](json: JsValue, serviceName: String, path: String, hc: HeaderCarrier)(implicit rds: HttpReads[T]): TestF[T] = ???
+      override def doGet(
+        serviceName: String,
+        path:        String,
+        hc:          HeaderCarrier
+      ): TestF[JsValue] = ???
+
+      override def doPost[T](
+        json:         JsValue,
+        serviceName:  String,
+        path:         String,
+        hc:           HeaderCarrier
+      )(implicit rds: HttpReads[T]
+      ): TestF[T] = ???
     }
 
   private def service(
@@ -41,33 +62,45 @@ class PreFlightServiceImplSpec extends FreeSpecLike with Matchers with TestF wit
     saUtr:           Option[SaUtr],
     credentials:     Credentials,
     confidenceLevel: ConfidenceLevel,
-    connector:       GenericConnector[TestF]): PreFlightService[TestF] = new PreFlightServiceImpl[TestF](connector, 200) {
-    override def retrieveAccounts(implicit hc: HeaderCarrier): TestF[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)] =
+    connector:       GenericConnector[TestF]
+  ): PreFlightService[TestF] = new PreFlightServiceImpl[TestF](connector, 200) {
+
+    override def retrieveAccounts(
+      implicit hc: HeaderCarrier
+    ): TestF[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)] =
       (nino, saUtr, credentials, confidenceLevel).pure[TestF]
 
-    override def auditing[T](service: String, details: Map[String, String])(f: => TestF[T])(implicit hc: HeaderCarrier): TestF[T] = f
+    override def auditing[T](
+      service:     String,
+      details:     Map[String, String]
+    )(f:           => TestF[T]
+    )(implicit hc: HeaderCarrier
+    ): TestF[T] = f
   }
 
   "preFlight" - {
     "should" - {
       "return a response" - {
         "with the expected nino" in forAll { nino: Nino =>
-          val sut = service(Some(nino), None, Credentials("", "GovernmentGateway"), ConfidenceLevel.L200, dummyConnector)
-          sut.preFlight("journeyId")(HeaderCarrier()).unsafeGet.nino shouldBe Some(nino)
+          val sut =
+            service(Some(nino), None, Credentials("", "GovernmentGateway"), ConfidenceLevel.L200, dummyConnector)
+          sut.preFlight(journeyId)(HeaderCarrier()).unsafeGet.nino shouldBe Some(nino)
         }
 
         "with the expected utr" in forAll { utr: String =>
-          val sut = service(None, Some(SaUtr(utr)), Credentials("", "GovernmentGateway"), ConfidenceLevel.L200, dummyConnector)
-          sut.preFlight("journeyId")(HeaderCarrier()).unsafeGet.saUtr shouldBe Some(SaUtr(utr))
+          val sut =
+            service(None, Some(SaUtr(utr)), Credentials("", "GovernmentGateway"), ConfidenceLevel.L200, dummyConnector)
+          sut.preFlight(journeyId)(HeaderCarrier()).unsafeGet.saUtr shouldBe Some(SaUtr(utr))
         }
 
         {
           implicit val arbConfidenceLevel: Arbitrary[ConfidenceLevel] =
             Arbitrary(Gen.oneOf(ConfidenceLevel.L200, ConfidenceLevel.L300, ConfidenceLevel.L500))
 
-          "routeToIV should be false if the confidence level is 200 or above" in forAll { confidenceLevel: ConfidenceLevel =>
-            val sut = service(None, None, Credentials("", "GovernmentGateway"), confidenceLevel, dummyConnector)
-            sut.preFlight("journeyId")(HeaderCarrier()).unsafeGet.routeToIV shouldBe false
+          "routeToIV should be false if the confidence level is 200 or above" in forAll {
+            confidenceLevel: ConfidenceLevel =>
+              val sut = service(None, None, Credentials("", "GovernmentGateway"), confidenceLevel, dummyConnector)
+              sut.preFlight(journeyId)(HeaderCarrier()).unsafeGet.routeToIV shouldBe false
           }
         }
 
@@ -75,16 +108,18 @@ class PreFlightServiceImplSpec extends FreeSpecLike with Matchers with TestF wit
           implicit val arbConfidenceLevel: Arbitrary[ConfidenceLevel] =
             Arbitrary(Gen.oneOf(ConfidenceLevel.L50, ConfidenceLevel.L0))
 
-          "routeToIV should be true if the confidence level is below 200" in forAll { confidenceLevel: ConfidenceLevel =>
-            val sut = service(None, None, Credentials("", "GovernmentGateway"), confidenceLevel, dummyConnector)
-            sut.preFlight("journeyId")(HeaderCarrier()).unsafeGet.routeToIV shouldBe true
+          "routeToIV should be true if the confidence level is below 200" in forAll {
+            confidenceLevel: ConfidenceLevel =>
+              val sut = service(None, None, Credentials("", "GovernmentGateway"), confidenceLevel, dummyConnector)
+              sut.preFlight(journeyId)(HeaderCarrier()).unsafeGet.routeToIV shouldBe true
           }
         }
 
         "and if the auth provided is not 'GovernmentGateway'" - {
           "it should throw an UnsupportedAuthProvider exception" in {
-            val sut = service(None, None, Credentials("", "NotGovernmentGateway!"), ConfidenceLevel.L200, dummyConnector)
-            intercept[UnsupportedAuthProvider](sut.preFlight("journeyId")(HeaderCarrier()).unsafeGet)
+            val sut =
+              service(None, None, Credentials("", "NotGovernmentGateway!"), ConfidenceLevel.L200, dummyConnector)
+            intercept[UnsupportedAuthProvider](sut.preFlight(journeyId)(HeaderCarrier()).unsafeGet)
           }
         }
       }

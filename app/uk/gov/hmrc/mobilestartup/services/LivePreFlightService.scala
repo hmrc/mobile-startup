@@ -29,26 +29,32 @@ import uk.gov.hmrc.service.Auditor
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class LivePreFlightService @Inject()(
+class LivePreFlightService @Inject() (
   genericConnector:                                    GenericConnector[Future],
   val auditConnector:                                  AuditConnector,
   val authConnector:                                   AuthConnector,
   @Named("appName") val appName:                       String,
   @Named("controllers.confidenceLevel") val confLevel: Int
-)(
-  implicit executionContext: ExecutionContext
-) extends PreFlightServiceImpl[Future](genericConnector, confLevel)
+)(implicit executionContext:                           ExecutionContext)
+    extends PreFlightServiceImpl[Future](genericConnector, confLevel)
     with AuthorisedFunctions
     with Auditor {
 
   // Just adapting from `F` to `Future` here
-  override def auditing[T](service: String, details: Map[String, String])(f: => Future[T])(implicit hc: HeaderCarrier): Future[T] =
+  override def auditing[T](
+    service:     String,
+    details:     Map[String, String]
+  )(f:           => Future[T]
+  )(implicit hc: HeaderCarrier
+  ): Future[T] =
     withAudit(service, details)(f)
 
   // The retrieval function is really hard to dummy out in tests because of it's polymorphic nature, and the `~` trick doesn't
   // help, but isolating it here and adapting to the concrete tuple of results we are expecting makes testing of the logic in
   // `PreFlightServiceImpl` much easier.
-  override def retrieveAccounts(implicit hc: HeaderCarrier): Future[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)] =
+  override def retrieveAccounts(
+    implicit hc: HeaderCarrier
+  ): Future[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)] =
     authConnector.authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel).map {
       case foundNino ~ foundSaUtr ~ creds ~ conf =>
         (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf)

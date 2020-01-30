@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.mobilestartup.services
-import play.api.libs.json.JsObject
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+package uk.gov.hmrc.mobilestartup.model.types
 
-trait StartupService[F[_]] {
+import eu.timepit.refined.api.Refined
+import eu.timepit.refined.string.MatchesRegex
+import eu.timepit.refined._
 
-  def startup(
-    nino:        String,
-    journeyId:   JourneyId
-  )(implicit hc: HeaderCarrier
-  ): F[JsObject]
+object ModelTypes {
+
+  type JourneyId = String Refined ValidJourneyId
+
+  private type ValidJourneyId =
+    MatchesRegex[W.`"""[A-Fa-f0-9]{8}\\-[A-Fa-f0-9]{4}\\-[A-Fa-f0-9]{4}\\-[A-Fa-f0-9]{4}\\-[A-Fa-f0-9]{12}"""`.T]
+
 }

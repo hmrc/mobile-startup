@@ -26,19 +26,31 @@ import uk.gov.hmrc.mobilestartup.config.WSHttpImpl
 import scala.concurrent.{ExecutionContext, Future}
 
 trait GenericConnector[F[_]] {
-  def doGet(serviceName: String, path:         String, hc:   HeaderCarrier): F[JsValue]
-  def doPost[T](json:    JsValue, serviceName: String, path: String, hc: HeaderCarrier)(implicit rds: HttpReads[T]): F[T]
+
+  def doGet(
+    serviceName: String,
+    path:        String,
+    hc:          HeaderCarrier
+  ): F[JsValue]
+
+  def doPost[T](
+    json:         JsValue,
+    serviceName:  String,
+    path:         String,
+    hc:           HeaderCarrier
+  )(implicit rds: HttpReads[T]
+  ): F[T]
 }
 
 @Singleton
-class GenericConnectorImpl @Inject()(
+class GenericConnectorImpl @Inject() (
   configuration: Configuration,
   wSHttp:        WSHttpImpl
-)(
-  implicit ec: ExecutionContext
-) extends GenericConnector[Future] {
+)(implicit ec:   ExecutionContext)
+    extends GenericConnector[Future] {
 
-  def protocol(serviceName: String): String = getServiceConfig(serviceName).getOptional[String]("protocol").getOrElse("https")
+  def protocol(serviceName: String): String =
+    getServiceConfig(serviceName).getOptional[String]("protocol").getOrElse("https")
 
   def host(serviceName: String): String = getConfigProperty(serviceName, "host")
 
@@ -46,21 +58,40 @@ class GenericConnectorImpl @Inject()(
 
   def http: CorePost with CoreGet = wSHttp
 
-  def doGet(serviceName: String, path: String, hc: HeaderCarrier): Future[JsValue] = {
+  def doGet(
+    serviceName: String,
+    path:        String,
+    hc:          HeaderCarrier
+  ): Future[JsValue] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
     http.GET[JsValue](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path))
   }
 
-  def doPost[T](json: JsValue, serviceName: String, path: String, hc: HeaderCarrier)(implicit rds: HttpReads[T]): Future[T] = {
+  def doPost[T](
+    json:         JsValue,
+    serviceName:  String,
+    path:         String,
+    hc:           HeaderCarrier
+  )(implicit rds: HttpReads[T]
+  ): Future[T] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
     http.POST[JsValue, T](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path), json)
   }
 
-  private def addAPIHeaders(hc: HeaderCarrier): HeaderCarrier = hc.withExtraHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
+  private def addAPIHeaders(hc: HeaderCarrier): HeaderCarrier =
+    hc.withExtraHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
 
-  private def buildUrl(protocol: String, host: String, port: Int, path: String): String = s"""$protocol://$host:$port$path"""
+  private def buildUrl(
+    protocol: String,
+    host:     String,
+    port:     Int,
+    path:     String
+  ): String = s"""$protocol://$host:$port$path"""
 
-  private def getConfigProperty(serviceName: String, property: String): String =
+  private def getConfigProperty(
+    serviceName: String,
+    property:    String
+  ): String =
     getServiceConfig(serviceName)
       .getOptional[String](property)
       .getOrElse(throw new Exception(s"No service configuration found for $serviceName"))

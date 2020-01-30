@@ -1,30 +1,70 @@
-import play.core.PlayVersion.current
+import play.core.PlayVersion
 import sbt._
 
 object AppDependencies {
 
-  val compile: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc"   %% "bootstrap-play-26" % "0.36.0",
-    "uk.gov.hmrc"   %% "play-hmrc-api"     % "3.6.0-play-26",
-    "uk.gov.hmrc"   %% "tax-year"          % "0.6.0",
-    "uk.gov.hmrc"   %% "domain"            % "5.6.0-play-26",
-    "org.typelevel" %% "cats-core"         % "1.6.0"
+  private val bootstrapPlayVersion = "1.3.0"
+  private val scalaTestPlusVersion = "3.1.2"
+  private val domainVersion        = "5.6.0-play-26"
+  private val playHmrcApiVersion   = "4.1.0-play-26"
+  private val taxYearVersion       = "1.0.0"
+
+  private val scalaTestVersion              = "3.0.8"
+  private val pegdownVersion                = "1.6.0"
+  private val refinedVersion                = "0.9.4"
+  private val wireMockVersion               = "2.21.0"
+  private val catsCoreVersion               = "2.1.0"
+  private val scalaMockVersion              = "4.1.0"
+  private val scalaCheckVersion             = "1.14.0"
+  private val serviceIntegrationTestVersion = "0.9.0-play-26"
+
+  val compile = Seq(
+    "uk.gov.hmrc"   %% "bootstrap-play-26" % bootstrapPlayVersion,
+    "uk.gov.hmrc"   %% "play-hmrc-api"     % playHmrcApiVersion,
+    "uk.gov.hmrc"   %% "tax-year"          % taxYearVersion,
+    "uk.gov.hmrc"   %% "domain"            % domainVersion,
+    "org.typelevel" %% "cats-core"         % catsCoreVersion,
+    "eu.timepit"    %% "refined"           % refinedVersion
   )
 
-  val test: Seq[ModuleID] = Seq(
-    "org.scalamock"     %% "scalamock"  % "4.1.0"  % "test",
-    "org.scalatest"     %% "scalatest"  % "3.0.5"  % "test",
-    "com.typesafe.play" %% "play-test"  % current  % "test",
-    "org.pegdown"       % "pegdown"     % "1.6.0"  % "test, it",
-    "org.scalacheck"    %% "scalacheck" % "1.14.0" % "test, it"
+  trait TestDependencies {
+    lazy val scope: String        = "test"
+    lazy val test:  Seq[ModuleID] = ???
+  }
+
+  private def testCommon(scope: String) = Seq(
+    "org.pegdown"            % "pegdown"             % pegdownVersion       % scope,
+    "com.typesafe.play"      %% "play-test"          % PlayVersion.current  % scope,
+    "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope
   )
 
-  val it: Seq[ModuleID] = Seq(
-    "org.scalatest"          %% "scalatest"                % "3.0.5"         % "it",
-    "com.typesafe.play"      %% "play-test"                % current         % "it",
-    "org.pegdown"            % "pegdown"                   % "1.6.0"         % "it",
-    "uk.gov.hmrc"            %% "service-integration-test" % "0.4.0-play-26" % "it",
-    "com.github.tomakehurst" % "wiremock-jre8"             % "2.21.0"        % "it",
-    "org.scalatestplus.play" %% "scalatestplus-play"       % "3.1.2"         % "it"
-  )
+  object Test {
+
+    def apply(): Seq[ModuleID] =
+      new TestDependencies {
+
+        override lazy val test: Seq[ModuleID] = testCommon(scope) ++ Seq(
+            "org.scalamock"  %% "scalamock"  % scalaMockVersion  % scope,
+            "org.scalacheck" %% "scalacheck" % scalaCheckVersion % scope
+          )
+      }.test
+  }
+
+  object IntegrationTest {
+
+    def apply(): Seq[ModuleID] =
+      new TestDependencies {
+
+        override lazy val scope: String = "it"
+
+        override lazy val test: Seq[ModuleID] = testCommon(scope) ++ Seq(
+            "org.scalatest"          %% "scalatest"                % scalaTestVersion % "it",
+            "uk.gov.hmrc"            %% "service-integration-test" % serviceIntegrationTestVersion  % "it",
+            "com.github.tomakehurst" % "wiremock-jre8"             % wireMockVersion  % "it"
+          )
+      }.test
+  }
+
+  def apply(): Seq[ModuleID] = compile ++ Test() ++ IntegrationTest()
+
 }
