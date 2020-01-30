@@ -19,18 +19,16 @@ import javax.inject.Inject
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.api.sandbox.FileResource
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
 import scala.concurrent.ExecutionContext
 
-class SandboxStartupController @Inject()(
-  val controllerComponents: ControllerComponents
-)(
-  implicit ec: ExecutionContext
-) extends BackendBaseController
+class SandboxStartupController @Inject() (val controllerComponents: ControllerComponents)(implicit ec: ExecutionContext)
+    extends BackendBaseController
     with FileResource {
 
-  def startup(journeyId: String): Action[AnyContent] = Action { _ =>
+  def startup(journeyId: JourneyId): Action[AnyContent] = Action { _ =>
     Ok(Json.parse(findResource("/sandbox/startup.json").getOrElse("{}")))
   }
 }

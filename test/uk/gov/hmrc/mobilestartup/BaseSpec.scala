@@ -20,7 +20,17 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import eu.timepit.refined.auto._
 
-trait BaseSpec extends WordSpecLike with Matchers with MockFactory with FutureAwaits with DefaultAwaitTimeout with OptionValues {
+trait BaseSpec
+    extends WordSpecLike
+    with Matchers
+    with MockFactory
+    with FutureAwaits
+    with DefaultAwaitTimeout
+    with OptionValues {
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
+  val journeyId: JourneyId = "7f1b5289-5f4d-4150-93a3-ff02dda28375"
+
 }

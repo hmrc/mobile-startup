@@ -22,22 +22,31 @@ import uk.gov.hmrc.auth.core.{ConfidenceLevel, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 
-abstract class PreFlightServiceImpl[F[_]](genericConnector: GenericConnector[F], minimumConfidenceLevel: Int)(
-  implicit F:                                               MonadError[F, Throwable]
-) extends PreFlightService[F] {
+abstract class PreFlightServiceImpl[F[_]](
+  genericConnector:       GenericConnector[F],
+  minimumConfidenceLevel: Int
+)(implicit F:             MonadError[F, Throwable])
+    extends PreFlightService[F] {
 
   // The authentication and auditing calls from the platform are based on Future so declare a couple of
   // methods that adapt away from Future to F that the live implementation can define.
   def retrieveAccounts(implicit hc: HeaderCarrier): F[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)]
-  def auditing[T](service:          String, details: Map[String, String])(f: => F[T])(implicit hc: HeaderCarrier): F[T]
 
-  def preFlight(journeyId: String)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
+  def auditing[T](
+    service:     String,
+    details:     Map[String, String]
+  )(f:           => F[T]
+  )(implicit hc: HeaderCarrier
+  ): F[T]
+
+  def preFlight(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
     auditing("preFlightCheck", Map.empty) {
       getPreFlightCheckResponse(journeyId)
     }
 
-  private def getPreFlightCheckResponse(journeyId: String)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
+  private def getPreFlightCheckResponse(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
     retrieveAccounts.map {
       case (nino, saUtr, credentials, confidenceLevel) =>
         if (credentials.providerType != "GovernmentGateway") throw new UnsupportedAuthProvider

@@ -19,16 +19,23 @@ import com.google.inject.ImplementedBy
 import play.api.libs.json.{JsObject, Json, Writes}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 
-case class PreFlightCheckResponse(nino: Option[Nino], saUtr: Option[SaUtr], routeToIV: Boolean)
+case class PreFlightCheckResponse(
+  nino:      Option[Nino],
+  saUtr:     Option[SaUtr],
+  routeToIV: Boolean)
 
 object PreFlightCheckResponse {
 
   implicit val writes: Writes[PreFlightCheckResponse] = new Writes[PreFlightCheckResponse] {
-    def withNino(nino: Option[Nino]): JsObject = nino.fold(Json.obj()) { found => Json.obj("nino" -> found.value)
+
+    def withNino(nino: Option[Nino]): JsObject = nino.fold(Json.obj()) { found =>
+      Json.obj("nino" -> found.value)
     }
 
-    def withSaUtr(saUtr: Option[SaUtr]): JsObject = saUtr.fold(Json.obj()) { found => Json.obj("saUtr" -> found.value)
+    def withSaUtr(saUtr: Option[SaUtr]): JsObject = saUtr.fold(Json.obj()) { found =>
+      Json.obj("saUtr" -> found.value)
     }
 
     def writes(preFlightCheckResponse: PreFlightCheckResponse): JsObject =
@@ -40,5 +47,5 @@ object PreFlightCheckResponse {
 
 @ImplementedBy(classOf[LivePreFlightService])
 trait PreFlightService[F[_]] {
-  def preFlight(journeyId: String)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse]
+  def preFlight(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse]
 }

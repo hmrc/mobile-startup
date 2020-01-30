@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.mobilestartup.controllers
 
-import org.scalamock.scalatest.MockFactory
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.WordSpec
 import play.api.http.Status
 import play.api.libs.json.JsObject
 import play.api.libs.json.Json._
@@ -27,21 +26,35 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.mobilestartup.BaseSpec
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.StartupService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class LiveStartupControllerSpec extends WordSpec with Matchers with MockFactory {
+class LiveStartupControllerSpec extends WordSpec with BaseSpec {
   private val fakeRequest = FakeRequest("GET", "/")
+
   private val stubStartupService = new StartupService[Future] {
-    override def startup(nino: String, journeyId: String)(implicit hc: HeaderCarrier): Future[JsObject] =
+
+    override def startup(
+      nino:        String,
+      journeyId:   JourneyId
+    )(implicit hc: HeaderCarrier
+    ): Future[JsObject] =
       Future.successful(obj())
   }
 
   private def authConnector(stubbedRetrievalResult: Future[_]): AuthConnector = new AuthConnector {
-    def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
-      stubbedRetrievalResult.map(_.asInstanceOf[A])
+
+    def authorise[A](
+      predicate:   Predicate,
+      retrieval:   Retrieval[A]
+    )(implicit hc: HeaderCarrier,
+      ec:          ExecutionContext
+    ): Future[A] =
+      stubbedRetrievalResult.map(_.asInstanceOf[A])(ec)
   }
 
   "GET /" should {
@@ -52,7 +65,7 @@ class LiveStartupControllerSpec extends WordSpec with Matchers with MockFactory 
         authConnector(Future.successful(Some("nino"))),
         200
       )
-      val result = controller.startup("journeyId")(fakeRequest)
+      val result = controller.startup(journeyId)(fakeRequest)
       status(result) shouldBe Status.OK
     }
   }

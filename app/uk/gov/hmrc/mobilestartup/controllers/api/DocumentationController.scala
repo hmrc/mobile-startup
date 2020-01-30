@@ -23,14 +23,16 @@ import play.api.libs.json.{Json, OWrites}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.mobilestartup.views.txt
 
-case class ApiAccess(`type`: String, whitelistedApplicationIds: Seq[String])
+case class ApiAccess(
+  `type`:                    String,
+  whitelistedApplicationIds: Seq[String])
 
 object ApiAccess {
   implicit val writes: OWrites[ApiAccess] = Json.writes[ApiAccess]
 }
 
 @Singleton
-class DocumentationController @Inject()(
+class DocumentationController @Inject() (
   controllerComponents: ControllerComponents,
   assets:               Assets,
   apiAccess:            ApiAccess,

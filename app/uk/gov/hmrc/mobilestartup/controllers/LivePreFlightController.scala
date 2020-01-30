@@ -20,18 +20,18 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, BodyParser, ControllerComponents}
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.PreFlightService
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class LivePreFlightController @Inject()(
-  val controllerComponents:   ControllerComponents,
-  preflightService:           PreFlightService[Future],
-  override val authConnector: AuthConnector
-)(
-  implicit override val executionContext: ExecutionContext
-) extends BackendBaseController
+class LivePreFlightController @Inject() (
+  val controllerComponents:               ControllerComponents,
+  preflightService:                       PreFlightService[Future],
+  override val authConnector:             AuthConnector
+)(implicit override val executionContext: ExecutionContext)
+    extends BackendBaseController
     with AuthorisedFunctions
     with HeaderValidator {
 
@@ -39,7 +39,7 @@ class LivePreFlightController @Inject()(
 
   private val authToken = "AuthToken"
 
-  def preFlightCheck(journeyId: String): Action[AnyContent] =
+  def preFlightCheck(journeyId: JourneyId): Action[AnyContent] =
     validateAccept(acceptHeaderValidationRules).async { implicit request =>
       preflightService.preFlight(journeyId).map { response =>
         hc.authorization match {

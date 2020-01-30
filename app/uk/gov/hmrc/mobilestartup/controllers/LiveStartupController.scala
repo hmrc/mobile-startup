@@ -19,25 +19,26 @@ package uk.gov.hmrc.mobilestartup.controllers
 import javax.inject.{Inject, Named, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.StartupService
 import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton()
-class LiveStartupController @Inject()(
+class LiveStartupController @Inject() (
   service:                                             StartupService[Future],
   val controllerComponents:                            ControllerComponents,
   override val authConnector:                          AuthConnector,
   @Named("controllers.confidenceLevel") val confLevel: Int
-)(
-  implicit ec: ExecutionContext
-) extends BackendBaseController
+)(implicit ec:                                         ExecutionContext)
+    extends BackendBaseController
     with AuthorisedFunctions {
+  class GrantAccessException(message: String) extends HttpException(message, 401)
 
-  def startup(journeyId: String): Action[AnyContent] =
+  def startup(journeyId: JourneyId): Action[AnyContent] =
     Action.async { implicit request =>
       withNinoFromAuth { verifiedNino =>
         service.startup(verifiedNino, journeyId).map(Ok(_))

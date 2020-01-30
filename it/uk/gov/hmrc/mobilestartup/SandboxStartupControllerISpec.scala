@@ -12,7 +12,7 @@ class SandboxStartupControllerISpec extends BaseISpec {
 
       implicit val wsClient: WSClient = app.injector.instanceOf[WSClient]
 
-      val response = await(wsUrl("/startup?journeyId=journeyId").addHttpHeaders(mobileHeader).get)
+      val response = await(wsUrl("/startup?journeyId=7f1b5289-5f4d-4150-93a3-ff02dda28375").addHttpHeaders(mobileHeader).get)
       response.status shouldBe 200
 
     }
@@ -23,6 +23,12 @@ class SandboxStartupControllerISpec extends BaseISpec {
       val response = await(wsUrl("/startup").addHttpHeaders(mobileHeader).get)
       response.status shouldBe 400
 
+    }
+
+    "return 400 if journeyId is invalid" in {
+      implicit val wsClient: WSClient = app.injector.instanceOf[WSClient]
+      val response = await(wsUrl(s"/startup?journeyId=ThisIsAnInvalidJourneyId").addHttpHeaders(mobileHeader).get)
+      response.status shouldBe 400
     }
   }
 }
