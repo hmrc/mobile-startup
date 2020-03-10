@@ -23,8 +23,12 @@ import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import scala.concurrent.{ExecutionContext, Future}
 
 class LiveStartupService @Inject() (
-  connector:                                                      GenericConnector[Future],
-  @Named("feature.userPanelSignUp") userPanelSignUp:              Boolean,
-  @Named("feature.helpToSave.enableBadge") helpToSaveEnableBadge: Boolean
-)(implicit ec:                                                    ExecutionContext)
-    extends StartupServiceImpl[Future](connector, userPanelSignUp, helpToSaveEnableBadge)
+  connector:                                                                                         GenericConnector[Future],
+  @Named("feature.userPanelSignUp") userPanelSignUp:                                                 Boolean,
+  @Named("feature.helpToSave.enableBadge") helpToSaveEnableBadge:                                    Boolean,
+  @Named("feature.enablePushNotificationTokenRegistration") enablePushNotificationTokenRegistration: Boolean
+)(implicit ec:                                                                                       ExecutionContext)
+    extends StartupServiceImpl[Future](connector,
+                                       userPanelSignUp,
+                                       helpToSaveEnableBadge,
+                                       enablePushNotificationTokenRegistration)

@@ -41,10 +41,11 @@ object FeatureFlag {
   * onto the `GenericConnector` trait but that had very little impact beyond the change to the guice wiring.
   */
 class StartupServiceImpl[F[_]] @Inject() (
-  connector:             GenericConnector[F],
-  userPanelSignUp:       Boolean,
-  helpToSaveEnableBadge: Boolean
-)(implicit F:            MonadError[F, Throwable])
+  connector:                               GenericConnector[F],
+  userPanelSignUp:                         Boolean,
+  helpToSaveEnableBadge:                   Boolean,
+  enablePushNotificationTokenRegistration: Boolean
+)(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 
   override def startup(
@@ -58,8 +59,11 @@ class StartupServiceImpl[F[_]] @Inject() (
 
   private val featureFlags: JsObject =
     obj(
-      "feature" -> List(FeatureFlag("userPanelSignUp", userPanelSignUp),
-                        FeatureFlag("helpToSaveEnableBadge", helpToSaveEnableBadge))
+      "feature" -> List(
+        FeatureFlag("userPanelSignUp", userPanelSignUp),
+        FeatureFlag("helpToSaveEnableBadge", helpToSaveEnableBadge),
+        FeatureFlag("enablePushNotificationTokenRegistration", enablePushNotificationTokenRegistration)
+      )
     )
 
   private def callService(name: String)(f: => F[Option[JsValue]]): F[JsObject] =
@@ -85,7 +89,9 @@ class StartupServiceImpl[F[_]] @Inject() (
 
   private def tcrStartup(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[Option[JsValue]] =
     connector
-      .doGet("mobile-tax-credits-renewal", s"/income/tax-credits/submission/state/enabled?journeyId=${journeyId.value}", hc)
+      .doGet("mobile-tax-credits-renewal",
+             s"/income/tax-credits/submission/state/enabled?journeyId=${journeyId.value}",
+             hc)
       .map[Option[JsValue]](res => obj("submissionsState" -> JsString((res \ "submissionsState").as[String])).some)
       .recover {
         case NonFatal(e) =>

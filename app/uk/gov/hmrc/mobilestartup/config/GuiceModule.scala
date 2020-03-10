@@ -43,6 +43,7 @@ class GuiceModule @Inject() (
     bindConfigInt("controllers.confidenceLevel")
     bindConfigString("appUrl", "appUrl")
     bindConfigBoolean("feature.userPanelSignUp")
+    bindConfigBoolean("feature.enablePushNotificationTokenRegistration")
     bindConfigBoolean("feature.helpToSave.enableBadge")
     bind(classOf[LoggerLike]).toInstance(Logger)
 

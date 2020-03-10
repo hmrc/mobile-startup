@@ -59,15 +59,21 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
 
   "a fully successful response" should {
     "contain success entries for each service" in {
-      val sut = new StartupServiceImpl[TestF](dummyConnector(), false, helpToSaveEnableBadge = true)
+      val sut = new StartupServiceImpl[TestF](dummyConnector(),
+                                              userPanelSignUp                         = false,
+                                              helpToSaveEnableBadge                   = true,
+                                              enablePushNotificationTokenRegistration = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
-        .as[List[FeatureFlag]] shouldBe List(FeatureFlag("userPanelSignUp", enabled = false),
-                                             FeatureFlag("helpToSaveEnableBadge", enabled = true))
+        .as[List[FeatureFlag]] shouldBe List(
+        FeatureFlag("userPanelSignUp", enabled                         = false),
+        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
+        FeatureFlag("enablePushNotificationTokenRegistration", enabled = false)
+      )
     }
   }
 
@@ -75,29 +81,37 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain an empty-object entry for help-to-save when the hts call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error),
                                               false,
-                                              helpToSaveEnableBadge = true)
+                                              helpToSaveEnableBadge                   = true,
+                                              enablePushNotificationTokenRegistration = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value         shouldBe obj()
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
-        .as[List[FeatureFlag]] shouldBe List(FeatureFlag("userPanelSignUp", enabled = false),
-                                             FeatureFlag("helpToSaveEnableBadge", enabled = true))
+        .as[List[FeatureFlag]] shouldBe List(
+        FeatureFlag("userPanelSignUp", enabled                         = false),
+        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
+        FeatureFlag("enablePushNotificationTokenRegistration", enabled = false)
+      )
     }
 
     "contain an error entry for tcr when the tcr call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error),
                                               false,
-                                              helpToSaveEnableBadge = true)
+                                              helpToSaveEnableBadge                   = true,
+                                              enablePushNotificationTokenRegistration = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe obj("submissionsState" -> "error")
       (result \ "feature").get
-        .as[List[FeatureFlag]] shouldBe List(FeatureFlag("userPanelSignUp", enabled = false),
-                                             FeatureFlag("helpToSaveEnableBadge", enabled = true))
+        .as[List[FeatureFlag]] shouldBe List(
+        FeatureFlag("userPanelSignUp", enabled                         = false),
+        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
+        FeatureFlag("enablePushNotificationTokenRegistration", enabled = false)
+      )
     }
   }
 }
