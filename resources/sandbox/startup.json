@@ -12,6 +12,10 @@
       "enabled": false
     },
     {
+      "name": "helpToSaveEnableBadge",
+      "enabled": true
+    },
+    {
       "name": "enablePushNotificationTokenRegistration",
       "enabled": false
     }
@@ -90,8 +94,8 @@
         "link": {
           "url": "URL3",
           "urlType": "Sso",
-          "type": "Secondary",
-          "message": "Click me"
+          "buttonType": "Secondary",
+          "buttonMessage": "Click me"
         }
       },
       {
@@ -104,8 +108,8 @@
         "link": {
           "url": "URL4",
           "urlType": "Normal",
-          "type": "Secondary",
-          "message": "Click me"
+          "buttonType": "Secondary",
+          "buttonMessage": "Click me"
         }
       }
     ]
