@@ -87,8 +87,8 @@
         "link": {
           "url": "URL3",
           "urlType": "Sso",
-          "buttonType": "Secondary",
-          "buttonMessage": "Click me"
+          "type": "Secondary",
+          "message": "Click me"
         }
       },
       {
@@ -101,8 +101,8 @@
         "link": {
           "url": "URL4",
           "urlType": "Normal",
-          "buttonType": "Secondary",
-          "buttonMessage": "Click me"
+          "type": "Secondary",
+          "message": "Click me"
         }
       }
     ]

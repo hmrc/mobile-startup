@@ -73,8 +73,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                                               |      "link": {
                                                               |        "url": "URL3",
                                                               |        "urlType": "Normal",
-                                                              |        "buttonType": "Secondary",
-                                                              |        "buttonMessage": "Click me"
+                                                              |        "type": "Secondary",
+                                                              |        "message": "Click me"
                                                               |      }
                                                               |    },
                                                               |    {
@@ -87,8 +87,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                                               |      "link": {
                                                               |        "url": "URL4",
                                                               |        "urlType": "Normal",
-                                                              |        "buttonType": "Secondary",
-                                                              |        "buttonMessage": "Click me"
+                                                              |        "type": "Secondary",
+                                                              |        "message": "Click me"
                                                               |      }
                                                               |    }
                                                               |  ]
