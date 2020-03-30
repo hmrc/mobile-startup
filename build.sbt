@@ -44,7 +44,7 @@ lazy val microservice = Project(appName, file("."))
       //"-Xfatal-warnings",
       "-Xlint"
     ),
-    coverageMinimum := 68,
+    coverageMinimum := 70,
     coverageFailOnMinimum := true,
     coverageHighlighting := true,
     coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;.*BuildInfo.*;.*Routes.*;.*javascript.*;.*Reverse.*;.*WSHttpImpl.*"
