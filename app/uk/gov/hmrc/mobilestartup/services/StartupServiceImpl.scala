@@ -55,7 +55,8 @@ class StartupServiceImpl[F[_]] @Inject() (
   ): F[JsObject] =
     (callService("helpToSave")(mhtsStartup),
      callService("taxCreditRenewals")(tcrStartup(journeyId)),
-     featureFlags.pure[F]).mapN((a, b, c) => a ++ b ++ c)
+     callService("messages")(inAppMsgsStartup),
+     featureFlags.pure[F]).mapN((a, b, c, d) => a ++ b ++ c ++ d)
 
   private val featureFlags: JsObject =
     obj(
@@ -99,6 +100,23 @@ class StartupServiceImpl[F[_]] @Inject() (
             s"${journeyId.value} - Failed to retrieve TaxCreditsRenewals and exception is ${e.getMessage}! Default of submissionsState is error!"
           )
           obj("submissionsState" -> JsString("error")).some
+      }
+
+  private def inAppMsgsStartup(implicit hc: HeaderCarrier): F[Option[JsValue]] =
+    connector
+      .doGet("mobile-in-app-messages", "/in-app-messages", hc)
+      .map(_.some)
+      .recover {
+        case NonFatal(e) =>
+          Logger.warn(
+            s"""Exception thrown by "/mobile-in-app-messages/in-app-messages", not returning any inAppMessages result: ${e.getMessage}"""
+          )
+          Some(Json.parse("""{
+                       |  "paye": [],
+                       |  "tc": [],
+                       |  "hts": []
+                       |}
+                       |""".stripMargin))
       }
 
 }

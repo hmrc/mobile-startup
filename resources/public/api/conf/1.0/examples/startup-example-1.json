@@ -32,5 +32,79 @@
       "name": "enablePushNotificationTokenRegistration",
       "enabled": false
     }
-  ]
+  ],
+  "messages": {
+    "paye": [
+      {
+        "id": "paye-message-1",
+        "type": "Info",
+        "headline": "Title2 - Has active date",
+        "content": {
+          "title": "title Content title",
+          "body": "Content2"
+        },
+        "activeWindow": {
+          "startTime": "2020-03-01T20:06:12.726",
+          "endTime": "2020-05-24T20:06:12.726"
+        }
+      }
+    ],
+    "tc": [
+      {
+        "id": "tcr-message-1",
+        "type": "Info",
+        "headline": "Title2 - Has active date",
+        "content": {
+          "title": "title Content title",
+          "body": "Content2"
+        },
+        "activeWindow": {
+          "startTime": "2020-03-01T20:06:12.726",
+          "endTime": "2020-05-24T20:06:12.726"
+        }
+      },
+      {
+        "id": "tcr-message-2",
+        "type": "Info",
+        "headline": "Title2 - Has active date",
+        "content": {
+          "body": "Content2"
+        },
+        "activeWindow": {
+          "startTime": "2020-03-01T20:06:12.726",
+          "endTime": "2020-05-24T20:06:12.726"
+        }
+      }
+    ],
+    "hts": [
+      {
+        "id": "hts-message-1",
+        "type": "Warning",
+        "headline": "Title3",
+        "content": {
+          "body": "Content3"
+        },
+        "link": {
+          "url": "URL3",
+          "urlType": "Sso",
+          "buttonType": "Secondary",
+          "buttonMessage": "Click me"
+        }
+      },
+      {
+        "id": "hts-message-2",
+        "type": "Urgent",
+        "headline": "Title4",
+        "content": {
+          "body": "Content4"
+        },
+        "link": {
+          "url": "URL4",
+          "urlType": "Normal",
+          "buttonType": "Secondary",
+          "buttonMessage": "Click me"
+        }
+      }
+    ]
+  }
 }
