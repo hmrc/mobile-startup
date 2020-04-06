@@ -127,7 +127,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain success entries for each service" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(),
                                               userPanelSignUp                         = false,
-                                              helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -137,7 +136,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
         FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
@@ -148,7 +146,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain an empty-object entry for help-to-save when the hts call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error),
                                               false,
-                                              helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -158,7 +155,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
         FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false)
       )
     }
@@ -166,7 +162,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain an error entry for tcr when the tcr call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error),
                                               false,
-                                              helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -176,7 +171,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
         FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false)
       )
     }
@@ -185,7 +179,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       val sut = new StartupServiceImpl[TestF](
         dummyConnector(inAppMessagesResponse = new Exception("message call failed").error),
         false,
-        helpToSaveEnableBadge                   = true,
         enablePushNotificationTokenRegistration = false
       )
 
@@ -196,7 +189,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
         FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false)
       )
       (result \ messages).toOption.value shouldBe Json.parse("""{

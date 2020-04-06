@@ -25,10 +25,6 @@
       "enabled": false
     },
     {
-      "name": "helpToSaveEnableBadge",
-      "enabled": true
-    },
-    {
       "name": "enablePushNotificationTokenRegistration",
       "enabled": false
     }
