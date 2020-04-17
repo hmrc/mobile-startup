@@ -43,6 +43,7 @@ object FeatureFlag {
 class StartupServiceImpl[F[_]] @Inject() (
   connector:                               GenericConnector[F],
   userPanelSignUp:                         Boolean,
+  helpToSaveEnableBadge:                   Boolean,
   enablePushNotificationTokenRegistration: Boolean
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
@@ -61,6 +62,7 @@ class StartupServiceImpl[F[_]] @Inject() (
     obj(
       "feature" -> List(
         FeatureFlag("userPanelSignUp", userPanelSignUp),
+        FeatureFlag("helpToSaveEnableBadge", helpToSaveEnableBadge),
         FeatureFlag("enablePushNotificationTokenRegistration", enablePushNotificationTokenRegistration)
       )
     )

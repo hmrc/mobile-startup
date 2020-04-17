@@ -44,6 +44,7 @@ class GuiceModule @Inject() (
     bindConfigString("appUrl", "appUrl")
     bindConfigBoolean("feature.userPanelSignUp")
     bindConfigBoolean("feature.enablePushNotificationTokenRegistration")
+    bindConfigBoolean("feature.helpToSave.enableBadge")
     bind(classOf[LoggerLike]).toInstance(Logger)
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
