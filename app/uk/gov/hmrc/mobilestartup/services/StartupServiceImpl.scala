@@ -114,7 +114,8 @@ class StartupServiceImpl[F[_]] @Inject() (
           Some(Json.parse("""{
                        |  "paye": [],
                        |  "tc": [],
-                       |  "hts": []
+                       |  "hts": [],
+                       |  "tcp": []
                        |}
                        |""".stripMargin))
       }

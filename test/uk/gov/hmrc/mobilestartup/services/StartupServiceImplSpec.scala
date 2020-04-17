@@ -202,7 +202,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ messages).toOption.value shouldBe Json.parse("""{
                                                                |  "paye": [],
                                                                |  "tc": [],
-                                                               |  "hts": []
+                                                               |  "hts": [],
+                                                               |  "tcp": []
                                                                |}
                                                                |""".stripMargin)
     }
