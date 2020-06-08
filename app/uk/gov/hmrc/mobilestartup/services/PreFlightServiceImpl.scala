@@ -17,6 +17,7 @@
 package uk.gov.hmrc.mobilestartup.services
 import cats.MonadError
 import cats.implicits._
+import play.api.Logger
 import uk.gov.hmrc.auth.core.retrieve.Credentials
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
@@ -32,7 +33,7 @@ abstract class PreFlightServiceImpl[F[_]](
 
   // The authentication and auditing calls from the platform are based on Future so declare a couple of
   // methods that adapt away from Future to F that the live implementation can define.
-  def retrieveAccounts(implicit hc: HeaderCarrier): F[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)]
+  def retrieveAccounts(implicit hc: HeaderCarrier): F[(Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[String])]
 
   def auditing[T](
     service:     String,
@@ -48,8 +49,15 @@ abstract class PreFlightServiceImpl[F[_]](
 
   private def getPreFlightCheckResponse(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
     retrieveAccounts.map {
-      case (nino, saUtr, credentials, confidenceLevel) =>
+      case (nino, saUtr, Some(credentials), confidenceLevel, profile) =>
         if (credentials.providerType != "GovernmentGateway") throw new UnsupportedAuthProvider
+
+        if(profile.isDefined){
+          Logger.info("[HMA-3114] - Profile found")
+        }else{
+          Logger.info("[HMA-3114] - Profile missing")
+        }
+
         PreFlightCheckResponse(
           nino,
           saUtr,
