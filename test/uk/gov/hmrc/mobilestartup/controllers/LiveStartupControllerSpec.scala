@@ -32,7 +32,6 @@ import uk.gov.hmrc.mobilestartup.services.StartupService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.auth.core.retrieve.~
 
 class LiveStartupControllerSpec extends WordSpec with BaseSpec {
   private val fakeRequest = FakeRequest("GET", "/")

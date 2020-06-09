@@ -60,16 +60,15 @@ class PreFlightServiceImplSpec
   private def service(
     nino:            Option[Nino],
     saUtr:           Option[SaUtr],
-    credentials:     Option[Credentials],
+    credentials:     Credentials,
     confidenceLevel: ConfidenceLevel,
-    profile: Option[String],
     connector:       GenericConnector[TestF]
   ): PreFlightService[TestF] = new PreFlightServiceImpl[TestF](connector, 200) {
 
     override def retrieveAccounts(
       implicit hc: HeaderCarrier
-    ): TestF[(Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[String])] =
-      (nino, saUtr, credentials, confidenceLevel, profile).pure[TestF]
+    ): TestF[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)] =
+      (nino, saUtr, credentials, confidenceLevel).pure[TestF]
 
     override def auditing[T](
       service:     String,
@@ -84,13 +83,13 @@ class PreFlightServiceImplSpec
       "return a response" - {
         "with the expected nino" in forAll { nino: Nino =>
           val sut =
-            service(Some(nino), None, Some(Credentials("", "GovernmentGateway")), ConfidenceLevel.L200, Some("profile"),  dummyConnector)
+            service(Some(nino), None, Credentials("", "GovernmentGateway"), ConfidenceLevel.L200, dummyConnector)
           sut.preFlight(journeyId)(HeaderCarrier()).unsafeGet.nino shouldBe Some(nino)
         }
 
         "with the expected utr" in forAll { utr: String =>
           val sut =
-            service(None, Some(SaUtr(utr)), Some(Credentials("", "GovernmentGateway")), ConfidenceLevel.L200, Some("profile"),dummyConnector)
+            service(None, Some(SaUtr(utr)), Credentials("", "GovernmentGateway"), ConfidenceLevel.L200, dummyConnector)
           sut.preFlight(journeyId)(HeaderCarrier()).unsafeGet.saUtr shouldBe Some(SaUtr(utr))
         }
 
@@ -100,7 +99,7 @@ class PreFlightServiceImplSpec
 
           "routeToIV should be false if the confidence level is 200 or above" in forAll {
             confidenceLevel: ConfidenceLevel =>
-              val sut = service(None, None, Some(Credentials("", "GovernmentGateway")), confidenceLevel, Some("profile"),dummyConnector)
+              val sut = service(None, None, Credentials("", "GovernmentGateway"), confidenceLevel, dummyConnector)
               sut.preFlight(journeyId)(HeaderCarrier()).unsafeGet.routeToIV shouldBe false
           }
         }
@@ -111,7 +110,7 @@ class PreFlightServiceImplSpec
 
           "routeToIV should be true if the confidence level is below 200" in forAll {
             confidenceLevel: ConfidenceLevel =>
-              val sut = service(None, None, Some(Credentials("", "GovernmentGateway")), confidenceLevel, Some("profile"),dummyConnector)
+              val sut = service(None, None, Credentials("", "GovernmentGateway"), confidenceLevel, dummyConnector)
               sut.preFlight(journeyId)(HeaderCarrier()).unsafeGet.routeToIV shouldBe true
           }
         }
@@ -119,7 +118,7 @@ class PreFlightServiceImplSpec
         "and if the auth provided is not 'GovernmentGateway'" - {
           "it should throw an UnsupportedAuthProvider exception" in {
             val sut =
-              service(None, None, Some(Credentials("", "NotGovernmentGateway!")), ConfidenceLevel.L200, Some("profile"),dummyConnector)
+              service(None, None, Credentials("", "NotGovernmentGateway!"), ConfidenceLevel.L200, dummyConnector)
             intercept[UnsupportedAuthProvider](sut.preFlight(journeyId)(HeaderCarrier()).unsafeGet)
           }
         }
