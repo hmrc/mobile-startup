@@ -18,7 +18,7 @@ package uk.gov.hmrc.mobilestartup.services
 import cats.implicits._
 import javax.inject.{Inject, Named}
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, ~}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
@@ -54,9 +54,9 @@ class LivePreFlightService @Inject() (
   // `PreFlightServiceImpl` much easier.
   override def retrieveAccounts(
     implicit hc: HeaderCarrier
-  ): Future[(Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[String])] =
-    authConnector.authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and profile).map {
-      case foundNino ~ foundSaUtr ~ creds ~ conf ~ profile =>
-        (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf, profile)
+  ): Future[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)] =
+    authConnector.authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel).map {
+      case foundNino ~ foundSaUtr ~ creds ~ conf =>
+        (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf)
     }
 }
