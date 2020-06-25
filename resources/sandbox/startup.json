@@ -5,6 +5,7 @@
   "feature": [
     {
       "name": "userPanelSignUp",
+      "name": "userPanelSignUp",
       "enabled": false
     },
     {
