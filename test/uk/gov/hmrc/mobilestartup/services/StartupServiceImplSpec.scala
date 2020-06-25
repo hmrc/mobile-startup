@@ -145,7 +145,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
   }
 
   "a response" should {
-    "contain an empty-object entry for help-to-save when the hts call fails" in {
+    " not contain an entry for help-to-save when the hts call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error),
                                               false,
                                               helpToSaveEnableBadge                   = true,
@@ -153,7 +153,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
-      (result \ helpToSave).toOption.value         shouldBe obj()
+      (result \ helpToSave).toOption               shouldBe None
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(

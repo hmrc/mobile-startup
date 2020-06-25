@@ -85,7 +85,7 @@ class StartupServiceImpl[F[_]] @Inject() (
           Logger.warn(
             s"""Exception thrown by "/mobile-help-to-save/startup", not returning any helpToSave result: ${e.getMessage}"""
           )
-          obj().some
+          None
       }
 
   private def tcrStartup(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[Option[JsValue]] =
