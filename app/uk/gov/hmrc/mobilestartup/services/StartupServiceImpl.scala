@@ -44,7 +44,8 @@ class StartupServiceImpl[F[_]] @Inject() (
   connector:                               GenericConnector[F],
   userPanelSignUp:                         Boolean,
   helpToSaveEnableBadge:                   Boolean,
-  enablePushNotificationTokenRegistration: Boolean
+  enablePushNotificationTokenRegistration: Boolean,
+  enablePaperlessAlertDialogues:           Boolean
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -63,7 +64,8 @@ class StartupServiceImpl[F[_]] @Inject() (
       "feature" -> List(
         FeatureFlag("userPanelSignUp", userPanelSignUp),
         FeatureFlag("helpToSaveEnableBadge", helpToSaveEnableBadge),
-        FeatureFlag("enablePushNotificationTokenRegistration", enablePushNotificationTokenRegistration)
+        FeatureFlag("enablePushNotificationTokenRegistration", enablePushNotificationTokenRegistration),
+        FeatureFlag("paperlessAlertDialogues", enablePaperlessAlertDialogues)
       )
     )
 
@@ -112,12 +114,12 @@ class StartupServiceImpl[F[_]] @Inject() (
             s"""Exception thrown by "/mobile-in-app-messages/in-app-messages", not returning any inAppMessages result: ${e.getMessage}"""
           )
           Some(Json.parse("""{
-                       |  "paye": [],
-                       |  "tc": [],
-                       |  "hts": [],
-                       |  "tcp": []
-                       |}
-                       |""".stripMargin))
+                            |  "paye": [],
+                            |  "tc": [],
+                            |  "hts": [],
+                            |  "tcp": []
+                            |}
+                            |""".stripMargin))
       }
 
 }
