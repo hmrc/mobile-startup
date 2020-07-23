@@ -27,10 +27,12 @@ class LiveStartupService @Inject() (
   @Named("feature.userPanelSignUp") userPanelSignUp:                                                 Boolean,
   @Named("feature.helpToSave.enableBadge") helpToSaveEnableBadge:                                    Boolean,
   @Named("feature.enablePushNotificationTokenRegistration") enablePushNotificationTokenRegistration: Boolean,
-  @Named("feature.paperlessAlertDialogues") enablePaperlessAlertDialogues:                           Boolean
+  @Named("feature.paperlessAlertDialogues") enablePaperlessAlertDialogues:                           Boolean,
+  @Named("feature.paperlessAdverts") enablePaperlessAdverts:                                         Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
                                        helpToSaveEnableBadge,
                                        enablePushNotificationTokenRegistration,
-                                       enablePaperlessAlertDialogues)
+                                       enablePaperlessAlertDialogues,
+                                       enablePaperlessAdverts)
