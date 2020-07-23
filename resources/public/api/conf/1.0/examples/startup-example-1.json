@@ -31,6 +31,14 @@
     {
       "name": "enablePushNotificationTokenRegistration",
       "enabled": false
+    },
+    {
+      "name": "paperlessAlertDialogues",
+      "enabled": false
+    },
+    {
+      "name": "paperlessAdverts",
+      "enabled": false
     }
   ],
   "messages": {

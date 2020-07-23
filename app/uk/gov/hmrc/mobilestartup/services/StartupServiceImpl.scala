@@ -45,7 +45,8 @@ class StartupServiceImpl[F[_]] @Inject() (
   userPanelSignUp:                         Boolean,
   helpToSaveEnableBadge:                   Boolean,
   enablePushNotificationTokenRegistration: Boolean,
-  enablePaperlessAlertDialogues:           Boolean
+  enablePaperlessAlertDialogues:           Boolean,
+  enablePaperlessAdverts:                  Boolean
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -65,7 +66,8 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("userPanelSignUp", userPanelSignUp),
         FeatureFlag("helpToSaveEnableBadge", helpToSaveEnableBadge),
         FeatureFlag("enablePushNotificationTokenRegistration", enablePushNotificationTokenRegistration),
-        FeatureFlag("paperlessAlertDialogues", enablePaperlessAlertDialogues)
+        FeatureFlag("paperlessAlertDialogues", enablePaperlessAlertDialogues),
+        FeatureFlag("paperlessAdverts", enablePaperlessAdverts)
       )
     )
 

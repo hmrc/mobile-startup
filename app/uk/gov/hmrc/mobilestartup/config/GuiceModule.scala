@@ -46,6 +46,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.enablePushNotificationTokenRegistration")
     bindConfigBoolean("feature.helpToSave.enableBadge")
     bindConfigBoolean("feature.paperlessAlertDialogues")
+    bindConfigBoolean("feature.paperlessAdverts")
     bind(classOf[LoggerLike]).toInstance(Logger)
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
