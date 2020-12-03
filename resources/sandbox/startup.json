@@ -1,6 +1,6 @@
 {
   "taxCreditRenewals": {
-    "submissionsState": "open"
+    "submissionsState": "<RENEWALS_STATUS>"
   },
   "feature": [
     {
@@ -45,7 +45,7 @@
     "infoUrl": "https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme",
     "accessAccountUrl": "/",
     "user": {
-      "state": "Enrolled"
+      "state": "<HTS_STATUS>"
     }
   },
   "messages": {
