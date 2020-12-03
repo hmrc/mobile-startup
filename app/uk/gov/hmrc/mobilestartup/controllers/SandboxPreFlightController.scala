@@ -45,20 +45,13 @@ class SandboxPreFlightController @Inject() (
           case Some("ERROR-401") => Unauthorized
           case Some("ERROR-403") => Forbidden
           case Some("ERROR-500") => InternalServerError
-          case _ =>
-            val (upgrade, toIV) = sandboxControl match {
-              case Some("ROUTE-TO-IV")         => (false, true)
-              case Some("ROUTE-TO-TWO-FACTOR") => (false, false)
-              case _                           => (false, false)
-            }
-
-            Ok(toJson(buildPreFlightResponse(upgrade, toIV)))
+          case Some("ROUTE-TO-IV") => Ok(toJson(buildPreFlightResponse(true)))
+          case _ => Ok(toJson(buildPreFlightResponse(false)))
         }
       }
     }
 
   def buildPreFlightResponse(
-    upgrade: Boolean,
     toIV:    Boolean
   ): PreFlightCheckResponse =
     PreFlightCheckResponse(Some(Nino("CS700100A")), Some(SaUtr("1234567890")), toIV)
