@@ -27,38 +27,43 @@ import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SandboxStartupController @Inject()(val controllerComponents: ControllerComponents)(implicit val ec: ExecutionContext)
-  extends BackendBaseController
+class SandboxStartupController @Inject() (
+  val controllerComponents:      ControllerComponents
+)(implicit val executionContext: ExecutionContext)
+    extends BackendBaseController
     with FileResource
     with HeaderValidator {
 
-  def startup(journeyId: JourneyId): Action[AnyContent] = {
+  def startup(journeyId: JourneyId): Action[AnyContent] =
     validateAccept(acceptHeaderValidationRules).async { implicit request =>
       val sandboxControl: Option[String] = request.headers.get("SANDBOX-CONTROL")
 
       Future.successful {
         sandboxControl match {
-          case Some("ERROR-401") => Unauthorized
-          case Some("ERROR-403") => Forbidden
-          case Some("ERROR-500") => InternalServerError
-          case Some("RENEWALS-OPEN") => Ok(readData("startup.json"))
+          case Some("ERROR-401")          => Unauthorized
+          case Some("ERROR-403")          => Forbidden
+          case Some("ERROR-500")          => InternalServerError
+          case Some("RENEWALS-OPEN")      => Ok(readData("startup.json"))
           case Some("RENEWALS-VIEW-ONLY") => Ok(readData("startup.json", renewalsStatus = "status_view_only"))
-          case Some("RENEWALS-CLOSED") => Ok(readData("startup.json", renewalsStatus = "closed"))
-          case Some("HTS-ENROLLED") => Ok(readData("startup.json"))
-          case Some("HTS-ELIGABLE") => Ok(readData("startup.json", htsStatus = "NotEnrolledButEligable"))
-          case Some("HTS-NOT-ENROLLED") => Ok(readData("startup.json", htsStatus = "NotEnrolled"))
-          case _ => Ok(readData("startup.json"))
+          case Some("RENEWALS-CLOSED")    => Ok(readData("startup.json", renewalsStatus = "closed"))
+          case Some("HTS-ENROLLED")       => Ok(readData("startup.json"))
+          case Some("HTS-ELIGIBLE")       => Ok(readData("startup.json", htsStatus = "NotEnrolledButEligible"))
+          case Some("HTS-NOT-ENROLLED")   => Ok(readData("startup.json", htsStatus = "NotEnrolled"))
+          case _                          => Ok(readData("startup.json"))
         }
       }
     }
-  }
 
-  private def readData(resource: String, renewalsStatus: String = "open", htsStatus: String = "Enrolled") = {
-          findResource(s"/resources/mobilepayesummary/$resource")
-            .getOrElse(throw new IllegalArgumentException("Resource not found!"))
-            .replace("<RENEWALS_STATUS>", renewalsStatus)
-            .replace("<HTS_STATUS>", htsStatus)
-  }
+  private def readData(
+    resource:       String,
+    renewalsStatus: String = "open",
+    htsStatus:      String = "Enrolled"
+  ) =
+    findResource(s"/sandbox/$resource")
+      .getOrElse(throw new IllegalArgumentException("Resource not found!"))
+      .replace("<RENEWALS_STATUS>", renewalsStatus)
+      .replace("<HTS_STATUS>", htsStatus)
 
   override def parser: BodyParser[AnyContent] = controllerComponents.parsers.anyContent
+
 }
