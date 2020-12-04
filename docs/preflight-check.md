@@ -18,11 +18,11 @@ The response to this service includes a set of account identifiers for the user.
 
 *  **URL Params**
 
-   **Optional:**
+   **Required:**
  
    `journeyId=[journeyId]`
    
-   The journey ID may be supplied for logging and diagnostic purposes.
+   The journey ID is used for logging and diagnostic purposes.
 
 * **Success Response:**
 

@@ -44,7 +44,7 @@ class SandboxStartupController @Inject() (
           case Some("ERROR-403")          => Forbidden
           case Some("ERROR-500")          => InternalServerError
           case Some("RENEWALS-OPEN")      => Ok(readData("startup.json"))
-          case Some("RENEWALS-VIEW-ONLY") => Ok(readData("startup.json", renewalsStatus = "status_view_only"))
+          case Some("RENEWALS-VIEW-ONLY") => Ok(readData("startup.json", renewalsStatus = "check_status_only"))
           case Some("RENEWALS-CLOSED")    => Ok(readData("startup.json", renewalsStatus = "closed"))
           case Some("HTS-ENROLLED")       => Ok(readData("startup.json"))
           case Some("HTS-ELIGIBLE")       => Ok(readData("startup.json", htsStatus = "NotEnrolledButEligible"))
