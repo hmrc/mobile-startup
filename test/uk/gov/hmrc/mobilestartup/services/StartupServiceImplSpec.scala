@@ -130,7 +130,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogues           = false,
-                                              enablePaperlessAdverts                  = false)
+                                              enablePaperlessAdverts                  = false,
+                                              enableHtsAdverts                        = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -142,7 +143,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
-        FeatureFlag("paperlessAdverts", enabled                        = false)
+        FeatureFlag("paperlessAdverts", enabled                        = false),
+        FeatureFlag("htsAdverts", enabled                             = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
     }
@@ -155,7 +157,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogues           = false,
-                                              enablePaperlessAdverts                  = false)
+                                              enablePaperlessAdverts                  = false,
+                                              enableHtsAdverts                        = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -167,7 +170,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
-        FeatureFlag("paperlessAdverts", enabled                        = false)
+        FeatureFlag("paperlessAdverts", enabled                        = false),
+        FeatureFlag("htsAdverts", enabled                             = false)
       )
     }
 
@@ -177,7 +181,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogues           = false,
-                                              enablePaperlessAdverts                  = false)
+                                              enablePaperlessAdverts                  = false,
+                                              enableHtsAdverts                        = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -189,7 +194,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
-        FeatureFlag("paperlessAdverts", enabled                        = false)
+        FeatureFlag("paperlessAdverts", enabled                        = false),
+        FeatureFlag("htsAdverts", enabled                             = false)
       )
     }
 
@@ -200,7 +206,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         helpToSaveEnableBadge                   = true,
         enablePushNotificationTokenRegistration = false,
         enablePaperlessAlertDialogues           = false,
-        enablePaperlessAdverts                  = false
+        enablePaperlessAdverts                  = false,
+        enableHtsAdverts                        = false
       )
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -213,7 +220,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
-        FeatureFlag("paperlessAdverts", enabled                        = false)
+        FeatureFlag("paperlessAdverts", enabled                        = false),
+        FeatureFlag("htsAdverts", enabled                             = false)
       )
       (result \ messages).toOption.value shouldBe Json.parse("""{
                                                                |  "paye": [],

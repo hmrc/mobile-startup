@@ -26,6 +26,10 @@
     {
       "name": "paperlessAdverts",
       "enabled": true
+    },
+    {
+      "name": "htsAdverts",
+      "enabled": true
     }
   ],
   "helpToSave": {
