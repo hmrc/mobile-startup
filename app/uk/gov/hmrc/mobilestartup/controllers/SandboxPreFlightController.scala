@@ -45,7 +45,7 @@ class SandboxPreFlightController @Inject() (
           case Some("ERROR-401") => Unauthorized
           case Some("ERROR-403") => Forbidden
           case Some("ERROR-500") => InternalServerError
-          case Some("ROUTE-TO-IV") => Ok(toJson(buildPreFlightResponse(true)))
+          case Some("ROUTE-TO-IV") => Ok(toJson(PreFlightCheckResponse(None, None, routeToIV = true)))
           case _ => Ok(toJson(buildPreFlightResponse(false)))
         }
       }

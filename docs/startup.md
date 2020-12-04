@@ -14,6 +14,13 @@ about the user's help-to-save-account (if they have one) and any global feature 
   
     **Authorization** -> `Bearer Token`
     
+*  **URL Params**
+
+   **Required:**
+ 
+   `journeyId=[journeyId]`
+   
+   The journey ID is used for logging and diagnostic purposes.
     
 * **Method:**
 
