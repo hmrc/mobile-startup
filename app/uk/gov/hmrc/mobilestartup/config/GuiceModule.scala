@@ -47,6 +47,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.helpToSave.enableBadge")
     bindConfigBoolean("feature.paperlessAlertDialogues")
     bindConfigBoolean("feature.paperlessAdverts")
+    bindConfigBoolean("feature.htsAdverts")
     bind(classOf[LoggerLike]).toInstance(Logger)
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
