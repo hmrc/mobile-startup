@@ -17,7 +17,7 @@
 package uk.gov.hmrc.mobilestartup.services
 import cats.MonadError
 import cats.implicits._
-import uk.gov.hmrc.auth.core.retrieve.Credentials
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, Name}
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,7 +32,7 @@ abstract class PreFlightServiceImpl[F[_]](
 
   // The authentication and auditing calls from the platform are based on Future so declare a couple of
   // methods that adapt away from Future to F that the live implementation can define.
-  def retrieveAccounts(implicit hc: HeaderCarrier): F[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel)]
+  def retrieveAccounts(implicit hc: HeaderCarrier): F[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel, Name)]
 
   def auditing[T](
     service:     String,
@@ -48,12 +48,13 @@ abstract class PreFlightServiceImpl[F[_]](
 
   private def getPreFlightCheckResponse(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
     retrieveAccounts.map {
-      case (nino, saUtr, credentials, confidenceLevel) =>
+      case (nino, saUtr, credentials, confidenceLevel, name) =>
         if (credentials.providerType != "GovernmentGateway") throw new UnsupportedAuthProvider
         PreFlightCheckResponse(
           nino,
           saUtr,
-          minimumConfidenceLevel > confidenceLevel.level
+          minimumConfidenceLevel > confidenceLevel.level,
+          name
         )
     }
 

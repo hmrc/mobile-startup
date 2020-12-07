@@ -36,7 +36,7 @@ class SandboxStartupControllerISpec extends BaseISpec {
           .get()
       )
       response.status                                                       shouldBe 200
-      (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "status_view_only"
+      (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "check_status_only"
     }
 
     "return 200 and RENEWALS CLOSE json where SANDBOX-CONTROL is RENEWALS-CLOSED" in {
