@@ -17,6 +17,7 @@
 package uk.gov.hmrc.mobilestartup.services
 import com.google.inject.ImplementedBy
 import play.api.libs.json.{JsObject, Json, Writes}
+import uk.gov.hmrc.auth.core.retrieve.Name
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
@@ -24,7 +25,8 @@ import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 case class PreFlightCheckResponse(
   nino:      Option[Nino],
   saUtr:     Option[SaUtr],
-  routeToIV: Boolean)
+  routeToIV: Boolean,
+  name:      Name)
 
 object PreFlightCheckResponse {
 
@@ -38,9 +40,13 @@ object PreFlightCheckResponse {
       Json.obj("saUtr" -> found.value)
     }
 
+    def withName(fullName: Name): JsObject = fullName.name.fold(Json.obj()) { found =>
+      Json.obj("name" -> (found + " " + fullName.lastName.getOrElse("")).trim)
+    }
+
     def writes(preFlightCheckResponse: PreFlightCheckResponse): JsObject =
       withNino(preFlightCheckResponse.nino) ++ withSaUtr(preFlightCheckResponse.saUtr) ++ Json
-        .obj("routeToIV" -> preFlightCheckResponse.routeToIV)
+        .obj("routeToIV" -> preFlightCheckResponse.routeToIV) ++ withName(preFlightCheckResponse.name)
   }
 
 }

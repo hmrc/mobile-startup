@@ -20,6 +20,7 @@ import play.api.libs.json.Json.toJson
 import play.api.mvc._
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.api.sandbox.FileResource
+import uk.gov.hmrc.auth.core.retrieve.Name
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.PreFlightCheckResponse
@@ -42,24 +43,15 @@ class SandboxPreFlightController @Inject() (
 
       Future.successful {
         sandboxControl match {
-          case Some("ERROR-401") => Unauthorized
-          case Some("ERROR-403") => Forbidden
-          case Some("ERROR-500") => InternalServerError
-          case _ =>
-            val (upgrade, toIV) = sandboxControl match {
-              case Some("ROUTE-TO-IV")         => (false, true)
-              case Some("ROUTE-TO-TWO-FACTOR") => (false, false)
-              case _                           => (false, false)
-            }
-
-            Ok(toJson(buildPreFlightResponse(upgrade, toIV)))
+          case Some("ERROR-401")   => Unauthorized
+          case Some("ERROR-403")   => Forbidden
+          case Some("ERROR-500")   => InternalServerError
+          case Some("ROUTE-TO-IV") => Ok(toJson(PreFlightCheckResponse(Some(Nino("CS700100A")), None, routeToIV = true, Name(Some("John"), Some("Smith")))))
+          case _                   => Ok(toJson(buildPreFlightResponse(false)))
         }
       }
     }
 
-  def buildPreFlightResponse(
-    upgrade: Boolean,
-    toIV:    Boolean
-  ): PreFlightCheckResponse =
-    PreFlightCheckResponse(Some(Nino("CS700100A")), Some(SaUtr("1234567890")), toIV)
+  def buildPreFlightResponse(toIV: Boolean): PreFlightCheckResponse =
+    PreFlightCheckResponse(Some(Nino("CS700100A")), Some(SaUtr("1234567890")), toIV, Name(Some("John"), Some("Smith")))
 }
