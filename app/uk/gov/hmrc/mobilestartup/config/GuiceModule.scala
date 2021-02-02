@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorI
 import uk.gov.hmrc.mobilestartup.controllers.api.ApiAccess
 import uk.gov.hmrc.mobilestartup.services.{LivePreFlightService, LiveStartupService, PreFlightService, StartupService}
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
@@ -36,7 +36,7 @@ class GuiceModule @Inject() (
   configuration: Configuration)
     extends AbstractModule {
 
-  val servicesConfig: ServicesConfig = new ServicesConfig(configuration, new RunMode(configuration, environment.mode))
+  val servicesConfig: ServicesConfig = new ServicesConfig(configuration)
 
   override def configure(): Unit = {
 
@@ -48,10 +48,10 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.paperlessAlertDialogues")
     bindConfigBoolean("feature.paperlessAdverts")
     bindConfigBoolean("feature.htsAdverts")
+    bindConfigBoolean("feature.annualTaxSummaryLink")
     bind(classOf[LoggerLike]).toInstance(Logger)
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
-    bind(classOf[CoreGet]).to(classOf[WSHttpImpl])
     bind(classOf[CorePost]).to(classOf[WSHttpImpl])
 
     bind(new TypeLiteral[GenericConnector[Future]] {}).to(classOf[GenericConnectorImpl])

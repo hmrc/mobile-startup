@@ -3,10 +3,10 @@ import sbt._
 
 object AppDependencies {
 
-  private val bootstrapPlayVersion = "1.3.0"
+  private val bootstrapPlayVersion = "3.0.0"
   private val scalaTestPlusVersion = "3.1.2"
   private val domainVersion        = "5.6.0-play-26"
-  private val playHmrcApiVersion   = "4.1.0-play-26"
+  private val playHmrcApiVersion   = "5.3.0-play-26"
   private val taxYearVersion       = "1.0.0"
 
   private val scalaTestVersion              = "3.0.8"
@@ -19,12 +19,12 @@ object AppDependencies {
   private val serviceIntegrationTestVersion = "0.9.0-play-26"
 
   val compile = Seq(
-    "uk.gov.hmrc"   %% "bootstrap-play-26" % bootstrapPlayVersion,
-    "uk.gov.hmrc"   %% "play-hmrc-api"     % playHmrcApiVersion,
-    "uk.gov.hmrc"   %% "tax-year"          % taxYearVersion,
-    "uk.gov.hmrc"   %% "domain"            % domainVersion,
-    "org.typelevel" %% "cats-core"         % catsCoreVersion,
-    "eu.timepit"    %% "refined"           % refinedVersion
+    "uk.gov.hmrc"   %% "bootstrap-backend-play-26" % bootstrapPlayVersion,
+    "uk.gov.hmrc"   %% "play-hmrc-api"             % playHmrcApiVersion,
+    "uk.gov.hmrc"   %% "tax-year"                  % taxYearVersion,
+    "uk.gov.hmrc"   %% "domain"                    % domainVersion,
+    "org.typelevel" %% "cats-core"                 % catsCoreVersion,
+    "eu.timepit"    %% "refined"                   % refinedVersion
   )
 
   trait TestDependencies {
@@ -58,9 +58,9 @@ object AppDependencies {
         override lazy val scope: String = "it"
 
         override lazy val test: Seq[ModuleID] = testCommon(scope) ++ Seq(
-            "org.scalatest"          %% "scalatest"                % scalaTestVersion % "it",
-            "uk.gov.hmrc"            %% "service-integration-test" % serviceIntegrationTestVersion  % "it",
-            "com.github.tomakehurst" % "wiremock-jre8"             % wireMockVersion  % "it"
+            "org.scalatest"          %% "scalatest"                % scalaTestVersion              % "it",
+            "uk.gov.hmrc"            %% "service-integration-test" % serviceIntegrationTestVersion % "it",
+            "com.github.tomakehurst" % "wiremock-jre8"             % wireMockVersion               % "it"
           )
       }.test
   }

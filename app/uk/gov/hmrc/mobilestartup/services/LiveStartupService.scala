@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,8 @@ class LiveStartupService @Inject() (
   @Named("feature.enablePushNotificationTokenRegistration") enablePushNotificationTokenRegistration: Boolean,
   @Named("feature.paperlessAlertDialogues") enablePaperlessAlertDialogues:                           Boolean,
   @Named("feature.paperlessAdverts") enablePaperlessAdverts:                                         Boolean,
-  @Named("feature.htsAdverts") enableHtsAdverts:                                                     Boolean
+  @Named("feature.htsAdverts") enableHtsAdverts:                                                     Boolean,
+  @Named("feature.annualTaxSummaryLink") enableAnnualTaxSummaryLink:                                 Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -37,4 +38,5 @@ class LiveStartupService @Inject() (
                                        enablePushNotificationTokenRegistration,
                                        enablePaperlessAlertDialogues,
                                        enablePaperlessAdverts,
-                                       enableHtsAdverts)
+                                       enableHtsAdverts,
+                                       enableAnnualTaxSummaryLink)

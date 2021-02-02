@@ -19,26 +19,81 @@ package uk.gov.hmrc.mobilestartup.stubs
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import play.api.libs.json.Json
 
 object AuthStub {
+
+  private val authUrl: String = "/auth/authorise"
 
   private val authoriseRequestBody: String = {
     """
       |{
-      | "authorise": [ ],
+      | "authorise": [ {
+      |  "confidenceLevel" : 200
+      |  } ],
       | "retrieve": ["nino"]
       |}""".stripMargin
   }
 
-  def userIsLoggedIn(nino: String)(implicit wireMockServer: WireMockServer): StubMapping =
-    wireMockServer.stubFor(
-      post(urlPathEqualTo("/auth/authorise"))
-        .withRequestBody(equalToJson(authoriseRequestBody))
+  private val accountsRequestJson: String = {
+    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","optionalName","allEnrolments"] }""".stripMargin
+  }
+
+  private def loggedInResponse(
+    nino:        String,
+    saUtr:       String,
+    activateUtr: Boolean
+  ): String =
+    s"""
+       |{
+       |  "nino": "$nino",
+       |  "saUtr": "$saUtr",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "allEnrolments": [{
+       |      "key": "IR-SA",
+       |      "identifiers": [{
+       |        "key": "UTR",
+       |        "value": "$saUtr"
+       |      }],
+       |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
+       |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200,
+       |  "optionalName": {
+       |    "name": "TestUser"
+       |  }
+       |}
+           """.stripMargin
+
+  def accountsFound(
+    nino:        String  = "AA000006C",
+    saUtr:       String  = "123456789",
+    activateUtr: Boolean = true
+  ): StubMapping =
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(accountsRequestJson, true, false))
         .willReturn(
           aResponse()
             .withStatus(200)
-            .withBody(Json.obj("nino" -> nino).toString)
+            .withBody(loggedInResponse(nino, saUtr, activateUtr))
+        )
+    )
+
+  def userLoggedIn(
+                     nino:        String  = "AA000006C",
+                     saUtr:       String  = "123456789",
+                     activateUtr: Boolean = true
+                   ): StubMapping =
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(authoriseRequestBody, true, false))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(loggedInResponse(nino, saUtr, activateUtr))
         )
     )
 

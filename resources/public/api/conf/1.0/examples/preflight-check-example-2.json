@@ -1,4 +1,10 @@
 {
   "nino": "CS700100A",
-  "routeToIV": true
+  "saUtr:": "123456789",
+  "routeToIV": true,
+  "name": "John Smith",
+  "annualTaxSummaryLink": {
+    "link": "/",
+    "destination": "PAYE"
+  }
 }
