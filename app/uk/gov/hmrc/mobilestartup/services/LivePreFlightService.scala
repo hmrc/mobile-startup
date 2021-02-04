@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,12 @@
 package uk.gov.hmrc.mobilestartup.services
 import cats.implicits._
 
+import eu.timepit.refined.auto._
 import javax.inject.{Inject, Named}
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
-import uk.gov.hmrc.auth.core.retrieve.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, Name, ~}
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel}
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
@@ -31,12 +32,13 @@ import uk.gov.hmrc.service.Auditor
 import scala.concurrent.{ExecutionContext, Future}
 
 class LivePreFlightService @Inject() (
-  genericConnector:                                    GenericConnector[Future],
-  val auditConnector:                                  AuditConnector,
-  val authConnector:                                   AuthConnector,
-  @Named("appName") val appName:                       String,
-  @Named("controllers.confidenceLevel") val confLevel: Int
-)(implicit executionContext:                           ExecutionContext)
+  genericConnector:                                       GenericConnector[Future],
+  val auditConnector:                                     AuditConnector,
+  val authConnector:                                      AuthConnector,
+  @Named("appName") val appName:                          String,
+  @Named("controllers.confidenceLevel") val confLevel:    Int,
+  @Named("feature.annualTaxSummaryLink") val showATSLink: Boolean
+)(implicit executionContext:                              ExecutionContext)
     extends PreFlightServiceImpl[Future](genericConnector, confLevel)
     with AuthorisedFunctions
     with Auditor {
@@ -55,9 +57,26 @@ class LivePreFlightService @Inject() (
   // `PreFlightServiceImpl` much easier.
   override def retrieveAccounts(
     implicit hc: HeaderCarrier
-  ): Future[(Option[Nino], Option[SaUtr], Credentials, ConfidenceLevel, Name)] =
-    authConnector.authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and name).map {
-      case foundNino ~ foundSaUtr ~ creds ~ conf ~ name =>
-        (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf, name)
-    }
+  ): Future[(Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[Name], Option[AnnualTaxSummaryLink])] =
+    authConnector
+      .authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and name and allEnrolments)
+      .map {
+        case foundNino ~ foundSaUtr ~ creds ~ conf ~ name ~ foundEnrolments =>
+          (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf, name, getATSLink(foundEnrolments))
+
+      }
+
+  private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] = {
+    if (showATSLink) {
+      val saUtr: Option[SaUtr] =
+        enrolments.enrolments
+          .find(_.key == "IR-SA")
+          .flatMap { enrolment =>
+            enrolment.identifiers
+              .find(id => id.key == "UTR" && enrolment.state == "Activated")
+              .map(key => SaUtr(key.value))
+          }
+      if (saUtr.isDefined) Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA")) else Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE"))
+    } else None
+  }
 }

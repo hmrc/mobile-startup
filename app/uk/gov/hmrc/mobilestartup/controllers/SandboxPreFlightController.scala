@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import uk.gov.hmrc.auth.core.retrieve.Name
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.PreFlightCheckResponse
-import uk.gov.hmrc.play.bootstrap.controller.BackendBaseController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,12 +46,12 @@ class SandboxPreFlightController @Inject() (
           case Some("ERROR-401")   => Unauthorized
           case Some("ERROR-403")   => Forbidden
           case Some("ERROR-500")   => InternalServerError
-          case Some("ROUTE-TO-IV") => Ok(toJson(PreFlightCheckResponse(Some(Nino("CS700100A")), None, routeToIV = true, Name(Some("John"), Some("Smith")))))
+          case Some("ROUTE-TO-IV") => Ok(toJson(PreFlightCheckResponse(Some(Nino("CS700100A")), None, routeToIV = true, Some(Name(Some("John"), Some("Smith"))))))
           case _                   => Ok(toJson(buildPreFlightResponse(false)))
         }
       }
     }
 
   def buildPreFlightResponse(toIV: Boolean): PreFlightCheckResponse =
-    PreFlightCheckResponse(Some(Nino("CS700100A")), Some(SaUtr("1234567890")), toIV, Name(Some("John"), Some("Smith")))
+    PreFlightCheckResponse(Some(Nino("CS700100A")), Some(SaUtr("1234567890")), toIV, Some(Name(Some("John"), Some("Smith"))))
 }

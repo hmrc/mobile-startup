@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,8 @@ class StartupServiceImpl[F[_]] @Inject() (
   enablePushNotificationTokenRegistration: Boolean,
   enablePaperlessAlertDialogues:           Boolean,
   enablePaperlessAdverts:                  Boolean,
-  enableHtsAdverts:                        Boolean
+  enableHtsAdverts:                        Boolean,
+  enableAnnualTaxSummaryLink:              Boolean
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -69,7 +70,8 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("enablePushNotificationTokenRegistration", enablePushNotificationTokenRegistration),
         FeatureFlag("paperlessAlertDialogues", enablePaperlessAlertDialogues),
         FeatureFlag("paperlessAdverts", enablePaperlessAdverts),
-        FeatureFlag("htsAdverts", enableHtsAdverts)
+        FeatureFlag("htsAdverts", enableHtsAdverts),
+        FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink)
       )
     )
 

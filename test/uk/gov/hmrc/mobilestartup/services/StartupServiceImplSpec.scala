@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -131,7 +131,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogues           = false,
                                               enablePaperlessAdverts                  = false,
-                                              enableHtsAdverts                        = false)
+                                              enableHtsAdverts                        = false,
+                                              enableAnnualTaxSummaryLink              = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -144,7 +145,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
-        FeatureFlag("htsAdverts", enabled                             = false)
+        FeatureFlag("htsAdverts", enabled                              = false),
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
     }
@@ -158,7 +160,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogues           = false,
                                               enablePaperlessAdverts                  = false,
-                                              enableHtsAdverts                        = false)
+                                              enableHtsAdverts                        = false,
+                                              enableAnnualTaxSummaryLink              = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -171,7 +174,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
-        FeatureFlag("htsAdverts", enabled                             = false)
+        FeatureFlag("htsAdverts", enabled                              = false),
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
       )
     }
 
@@ -182,7 +186,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogues           = false,
                                               enablePaperlessAdverts                  = false,
-                                              enableHtsAdverts                        = false)
+                                              enableHtsAdverts                        = false,
+                                              enableAnnualTaxSummaryLink              = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -195,7 +200,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
-        FeatureFlag("htsAdverts", enabled                             = false)
+        FeatureFlag("htsAdverts", enabled                              = false),
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
       )
     }
 
@@ -207,7 +213,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         enablePushNotificationTokenRegistration = false,
         enablePaperlessAlertDialogues           = false,
         enablePaperlessAdverts                  = false,
-        enableHtsAdverts                        = false
+        enableHtsAdverts                        = false,
+        enableAnnualTaxSummaryLink              = false
       )
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -221,7 +228,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
-        FeatureFlag("htsAdverts", enabled                             = false)
+        FeatureFlag("htsAdverts", enabled                              = false),
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
       )
       (result \ messages).toOption.value shouldBe Json.parse("""{
                                                                |  "paye": [],
