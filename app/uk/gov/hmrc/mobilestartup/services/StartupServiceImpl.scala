@@ -46,6 +46,7 @@ class StartupServiceImpl[F[_]] @Inject() (
   helpToSaveEnableBadge:                   Boolean,
   enablePushNotificationTokenRegistration: Boolean,
   enablePaperlessAlertDialogues:           Boolean,
+  enablePaperlessAlertDialogs:             Boolean,
   enablePaperlessAdverts:                  Boolean,
   enableHtsAdverts:                        Boolean,
   enableAnnualTaxSummaryLink:              Boolean
@@ -69,6 +70,7 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("helpToSaveEnableBadge", helpToSaveEnableBadge),
         FeatureFlag("enablePushNotificationTokenRegistration", enablePushNotificationTokenRegistration),
         FeatureFlag("paperlessAlertDialogues", enablePaperlessAlertDialogues),
+        FeatureFlag("paperlessAlertDialogs", enablePaperlessAlertDialogs),
         FeatureFlag("paperlessAdverts", enablePaperlessAdverts),
         FeatureFlag("htsAdverts", enableHtsAdverts),
         FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink)

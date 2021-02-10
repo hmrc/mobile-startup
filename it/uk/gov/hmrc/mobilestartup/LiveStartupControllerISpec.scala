@@ -60,12 +60,14 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 2 \ "enabled").as[Boolean]               shouldBe true
       (response.json \ "feature" \ 3 \ "name").as[String]                   shouldBe "paperlessAlertDialogues"
       (response.json \ "feature" \ 3 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 4 \ "name").as[String]                   shouldBe "paperlessAdverts"
+      (response.json \ "feature" \ 4 \ "name").as[String]                   shouldBe "paperlessAlertDialogs"
       (response.json \ "feature" \ 4 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 5 \ "name").as[String]                   shouldBe "htsAdverts"
+      (response.json \ "feature" \ 5 \ "name").as[String]                   shouldBe "paperlessAdverts"
       (response.json \ "feature" \ 5 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 6 \ "name").as[String]                   shouldBe "annualTaxSummaryLink"
+      (response.json \ "feature" \ 6 \ "name").as[String]                   shouldBe "htsAdverts"
       (response.json \ "feature" \ 6 \ "enabled").as[Boolean]               shouldBe true
+      (response.json \ "feature" \ 7 \ "name").as[String]                   shouldBe "annualTaxSummaryLink"
+      (response.json \ "feature" \ 7 \ "enabled").as[Boolean]               shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
 
     }
