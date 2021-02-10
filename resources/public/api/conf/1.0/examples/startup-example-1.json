@@ -37,6 +37,10 @@
       "enabled": false
     },
     {
+      "name": "paperlessAlertDialogs",
+      "enabled": false
+    },
+    {
       "name": "paperlessAdverts",
       "enabled": false
     },

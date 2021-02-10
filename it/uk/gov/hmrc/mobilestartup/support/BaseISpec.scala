@@ -34,6 +34,7 @@ class BaseISpec
       "feature.enablePushNotificationTokenRegistration"       -> true,
       "feature.helpToSave.enableBadge"                        -> true,
       "feature.paperlessAlertDialogues"                       -> true,
+      "feature.paperlessAlertDialogs"                         -> true,
       "feature.paperlessAdverts"                              -> true,
       "feature.htsAdverts"                                    -> true,
       "feature.annualTaxSummaryLink"                          -> true
