@@ -130,6 +130,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogues           = false,
+                                              enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
                                               enableHtsAdverts                        = false,
                                               enableAnnualTaxSummaryLink              = false)
@@ -144,6 +145,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
+        FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
         FeatureFlag("annualTaxSummaryLink", enabled                    = false)
@@ -159,6 +161,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogues           = false,
+                                              enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
                                               enableHtsAdverts                        = false,
                                               enableAnnualTaxSummaryLink              = false)
@@ -173,6 +176,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
+        FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
         FeatureFlag("annualTaxSummaryLink", enabled                    = false)
@@ -185,6 +189,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogues           = false,
+                                              enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
                                               enableHtsAdverts                        = false,
                                               enableAnnualTaxSummaryLink              = false)
@@ -199,6 +204,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
+        FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
         FeatureFlag("annualTaxSummaryLink", enabled                    = false)
@@ -212,6 +218,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         helpToSaveEnableBadge                   = true,
         enablePushNotificationTokenRegistration = false,
         enablePaperlessAlertDialogues           = false,
+        enablePaperlessAlertDialogs             = false,
         enablePaperlessAdverts                  = false,
         enableHtsAdverts                        = false,
         enableAnnualTaxSummaryLink              = false
@@ -227,6 +234,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogues", enabled                 = false),
+        FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
         FeatureFlag("annualTaxSummaryLink", enabled                    = false)

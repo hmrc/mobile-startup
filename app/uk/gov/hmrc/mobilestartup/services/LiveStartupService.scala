@@ -28,6 +28,7 @@ class LiveStartupService @Inject() (
   @Named("feature.helpToSave.enableBadge") helpToSaveEnableBadge:                                    Boolean,
   @Named("feature.enablePushNotificationTokenRegistration") enablePushNotificationTokenRegistration: Boolean,
   @Named("feature.paperlessAlertDialogues") enablePaperlessAlertDialogues:                           Boolean,
+  @Named("feature.paperlessAlertDialogs") enablePaperlessAlertDialogs:                               Boolean,
   @Named("feature.paperlessAdverts") enablePaperlessAdverts:                                         Boolean,
   @Named("feature.htsAdverts") enableHtsAdverts:                                                     Boolean,
   @Named("feature.annualTaxSummaryLink") enableAnnualTaxSummaryLink:                                 Boolean
@@ -37,6 +38,7 @@ class LiveStartupService @Inject() (
                                        helpToSaveEnableBadge,
                                        enablePushNotificationTokenRegistration,
                                        enablePaperlessAlertDialogues,
+                                       enablePaperlessAlertDialogs,
                                        enablePaperlessAdverts,
                                        enableHtsAdverts,
                                        enableAnnualTaxSummaryLink)

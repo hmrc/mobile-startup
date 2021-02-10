@@ -46,6 +46,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.enablePushNotificationTokenRegistration")
     bindConfigBoolean("feature.helpToSave.enableBadge")
     bindConfigBoolean("feature.paperlessAlertDialogues")
+    bindConfigBoolean("feature.paperlessAlertDialogs")
     bindConfigBoolean("feature.paperlessAdverts")
     bindConfigBoolean("feature.htsAdverts")
     bindConfigBoolean("feature.annualTaxSummaryLink")
