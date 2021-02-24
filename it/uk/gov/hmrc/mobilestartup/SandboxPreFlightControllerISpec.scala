@@ -1,7 +1,9 @@
 package uk.gov.hmrc.mobilestartup
 
 import play.api.http.HeaderNames
+import uk.gov.hmrc.mobilestartup.services.AnnualTaxSummaryLink
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
+import eu.timepit.refined.auto._
 
 class SandboxPreFlightControllerISpec extends BaseISpec {
 
@@ -24,10 +26,11 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       val response =
         await(wsUrl(s"/preflight-check?${withJourneyParam(journeyId)}").addHttpHeaders(headerThatSucceeds: _*).get)
 
-      response.status                           shouldBe 200
-      (response.json \ "nino").as[String]       shouldBe nino
-      (response.json \ "routeToIV").as[Boolean] shouldBe false
-      (response.json \ "name").as[String]       shouldBe name
+      response.status                                                   shouldBe 200
+      (response.json \ "nino").as[String]                               shouldBe nino
+      (response.json \ "routeToIV").as[Boolean]                         shouldBe false
+      (response.json \ "name").as[String]                               shouldBe name
+      (response.json \ "annualTaxSummaryLink").as[AnnualTaxSummaryLink] shouldBe AnnualTaxSummaryLink("/", "PAYE")
     }
 
     "return routeToIV = true when SANDBOX-CONTROL header = ROUTE-TO-IV" in {
@@ -80,7 +83,11 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
     }
 
     "return 400 if journeyId is invalid" in {
-      val response = await(wsUrl(s"/preflight-check?${withJourneyParam("ThisIsAnInvalidJourneyId")}").addHttpHeaders(headerThatSucceeds: _*).get)
+      val response = await(
+        wsUrl(s"/preflight-check?${withJourneyParam("ThisIsAnInvalidJourneyId")}")
+          .addHttpHeaders(headerThatSucceeds: _*)
+          .get
+      )
       response.status shouldBe 400
     }
   }
