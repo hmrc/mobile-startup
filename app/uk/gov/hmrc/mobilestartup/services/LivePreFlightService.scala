@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.mobilestartup.services
 import cats.implicits._
-
 import eu.timepit.refined.auto._
+
 import javax.inject.{Inject, Named}
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
-import uk.gov.hmrc.auth.core.retrieve.{Credentials, Name, ~}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName, ~}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -57,12 +57,12 @@ class LivePreFlightService @Inject() (
   // `PreFlightServiceImpl` much easier.
   override def retrieveAccounts(
     implicit hc: HeaderCarrier
-  ): Future[(Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[Name], Option[AnnualTaxSummaryLink])] =
+  ): Future[(Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[ItmpName], Option[AnnualTaxSummaryLink])] =
     authConnector
-      .authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and name and allEnrolments)
+      .authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and itmpName and allEnrolments)
       .map {
-        case foundNino ~ foundSaUtr ~ creds ~ conf ~ name ~ foundEnrolments =>
-          (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf, name, getATSLink(foundEnrolments))
+        case foundNino ~ foundSaUtr ~ creds ~ conf ~ itmpName ~ foundEnrolments =>
+          (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf, itmpName, getATSLink(foundEnrolments))
 
       }
 

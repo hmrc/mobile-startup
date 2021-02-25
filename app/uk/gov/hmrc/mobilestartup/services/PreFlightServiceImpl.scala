@@ -17,7 +17,7 @@
 package uk.gov.hmrc.mobilestartup.services
 import cats.MonadError
 import cats.implicits._
-import uk.gov.hmrc.auth.core.retrieve.{Credentials, Name}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName}
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -34,7 +34,7 @@ abstract class PreFlightServiceImpl[F[_]](
   // methods that adapt away from Future to F that the live implementation can define.
   def retrieveAccounts(
     implicit hc: HeaderCarrier
-  ): F[(Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[Name], Option[AnnualTaxSummaryLink])]
+  ): F[(Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[ItmpName], Option[AnnualTaxSummaryLink])]
 
   def auditing[T](
     service:     String,

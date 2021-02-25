@@ -41,7 +41,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
       response.status                           shouldBe 200
       (response.json \ "nino").as[String]       shouldBe nino.nino
       (response.json \ "saUtr").as[String]      shouldBe saUtr.utr
-      (response.json \ "name").as[String]       shouldBe "TestUser"
+      (response.json \ "name").as[String]       shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean] shouldBe false
 
     }
