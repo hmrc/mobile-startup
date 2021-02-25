@@ -20,7 +20,7 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.{FreeSpecLike, Matchers}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.libs.json.JsValue
-import uk.gov.hmrc.auth.core.retrieve.{Credentials, Name}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName, Name}
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
@@ -38,7 +38,7 @@ class PreFlightServiceImplSpec
 
   val journeyId: JourneyId = "7f1b5289-5f4d-4150-93a3-ff02dda28375"
 
-  val fullName = Name(Some("John"), Some("Smith"))
+  val fullName = ItmpName(givenName = Some("John"), None, familyName = Some("Smith"))
 
   private def dummyConnector: GenericConnector[TestF] =
     new GenericConnector[TestF] {
@@ -63,13 +63,13 @@ class PreFlightServiceImplSpec
     saUtr:                Option[SaUtr],
     credentials:          Option[Credentials],
     confidenceLevel:      ConfidenceLevel,
-    name:                 Option[Name],
+    name:                 Option[ItmpName],
     annualTaxSummaryLink: Option[AnnualTaxSummaryLink],
     connector:            GenericConnector[TestF]
   ): PreFlightService[TestF] = new PreFlightServiceImpl[TestF](connector, 200) {
 
     override def retrieveAccounts(implicit hc: HeaderCarrier): TestF[
-      (Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[Name], Option[AnnualTaxSummaryLink])
+      (Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[ItmpName], Option[AnnualTaxSummaryLink])
     ] =
       (nino, saUtr, credentials, confidenceLevel, name, annualTaxSummaryLink).pure[TestF]
 

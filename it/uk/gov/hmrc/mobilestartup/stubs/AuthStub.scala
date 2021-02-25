@@ -35,7 +35,7 @@ object AuthStub {
   }
 
   private val accountsRequestJson: String = {
-    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","optionalName","allEnrolments"] }""".stripMargin
+    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","optionalItmpName","allEnrolments"] }""".stripMargin
   }
 
   private def loggedInResponse(
@@ -61,8 +61,9 @@ object AuthStub {
        |}],
        |  "groupIdentifier": "groupId",
        |  "confidenceLevel": 200,
-       |  "optionalName": {
-       |    "name": "TestUser"
+       |  "optionalItmpName": {
+       |    "givenName": "Test",
+       |    "familyName": "User"
        |  }
        |}
            """.stripMargin
