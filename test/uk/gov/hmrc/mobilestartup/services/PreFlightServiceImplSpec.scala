@@ -38,7 +38,7 @@ class PreFlightServiceImplSpec
 
   val journeyId: JourneyId = "7f1b5289-5f4d-4150-93a3-ff02dda28375"
 
-  val fullName = ItmpName(givenName = Some("John"), None, familyName = Some("Thorsteinson"))
+  val fullName = ItmpName(givenName = Some("Jennifer"), None, familyName = Some("Thorsteinson"))
 
   private def dummyConnector: GenericConnector[TestF] =
     new GenericConnector[TestF] {
