@@ -18,7 +18,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
 
   val nino = "CS700100A"
 
-  val name = "John Smith"
+  val name = "Jennifer Thorsteinson"
 
   "POST of /preflight-check with X-MOBILE-USER-ID header" should {
 
