@@ -46,6 +46,34 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     }
 
+    "return account details with name if itmpName not available" in {
+      accountsFoundMissingItmpName(nino.nino, saUtr.utr)
+      respondToAuditMergedWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                           shouldBe 200
+      (response.json \ "nino").as[String]       shouldBe nino.nino
+      (response.json \ "saUtr").as[String]      shouldBe saUtr.utr
+      (response.json \ "name").as[String]       shouldBe "TestUser2"
+      (response.json \ "routeToIV").as[Boolean] shouldBe false
+
+    }
+
+    "return account details with no name if itmpName and name not available" in {
+      accountsFoundMissingItmpName(nino.nino, saUtr.utr, bothNamesMissing = true)
+      respondToAuditMergedWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                           shouldBe 200
+      (response.json \ "nino").as[String]       shouldBe nino.nino
+      (response.json \ "saUtr").as[String]      shouldBe saUtr.utr
+      (response.json \ "name").isEmpty          shouldBe true
+      (response.json \ "routeToIV").as[Boolean] shouldBe false
+
+    }
+
     "return 401 when auth fails" in {
       accountsFound()
 

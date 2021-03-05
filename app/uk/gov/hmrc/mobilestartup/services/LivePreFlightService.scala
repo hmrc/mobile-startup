@@ -21,7 +21,7 @@ import eu.timepit.refined.auto._
 import javax.inject.{Inject, Named}
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
-import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName, ~}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName, Name, ~}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -55,18 +55,28 @@ class LivePreFlightService @Inject() (
   // The retrieval function is really hard to dummy out in tests because of it's polymorphic nature, and the `~` trick doesn't
   // help, but isolating it here and adapting to the concrete tuple of results we are expecting makes testing of the logic in
   // `PreFlightServiceImpl` much easier.
-  override def retrieveAccounts(
-    implicit hc: HeaderCarrier
-  ): Future[(Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[ItmpName], Option[AnnualTaxSummaryLink])] =
+  override def retrieveAccounts(implicit hc: HeaderCarrier): Future[
+    (Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[ItmpName], Option[AnnualTaxSummaryLink])
+  ] =
     authConnector
-      .authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and itmpName and allEnrolments)
+      .authorise(EmptyPredicate,
+                 nino and saUtr and credentials and confidenceLevel and itmpName and allEnrolments and name)
       .map {
-        case foundNino ~ foundSaUtr ~ creds ~ conf ~ itmpName ~ foundEnrolments =>
+        case foundNino ~ foundSaUtr ~ creds ~ conf ~ Some(itmpName) ~ foundEnrolments ~ _ =>
+          (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf, Some(itmpName), getATSLink(foundEnrolments))
+        case foundNino ~ foundSaUtr ~ creds ~ conf ~ None ~ foundEnrolments ~ Some(name) =>
+          (foundNino.map(Nino(_)),
+           foundSaUtr.map(SaUtr(_)),
+           creds,
+           conf,
+           Some(ItmpName(givenName = name.name, None, familyName = name.lastName)),
+           getATSLink(foundEnrolments))
+        case foundNino ~ foundSaUtr ~ creds ~ conf ~ itmpName ~ foundEnrolments ~ _ =>
           (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf, itmpName, getATSLink(foundEnrolments))
 
       }
 
-  private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] = {
+  private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] =
     if (showATSLink) {
       val saUtr: Option[SaUtr] =
         enrolments.enrolments
@@ -76,7 +86,7 @@ class LivePreFlightService @Inject() (
               .find(id => id.key == "UTR" && enrolment.state == "Activated")
               .map(key => SaUtr(key.value))
           }
-      if (saUtr.isDefined) Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA")) else Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE"))
+      if (saUtr.isDefined) Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA"))
+      else Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE"))
     } else None
-  }
 }
