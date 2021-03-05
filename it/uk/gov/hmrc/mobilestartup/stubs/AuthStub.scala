@@ -35,7 +35,7 @@ object AuthStub {
   }
 
   private val accountsRequestJson: String = {
-    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","optionalItmpName","allEnrolments"] }""".stripMargin
+    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","optionalItmpName","allEnrolments","optionalName"] }""".stripMargin
   }
 
   private def loggedInResponse(
@@ -64,7 +64,65 @@ object AuthStub {
        |  "optionalItmpName": {
        |    "givenName": "Test",
        |    "familyName": "User"
+       |  },
+       |  "optionalName": {
+       |    "name": "TestUser2"
        |  }
+       |}
+           """.stripMargin
+
+  private def loggedInResponseNoItmpName(
+    nino:        String,
+    saUtr:       String,
+    activateUtr: Boolean
+  ): String =
+    s"""
+       |{
+       |  "nino": "$nino",
+       |  "saUtr": "$saUtr",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "allEnrolments": [{
+       |      "key": "IR-SA",
+       |      "identifiers": [{
+       |        "key": "UTR",
+       |        "value": "$saUtr"
+       |      }],
+       |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
+       |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200,
+       |  "optionalName": {
+       |    "name": "TestUser2"
+       |  }
+       |}
+           """.stripMargin
+
+  private def loggedInResponseNoNames(
+    nino:        String,
+    saUtr:       String,
+    activateUtr: Boolean
+  ): String =
+    s"""
+       |{
+       |  "nino": "$nino",
+       |  "saUtr": "$saUtr",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "allEnrolments": [{
+       |      "key": "IR-SA",
+       |      "identifiers": [{
+       |        "key": "UTR",
+       |        "value": "$saUtr"
+       |      }],
+       |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
+       |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200
        |}
            """.stripMargin
 
@@ -83,11 +141,31 @@ object AuthStub {
         )
     )
 
+  def accountsFoundMissingItmpName(
+    nino:             String  = "AA000006C",
+    saUtr:            String  = "123456789",
+    activateUtr:      Boolean = true,
+    bothNamesMissing: Boolean = false
+  ): StubMapping = {
+    val response =
+      if (bothNamesMissing) loggedInResponseNoNames(nino, saUtr, activateUtr)
+      else loggedInResponseNoItmpName(nino, saUtr, activateUtr)
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(accountsRequestJson, true, false))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(response)
+        )
+    )
+  }
+
   def userLoggedIn(
-                     nino:        String  = "AA000006C",
-                     saUtr:       String  = "123456789",
-                     activateUtr: Boolean = true
-                   ): StubMapping =
+    nino:        String  = "AA000006C",
+    saUtr:       String  = "123456789",
+    activateUtr: Boolean = true
+  ): StubMapping =
     stubFor(
       post(urlEqualTo(authUrl))
         .withRequestBody(equalToJson(authoriseRequestBody, true, false))
