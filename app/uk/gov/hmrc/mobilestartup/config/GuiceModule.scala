@@ -21,7 +21,7 @@ import com.google.inject.{AbstractModule, TypeLiteral}
 import javax.inject.Inject
 import play.api.{Configuration, Environment, Logger, LoggerLike}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.http.{CoreGet, CorePost}
+import uk.gov.hmrc.http.CorePost
 import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorImpl}
 import uk.gov.hmrc.mobilestartup.controllers.api.ApiAccess
 import uk.gov.hmrc.mobilestartup.services.{LivePreFlightService, LiveStartupService, PreFlightService, StartupService}

@@ -22,6 +22,7 @@ import play.api.Configuration
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.mobilestartup.config.WSHttpImpl
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 

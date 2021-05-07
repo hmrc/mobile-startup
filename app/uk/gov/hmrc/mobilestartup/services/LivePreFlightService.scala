@@ -21,7 +21,7 @@ import eu.timepit.refined.auto._
 import javax.inject.{Inject, Named}
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
-import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName, Name, ~}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName, ~}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier

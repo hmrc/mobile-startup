@@ -120,7 +120,7 @@ class PreFlightServiceImplSpec
 
         {
           implicit val arbConfidenceLevel: Arbitrary[ConfidenceLevel] =
-            Arbitrary(Gen.oneOf(ConfidenceLevel.L200, ConfidenceLevel.L300, ConfidenceLevel.L500))
+            Arbitrary(Gen.oneOf(ConfidenceLevel.L200, ConfidenceLevel.L500))
 
           "routeToIV should be false if the confidence level is 200 or above" in forAll {
             confidenceLevel: ConfidenceLevel =>
@@ -138,7 +138,7 @@ class PreFlightServiceImplSpec
 
         {
           implicit val arbConfidenceLevel: Arbitrary[ConfidenceLevel] =
-            Arbitrary(Gen.oneOf(ConfidenceLevel.L50, ConfidenceLevel.L0))
+            Arbitrary(ConfidenceLevel.L50)
 
           "routeToIV should be true if the confidence level is below 200" in forAll {
             confidenceLevel: ConfidenceLevel =>
