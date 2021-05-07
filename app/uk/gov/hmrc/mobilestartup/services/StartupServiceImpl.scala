@@ -53,6 +53,8 @@ class StartupServiceImpl[F[_]] @Inject() (
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 
+  val logger: Logger = Logger(this.getClass)
+
   override def startup(
     nino:        String,
     journeyId:   JourneyId
@@ -92,7 +94,7 @@ class StartupServiceImpl[F[_]] @Inject() (
       .map(_.some)
       .recover {
         case NonFatal(e) =>
-          Logger.warn(
+          logger.warn(
             s"""Exception thrown by "/mobile-help-to-save/startup", not returning any helpToSave result: ${e.getMessage}"""
           )
           None
@@ -106,7 +108,7 @@ class StartupServiceImpl[F[_]] @Inject() (
       .map[Option[JsValue]](res => obj("submissionsState" -> JsString((res \ "submissionsState").as[String])).some)
       .recover {
         case NonFatal(e) =>
-          Logger.warn(
+          logger.warn(
             s"${journeyId.value} - Failed to retrieve TaxCreditsRenewals and exception is ${e.getMessage}! Default of submissionsState is error!"
           )
           obj("submissionsState" -> JsString("error")).some
@@ -118,7 +120,7 @@ class StartupServiceImpl[F[_]] @Inject() (
       .map(_.some)
       .recover {
         case NonFatal(e) =>
-          Logger.warn(
+          logger.warn(
             s"""Exception thrown by "/mobile-in-app-messages/in-app-messages", not returning any inAppMessages result: ${e.getMessage}"""
           )
           Some(Json.parse("""{

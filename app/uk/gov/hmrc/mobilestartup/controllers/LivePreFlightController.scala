@@ -42,7 +42,6 @@ class LivePreFlightController @Inject() (
   def preFlightCheck(journeyId: JourneyId): Action[AnyContent] =
     validateAccept(acceptHeaderValidationRules).async { implicit request =>
       preflightService.preFlight(journeyId).map { response =>
-        val test = hc
         hc.authorization match {
           case Some(auth) => Ok(Json.toJson(response)).addingToSession(authToken -> auth.value)
           case _          => Unauthorized("Failed to resolve authentication from HC!")

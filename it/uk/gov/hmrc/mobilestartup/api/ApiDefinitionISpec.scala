@@ -34,7 +34,7 @@ class ApiDefinitionISpec extends BaseISpec {
       val response = await(wsUrl("/api/definition").get())
       response.status shouldBe 200
 
-      response.header("Content-Type") shouldBe Some("application/json")
+      response.header("Content-Type") shouldBe Some("application/json;charset=utf-8")
 
       val definition = response.json
       (definition \\ "version").map(_.as[String]).head shouldBe "1.0"
