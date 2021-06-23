@@ -71,6 +71,37 @@ object AuthStub {
        |}
            """.stripMargin
 
+  private def loggedInResponseNoNino(
+                                saUtr:       String,
+                                activateUtr: Boolean
+                              ): String =
+    s"""
+       |{
+       |  "saUtr": "$saUtr",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "allEnrolments": [{
+       |      "key": "IR-SA",
+       |      "identifiers": [{
+       |        "key": "UTR",
+       |        "value": "$saUtr"
+       |      }],
+       |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
+       |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200,
+       |  "optionalItmpName": {
+       |    "givenName": "Test",
+       |    "familyName": "User"
+       |  },
+       |  "optionalName": {
+       |    "name": "TestUser2"
+       |  }
+       |}
+           """.stripMargin
+
   private def loggedInResponseNoItmpName(
     nino:        String,
     saUtr:       String,
@@ -173,6 +204,20 @@ object AuthStub {
           aResponse()
             .withStatus(200)
             .withBody(loggedInResponse(nino, saUtr, activateUtr))
+        )
+    )
+
+  def userLoggedInNoNino(
+                    saUtr:       String  = "123456789",
+                    activateUtr: Boolean = true
+                  ): StubMapping =
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(authoriseRequestBody, true, false))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(loggedInResponseNoNino(saUtr, activateUtr))
         )
     )
 
