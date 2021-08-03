@@ -28,7 +28,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
   private val taxCreditsRenewals = "taxCreditRenewals"
   private val messages           = "messages"
   private val user               = "user"
-  val successfulResponse         = JsString("success")
+  private val successfulResponse = JsString("success")
 
   private val htsSuccessResponse:      JsValue = successfulResponse
   private val tcrSuccessResponse:      JsValue = obj("submissionsState" -> "open")
@@ -181,8 +181,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
-      println(Json.prettyPrint(result))
-
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
@@ -313,8 +311,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       enableAnnualTaxSummaryLink              = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
-
-      println(Json.prettyPrint(result))
 
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
