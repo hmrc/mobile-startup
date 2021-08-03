@@ -60,7 +60,7 @@ class LiveStartupControllerISpec extends BaseISpec {
 
   def stubCitizenDetailsResponse(): StubMapping =
     stubFor(
-      get(urlEqualTo("/AA000006C/designatory-details"))
+      get(urlEqualTo("/citizen-details/AA000006C/designatory-details"))
         .willReturn(
           aResponse()
             .withStatus(200)
