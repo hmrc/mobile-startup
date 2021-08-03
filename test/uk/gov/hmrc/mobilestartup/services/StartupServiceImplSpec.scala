@@ -27,6 +27,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
   private val helpToSave         = "helpToSave"
   private val taxCreditsRenewals = "taxCreditRenewals"
   private val messages           = "messages"
+  private val user               = "user"
   val successfulResponse         = JsString("success")
 
   private val htsSuccessResponse:      JsValue = successfulResponse
@@ -95,10 +96,52 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                                               |}
                                                               |""".stripMargin)
 
+  private val citizenDetailsSuccessResponse: JsValue = Json.parse("""{
+                                                                    |    "person": {
+                                                                    |      "firstName": "Angus",
+                                                                    |      "middleName": "John",
+                                                                    |      "lastName": "Smith",
+                                                                    |      "title": "Mr",
+                                                                    |      "honours": null,
+                                                                    |      "sex": "M",
+                                                                    |      "dateOfBirth": -26092800000,
+                                                                    |      "nino": "AA000006C"
+                                                                    |    },
+                                                                    |    "address": {
+                                                                    |      "line1": "123456",
+                                                                    |      "line2": "23456",
+                                                                    |      "line3": "3456",
+                                                                    |      "line4": "456",
+                                                                    |      "line5": "55555",
+                                                                    |      "postcode": "98765",
+                                                                    |      "startDate": 946684800000,
+                                                                    |      "country": "Test Country",
+                                                                    |      "type": "Residential"
+                                                                    |    },
+                                                                    |    "correspondenceAddress": {
+                                                                    |      "line1": "1 Main Street",
+                                                                    |      "line2": "Central",
+                                                                    |      "line3": "Anothertown",
+                                                                    |      "line4": "Anothershire",
+                                                                    |      "line5": "Anotherline",
+                                                                    |      "postcode": "AA1 1AA",
+                                                                    |      "startDate": 1341100800000,
+                                                                    |      "country": null,
+                                                                    |      "type": "Correspondence"
+                                                                    |    }
+                                                                    |  }
+                                                                    |""".stripMargin)
+
+  private val userExpectedResponse: JsValue = Json.parse("""{
+                                                           |    "name": "Angus Smith"
+                                                           |  }
+                                                           |""".stripMargin)
+
   private def dummyConnector(
-    htsResponse:           TestF[JsValue] = htsSuccessResponse.pure[TestF],
-    tcrResponse:           TestF[JsValue] = tcrSuccessResponse.pure[TestF],
-    inAppMessagesResponse: TestF[JsValue] = messagesSuccessResponse.pure[TestF]
+    htsResponse:            TestF[JsValue] = htsSuccessResponse.pure[TestF],
+    tcrResponse:            TestF[JsValue] = tcrSuccessResponse.pure[TestF],
+    inAppMessagesResponse:  TestF[JsValue] = messagesSuccessResponse.pure[TestF],
+    citizenDetailsResponse: TestF[JsValue] = citizenDetailsSuccessResponse.pure[TestF]
   ): GenericConnector[TestF] =
     new GenericConnector[TestF] {
 
@@ -111,6 +154,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
           case "mobile-help-to-save"        => htsResponse
           case "mobile-tax-credits-renewal" => tcrResponse
           case "mobile-in-app-messages"     => inAppMessagesResponse
+          case "citizen-details"            => citizenDetailsResponse
           case _                            => obj().pure[TestF]
         }
 
@@ -137,6 +181,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
+      println(Json.prettyPrint(result))
+
       (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
@@ -151,11 +197,12 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("annualTaxSummaryLink", enabled                    = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
+      (result \ user).toOption.value     shouldBe userExpectedResponse
     }
   }
 
   "a response" should {
-    " not contain an entry for help-to-save when the hts call fails" in {
+    "not contain an entry for help-to-save when the hts call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error),
                                               false,
                                               helpToSaveEnableBadge                   = true,
@@ -181,6 +228,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("htsAdverts", enabled                              = false),
         FeatureFlag("annualTaxSummaryLink", enabled                    = false)
       )
+      (result \ messages).toOption.value shouldBe messagesSuccessResponse
+      (result \ user).toOption.value     shouldBe userExpectedResponse
     }
 
     "contain an error entry for tcr when the tcr call fails" in {
@@ -209,6 +258,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("htsAdverts", enabled                              = false),
         FeatureFlag("annualTaxSummaryLink", enabled                    = false)
       )
+      (result \ messages).toOption.value shouldBe messagesSuccessResponse
+      (result \ user).toOption.value     shouldBe userExpectedResponse
     }
 
     "contain an empty lists entry for messages when the messages call fails" in {
@@ -246,6 +297,40 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                                                |  "tcp": []
                                                                |}
                                                                |""".stripMargin)
+      (result \ user).toOption.value     shouldBe userExpectedResponse
+    }
+
+    "not contain an entry for user when the citizen details call fails" in {
+      val sut =
+        new StartupServiceImpl[TestF](dummyConnector(citizenDetailsResponse = new Exception("cid failed").error),
+                                      false,
+                                      helpToSaveEnableBadge                   = true,
+                                      enablePushNotificationTokenRegistration = false,
+                                      enablePaperlessAlertDialogues           = false,
+                                      enablePaperlessAlertDialogs             = false,
+                                      enablePaperlessAdverts                  = false,
+                                      enableHtsAdverts                        = false,
+                                      enableAnnualTaxSummaryLink              = false)
+
+      val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
+
+      println(Json.prettyPrint(result))
+
+      (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
+      (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
+      (result \ "feature").get
+        .as[List[FeatureFlag]] shouldBe List(
+        FeatureFlag("userPanelSignUp", enabled                         = false),
+        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
+        FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
+        FeatureFlag("paperlessAlertDialogues", enabled                 = false),
+        FeatureFlag("paperlessAlertDialogs", enabled                   = false),
+        FeatureFlag("paperlessAdverts", enabled                        = false),
+        FeatureFlag("htsAdverts", enabled                              = false),
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+      )
+      (result \ messages).toOption.value shouldBe messagesSuccessResponse
+      (result \ user).toOption           shouldBe None
     }
   }
 }

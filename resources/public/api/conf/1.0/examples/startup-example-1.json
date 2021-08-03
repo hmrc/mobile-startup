@@ -1,4 +1,7 @@
 {
+  "user": {
+    "name": "John Smith"
+  },
   "taxCreditRenewals": {
     "submissionsState": "open"
   },
