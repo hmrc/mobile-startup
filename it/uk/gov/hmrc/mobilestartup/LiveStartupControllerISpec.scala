@@ -58,12 +58,57 @@ class LiveStartupControllerISpec extends BaseISpec {
         )
     )
 
+  def stubCitizenDetailsResponse(): StubMapping =
+    stubFor(
+      get(urlEqualTo("/AA000006C/designatory-details"))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody("""{
+                        |    "person": {
+                        |      "firstName": "Angus",
+                        |      "middleName": "John",
+                        |      "lastName": "Smith",
+                        |      "title": "Mr",
+                        |      "honours": null,
+                        |      "sex": "M",
+                        |      "dateOfBirth": -26092800000,
+                        |      "nino": "AA000006C"
+                        |    },
+                        |    "address": {
+                        |      "line1": "123456",
+                        |      "line2": "23456",
+                        |      "line3": "3456",
+                        |      "line4": "456",
+                        |      "line5": "55555",
+                        |      "postcode": "98765",
+                        |      "startDate": 946684800000,
+                        |      "country": "Test Country",
+                        |      "type": "Residential"
+                        |    },
+                        |    "correspondenceAddress": {
+                        |      "line1": "1 Main Street",
+                        |      "line2": "Central",
+                        |      "line3": "Anothertown",
+                        |      "line4": "Anothershire",
+                        |      "line5": "Anotherline",
+                        |      "postcode": "AA1 1AA",
+                        |      "startDate": 1341100800000,
+                        |      "country": null,
+                        |      "type": "Correspondence"
+                        |    }
+                        |  }
+                        |""".stripMargin.stripMargin)
+        )
+    )
+
   "GET /startup" should {
 
     "return startup details" in {
       userLoggedIn()
       respondToAuditMergedWithNoBody
       stubRenewalsResponse()
+      stubCitizenDetailsResponse()
 
       val response = await(getRequestWithAcceptHeader(url))
 
@@ -85,6 +130,7 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 7 \ "name").as[String]                   shouldBe "annualTaxSummaryLink"
       (response.json \ "feature" \ 7 \ "enabled").as[Boolean]               shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
+      (response.json \ "user" \ "name").as[String]                          shouldBe "Angus Smith"
 
     }
 
