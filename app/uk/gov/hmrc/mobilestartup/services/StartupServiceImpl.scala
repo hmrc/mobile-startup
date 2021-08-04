@@ -138,7 +138,7 @@ class StartupServiceImpl[F[_]] @Inject() (
 
   private def citizenDetailsStartup(nino: String)(implicit hc: HeaderCarrier): F[Option[JsValue]] =
     connector
-      .doGet("citizen-details", s"/$nino/designatory-details", hc)
+      .doGet("citizen-details", s"/citizen-details/$nino/designatory-details", hc)
       .map { p =>
         val person = p.as[PersonDetails]
         Option(Json.toJson(new JsObject(Map("name" -> Json.toJson(person.person.shortName)))))
