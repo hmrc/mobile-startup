@@ -119,16 +119,14 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 1 \ "enabled").as[Boolean]               shouldBe true
       (response.json \ "feature" \ 2 \ "name").as[String]                   shouldBe "enablePushNotificationTokenRegistration"
       (response.json \ "feature" \ 2 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 3 \ "name").as[String]                   shouldBe "paperlessAlertDialogues"
+      (response.json \ "feature" \ 3 \ "name").as[String]                   shouldBe "paperlessAlertDialogs"
       (response.json \ "feature" \ 3 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 4 \ "name").as[String]                   shouldBe "paperlessAlertDialogs"
+      (response.json \ "feature" \ 4 \ "name").as[String]                   shouldBe "paperlessAdverts"
       (response.json \ "feature" \ 4 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 5 \ "name").as[String]                   shouldBe "paperlessAdverts"
+      (response.json \ "feature" \ 5 \ "name").as[String]                   shouldBe "htsAdverts"
       (response.json \ "feature" \ 5 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 6 \ "name").as[String]                   shouldBe "htsAdverts"
+      (response.json \ "feature" \ 6 \ "name").as[String]                   shouldBe "annualTaxSummaryLink"
       (response.json \ "feature" \ 6 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 7 \ "name").as[String]                   shouldBe "annualTaxSummaryLink"
-      (response.json \ "feature" \ 7 \ "enabled").as[Boolean]               shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus Smith"
 
@@ -136,6 +134,13 @@ class LiveStartupControllerISpec extends BaseISpec {
 
     "return 401 when user is not logged in" in {
       userIsNotLoggedIn()
+
+      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader).get())
+      response.status shouldBe 401
+    }
+
+    "return 401 when no nino is found for user" in {
+      userLoggedInNoNino()
 
       val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader).get())
       response.status shouldBe 401

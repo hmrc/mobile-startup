@@ -50,7 +50,6 @@ class BaseISpec
       "feature.userPanelSignUp"                               -> true,
       "feature.enablePushNotificationTokenRegistration"       -> true,
       "feature.helpToSave.enableBadge"                        -> true,
-      "feature.paperlessAlertDialogues"                       -> true,
       "feature.paperlessAlertDialogs"                         -> true,
       "feature.paperlessAdverts"                              -> true,
       "feature.htsAdverts"                                    -> true,
