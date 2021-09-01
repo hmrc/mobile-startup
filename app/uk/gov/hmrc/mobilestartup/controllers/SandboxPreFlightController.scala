@@ -53,7 +53,7 @@ class SandboxPreFlightController @Inject() (
                 PreFlightCheckResponse(Some(Nino("CS700100A")),
                                        None,
                                        routeToIV = true,
-                                       Some(ItmpName(givenName = Some("Jennifer"), None, familyName = Some("Thorsteinson"))))
+                                       Some(ItmpName(givenName = Some("Nia"), None, familyName = Some("Jackson"))))
               )
             )
           case _ => Ok(toJson(buildPreFlightResponse(false)))
@@ -65,6 +65,6 @@ class SandboxPreFlightController @Inject() (
     PreFlightCheckResponse(Some(Nino("CS700100A")),
                            Some(SaUtr("1234567890")),
                            toIV,
-                           Some(ItmpName(givenName = Some("Jennifer"), None, familyName = Some("Thorsteinson"))),
+                           Some(ItmpName(givenName = Some("Nia"), None, familyName = Some("Jackson"))),
                            Some(AnnualTaxSummaryLink("/", "PAYE")))
 }
