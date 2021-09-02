@@ -49,77 +49,28 @@
     }
   ],
   "messages": {
-    "paye": [
+    "paye": [],
+    "tc": [],
+    "hts": [],
+    "tcp": [],
+    "money": [
       {
-        "id": "paye-message-1",
         "type": "Info",
-        "headline": "Title2 - Has active date",
-        "content": {
-          "title": "title Content title",
-          "body": "Content2"
-        },
-        "activeWindow": {
-          "startTime": "2020-03-01T20:06:12.726",
-          "endTime": "2020-05-24T20:06:12.726"
+        "id": "your-details-signpost",
+        "headlineContent": {
+          "title": "Looking for your Unique Taxpayer Reference (UTR)?",
+          "links": [
+            {
+              "url": "your-details",
+              "urlType": "InApp",
+              "type": "Secondary",
+              "message": "Go to your details"
+            }
+          ]
         }
       }
     ],
-    "tc": [
-      {
-        "id": "tcr-message-1",
-        "type": "Info",
-        "headline": "Title2 - Has active date",
-        "content": {
-          "title": "title Content title",
-          "body": "Content2"
-        },
-        "activeWindow": {
-          "startTime": "2020-03-01T20:06:12.726",
-          "endTime": "2020-05-24T20:06:12.726"
-        }
-      },
-      {
-        "id": "tcr-message-2",
-        "type": "Info",
-        "headline": "Title2 - Has active date",
-        "content": {
-          "body": "Content2"
-        },
-        "activeWindow": {
-          "startTime": "2020-03-01T20:06:12.726",
-          "endTime": "2020-05-24T20:06:12.726"
-        }
-      }
-    ],
-    "hts": [
-      {
-        "id": "hts-message-1",
-        "type": "Warning",
-        "headline": "Title3",
-        "content": {
-          "body": "Content3"
-        },
-        "link": {
-          "url": "URL3",
-          "urlType": "Sso",
-          "type": "Secondary",
-          "message": "Click me"
-        }
-      },
-      {
-        "id": "hts-message-2",
-        "type": "Urgent",
-        "headline": "Title4",
-        "content": {
-          "body": "Content4"
-        },
-        "link": {
-          "url": "URL4",
-          "urlType": "Normal",
-          "type": "Secondary",
-          "message": "Click me"
-        }
-      }
-    ]
+    "communication": [],
+    "details": []
   }
 }
