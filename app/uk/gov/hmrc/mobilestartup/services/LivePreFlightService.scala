@@ -100,12 +100,6 @@ class LivePreFlightService @Inject() (
 
       }
 
-  private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] =
-    if (showATSLink) {
-      if (getActivatedSaUtr(enrolments).isDefined) Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA"))
-      else Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE"))
-    } else None
-
   override def getUtr(
     foundUtr:    Option[SaUtr],
     foundNino:   Option[Nino],
@@ -146,6 +140,12 @@ class LivePreFlightService @Inject() (
         .getOrElse(Future successful None)
     }
   }
+
+  private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] =
+    if (showATSLink) {
+      if (getActivatedSaUtr(enrolments).isDefined) Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA"))
+      else Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE"))
+    } else None
 
   private def getActivatedSaUtr(enrolments: Enrolments): Option[SaUtr] =
     enrolments.enrolments
