@@ -16,19 +16,25 @@
 
 package uk.gov.hmrc.mobilestartup.services
 import com.google.inject.ImplementedBy
+import play.api.libs.json
 import play.api.libs.json.{Format, JsObject, Json, Writes}
+import uk.gov.hmrc.auth.core.Enrolments
 import uk.gov.hmrc.auth.core.retrieve.ItmpName
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.{JourneyId, LinkDestination}
 import uk.gov.hmrc.mobilestartup.model.types._
 
+import scala.concurrent.{ExecutionContext, Future}
+
 case class PreFlightCheckResponse(
   nino:                 Option[Nino],
   saUtr:                Option[SaUtr],
   routeToIV:            Boolean,
   name:                 Option[ItmpName],
-  annualTaxSummaryLink: Option[AnnualTaxSummaryLink] = None)
+  annualTaxSummaryLink: Option[AnnualTaxSummaryLink] = None,
+  utr:                  Option[Utr],
+  enrolments:           Enrolments)
 
 object PreFlightCheckResponse {
 
@@ -50,10 +56,12 @@ object PreFlightCheckResponse {
       Json.obj("annualTaxSummaryLink" -> found)
     }
 
+    def withUtr(utr: Option[Utr]): JsObject = utr.fold(Json.obj())(found => Json.obj("utr" -> found))
+
     def writes(preFlightCheckResponse: PreFlightCheckResponse): JsObject =
       withNino(preFlightCheckResponse.nino) ++ withSaUtr(preFlightCheckResponse.saUtr) ++ Json
         .obj("routeToIV" -> preFlightCheckResponse.routeToIV) ++ withName(preFlightCheckResponse.name) ++
-      withATSLink(preFlightCheckResponse.annualTaxSummaryLink)
+      withATSLink(preFlightCheckResponse.annualTaxSummaryLink) ++ withUtr(preFlightCheckResponse.utr)
   }
 
 }
@@ -64,7 +72,18 @@ case class AnnualTaxSummaryLink(
 
 object AnnualTaxSummaryLink { implicit val formats: Format[AnnualTaxSummaryLink] = Json.format[AnnualTaxSummaryLink] }
 
+case class Utr(
+  saUtr:                SaUtr,
+  inactiveEnrolmentUrl: Option[String])
+
+object Utr { implicit val formats: Format[Utr] = Json.format[Utr] }
+
 @ImplementedBy(classOf[LivePreFlightService])
 trait PreFlightService[F[_]] {
-  def preFlight(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse]
+
+  def preFlight(
+    journeyId:   JourneyId
+  )(implicit hc: HeaderCarrier,
+    ec:          ExecutionContext
+  ): F[PreFlightCheckResponse]
 }

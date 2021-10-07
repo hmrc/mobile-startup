@@ -26,6 +26,7 @@ import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.{AnnualTaxSummaryLink, PreFlightCheckResponse}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendBaseController
 import eu.timepit.refined.auto._
+import uk.gov.hmrc.auth.core.Enrolments
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -50,10 +51,14 @@ class SandboxPreFlightController @Inject() (
           case Some("ROUTE-TO-IV") =>
             Ok(
               toJson(
-                PreFlightCheckResponse(Some(Nino("CS700100A")),
-                                       None,
-                                       routeToIV = true,
-                                       Some(ItmpName(givenName = Some("Nia"), None, familyName = Some("Jackson"))))
+                PreFlightCheckResponse(
+                  Some(Nino("CS700100A")),
+                  None,
+                  routeToIV = true,
+                  Some(ItmpName(givenName = Some("Nia"), None, familyName = Some("Jackson"))),
+                  utr        = None,
+                  enrolments = Enrolments(Set.empty)
+                )
               )
             )
           case _ => Ok(toJson(buildPreFlightResponse(false)))
@@ -62,9 +67,13 @@ class SandboxPreFlightController @Inject() (
     }
 
   def buildPreFlightResponse(toIV: Boolean): PreFlightCheckResponse =
-    PreFlightCheckResponse(Some(Nino("CS700100A")),
-                           Some(SaUtr("1234567890")),
-                           toIV,
-                           Some(ItmpName(givenName = Some("Nia"), None, familyName = Some("Jackson"))),
-                           Some(AnnualTaxSummaryLink("/", "PAYE")))
+    PreFlightCheckResponse(
+      Some(Nino("CS700100A")),
+      Some(SaUtr("1234567890")),
+      toIV,
+      Some(ItmpName(givenName = Some("Nia"), None, familyName = Some("Jackson"))),
+      Some(AnnualTaxSummaryLink("/", "PAYE")),
+      None,
+      Enrolments(Set.empty)
+    )
 }

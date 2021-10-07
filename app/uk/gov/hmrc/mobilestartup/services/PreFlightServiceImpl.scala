@@ -18,11 +18,13 @@ package uk.gov.hmrc.mobilestartup.services
 import cats.MonadError
 import cats.implicits._
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName}
-import uk.gov.hmrc.auth.core.{ConfidenceLevel, UnsupportedAuthProvider}
+import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+
+import scala.concurrent.ExecutionContext
 
 abstract class PreFlightServiceImpl[F[_]](
   genericConnector:       GenericConnector[F],
@@ -32,9 +34,24 @@ abstract class PreFlightServiceImpl[F[_]](
 
   // The authentication and auditing calls from the platform are based on Future so declare a couple of
   // methods that adapt away from Future to F that the live implementation can define.
-  def retrieveAccounts(
-    implicit hc: HeaderCarrier
-  ): F[(Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[ItmpName], Option[AnnualTaxSummaryLink])]
+  def retrieveAccounts(implicit hc: HeaderCarrier): F[
+    (Option[Nino],
+     Option[SaUtr],
+     Option[Credentials],
+     ConfidenceLevel,
+     Option[ItmpName],
+     Option[AnnualTaxSummaryLink],
+     Enrolments)
+  ]
+
+  def getUtr(
+    foundUtr:    Option[SaUtr],
+    foundNino:   Option[Nino],
+    enrolments:  Enrolments
+  )(implicit hc: HeaderCarrier
+  ): F[
+    (Option[Utr])
+  ]
 
   def auditing[T](
     service:     String,
@@ -43,23 +60,45 @@ abstract class PreFlightServiceImpl[F[_]](
   )(implicit hc: HeaderCarrier
   ): F[T]
 
-  def preFlight(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
+  def preFlight(
+    journeyId:   JourneyId
+  )(implicit hc: HeaderCarrier,
+    ec:          ExecutionContext
+  ): F[PreFlightCheckResponse] =
     auditing("preFlightCheck", Map.empty) {
       getPreFlightCheckResponse(journeyId)
     }
 
-  private def getPreFlightCheckResponse(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] =
-    retrieveAccounts.map {
-      case (nino, saUtr, credentials, confidenceLevel, name, annualTaxSummaryLink) =>
+  private def getPreFlightCheckResponse(
+    journeyId:   JourneyId
+  )(implicit hc: HeaderCarrier,
+    ec:          ExecutionContext
+  ): F[PreFlightCheckResponse] = {
+
+    val accountsRetrieved: F[PreFlightCheckResponse] = retrieveAccounts.map {
+      case (nino, saUtr, credentials, confidenceLevel, name, annualTaxSummaryLink, enrolments) =>
         if (credentials.getOrElse(Credentials("Unsupported", "Unsupported")).providerType != "GovernmentGateway")
           throw new UnsupportedAuthProvider
-        PreFlightCheckResponse(
-          nino,
-          saUtr,
-          minimumConfidenceLevel > confidenceLevel.level,
-          name,
-          annualTaxSummaryLink
-        )
+        PreFlightCheckResponse(nino,
+                               saUtr,
+                               minimumConfidenceLevel > confidenceLevel.level,
+                               name,
+                               annualTaxSummaryLink,
+                               None,
+                               enrolments)
     }
+    for {
+      account    <- accountsRetrieved
+      utrDetails <- getUtr(account.saUtr, account.nino, account.enrolments)
+    } yield {
+      PreFlightCheckResponse(account.nino,
+                             account.saUtr,
+                             account.routeToIV,
+                             account.name,
+                             account.annualTaxSummaryLink,
+                             utrDetails,
+                             account.enrolments)
+    }
+  }
 
 }

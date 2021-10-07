@@ -6,5 +6,9 @@
   "annualTaxSummaryLink": {
     "link": "/",
     "destination": "PAYE"
+  },
+  "utr": {
+    "saUtr": 123456789,
+    "inactiveEnrolmentLink": "/"
   }
 }

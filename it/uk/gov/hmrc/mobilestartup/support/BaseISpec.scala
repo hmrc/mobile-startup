@@ -46,6 +46,7 @@ class BaseISpec
       "microservice.services.datastream.port"                 -> wireMockPort,
       "microservice.services.mobile-tax-credits-renewal.port" -> wireMockPort,
       "microservice.services.citizen-details.port"            -> wireMockPort,
+      "microservice.services.enrolment-store-proxy.port"      -> wireMockPort,
       "auditing.consumer.baseUri.port"                        -> wireMockPort,
       "feature.userPanelSignUp"                               -> true,
       "feature.enablePushNotificationTokenRegistration"       -> true,

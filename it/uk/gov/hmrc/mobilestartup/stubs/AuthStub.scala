@@ -72,9 +72,9 @@ object AuthStub {
            """.stripMargin
 
   private def loggedInResponseNoNino(
-                                saUtr:       String,
-                                activateUtr: Boolean
-                              ): String =
+    saUtr:       String,
+    activateUtr: Boolean
+  ): String =
     s"""
        |{
        |  "saUtr": "$saUtr",
@@ -90,6 +90,27 @@ object AuthStub {
        |      }],
        |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
        |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200,
+       |  "optionalItmpName": {
+       |    "givenName": "Test",
+       |    "familyName": "User"
+       |  },
+       |  "optionalName": {
+       |    "name": "TestUser2"
+       |  }
+       |}
+           """.stripMargin
+
+  private def loggedInResponseNoSaUtr(nino: String): String =
+    s"""
+       |{
+       |  "nino": "$nino",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "allEnrolments": [],
        |  "groupIdentifier": "groupId",
        |  "confidenceLevel": 200,
        |  "optionalItmpName": {
@@ -172,6 +193,17 @@ object AuthStub {
         )
     )
 
+  def accountsFoundMissingSaUtr(nino: String = "AA000006C"): StubMapping =
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(accountsRequestJson, true, false))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(loggedInResponseNoSaUtr(nino))
+        )
+    )
+
   def accountsFoundMissingItmpName(
     nino:             String  = "AA000006C",
     saUtr:            String  = "123456789",
@@ -208,9 +240,9 @@ object AuthStub {
     )
 
   def userLoggedInNoNino(
-                    saUtr:       String  = "123456789",
-                    activateUtr: Boolean = true
-                  ): StubMapping =
+    saUtr:       String  = "123456789",
+    activateUtr: Boolean = true
+  ): StubMapping =
     stubFor(
       post(urlEqualTo(authUrl))
         .withRequestBody(equalToJson(authoriseRequestBody, true, false))
