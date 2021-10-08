@@ -20,6 +20,7 @@ import play.api.libs.json.Json._
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
 import uk.gov.hmrc.mobilestartup.{BaseSpec, TestF}
 
 class StartupServiceImplSpec extends BaseSpec with TestF {
@@ -157,6 +158,18 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
           case "citizen-details"            => citizenDetailsResponse
           case _                            => obj().pure[TestF]
         }
+
+      override def cidGet(
+        serviceName: String,
+        path:        String,
+        hc:          HeaderCarrier
+      ): TestF[CidPerson] = ???
+
+      override def enrolmentStoreGet(
+        serviceName: String,
+        path:        String,
+        hc:          HeaderCarrier
+      ): TestF[EnrolmentStoreResponse] = ???
 
       override def doPost[T](
         json:         JsValue,

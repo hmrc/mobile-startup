@@ -22,6 +22,7 @@ import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import eu.timepit.refined.auto._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 trait BaseSpec
     extends WordSpecLike

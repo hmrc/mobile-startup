@@ -17,12 +17,14 @@
 package uk.gov.hmrc.mobilestartup.connectors
 
 import com.google.inject.Singleton
+
 import javax.inject.Inject
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.mobilestartup.config.WSHttpImpl
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,6 +35,18 @@ trait GenericConnector[F[_]] {
     path:        String,
     hc:          HeaderCarrier
   ): F[JsValue]
+
+  def cidGet(
+    serviceName: String,
+    path:        String,
+    hc:          HeaderCarrier
+  ): F[CidPerson]
+
+  def enrolmentStoreGet(
+    serviceName: String,
+    path:        String,
+    hc:          HeaderCarrier
+  ): F[EnrolmentStoreResponse]
 
   def doPost[T](
     json:         JsValue,
@@ -66,6 +80,29 @@ class GenericConnectorImpl @Inject() (
   ): Future[JsValue] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
     http.GET[JsValue](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path))
+  }
+
+  def cidGet(
+    serviceName: String,
+    path:        String,
+    hc:          HeaderCarrier
+  ): Future[CidPerson] = {
+    implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
+    http.GET[CidPerson](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path))
+  }
+
+  def enrolmentStoreGet(
+    serviceName: String,
+    path:        String,
+    hc:          HeaderCarrier
+  ): Future[EnrolmentStoreResponse] = {
+    implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
+    http.GET[HttpResponse](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)).map {
+      response =>
+        if (response.status == 204) EnrolmentStoreResponse(Seq.empty)
+        else response.json.as[EnrolmentStoreResponse]
+    }
+
   }
 
   def doPost[T](

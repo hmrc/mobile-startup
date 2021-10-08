@@ -23,6 +23,8 @@ import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 import uk.gov.hmrc.mobilestartup.stubs.AuthStub._
 import uk.gov.hmrc.mobilestartup.stubs.AuditStub._
+import uk.gov.hmrc.mobilestartup.stubs.CitizenDetailsStub._
+import uk.gov.hmrc.mobilestartup.stubs.EnrolmentStoreStub._
 import eu.timepit.refined.auto._
 import play.api.inject.guice.GuiceApplicationBuilder
 
@@ -33,6 +35,32 @@ trait LivePreFlightControllerTests extends BaseISpec {
   val saUtr:     SaUtr     = SaUtr("123456789")
   val journeyId: JourneyId = "b6ef25bc-8f5e-49c8-98c5-f039f39e4557"
   val url:       String    = s"/preflight-check?journeyId=$journeyId"
+
+  private val cidPersonJson = s"""{ 
+                                 |  "name": {
+                                 |    "current": {
+                                 |      "firstName": "John",
+                                 |      "lastName": "Smith"
+                                 |    },
+                                 |    "previous": []
+                                 |  },
+                                 |  "ids": {
+                                 |    "nino": "AA000006C",
+                                 |    "sautr": "123123123"
+                                 |  },
+                                 |  "dateOfBirth": "11121971"
+                                 |}""".stripMargin
+
+  private val principalIdsJson = s"""{
+                                    |    "principalUserIds": [
+                                    |       "ABCEDEFGI1234567",
+                                    |       "ABCEDEFGI1234568"
+                                    |    ]
+                                    |}""".stripMargin
+
+  private val noPrincipalIdsJson = s"""{
+                                      |    "principalUserIds": []
+                                      |}""".stripMargin
 
   def getRequestWithAcceptHeader(url: String): Future[WSResponse] =
     wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader).get()
@@ -51,42 +79,171 @@ trait LivePreFlightControllerTests extends BaseISpec {
     "return account details" in {
       accountsFound(nino.nino, saUtr.utr)
       respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
 
       val response = await(getRequestWithAcceptHeader(url))
 
-      response.status                           shouldBe 200
-      (response.json \ "nino").as[String]       shouldBe nino.nino
-      (response.json \ "saUtr").as[String]      shouldBe saUtr.utr
-      (response.json \ "name").as[String]       shouldBe "Test User"
-      (response.json \ "routeToIV").as[Boolean] shouldBe false
+      response.status                                          shouldBe 200
+      (response.json \ "nino").as[String]                      shouldBe nino.nino
+      (response.json \ "saUtr").as[String]                     shouldBe saUtr.utr
+      (response.json \ "name").as[String]                      shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean]                shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
 
     }
 
     "return account details with name if itmpName not available" in {
       accountsFoundMissingItmpName(nino.nino, saUtr.utr)
       respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
 
       val response = await(getRequestWithAcceptHeader(url))
 
-      response.status                           shouldBe 200
-      (response.json \ "nino").as[String]       shouldBe nino.nino
-      (response.json \ "saUtr").as[String]      shouldBe saUtr.utr
-      (response.json \ "name").as[String]       shouldBe "TestUser2"
-      (response.json \ "routeToIV").as[Boolean] shouldBe false
+      response.status                                          shouldBe 200
+      (response.json \ "nino").as[String]                      shouldBe nino.nino
+      (response.json \ "saUtr").as[String]                     shouldBe saUtr.utr
+      (response.json \ "name").as[String]                      shouldBe "TestUser2"
+      (response.json \ "routeToIV").as[Boolean]                shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
 
     }
 
     "return account details with no name if itmpName and name not available" in {
       accountsFoundMissingItmpName(nino.nino, saUtr.utr, bothNamesMissing = true)
       respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                                          shouldBe 200
+      (response.json \ "nino").as[String]                      shouldBe nino.nino
+      (response.json \ "saUtr").as[String]                     shouldBe saUtr.utr
+      (response.json \ "name").isEmpty                         shouldBe true
+      (response.json \ "routeToIV").as[Boolean]                shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
+
+    }
+
+    "Look for SaUtr on citizen-details if none returned from auth" in {
+      accountsFoundMissingSaUtr(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      cidPersonForNinoAre(cidPersonJson)
+      principalIdsForUtrAre("123123123", principalIdsJson)
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                              shouldBe 200
+      (response.json \ "nino").as[String]          shouldBe nino.nino
+      (response.json \ "name").as[String]          shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean]    shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String] shouldBe "123123123"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl")
+        .as[String] shouldBe "/personal-account/self-assessment/signed-in-wrong-account"
+    }
+
+    "Return correct url if no principalIds found for CID utr on Enrolment store proxy" in {
+      accountsFoundMissingSaUtr(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      cidPersonForNinoAre(cidPersonJson)
+      principalIdsForUtrAre("123123123", noPrincipalIdsJson)
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                              shouldBe 200
+      (response.json \ "nino").as[String]          shouldBe nino.nino
+      (response.json \ "name").as[String]          shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean]    shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String] shouldBe "123123123"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl")
+        .as[String] shouldBe "/business-account/add-tax/self-assessment/try-iv?origin=pta-sa"
+    }
+
+    "return correct utr object if call to Enrolment Store returns 204" in {
+      accountsFoundMissingSaUtr(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      cidPersonForNinoAre(cidPersonJson)
+      enrolmentStoreReturnErrorResponse("123123123", 204)
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                              shouldBe 200
+      (response.json \ "nino").as[String]          shouldBe nino.nino
+      (response.json \ "name").as[String]          shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean]    shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String] shouldBe "123123123"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl")
+        .as[String] shouldBe "/business-account/add-tax/self-assessment/try-iv?origin=pta-sa"
+
+    }
+
+    "return no utr object if call to CID fails with 400" in {
+      accountsFoundMissingSaUtr(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      cidWillReturnErrorResponse(400)
 
       val response = await(getRequestWithAcceptHeader(url))
 
       response.status                           shouldBe 200
       (response.json \ "nino").as[String]       shouldBe nino.nino
-      (response.json \ "saUtr").as[String]      shouldBe saUtr.utr
-      (response.json \ "name").isEmpty          shouldBe true
+      (response.json \ "name").as[String]       shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean] shouldBe false
+      (response.json \ "utr").isEmpty           shouldBe true
+
+    }
+
+    "return no utr object if call to CID fails with 404" in {
+      accountsFoundMissingSaUtr(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      cidWillReturnErrorResponse(404)
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                           shouldBe 200
+      (response.json \ "nino").as[String]       shouldBe nino.nino
+      (response.json \ "name").as[String]       shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean] shouldBe false
+      (response.json \ "utr").isEmpty           shouldBe true
+
+    }
+
+    "return no utr object if call to CID fails with 500" in {
+      accountsFoundMissingSaUtr(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      cidWillReturnErrorResponse(500)
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                           shouldBe 200
+      (response.json \ "nino").as[String]       shouldBe nino.nino
+      (response.json \ "name").as[String]       shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean] shouldBe false
+      (response.json \ "utr").isEmpty           shouldBe true
+
+    }
+
+    "return no utr object if call to Enrolment Store fails" in {
+      accountsFoundMissingSaUtr(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      cidPersonForNinoAre(cidPersonJson)
+      enrolmentStoreReturnErrorResponse("123123123", 500)
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                           shouldBe 200
+      (response.json \ "nino").as[String]       shouldBe nino.nino
+      (response.json \ "name").as[String]       shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean] shouldBe false
+      (response.json \ "utr").isEmpty           shouldBe true
 
     }
 
@@ -119,26 +276,35 @@ trait LivePreFlightControllerTests extends BaseISpec {
 }
 
 class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTests {
+
   "GET /preflight-check" should {
 
-    "return paye link if no active saUtr found" in {
+    "return paye link and inactive saUtr link if no active saUtr found" in {
       accountsFound(nino.nino, saUtr.utr, activateUtr = false)
       respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
 
       val response = await(getRequestWithAcceptHeader(url))
 
       (response.json \ "annualTaxSummaryLink" \ "link").as[String]        shouldBe "/annual-tax-summary/paye/main"
       (response.json \ "annualTaxSummaryLink" \ "destination").as[String] shouldBe "PAYE"
+      (response.json \ "utr" \ "saUtr").as[String]                        shouldBe "123456789"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl")
+        .as[String] shouldBe "/enrolment-management-frontend/IR-SA/get-access-tax-scheme?continue=/personal-account"
+
     }
 
     "return sa link if active saUtr found" in {
       accountsFound(nino.nino, saUtr.utr)
       respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
 
       val response = await(getRequestWithAcceptHeader(url))
 
       (response.json \ "annualTaxSummaryLink" \ "link").as[String]        shouldBe "/annual-tax-summary"
       (response.json \ "annualTaxSummaryLink" \ "destination").as[String] shouldBe "SA"
+      (response.json \ "utr" \ "saUtr").as[String]                        shouldBe "123456789"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty            shouldBe true
     }
   }
 }
@@ -157,6 +323,7 @@ class LivePreflightControllerATSLinkDisabledISpec extends LivePreFlightControlle
     "return no ATS link if feature flag is off" in {
       accountsFound(nino.nino, saUtr.utr, activateUtr = false)
       respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
 
       val response = await(getRequestWithAcceptHeader(url))
 
