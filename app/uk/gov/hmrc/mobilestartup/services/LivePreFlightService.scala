@@ -25,9 +25,9 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName, ~}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream4xxResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
-import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
+import uk.gov.hmrc.mobilestartup.model.{Activated, CidPerson, EnrolmentStoreResponse, NoEnrolment, NotYetActivated, WrongAccount}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.service.Auditor
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND}
@@ -107,14 +107,9 @@ class LivePreFlightService @Inject() (
   )(implicit hc: HeaderCarrier
   ): Future[Option[Utr]] = {
     val activatedSaUtr = getActivatedSaUtr(enrolments)
-    if (activatedSaUtr.isDefined) Future successful activatedSaUtr.map(utr => Utr(utr, None))
+    if (activatedSaUtr.isDefined) Future successful activatedSaUtr.map(utr => Utr(utr, Activated))
     else if (foundUtr.isDefined) {
-      Future successful foundUtr.flatMap(utr =>
-        Some(
-          Utr(SaUtr(utr.utr),
-              Some("/enrolment-management-frontend/IR-SA/get-access-tax-scheme?continue=/personal-account"))
-        )
-      )
+      Future successful foundUtr.flatMap(utr => Some(Utr(SaUtr(utr.utr), NotYetActivated)))
     } else {
       foundNino
         .map { nino =>
@@ -124,15 +119,9 @@ class LivePreFlightService @Inject() (
           } yield {
             saUtrOnCid.flatMap { utr =>
               hasPrincipalIds match {
-                case None => None
-                case Some(true) =>
-                  Some(
-                    Utr(SaUtr(utr.value), Some("/personal-account/self-assessment/signed-in-wrong-account"))
-                  )
-                case _ =>
-                  Some(
-                    Utr(SaUtr(utr.value), Some("/business-account/add-tax/self-assessment/try-iv?origin=pta-sa"))
-                  )
+                case None       => None
+                case Some(true) => Some(Utr(SaUtr(utr.value), WrongAccount))
+                case _          => Some(Utr(SaUtr(utr.value), NoEnrolment))
               }
             }
           }

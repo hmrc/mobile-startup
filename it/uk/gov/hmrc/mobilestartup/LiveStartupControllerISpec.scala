@@ -127,6 +127,8 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 5 \ "enabled").as[Boolean]               shouldBe true
       (response.json \ "feature" \ 6 \ "name").as[String]                   shouldBe "annualTaxSummaryLink"
       (response.json \ "feature" \ 6 \ "enabled").as[Boolean]               shouldBe true
+      (response.json \ "feature" \ 7 \ "name").as[String]                   shouldBe "saTile"
+      (response.json \ "feature" \ 7 \ "enabled").as[Boolean]               shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus Smith"
 

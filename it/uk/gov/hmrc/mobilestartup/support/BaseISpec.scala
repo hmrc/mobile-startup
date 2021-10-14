@@ -54,6 +54,7 @@ class BaseISpec
       "feature.paperlessAlertDialogs"                         -> true,
       "feature.paperlessAdverts"                              -> true,
       "feature.htsAdverts"                                    -> true,
+      "feature.saTile"                                        -> true,
       "feature.annualTaxSummaryLink"                          -> true
     )
 

@@ -89,6 +89,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
       (response.json \ "name").as[String]                      shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean]                shouldBe false
       (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
+      (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
 
     }
@@ -106,6 +107,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
       (response.json \ "name").as[String]                      shouldBe "TestUser2"
       (response.json \ "routeToIV").as[Boolean]                shouldBe false
       (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
+      (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
 
     }
@@ -123,6 +125,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
       (response.json \ "name").isEmpty                         shouldBe true
       (response.json \ "routeToIV").as[Boolean]                shouldBe false
       (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
+      (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
 
     }
@@ -136,13 +139,14 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       val response = await(getRequestWithAcceptHeader(url))
 
-      response.status                              shouldBe 200
-      (response.json \ "nino").as[String]          shouldBe nino.nino
-      (response.json \ "name").as[String]          shouldBe "Test User"
-      (response.json \ "routeToIV").as[Boolean]    shouldBe false
-      (response.json \ "utr" \ "saUtr").as[String] shouldBe "123123123"
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "name").as[String]           shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean]     shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String]  shouldBe "123123123"
+      (response.json \ "utr" \ "status").as[String] shouldBe "wrongAccount"
       (response.json \ "utr" \ "inactiveEnrolmentUrl")
-        .as[String] shouldBe "/personal-account/self-assessment/signed-in-wrong-account"
+        .as[String] shouldBe "/personal-account/self-assessment"
     }
 
     "Return correct url if no principalIds found for CID utr on Enrolment store proxy" in {
@@ -154,13 +158,14 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       val response = await(getRequestWithAcceptHeader(url))
 
-      response.status                              shouldBe 200
-      (response.json \ "nino").as[String]          shouldBe nino.nino
-      (response.json \ "name").as[String]          shouldBe "Test User"
-      (response.json \ "routeToIV").as[Boolean]    shouldBe false
-      (response.json \ "utr" \ "saUtr").as[String] shouldBe "123123123"
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "name").as[String]           shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean]     shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String]  shouldBe "123123123"
+      (response.json \ "utr" \ "status").as[String] shouldBe "noEnrolment"
       (response.json \ "utr" \ "inactiveEnrolmentUrl")
-        .as[String] shouldBe "/business-account/add-tax/self-assessment/try-iv?origin=pta-sa"
+        .as[String] shouldBe "/personal-account/sa-enrolment"
     }
 
     "return correct utr object if call to Enrolment Store returns 204" in {
@@ -172,13 +177,14 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       val response = await(getRequestWithAcceptHeader(url))
 
-      response.status                              shouldBe 200
-      (response.json \ "nino").as[String]          shouldBe nino.nino
-      (response.json \ "name").as[String]          shouldBe "Test User"
-      (response.json \ "routeToIV").as[Boolean]    shouldBe false
-      (response.json \ "utr" \ "saUtr").as[String] shouldBe "123123123"
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "name").as[String]           shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean]     shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String]  shouldBe "123123123"
+      (response.json \ "utr" \ "status").as[String] shouldBe "noEnrolment"
       (response.json \ "utr" \ "inactiveEnrolmentUrl")
-        .as[String] shouldBe "/business-account/add-tax/self-assessment/try-iv?origin=pta-sa"
+        .as[String] shouldBe "/personal-account/sa-enrolment"
 
     }
 
@@ -290,7 +296,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
       (response.json \ "annualTaxSummaryLink" \ "destination").as[String] shouldBe "PAYE"
       (response.json \ "utr" \ "saUtr").as[String]                        shouldBe "123456789"
       (response.json \ "utr" \ "inactiveEnrolmentUrl")
-        .as[String] shouldBe "/enrolment-management-frontend/IR-SA/get-access-tax-scheme?continue=/personal-account"
+        .as[String] shouldBe "/personal-account/self-assessment"
 
     }
 

@@ -20,7 +20,7 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.{FreeSpecLike, Matchers}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.libs.json.JsValue
-import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName, Name}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName}
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
@@ -31,7 +31,7 @@ import eu.timepit.refined.auto._
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class PreFlightServiceImplSpec
     extends FreeSpecLike
