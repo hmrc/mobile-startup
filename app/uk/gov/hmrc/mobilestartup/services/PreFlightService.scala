@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.mobilestartup.services
 import com.google.inject.ImplementedBy
-import play.api.libs.json
 import play.api.libs.json.{Format, JsObject, Json, Writes}
 import uk.gov.hmrc.auth.core.Enrolments
 import uk.gov.hmrc.auth.core.retrieve.ItmpName
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.mobilestartup.model.EnrolmentStatus
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.{JourneyId, LinkDestination}
 import uk.gov.hmrc.mobilestartup.model.types._
 
@@ -74,9 +74,19 @@ object AnnualTaxSummaryLink { implicit val formats: Format[AnnualTaxSummaryLink]
 
 case class Utr(
   saUtr:                SaUtr,
+  status:               EnrolmentStatus,
   inactiveEnrolmentUrl: Option[String])
 
-object Utr { implicit val formats: Format[Utr] = Json.format[Utr] }
+object Utr {
+
+  def apply(
+    saUtr:  SaUtr,
+    status: EnrolmentStatus
+  ): Utr = Utr(saUtr, status, status.link)
+
+  implicit val formats: Format[Utr] = Json.format[Utr]
+
+}
 
 @ImplementedBy(classOf[LivePreFlightService])
 trait PreFlightService[F[_]] {
