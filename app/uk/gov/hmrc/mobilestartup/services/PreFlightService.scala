@@ -73,14 +73,14 @@ case class AnnualTaxSummaryLink(
 object AnnualTaxSummaryLink { implicit val formats: Format[AnnualTaxSummaryLink] = Json.format[AnnualTaxSummaryLink] }
 
 case class Utr(
-  saUtr:                SaUtr,
+  saUtr:                Option[SaUtr],
   status:               EnrolmentStatus,
   inactiveEnrolmentUrl: Option[String])
 
 object Utr {
 
   def apply(
-    saUtr:  SaUtr,
+    saUtr:  Option[SaUtr],
     status: EnrolmentStatus
   ): Utr = Utr(saUtr, status, status.link)
 
