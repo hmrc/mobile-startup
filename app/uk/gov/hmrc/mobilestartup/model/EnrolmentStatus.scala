@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.mobilestartup.model
 
-import play.api.libs.json.{Format, JsResult, JsString, JsSuccess, JsValue, Json, OFormat, Reads, Writes}
+import play.api.libs.json.{Format, JsResult, JsString, JsSuccess, JsValue}
 
 sealed trait EnrolmentStatus {
   val link: Option[String]
@@ -31,6 +31,7 @@ object EnrolmentStatus {
       case NoEnrolment     => JsString("noEnrolment")
       case NotYetActivated => JsString("notYetActivated")
       case WrongAccount    => JsString("wrongAccount")
+      case NoUtr           => JsString("noUtr")
     }
 
     override def reads(json: JsValue): JsResult[EnrolmentStatus] = json.as[String] match {
@@ -38,12 +39,18 @@ object EnrolmentStatus {
       case "noEnrolment"     => JsSuccess(NoEnrolment)
       case "notYetActivated" => JsSuccess(NotYetActivated)
       case "wrongAccount"    => JsSuccess(WrongAccount)
+      case "noUtr"           => JsSuccess(NoUtr)
     }
   }
 }
 
-case object Activated extends EnrolmentStatus { val link:   Option[String] = None }
-case object NoEnrolment extends EnrolmentStatus { val link: Option[String] = Some("/personal-account/sa-enrolment") }
+case object Activated extends EnrolmentStatus {
+  val link: Option[String] = None
+}
+
+case object NoEnrolment extends EnrolmentStatus {
+  val link: Option[String] = Some("/personal-account/sa-enrolment")
+}
 
 case object NotYetActivated extends EnrolmentStatus {
   val link: Option[String] = Some("/personal-account/self-assessment")
@@ -51,4 +58,8 @@ case object NotYetActivated extends EnrolmentStatus {
 
 case object WrongAccount extends EnrolmentStatus {
   val link: Option[String] = Some("/personal-account/self-assessment")
+}
+
+case object NoUtr extends EnrolmentStatus {
+  val link: Option[String] = Some("https://www.gov.uk/register-for-self-assessment")
 }

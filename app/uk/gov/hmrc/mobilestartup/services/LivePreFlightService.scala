@@ -25,9 +25,9 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName, ~}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
-import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, UpstreamErrorResponse}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
-import uk.gov.hmrc.mobilestartup.model.{Activated, CidPerson, EnrolmentStoreResponse, NoEnrolment, NotYetActivated, WrongAccount}
+import uk.gov.hmrc.mobilestartup.model.{Activated, CidPerson, EnrolmentStoreResponse, NoEnrolment, NoUtr, NotYetActivated, WrongAccount}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.service.Auditor
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND}
@@ -107,26 +107,32 @@ class LivePreFlightService @Inject() (
   )(implicit hc: HeaderCarrier
   ): Future[Option[Utr]] = {
     val activatedSaUtr = getActivatedSaUtr(enrolments)
-    if (activatedSaUtr.isDefined) Future successful activatedSaUtr.map(utr => Utr(utr, Activated))
+    if (activatedSaUtr.isDefined) Future successful activatedSaUtr.map(utr => Utr(Some(utr), Activated))
     else if (foundUtr.isDefined) {
-      Future successful foundUtr.flatMap(utr => Some(Utr(SaUtr(utr.utr), NotYetActivated)))
+      Future successful foundUtr.flatMap(utr => Some(Utr(Some(SaUtr(utr.utr)), NotYetActivated)))
     } else {
       foundNino
         .map { nino =>
           for {
-            saUtrOnCid      <- getUtrFromCID(nino.nino)
+            saUtrOnCid <- getUtrFromCID(nino.nino).recover {
+                           case e: NotFoundException => Some(SaUtr("NOT_FOUND"))
+                         }
             hasPrincipalIds <- doesUtrHavePrincipalIds(saUtrOnCid)
           } yield {
-            saUtrOnCid.flatMap { utr =>
-              hasPrincipalIds match {
-                case None       => None
-                case Some(true) => Some(Utr(SaUtr(utr.value), WrongAccount))
-                case _          => Some(Utr(SaUtr(utr.value), NoEnrolment))
-              }
+            saUtrOnCid match {
+              case Some(utr) =>
+                if (utr.utr == "NOT_FOUND") Some(Utr(None, NoUtr))
+                else
+                  hasPrincipalIds match {
+                    case None       => None
+                    case Some(true) => Some(Utr(Some(SaUtr(utr.value)), WrongAccount))
+                    case _          => Some(Utr(Some(SaUtr(utr.value)), NoEnrolment))
+                  }
+              case _ => None
             }
           }
         }
-        .getOrElse(Future successful None)
+        .getOrElse(Future successful Some(Utr(None, NoUtr)))
     }
   }
 
@@ -155,7 +161,7 @@ class LivePreFlightService @Inject() (
           None
         case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND =>
           logger.info(s"Call to CID failed - No record for the Nino: $nino found on CID.")
-          None
+          throw new NotFoundException("No UTR found on CID")
         case e: UpstreamErrorResponse =>
           logger.info(s"Call to CID failed $e")
           None
