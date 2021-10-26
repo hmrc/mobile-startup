@@ -25,7 +25,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class LiveStartupService @Inject() (
   connector:                                                                                         GenericConnector[Future],
   @Named("feature.userPanelSignUp") userPanelSignUp:                                                 Boolean,
-  @Named("feature.helpToSave.enableBadge") helpToSaveEnableBadge:                                    Boolean,
   @Named("feature.enablePushNotificationTokenRegistration") enablePushNotificationTokenRegistration: Boolean,
   @Named("feature.paperlessAlertDialogs") enablePaperlessAlertDialogs:                               Boolean,
   @Named("feature.paperlessAdverts") enablePaperlessAdverts:                                         Boolean,
@@ -35,7 +34,6 @@ class LiveStartupService @Inject() (
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
-                                       helpToSaveEnableBadge,
                                        enablePushNotificationTokenRegistration,
                                        enablePaperlessAlertDialogs,
                                        enablePaperlessAdverts,

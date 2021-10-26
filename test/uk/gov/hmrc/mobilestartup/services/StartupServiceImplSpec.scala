@@ -184,7 +184,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain success entries for each service" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(),
                                               userPanelSignUp                         = false,
-                                              helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
@@ -199,7 +198,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
         FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
@@ -216,7 +214,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "not contain an entry for help-to-save when the hts call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error),
                                               false,
-                                              helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
@@ -231,7 +228,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
         FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
@@ -246,7 +242,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain an error entry for tcr when the tcr call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error),
                                               false,
-                                              helpToSaveEnableBadge                   = true,
                                               enablePushNotificationTokenRegistration = false,
                                               enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
@@ -261,7 +256,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
         FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
@@ -277,7 +271,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       val sut = new StartupServiceImpl[TestF](
         dummyConnector(inAppMessagesResponse = new Exception("message call failed").error),
         false,
-        helpToSaveEnableBadge                   = true,
         enablePushNotificationTokenRegistration = false,
         enablePaperlessAlertDialogs             = false,
         enablePaperlessAdverts                  = false,
@@ -293,7 +286,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
         FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
@@ -315,7 +307,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       val sut =
         new StartupServiceImpl[TestF](dummyConnector(citizenDetailsResponse = new Exception("cid failed").error),
                                       false,
-                                      helpToSaveEnableBadge                   = true,
                                       enablePushNotificationTokenRegistration = false,
                                       enablePaperlessAlertDialogs             = false,
                                       enablePaperlessAdverts                  = false,
@@ -330,7 +321,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
         FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("helpToSaveEnableBadge", enabled                   = true),
         FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
