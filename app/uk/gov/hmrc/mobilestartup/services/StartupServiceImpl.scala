@@ -46,7 +46,6 @@ object FeatureFlag {
 class StartupServiceImpl[F[_]] @Inject() (
   connector:                               GenericConnector[F],
   userPanelSignUp:                         Boolean,
-  helpToSaveEnableBadge:                   Boolean,
   enablePushNotificationTokenRegistration: Boolean,
   enablePaperlessAlertDialogs:             Boolean,
   enablePaperlessAdverts:                  Boolean,
@@ -73,7 +72,6 @@ class StartupServiceImpl[F[_]] @Inject() (
     obj(
       "feature" -> List(
         FeatureFlag("userPanelSignUp", userPanelSignUp),
-        FeatureFlag("helpToSaveEnableBadge", helpToSaveEnableBadge),
         FeatureFlag("enablePushNotificationTokenRegistration", enablePushNotificationTokenRegistration),
         FeatureFlag("paperlessAlertDialogs", enablePaperlessAlertDialogs),
         FeatureFlag("paperlessAdverts", enablePaperlessAdverts),

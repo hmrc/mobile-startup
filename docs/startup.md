@@ -58,10 +58,6 @@ about the user's help-to-save-account (if they have one) and any global feature 
     {
       "name": "ssoEnabled",
       "enabled": false
-    },
-    {
-      "name": "helpToSaveEnableBadge",
-      "enabled": true
     }
   ]
 }

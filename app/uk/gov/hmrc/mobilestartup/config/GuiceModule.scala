@@ -44,7 +44,6 @@ class GuiceModule @Inject() (
     bindConfigString("appUrl", "appUrl")
     bindConfigBoolean("feature.userPanelSignUp")
     bindConfigBoolean("feature.enablePushNotificationTokenRegistration")
-    bindConfigBoolean("feature.helpToSave.enableBadge")
     bindConfigBoolean("feature.paperlessAlertDialogs")
     bindConfigBoolean("feature.paperlessAdverts")
     bindConfigBoolean("feature.htsAdverts")
