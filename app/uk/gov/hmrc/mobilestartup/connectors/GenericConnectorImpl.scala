@@ -25,6 +25,7 @@ import uk.gov.hmrc.http._
 import uk.gov.hmrc.mobilestartup.config.WSHttpImpl
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
+import play.api.http.Status.{NO_CONTENT, NOT_FOUND}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -88,7 +89,11 @@ class GenericConnectorImpl @Inject() (
     hc:          HeaderCarrier
   ): Future[CidPerson] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
-    http.GET[CidPerson](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path))
+    http.GET[HttpResponse](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)).map {
+      response =>
+        if (response.status == NOT_FOUND || response.status == NO_CONTENT) throw new NotFoundException("No UTR found for user")
+        else response.json.as[CidPerson]
+    }
   }
 
   def enrolmentStoreGet(

@@ -50,8 +50,7 @@ class StartupServiceImpl[F[_]] @Inject() (
   enablePaperlessAlertDialogs:             Boolean,
   enablePaperlessAdverts:                  Boolean,
   enableHtsAdverts:                        Boolean,
-  enableAnnualTaxSummaryLink:              Boolean,
-  enableSaTile:                            Boolean
+  enableAnnualTaxSummaryLink:              Boolean
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -76,8 +75,7 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("paperlessAlertDialogs", enablePaperlessAlertDialogs),
         FeatureFlag("paperlessAdverts", enablePaperlessAdverts),
         FeatureFlag("htsAdverts", enableHtsAdverts),
-        FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink),
-        FeatureFlag("saTile", enableSaTile)
+        FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink)
       )
     )
 

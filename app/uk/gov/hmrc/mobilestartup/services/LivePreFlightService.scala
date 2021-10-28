@@ -162,6 +162,9 @@ class LivePreFlightService @Inject() (
         case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND =>
           logger.info(s"Call to CID failed - No record for the Nino: $nino found on CID.")
           throw new NotFoundException("No UTR found on CID")
+        case e: NotFoundException =>
+          logger.info(s"Call to CID failed - No record for the Nino: $nino found on CID.")
+          throw e
         case e: UpstreamErrorResponse =>
           logger.info(s"Call to CID failed $e")
           None

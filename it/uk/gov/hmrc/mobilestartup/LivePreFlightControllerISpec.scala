@@ -149,6 +149,24 @@ trait LivePreFlightControllerTests extends BaseISpec {
         .as[String] shouldBe "/personal-account/self-assessment"
     }
 
+    "return noUtr status if call to CID returns 204" in {
+      accountsFoundMissingSaUtr(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      cidWillReturnErrorResponse(204)
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "name").as[String]           shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean]     shouldBe false
+      (response.json \ "utr" \ "status").as[String] shouldBe "noUtr"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl")
+        .as[String] shouldBe "https://www.gov.uk/register-for-self-assessment"
+
+    }
+
     "Return correct url if no principalIds found for CID utr on Enrolment store proxy" in {
       accountsFoundMissingSaUtr(nino.nino)
       respondToAuditMergedWithNoBody
@@ -204,7 +222,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     }
 
-    "return no utr status if call to CID fails with 404" in {
+    "return noUtr status if call to CID fails with 404" in {
       accountsFoundMissingSaUtr(nino.nino)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
