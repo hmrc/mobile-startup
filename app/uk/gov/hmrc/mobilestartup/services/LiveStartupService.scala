@@ -29,8 +29,7 @@ class LiveStartupService @Inject() (
   @Named("feature.paperlessAlertDialogs") enablePaperlessAlertDialogs:                               Boolean,
   @Named("feature.paperlessAdverts") enablePaperlessAdverts:                                         Boolean,
   @Named("feature.htsAdverts") enableHtsAdverts:                                                     Boolean,
-  @Named("feature.annualTaxSummaryLink") enableAnnualTaxSummaryLink:                                 Boolean,
-  @Named("feature.saTile") enableSaTile:                                                             Boolean
+  @Named("feature.annualTaxSummaryLink") enableAnnualTaxSummaryLink:                                 Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -38,5 +37,4 @@ class LiveStartupService @Inject() (
                                        enablePaperlessAlertDialogs,
                                        enablePaperlessAdverts,
                                        enableHtsAdverts,
-                                       enableAnnualTaxSummaryLink,
-                                       enableSaTile)
+                                       enableAnnualTaxSummaryLink)
