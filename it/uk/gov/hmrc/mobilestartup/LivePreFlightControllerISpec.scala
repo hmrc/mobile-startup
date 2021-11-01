@@ -51,6 +51,20 @@ trait LivePreFlightControllerTests extends BaseISpec {
                                  |  "dateOfBirth": "11121971"
                                  |}""".stripMargin
 
+  private val cidPersonJsonNoUtr = s"""{
+                                 |  "name": {
+                                 |    "current": {
+                                 |      "firstName": "John",
+                                 |      "lastName": "Smith"
+                                 |    },
+                                 |    "previous": []
+                                 |  },
+                                 |  "ids": {
+                                 |    "nino": "AA000006C"
+                                 |  },
+                                 |  "dateOfBirth": "11121971"
+                                 |}""".stripMargin
+
   private val principalIdsJson = s"""{
                                     |    "principalUserIds": [
                                     |       "ABCEDEFGI1234567",
@@ -147,6 +161,24 @@ trait LivePreFlightControllerTests extends BaseISpec {
       (response.json \ "utr" \ "status").as[String] shouldBe "wrongAccount"
       (response.json \ "utr" \ "inactiveEnrolmentUrl")
         .as[String] shouldBe "/personal-account/self-assessment"
+    }
+
+    "return noUtr status if call to CID returns no UTR" in {
+      accountsFoundMissingSaUtr(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      cidPersonForNinoAre(cidPersonJsonNoUtr)
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "name").as[String]           shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean]     shouldBe false
+      (response.json \ "utr" \ "status").as[String] shouldBe "noUtr"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl")
+        .as[String] shouldBe "https://www.gov.uk/register-for-self-assessment"
+
     }
 
     "return noUtr status if call to CID returns 204" in {
