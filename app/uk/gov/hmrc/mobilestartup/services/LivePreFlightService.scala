@@ -111,7 +111,7 @@ class LivePreFlightService @Inject() (
     else if (foundUtr.isDefined) {
       Future successful foundUtr.flatMap(utr => Some(Utr(Some(SaUtr(utr.utr)), NotYetActivated)))
     } else {
-      foundNino
+      val test = foundNino
         .map { nino =>
           for {
             saUtrOnCid <- getUtrFromCID(nino.nino).recover {
@@ -121,7 +121,7 @@ class LivePreFlightService @Inject() (
           } yield {
             saUtrOnCid match {
               case Some(utr) =>
-                if (utr.utr == "NOT_FOUND") Some(Utr(None, NoUtr))
+                if (utr.utr == "NOT_FOUND") Some(Utr.noUtr)
                 else
                   hasPrincipalIds match {
                     case None       => None
@@ -132,7 +132,7 @@ class LivePreFlightService @Inject() (
             }
           }
         }
-        .getOrElse(Future successful Some(Utr(None, NoUtr)))
+      test.getOrElse(Future successful Some(Utr.noUtr))
     }
   }
 
@@ -172,7 +172,11 @@ class LivePreFlightService @Inject() (
           logger.info(s"Call to CID failed")
           None
       }
-    cidPerson.map(_.flatMap(_.ids.saUtr))
+    cidPerson.map(_.map(_.ids.saUtr.isDefined)).flatMap {
+      case Some(true)  => cidPerson.map(_.flatMap(_.ids.saUtr))
+      case Some(false) => throw new NotFoundException("No UTR found on CID")
+      case None        => Future successful None
+    }
   }
 
   private def doesUtrHavePrincipalIds(utr: Option[SaUtr])(implicit hc: HeaderCarrier): Future[Option[Boolean]] =

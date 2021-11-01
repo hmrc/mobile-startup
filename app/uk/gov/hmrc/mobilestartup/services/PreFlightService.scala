@@ -21,7 +21,7 @@ import uk.gov.hmrc.auth.core.Enrolments
 import uk.gov.hmrc.auth.core.retrieve.ItmpName
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mobilestartup.model.EnrolmentStatus
+import uk.gov.hmrc.mobilestartup.model.{EnrolmentStatus, NoUtr}
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.{JourneyId, LinkDestination}
 import uk.gov.hmrc.mobilestartup.model.types._
 
@@ -83,6 +83,8 @@ object Utr {
     saUtr:  Option[SaUtr],
     status: EnrolmentStatus
   ): Utr = Utr(saUtr, status, status.link)
+
+  val noUtr: Utr = Utr(None, NoUtr, NoUtr.link)
 
   implicit val formats: Format[Utr] = Json.format[Utr]
 
