@@ -18,7 +18,6 @@ package uk.gov.hmrc.mobilestartup.stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, stubFor}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import uk.gov.hmrc.domain.Nino
 
 object CitizenDetailsStub {
 

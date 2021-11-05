@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.mobilestartup.stubs
 
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, stubFor}
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, getRequestedFor, stubFor, urlPathEqualTo, urlPathMatching}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 
 object EnrolmentStoreStub {
@@ -44,6 +45,14 @@ object EnrolmentStoreStub {
           aResponse()
             .withStatus(responseStatusCode)
         )
+    )
+
+  def enrolmentStoreShouldNotHaveBeenCalled()(implicit wireMockServer: WireMockServer): Unit =
+    wireMockServer.verify(
+      0,
+      getRequestedFor(
+        urlPathEqualTo("/enrolment-store-proxy/enrolment-store/")
+      )
     )
 
 }

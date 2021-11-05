@@ -180,24 +180,27 @@ class LivePreFlightService @Inject() (
   }
 
   private def doesUtrHavePrincipalIds(utr: Option[SaUtr])(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
-    utr
-      .map { utr =>
-        val enrolments: Future[Option[EnrolmentStoreResponse]] = genericConnector
-          .enrolmentStoreGet(
-            "enrolment-store-proxy",
-            s"/enrolment-store-proxy/enrolment-store/enrolments/IR-SA~UTR~${utr.utr}/users?type=principal",
-            hc
-          )
-          .map(Some(_))
-          .recover {
-            case e: UpstreamErrorResponse =>
-              logger.info(s"Call to Enrolment Store failed $e")
-              None
-            case _ =>
-              logger.info(s"Call to Enrolment Store failed")
-              None
-          }
-        enrolments.map(_.map(_.principalUserIds.nonEmpty))
-      }
-      .getOrElse(Future successful None)
+    if (utr.map(_.value).contains("NOT_FOUND")) Future successful None
+    else {
+      utr
+        .map { utr =>
+          val enrolments: Future[Option[EnrolmentStoreResponse]] = genericConnector
+            .enrolmentStoreGet(
+              "enrolment-store-proxy",
+              s"/enrolment-store-proxy/enrolment-store/enrolments/IR-SA~UTR~${utr.utr}/users?type=principal",
+              hc
+            )
+            .map(Some(_))
+            .recover {
+              case e: UpstreamErrorResponse =>
+                logger.info(s"Call to Enrolment Store failed $e")
+                None
+              case _ =>
+                logger.info(s"Call to Enrolment Store failed")
+                None
+            }
+          enrolments.map(_.map(_.principalUserIds.nonEmpty))
+        }
+        .getOrElse(Future successful None)
+    }
 }
