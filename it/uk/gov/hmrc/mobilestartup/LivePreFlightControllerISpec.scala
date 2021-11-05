@@ -27,6 +27,10 @@ import uk.gov.hmrc.mobilestartup.stubs.CitizenDetailsStub._
 import uk.gov.hmrc.mobilestartup.stubs.EnrolmentStoreStub._
 import eu.timepit.refined.auto._
 import play.api.inject.guice.GuiceApplicationBuilder
+import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.http.RequestMethod
+import com.github.tomakehurst.wiremock.matching.{RequestPatternBuilder, StringValuePattern, UrlPattern}
+import uk.gov.hmrc.http.HttpVerbs.GET
 
 import scala.concurrent.Future
 
@@ -196,6 +200,26 @@ trait LivePreFlightControllerTests extends BaseISpec {
       (response.json \ "utr" \ "status").as[String] shouldBe "noUtr"
       (response.json \ "utr" \ "inactiveEnrolmentUrl")
         .as[String] shouldBe "https://www.gov.uk/register-for-self-assessment"
+
+    }
+
+    "do not call Enrolment Store if no UTR found on CID" in {
+      accountsFoundMissingSaUtr(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      cidWillReturnErrorResponse(404)
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "name").as[String]           shouldBe "Test User"
+      (response.json \ "routeToIV").as[Boolean]     shouldBe false
+      (response.json \ "utr" \ "status").as[String] shouldBe "noUtr"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl")
+        .as[String] shouldBe "https://www.gov.uk/register-for-self-assessment"
+
+      enrolmentStoreShouldNotHaveBeenCalled()
 
     }
 
