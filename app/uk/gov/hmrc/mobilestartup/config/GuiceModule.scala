@@ -37,6 +37,7 @@ class GuiceModule @Inject() (
     extends AbstractModule {
 
   val servicesConfig: ServicesConfig = new ServicesConfig(configuration)
+  val logger: Logger = Logger(this.getClass)
 
   override def configure(): Unit = {
 
@@ -48,7 +49,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.paperlessAdverts")
     bindConfigBoolean("feature.htsAdverts")
     bindConfigBoolean("feature.annualTaxSummaryLink")
-    bind(classOf[LoggerLike]).toInstance(Logger)
+    bind(classOf[LoggerLike]).toInstance(logger)
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
     bind(classOf[CorePost]).to(classOf[WSHttpImpl])
