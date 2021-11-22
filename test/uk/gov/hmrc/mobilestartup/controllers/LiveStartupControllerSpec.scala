@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.mobilestartup.controllers
 
-import org.scalatest.WordSpec
 import play.api.http.Status
 import play.api.libs.json.JsObject
 import play.api.libs.json.Json._
@@ -33,7 +32,7 @@ import uk.gov.hmrc.mobilestartup.services.StartupService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class LiveStartupControllerSpec extends WordSpec with BaseSpec {
+class LiveStartupControllerSpec extends BaseSpec {
   private val fakeRequest = FakeRequest("GET", "/")
 
   private val stubStartupService = new StartupService[Future] {

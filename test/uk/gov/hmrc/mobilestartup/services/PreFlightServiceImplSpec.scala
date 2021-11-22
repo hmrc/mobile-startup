@@ -16,15 +16,12 @@
 
 package uk.gov.hmrc.mobilestartup.services
 import cats.implicits._
-import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.{FreeSpecLike, Matchers}
-import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName}
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
-import uk.gov.hmrc.mobilestartup.TestF
+import uk.gov.hmrc.mobilestartup.{BaseSpec, TestF}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import eu.timepit.refined.auto._
@@ -33,16 +30,13 @@ import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.ExecutionContext
 
-class PreFlightServiceImplSpec
-    extends FreeSpecLike
-    with TestF
-    with ScalaCheckDrivenPropertyChecks
-    with NinoGen
-    with Matchers {
+class PreFlightServiceImplSpec extends BaseSpec with TestF {
 
-  val journeyId:   JourneyId        = "7f1b5289-5f4d-4150-93a3-ff02dda28375"
-  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
-  val fullName = ItmpName(givenName = Some("Jennifer"), None, familyName = Some("Thorsteinson"))
+  override val journeyId: JourneyId        = "7f1b5289-5f4d-4150-93a3-ff02dda28375"
+  implicit val ec:        ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
+  val fullName:           ItmpName         = ItmpName(givenName = Some("Jennifer"), None, familyName = Some("Thorsteinson"))
+  val nino:               Nino             = Nino("CS700100A")
+  val utr:                SaUtr            = SaUtr("123123123")
 
   private def dummyConnector: GenericConnector[TestF] =
     new GenericConnector[TestF] {
@@ -111,98 +105,80 @@ class PreFlightServiceImplSpec
     ): TestF[Option[Utr]] = None.pure[TestF]
   }
 
-  "preFlight" - {
-    "should" - {
-      "return a response" - {
-        "with the expected nino" in forAll { nino: Nino =>
-          val sut =
-            service(
-              Some(nino),
-              None,
-              Some(Credentials("", "GovernmentGateway")),
-              ConfidenceLevel.L200,
-              Some(fullName),
-              Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA")),
-              Enrolments(Set.empty),
-              dummyConnector
-            )
-          sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
-          sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
-            AnnualTaxSummaryLink("/annual-tax-summary", "SA")
-          )
-        }
+  "preFlight" should {
+    "return a response with the expected nino" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L200,
+          Some(fullName),
+          Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA")),
+          Enrolments(Set.empty),
+          dummyConnector
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
+        AnnualTaxSummaryLink("/annual-tax-summary", "SA")
+      )
+    }
 
-        "with the expected utr" in forAll { utr: String =>
-          val sut =
-            service(
-              None,
-              Some(SaUtr(utr)),
-              Some(Credentials("", "GovernmentGateway")),
-              ConfidenceLevel.L200,
-              Some(fullName),
-              Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE")),
-              Enrolments(Set.empty),
-              dummyConnector
-            )
-          sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.saUtr shouldBe Some(SaUtr(utr))
-          sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
-            AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE")
-          )
-        }
+    "return a response with the expected utr" in {
+      val sut =
+        service(
+          None,
+          Some(utr),
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L200,
+          Some(fullName),
+          Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE")),
+          Enrolments(Set.empty),
+          dummyConnector
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.saUtr shouldBe Some(utr)
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
+        AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE")
+      )
+    }
 
-        {
-          implicit val arbConfidenceLevel: Arbitrary[ConfidenceLevel] =
-            Arbitrary(Gen.oneOf(ConfidenceLevel.L200, ConfidenceLevel.L500))
+    "routeToIV should be false if the confidence level is 200 or above" in {
+      val sut =
+        service(None,
+                None,
+                Some(Credentials("", "GovernmentGateway")),
+                ConfidenceLevel.L250,
+                Some(fullName),
+                None,
+                Enrolments(Set.empty),
+                dummyConnector)
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
+    }
 
-          "routeToIV should be false if the confidence level is 200 or above" in forAll {
-            confidenceLevel: ConfidenceLevel =>
-              val sut =
-                service(None,
-                        None,
-                        Some(Credentials("", "GovernmentGateway")),
-                        confidenceLevel,
-                        Some(fullName),
-                        None,
-                        Enrolments(Set.empty),
-                        dummyConnector)
-              sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
-          }
-        }
+    "routeToIV should be true if the confidence level is below 200" in {
+      val sut =
+        service(None,
+                None,
+                Some(Credentials("", "GovernmentGateway")),
+                ConfidenceLevel.L50,
+                Some(fullName),
+                None,
+                Enrolments(Set.empty),
+                dummyConnector)
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe true
+    }
 
-        {
-          implicit val arbConfidenceLevel: Arbitrary[ConfidenceLevel] =
-            Arbitrary(ConfidenceLevel.L50)
-
-          "routeToIV should be true if the confidence level is below 200" in forAll {
-            confidenceLevel: ConfidenceLevel =>
-              val sut =
-                service(None,
-                        None,
-                        Some(Credentials("", "GovernmentGateway")),
-                        confidenceLevel,
-                        Some(fullName),
-                        None,
-                        Enrolments(Set.empty),
-                        dummyConnector)
-              sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe true
-          }
-        }
-
-        "and if the auth provided is not 'GovernmentGateway'" - {
-          "it should throw an UnsupportedAuthProvider exception" in {
-            val sut =
-              service(None,
-                      None,
-                      Some(Credentials("", "NotGovernmentGateway!")),
-                      ConfidenceLevel.L200,
-                      Some(fullName),
-                      None,
-                      Enrolments(Set.empty),
-                      dummyConnector)
-            intercept[UnsupportedAuthProvider](sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet)
-          }
-        }
-      }
+    "if the auth provided is not 'GovernmentGateway' it should throw an UnsupportedAuthProvider exception" in {
+      val sut =
+        service(None,
+                None,
+                Some(Credentials("", "NotGovernmentGateway!")),
+                ConfidenceLevel.L200,
+                Some(fullName),
+                None,
+                Enrolments(Set.empty),
+                dummyConnector)
+      intercept[UnsupportedAuthProvider](sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet)
     }
   }
 }

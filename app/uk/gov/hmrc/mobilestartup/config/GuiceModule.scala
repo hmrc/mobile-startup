@@ -48,7 +48,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.paperlessAdverts")
     bindConfigBoolean("feature.htsAdverts")
     bindConfigBoolean("feature.annualTaxSummaryLink")
-    bind(classOf[LoggerLike]).toInstance(Logger)
+    bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
     bind(classOf[CorePost]).to(classOf[WSHttpImpl])
