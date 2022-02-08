@@ -69,7 +69,7 @@ class SandboxPreFlightController @Inject() (
   def buildPreFlightResponse(toIV: Boolean): PreFlightCheckResponse =
     PreFlightCheckResponse(
       Some(Nino("CS700100A")),
-      Some(SaUtr("1234567890")),
+      Some(SaUtr("1555369056K")),
       toIV,
       Some(ItmpName(givenName = Some("Nia"), None, familyName = Some("Jackson"))),
       Some(AnnualTaxSummaryLink("/", "PAYE")),
