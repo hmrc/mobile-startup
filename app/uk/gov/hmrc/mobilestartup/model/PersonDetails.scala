@@ -24,13 +24,15 @@ object Person {
 }
 
 case class Person(
-  firstName: Option[String],
-  lastName:  Option[String]) {
+  firstName:  Option[String],
+  middleName: Option[String],
+  lastName:   Option[String]) {
 
   lazy val shortName: Option[String] = for {
     f <- firstName
+    m <- middleName
     l <- lastName
-  } yield List(f, l).mkString(" ")
+  } yield List(f, m, l).mkString(" ")
 }
 
 object PersonDetails {
