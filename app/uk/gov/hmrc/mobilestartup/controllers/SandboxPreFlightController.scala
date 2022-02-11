@@ -74,7 +74,7 @@ class SandboxPreFlightController @Inject() (
       toIV,
       Some(ItmpName(givenName = Some("Nia"), None, familyName = Some("Jackson"))),
       Some(AnnualTaxSummaryLink("/", "PAYE")),
-      Some(Utr(Some(SaUtr("1234567890")), Activated)),
+      Some(Utr(Some(SaUtr("1555369056")), Activated)),
       Enrolments(Set.empty)
       )
 }
