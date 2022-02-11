@@ -134,7 +134,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                                                     |""".stripMargin)
 
   private val userExpectedResponse: JsValue = Json.parse("""{
-                                                           |    "name": "Angus Smith"
+                                                           |    "name": "Angus John Smith"
                                                            |  }
                                                            |""".stripMargin)
 
