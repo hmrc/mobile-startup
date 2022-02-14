@@ -28,11 +28,8 @@ case class Person(
   middleName: Option[String],
   lastName:   Option[String]) {
 
-  lazy val shortName: Option[String] = for {
-    f <- firstName
-    m <- middleName
-    l <- lastName
-  } yield List(f, m, l).mkString(" ")
+  lazy val shortName: String =
+    List(firstName, middleName, lastName).flatten.mkString(" ")
 }
 
 object PersonDetails {
