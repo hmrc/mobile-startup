@@ -40,14 +40,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
   val journeyId: JourneyId = "b6ef25bc-8f5e-49c8-98c5-f039f39e4557"
   val url:       String    = s"/preflight-check?journeyId=$journeyId"
 
-  private val cidPersonJson = s"""{ 
-                                 |  "name": {
-                                 |    "current": {
-                                 |      "firstName": "John",
-                                 |      "lastName": "Smith"
-                                 |    },
-                                 |    "previous": []
-                                 |  },
+  private val cidPersonJson = s"""{
                                  |  "ids": {
                                  |    "nino": "AA000006C",
                                  |    "sautr": "123123123"
@@ -56,13 +49,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
                                  |}""".stripMargin
 
   private val cidPersonJsonNoUtr = s"""{
-                                 |  "name": {
-                                 |    "current": {
-                                 |      "firstName": "John",
-                                 |      "lastName": "Smith"
-                                 |    },
-                                 |    "previous": []
-                                 |  },
                                  |  "ids": {
                                  |    "nino": "AA000006C"
                                  |  },
@@ -104,43 +90,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
       response.status                                          shouldBe 200
       (response.json \ "nino").as[String]                      shouldBe nino.nino
       (response.json \ "saUtr").as[String]                     shouldBe saUtr.utr
-      (response.json \ "name").as[String]                      shouldBe "Test User"
-      (response.json \ "routeToIV").as[Boolean]                shouldBe false
-      (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
-      (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
-      (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
-
-    }
-
-    "return account details with name if itmpName not available" in {
-      accountsFoundMissingItmpName(nino.nino, saUtr.utr)
-      respondToAuditMergedWithNoBody
-      respondToAuditWithNoBody
-
-      val response = await(getRequestWithAcceptHeader(url))
-
-      response.status                                          shouldBe 200
-      (response.json \ "nino").as[String]                      shouldBe nino.nino
-      (response.json \ "saUtr").as[String]                     shouldBe saUtr.utr
-      (response.json \ "name").as[String]                      shouldBe "TestUser2"
-      (response.json \ "routeToIV").as[Boolean]                shouldBe false
-      (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
-      (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
-      (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
-
-    }
-
-    "return account details with no name if itmpName and name not available" in {
-      accountsFoundMissingItmpName(nino.nino, saUtr.utr, bothNamesMissing = true)
-      respondToAuditMergedWithNoBody
-      respondToAuditWithNoBody
-
-      val response = await(getRequestWithAcceptHeader(url))
-
-      response.status                                          shouldBe 200
-      (response.json \ "nino").as[String]                      shouldBe nino.nino
-      (response.json \ "saUtr").as[String]                     shouldBe saUtr.utr
-      (response.json \ "name").isEmpty                         shouldBe true
       (response.json \ "routeToIV").as[Boolean]                shouldBe false
       (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
       (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
@@ -159,7 +108,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                               shouldBe 200
       (response.json \ "nino").as[String]           shouldBe nino.nino
-      (response.json \ "name").as[String]           shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean]     shouldBe false
       (response.json \ "utr" \ "saUtr").as[String]  shouldBe "123123123"
       (response.json \ "utr" \ "status").as[String] shouldBe "wrongAccount"
@@ -177,7 +125,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                               shouldBe 200
       (response.json \ "nino").as[String]           shouldBe nino.nino
-      (response.json \ "name").as[String]           shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean]     shouldBe false
       (response.json \ "utr" \ "status").as[String] shouldBe "noUtr"
       (response.json \ "utr" \ "inactiveEnrolmentUrl")
@@ -195,7 +142,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                               shouldBe 200
       (response.json \ "nino").as[String]           shouldBe nino.nino
-      (response.json \ "name").as[String]           shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean]     shouldBe false
       (response.json \ "utr" \ "status").as[String] shouldBe "noUtr"
       (response.json \ "utr" \ "inactiveEnrolmentUrl")
@@ -213,7 +159,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                               shouldBe 200
       (response.json \ "nino").as[String]           shouldBe nino.nino
-      (response.json \ "name").as[String]           shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean]     shouldBe false
       (response.json \ "utr" \ "status").as[String] shouldBe "noUtr"
       (response.json \ "utr" \ "inactiveEnrolmentUrl")
@@ -234,7 +179,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                               shouldBe 200
       (response.json \ "nino").as[String]           shouldBe nino.nino
-      (response.json \ "name").as[String]           shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean]     shouldBe false
       (response.json \ "utr" \ "saUtr").as[String]  shouldBe "123123123"
       (response.json \ "utr" \ "status").as[String] shouldBe "noEnrolment"
@@ -253,7 +197,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                               shouldBe 200
       (response.json \ "nino").as[String]           shouldBe nino.nino
-      (response.json \ "name").as[String]           shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean]     shouldBe false
       (response.json \ "utr" \ "saUtr").as[String]  shouldBe "123123123"
       (response.json \ "utr" \ "status").as[String] shouldBe "noEnrolment"
@@ -272,7 +215,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                           shouldBe 200
       (response.json \ "nino").as[String]       shouldBe nino.nino
-      (response.json \ "name").as[String]       shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean] shouldBe false
       (response.json \ "utr").isEmpty           shouldBe true
 
@@ -288,7 +230,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                               shouldBe 200
       (response.json \ "nino").as[String]           shouldBe nino.nino
-      (response.json \ "name").as[String]           shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean]     shouldBe false
       (response.json \ "utr" \ "status").as[String] shouldBe "noUtr"
       (response.json \ "utr" \ "inactiveEnrolmentUrl")
@@ -306,7 +247,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                           shouldBe 200
       (response.json \ "nino").as[String]       shouldBe nino.nino
-      (response.json \ "name").as[String]       shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean] shouldBe false
       (response.json \ "utr").isEmpty           shouldBe true
 
@@ -323,7 +263,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                           shouldBe 200
       (response.json \ "nino").as[String]       shouldBe nino.nino
-      (response.json \ "name").as[String]       shouldBe "Test User"
       (response.json \ "routeToIV").as[Boolean] shouldBe false
       (response.json \ "utr").isEmpty           shouldBe true
 

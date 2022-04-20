@@ -22,7 +22,7 @@ import play.api.Logger
 import javax.inject.{Inject, Named}
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
-import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName, ~}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials, ~}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, UpstreamErrorResponse}
@@ -65,39 +65,20 @@ class LivePreFlightService @Inject() (
      Option[SaUtr],
      Option[Credentials],
      ConfidenceLevel,
-     Option[ItmpName],
      Option[AnnualTaxSummaryLink],
      Enrolments)
   ] =
     authConnector
       .authorise(EmptyPredicate,
-                 nino and saUtr and credentials and confidenceLevel and itmpName and allEnrolments and name)
+                 nino and saUtr and credentials and confidenceLevel and allEnrolments)
       .map {
-        case foundNino ~ foundSaUtr ~ creds ~ conf ~ Some(itmpName) ~ foundEnrolments ~ _ =>
+        case foundNino ~ foundSaUtr ~ creds ~ conf ~ foundEnrolments =>
           (foundNino.map(Nino(_)),
            foundSaUtr.map(SaUtr(_)),
            creds,
            conf,
-           Some(itmpName),
            getATSLink(foundEnrolments),
            foundEnrolments)
-        case foundNino ~ foundSaUtr ~ creds ~ conf ~ None ~ foundEnrolments ~ Some(name) =>
-          (foundNino.map(Nino(_)),
-           foundSaUtr.map(SaUtr(_)),
-           creds,
-           conf,
-           Some(ItmpName(givenName = name.name, None, familyName = name.lastName)),
-           getATSLink(foundEnrolments),
-           foundEnrolments)
-        case foundNino ~ foundSaUtr ~ creds ~ conf ~ itmpName ~ foundEnrolments ~ _ =>
-          (foundNino.map(Nino(_)),
-           foundSaUtr.map(SaUtr(_)),
-           creds,
-           conf,
-           itmpName,
-           getATSLink(foundEnrolments),
-           foundEnrolments)
-
       }
 
   override def getUtr(

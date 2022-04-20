@@ -17,7 +17,7 @@
 package uk.gov.hmrc.mobilestartup.services
 import cats.MonadError
 import cats.implicits._
-import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials}
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -39,7 +39,6 @@ abstract class PreFlightServiceImpl[F[_]](
      Option[SaUtr],
      Option[Credentials],
      ConfidenceLevel,
-     Option[ItmpName],
      Option[AnnualTaxSummaryLink],
      Enrolments)
   ]
@@ -76,13 +75,12 @@ abstract class PreFlightServiceImpl[F[_]](
   ): F[PreFlightCheckResponse] = {
 
     val accountsRetrieved: F[PreFlightCheckResponse] = retrieveAccounts.map {
-      case (nino, saUtr, credentials, confidenceLevel, name, annualTaxSummaryLink, enrolments) =>
+      case (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments) =>
         if (credentials.getOrElse(Credentials("Unsupported", "Unsupported")).providerType != "GovernmentGateway")
           throw new UnsupportedAuthProvider
         PreFlightCheckResponse(nino,
                                saUtr,
                                minimumConfidenceLevel > confidenceLevel.level,
-                               name,
                                annualTaxSummaryLink,
                                None,
                                enrolments)
@@ -94,7 +92,6 @@ abstract class PreFlightServiceImpl[F[_]](
       PreFlightCheckResponse(account.nino,
                              account.saUtr,
                              account.routeToIV,
-                             account.name,
                              account.annualTaxSummaryLink,
                              utrDetails,
                              account.enrolments)

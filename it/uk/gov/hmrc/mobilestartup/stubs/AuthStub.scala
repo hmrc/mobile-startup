@@ -35,7 +35,7 @@ object AuthStub {
   }
 
   private val accountsRequestJson: String = {
-    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","optionalItmpName","allEnrolments","optionalName"] }""".stripMargin
+    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","allEnrolments"] }""".stripMargin
   }
 
   private def loggedInResponse(
@@ -60,14 +60,7 @@ object AuthStub {
        |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200,
-       |  "optionalItmpName": {
-       |    "givenName": "Test",
-       |    "familyName": "User"
-       |  },
-       |  "optionalName": {
-       |    "name": "TestUser2"
-       |  }
+       |  "confidenceLevel": 200
        |}
            """.stripMargin
 
@@ -91,14 +84,7 @@ object AuthStub {
        |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200,
-       |  "optionalItmpName": {
-       |    "givenName": "Test",
-       |    "familyName": "User"
-       |  },
-       |  "optionalName": {
-       |    "name": "TestUser2"
-       |  }
+       |  "confidenceLevel": 200
        |}
            """.stripMargin
 
@@ -112,14 +98,7 @@ object AuthStub {
        |  },
        |  "allEnrolments": [],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200,
-       |  "optionalItmpName": {
-       |    "givenName": "Test",
-       |    "familyName": "User"
-       |  },
-       |  "optionalName": {
-       |    "name": "TestUser2"
-       |  }
+       |  "confidenceLevel": 200
        |}
            """.stripMargin
 
@@ -145,10 +124,7 @@ object AuthStub {
        |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200,
-       |  "optionalName": {
-       |    "name": "TestUser2"
-       |  }
+       |  "confidenceLevel": 200
        |}
            """.stripMargin
 
