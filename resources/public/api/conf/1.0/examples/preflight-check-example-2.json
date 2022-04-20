@@ -2,7 +2,6 @@
   "nino": "CS700100A",
   "saUtr:": "123456789",
   "routeToIV": true,
-  "name": "Jennifer Thorsteinson",
   "annualTaxSummaryLink": {
     "link": "/",
     "destination": "PAYE"
