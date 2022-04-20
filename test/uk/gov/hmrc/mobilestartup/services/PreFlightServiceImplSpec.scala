@@ -17,7 +17,7 @@
 package uk.gov.hmrc.mobilestartup.services
 import cats.implicits._
 import play.api.libs.json.JsValue
-import uk.gov.hmrc.auth.core.retrieve.{Credentials, ItmpName}
+import uk.gov.hmrc.auth.core.retrieve.{Credentials}
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
@@ -34,7 +34,6 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
 
   override val journeyId: JourneyId        = "7f1b5289-5f4d-4150-93a3-ff02dda28375"
   implicit val ec:        ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
-  val fullName:           ItmpName         = ItmpName(givenName = Some("Jennifer"), None, familyName = Some("Thorsteinson"))
   val nino:               Nino             = Nino("CS700100A")
   val utr:                SaUtr            = SaUtr("123123123")
 
@@ -73,7 +72,6 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
     saUtr:                Option[SaUtr],
     credentials:          Option[Credentials],
     confidenceLevel:      ConfidenceLevel,
-    name:                 Option[ItmpName],
     annualTaxSummaryLink: Option[AnnualTaxSummaryLink],
     enrolments:           Enrolments,
     connector:            GenericConnector[TestF]
@@ -84,11 +82,10 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
        Option[SaUtr],
        Option[Credentials],
        ConfidenceLevel,
-       Option[ItmpName],
        Option[AnnualTaxSummaryLink],
        Enrolments)
     ] =
-      (nino, saUtr, credentials, confidenceLevel, name, annualTaxSummaryLink, enrolments).pure[TestF]
+      (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments).pure[TestF]
 
     override def auditing[T](
       service:     String,
@@ -113,7 +110,6 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
           None,
           Some(Credentials("", "GovernmentGateway")),
           ConfidenceLevel.L200,
-          Some(fullName),
           Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA")),
           Enrolments(Set.empty),
           dummyConnector
@@ -131,7 +127,6 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
           Some(utr),
           Some(Credentials("", "GovernmentGateway")),
           ConfidenceLevel.L200,
-          Some(fullName),
           Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE")),
           Enrolments(Set.empty),
           dummyConnector
@@ -148,7 +143,6 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
                 None,
                 Some(Credentials("", "GovernmentGateway")),
                 ConfidenceLevel.L250,
-                Some(fullName),
                 None,
                 Enrolments(Set.empty),
                 dummyConnector)
@@ -161,7 +155,6 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
                 None,
                 Some(Credentials("", "GovernmentGateway")),
                 ConfidenceLevel.L50,
-                Some(fullName),
                 None,
                 Enrolments(Set.empty),
                 dummyConnector)
@@ -174,7 +167,6 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
                 None,
                 Some(Credentials("", "NotGovernmentGateway!")),
                 ConfidenceLevel.L200,
-                Some(fullName),
                 None,
                 Enrolments(Set.empty),
                 dummyConnector)

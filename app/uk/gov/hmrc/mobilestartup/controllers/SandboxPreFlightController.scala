@@ -20,7 +20,6 @@ import play.api.libs.json.Json.toJson
 import play.api.mvc._
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.api.sandbox.FileResource
-import uk.gov.hmrc.auth.core.retrieve.ItmpName
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.{AnnualTaxSummaryLink, PreFlightCheckResponse, Utr}
@@ -56,7 +55,6 @@ class SandboxPreFlightController @Inject() (
                   Some(Nino("CS700100A")),
                   None,
                   routeToIV = true,
-                  Some(ItmpName(givenName = Some("Nia"), None, familyName = Some("Jackson"))),
                   utr        = None,
                   enrolments = Enrolments(Set.empty)
                 )
@@ -72,7 +70,6 @@ class SandboxPreFlightController @Inject() (
       Some(Nino("CS700100A")),
       Some(SaUtr("1555369056")),
       toIV,
-      Some(ItmpName(givenName = Some("Nia"), None, familyName = Some("Jackson"))),
       Some(AnnualTaxSummaryLink("/", "PAYE")),
       Some(Utr(Some(SaUtr("1555369056")), Activated)),
       Enrolments(Set.empty)

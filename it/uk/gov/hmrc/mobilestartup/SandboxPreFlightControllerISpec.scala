@@ -34,8 +34,6 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
 
   val nino = "CS700100A"
 
-  val name = "Nia Jackson"
-
   "POST of /preflight-check with X-MOBILE-USER-ID header" should {
 
     "successfully switch to the sandbox preflight" in {
@@ -45,7 +43,6 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       response.status                                                   shouldBe 200
       (response.json \ "nino").as[String]                               shouldBe nino
       (response.json \ "routeToIV").as[Boolean]                         shouldBe false
-      (response.json \ "name").as[String]                               shouldBe name
       (response.json \ "annualTaxSummaryLink").as[AnnualTaxSummaryLink] shouldBe AnnualTaxSummaryLink("/", "PAYE")
     }
 
@@ -59,7 +56,6 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       response.status                           shouldBe 200
       (response.json \ "nino").as[String]       shouldBe nino
       (response.json \ "routeToIV").as[Boolean] shouldBe true
-      (response.json \ "name").as[String]       shouldBe name
     }
 
     "return unauthorized when SANDBOX-CONTROL header = ERROR-401" in {

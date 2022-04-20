@@ -18,7 +18,6 @@ package uk.gov.hmrc.mobilestartup.services
 import com.google.inject.ImplementedBy
 import play.api.libs.json.{Format, JsObject, Json, Writes}
 import uk.gov.hmrc.auth.core.Enrolments
-import uk.gov.hmrc.auth.core.retrieve.ItmpName
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.model.{EnrolmentStatus, NoUtr}
@@ -31,7 +30,6 @@ case class PreFlightCheckResponse(
   nino:                 Option[Nino],
   saUtr:                Option[SaUtr],
   routeToIV:            Boolean,
-  name:                 Option[ItmpName],
   annualTaxSummaryLink: Option[AnnualTaxSummaryLink] = None,
   utr:                  Option[Utr],
   enrolments:           Enrolments)
@@ -48,10 +46,6 @@ object PreFlightCheckResponse {
       Json.obj("saUtr" -> found.value)
     }
 
-    def withName(fullName: Option[ItmpName]): JsObject = fullName.fold(Json.obj()) { found =>
-      Json.obj("name" -> (found.givenName.getOrElse("") + " " + found.familyName.getOrElse("")).trim)
-    }
-
     def withATSLink(atsLink: Option[AnnualTaxSummaryLink]): JsObject = atsLink.fold(Json.obj()) { found =>
       Json.obj("annualTaxSummaryLink" -> found)
     }
@@ -60,7 +54,7 @@ object PreFlightCheckResponse {
 
     def writes(preFlightCheckResponse: PreFlightCheckResponse): JsObject =
       withNino(preFlightCheckResponse.nino) ++ withSaUtr(preFlightCheckResponse.saUtr) ++ Json
-        .obj("routeToIV" -> preFlightCheckResponse.routeToIV) ++ withName(preFlightCheckResponse.name) ++
+        .obj("routeToIV" -> preFlightCheckResponse.routeToIV) ++
       withATSLink(preFlightCheckResponse.annualTaxSummaryLink) ++ withUtr(preFlightCheckResponse.utr)
   }
 
