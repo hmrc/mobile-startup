@@ -78,12 +78,7 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
   ): PreFlightService[TestF] = new PreFlightServiceImpl[TestF](connector, 200) {
 
     override def retrieveAccounts(implicit hc: HeaderCarrier): TestF[
-      (Option[Nino],
-       Option[SaUtr],
-       Option[Credentials],
-       ConfidenceLevel,
-       Option[AnnualTaxSummaryLink],
-       Enrolments)
+      (Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[AnnualTaxSummaryLink], Enrolments)
     ] =
       (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments).pure[TestF]
 
@@ -93,6 +88,8 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
     )(f:           => TestF[T]
     )(implicit hc: HeaderCarrier
     ): TestF[T] = f
+
+    def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean = false
 
     def getUtr(
       foundUtr:    Option[SaUtr],

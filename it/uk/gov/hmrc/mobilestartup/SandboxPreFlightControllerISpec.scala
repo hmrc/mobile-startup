@@ -43,6 +43,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       response.status                                                   shouldBe 200
       (response.json \ "nino").as[String]                               shouldBe nino
       (response.json \ "routeToIV").as[Boolean]                         shouldBe false
+      (response.json \ "routeToTEN").as[Boolean]                        shouldBe false
       (response.json \ "annualTaxSummaryLink").as[AnnualTaxSummaryLink] shouldBe AnnualTaxSummaryLink("/", "PAYE")
     }
 
@@ -56,6 +57,19 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       response.status                           shouldBe 200
       (response.json \ "nino").as[String]       shouldBe nino
       (response.json \ "routeToIV").as[Boolean] shouldBe true
+    }
+
+    "return routeToTEN = true when SANDBOX-CONTROL header = ROUTE-TO-TEN" in {
+      val response = await(
+        wsUrl(s"/preflight-check?${withJourneyParam(journeyId)}")
+          .addHttpHeaders(headerThatSucceeds ++ withSandboxControl("ROUTE-TO-TEN"): _*)
+          .get
+      )
+
+      response.status                            shouldBe 200
+      (response.json \ "nino").as[String]        shouldBe nino
+      (response.json \ "routeToIV").as[Boolean]  shouldBe false
+      (response.json \ "routeToTEN").as[Boolean] shouldBe true
     }
 
     "return unauthorized when SANDBOX-CONTROL header = ERROR-401" in {

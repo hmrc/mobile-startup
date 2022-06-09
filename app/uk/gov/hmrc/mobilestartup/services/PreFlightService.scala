@@ -32,7 +32,8 @@ case class PreFlightCheckResponse(
   routeToIV:            Boolean,
   annualTaxSummaryLink: Option[AnnualTaxSummaryLink] = None,
   utr:                  Option[Utr],
-  enrolments:           Enrolments)
+  enrolments:           Enrolments,
+  routeToTEN:           Boolean = false)
 
 object PreFlightCheckResponse {
 
@@ -42,10 +43,6 @@ object PreFlightCheckResponse {
       Json.obj("nino" -> found.value)
     }
 
-    def withSaUtr(saUtr: Option[SaUtr]): JsObject = saUtr.fold(Json.obj()) { found =>
-      Json.obj("saUtr" -> found.value)
-    }
-
     def withATSLink(atsLink: Option[AnnualTaxSummaryLink]): JsObject = atsLink.fold(Json.obj()) { found =>
       Json.obj("annualTaxSummaryLink" -> found)
     }
@@ -53,9 +50,10 @@ object PreFlightCheckResponse {
     def withUtr(utr: Option[Utr]): JsObject = utr.fold(Json.obj())(found => Json.obj("utr" -> found))
 
     def writes(preFlightCheckResponse: PreFlightCheckResponse): JsObject =
-      withNino(preFlightCheckResponse.nino) ++ withSaUtr(preFlightCheckResponse.saUtr) ++ Json
+      withNino(preFlightCheckResponse.nino) ++ Json
         .obj("routeToIV" -> preFlightCheckResponse.routeToIV) ++
-      withATSLink(preFlightCheckResponse.annualTaxSummaryLink) ++ withUtr(preFlightCheckResponse.utr)
+      withATSLink(preFlightCheckResponse.annualTaxSummaryLink) ++ withUtr(preFlightCheckResponse.utr) ++ Json
+        .obj("routeToTEN" -> preFlightCheckResponse.routeToTEN)
   }
 
 }
