@@ -48,6 +48,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.paperlessAdverts")
     bindConfigBoolean("feature.htsAdverts")
     bindConfigBoolean("feature.annualTaxSummaryLink")
+    bindConfigBoolean("enableMultipleGGIDCheck")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])

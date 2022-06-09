@@ -154,6 +154,36 @@ object AuthStub {
        |}
            """.stripMargin
 
+  private def loggedInResponseMultipleGGIDs(
+    nino:  String,
+    saUtr: String
+  ): String =
+    s"""
+       |{
+       |  "nino": "$nino",
+       |  "saUtr": "$saUtr",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "allEnrolments": [{
+       |      "key": "IR-SA",
+       |      "identifiers": [{
+       |        "key": "UTR",
+       |        "value": "$saUtr"
+       |      }],
+       |      "state": "Activated"
+       |},
+       |{
+       |      "key": "HMRC-PT",
+       |      "identifiers": [],
+       |      "state": "Activated"
+       |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200
+       |}
+           """.stripMargin
+
   def accountsFound(
     nino:        String  = "AA000006C",
     saUtr:       String  = "123456789",
@@ -199,6 +229,20 @@ object AuthStub {
         )
     )
   }
+
+  def accountsFoundMultipleGGIDs(
+    nino:  String = "AA000006C",
+    saUtr: String = "123456789"
+  ): StubMapping =
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(accountsRequestJson, true, false))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(loggedInResponseMultipleGGIDs(nino, saUtr))
+        )
+    )
 
   def userLoggedIn(
     nino:        String  = "AA000006C",

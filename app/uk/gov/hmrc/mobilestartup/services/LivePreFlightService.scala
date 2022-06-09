@@ -35,13 +35,14 @@ import play.api.http.Status.{BAD_REQUEST, NOT_FOUND}
 import scala.concurrent.{ExecutionContext, Future}
 
 class LivePreFlightService @Inject() (
-  genericConnector:                                       GenericConnector[Future],
-  val auditConnector:                                     AuditConnector,
-  val authConnector:                                      AuthConnector,
-  @Named("appName") val appName:                          String,
-  @Named("controllers.confidenceLevel") val confLevel:    Int,
-  @Named("feature.annualTaxSummaryLink") val showATSLink: Boolean
-)(implicit executionContext:                              ExecutionContext)
+  genericConnector:                                               GenericConnector[Future],
+  val auditConnector:                                             AuditConnector,
+  val authConnector:                                              AuthConnector,
+  @Named("appName") val appName:                                  String,
+  @Named("controllers.confidenceLevel") val confLevel:            Int,
+  @Named("feature.annualTaxSummaryLink") val showATSLink:         Boolean,
+  @Named("enableMultipleGGIDCheck") val multipleGGIDCheckEnabled: Boolean
+)(implicit executionContext:                                      ExecutionContext)
     extends PreFlightServiceImpl[Future](genericConnector, confLevel)
     with AuthorisedFunctions
     with Auditor {
@@ -61,24 +62,13 @@ class LivePreFlightService @Inject() (
   // help, but isolating it here and adapting to the concrete tuple of results we are expecting makes testing of the logic in
   // `PreFlightServiceImpl` much easier.
   override def retrieveAccounts(implicit hc: HeaderCarrier): Future[
-    (Option[Nino],
-     Option[SaUtr],
-     Option[Credentials],
-     ConfidenceLevel,
-     Option[AnnualTaxSummaryLink],
-     Enrolments)
+    (Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[AnnualTaxSummaryLink], Enrolments)
   ] =
     authConnector
-      .authorise(EmptyPredicate,
-                 nino and saUtr and credentials and confidenceLevel and allEnrolments)
+      .authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and allEnrolments)
       .map {
         case foundNino ~ foundSaUtr ~ creds ~ conf ~ foundEnrolments =>
-          (foundNino.map(Nino(_)),
-           foundSaUtr.map(SaUtr(_)),
-           creds,
-           conf,
-           getATSLink(foundEnrolments),
-           foundEnrolments)
+          (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf, getATSLink(foundEnrolments), foundEnrolments)
       }
 
   override def getUtr(
@@ -92,7 +82,7 @@ class LivePreFlightService @Inject() (
     else if (foundUtr.isDefined) {
       Future successful foundUtr.flatMap(utr => Some(Utr(Some(SaUtr(utr.utr)), NotYetActivated)))
     } else {
-      val test = foundNino
+      foundNino
         .map { nino =>
           for {
             saUtrOnCid <- getUtrFromCID(nino.nino).recover {
@@ -113,9 +103,12 @@ class LivePreFlightService @Inject() (
             }
           }
         }
-      test.getOrElse(Future successful Some(Utr.noUtr))
+        .getOrElse(Future successful Some(Utr.noUtr))
     }
   }
+
+  override def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean =
+    if (multipleGGIDCheckEnabled) enrolments.enrolments.exists(_.key == "HMRC-PT") else false
 
   private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] =
     if (showATSLink) {
@@ -184,4 +177,5 @@ class LivePreFlightService @Inject() (
         }
         .getOrElse(Future successful None)
     }
+
 }

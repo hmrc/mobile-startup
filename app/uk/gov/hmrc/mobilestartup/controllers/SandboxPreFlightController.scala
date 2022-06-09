@@ -54,9 +54,22 @@ class SandboxPreFlightController @Inject() (
                 PreFlightCheckResponse(
                   Some(Nino("CS700100A")),
                   None,
-                  routeToIV = true,
+                  routeToIV  = true,
                   utr        = None,
                   enrolments = Enrolments(Set.empty)
+                )
+              )
+            )
+          case Some("ROUTE-TO-TEN") =>
+            Ok(
+              toJson(
+                PreFlightCheckResponse(
+                  Some(Nino("CS700100A")),
+                  Some(SaUtr("1555369056")),
+                  routeToIV  = false,
+                  utr        = Some(Utr(Some(SaUtr("1555369056")), Activated)),
+                  enrolments = Enrolments(Set.empty),
+                  routeToTEN = true
                 )
               )
             )
@@ -73,5 +86,5 @@ class SandboxPreFlightController @Inject() (
       Some(AnnualTaxSummaryLink("/", "PAYE")),
       Some(Utr(Some(SaUtr("1555369056")), Activated)),
       Enrolments(Set.empty)
-      )
+    )
 }

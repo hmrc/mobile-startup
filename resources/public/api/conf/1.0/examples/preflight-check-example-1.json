@@ -1,4 +1,5 @@
 {
   "nino": "CS700100A",
-  "routeToIV": false
+  "routeToIV": false,
+  "routeToTEN": false
 }

@@ -49,11 +49,11 @@ trait LivePreFlightControllerTests extends BaseISpec {
                                  |}""".stripMargin
 
   private val cidPersonJsonNoUtr = s"""{
-                                 |  "ids": {
-                                 |    "nino": "AA000006C"
-                                 |  },
-                                 |  "dateOfBirth": "11121971"
-                                 |}""".stripMargin
+                                      |  "ids": {
+                                      |    "nino": "AA000006C"
+                                      |  },
+                                      |  "dateOfBirth": "11121971"
+                                      |}""".stripMargin
 
   private val principalIdsJson = s"""{
                                     |    "principalUserIds": [
@@ -89,11 +89,11 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
       response.status                                          shouldBe 200
       (response.json \ "nino").as[String]                      shouldBe nino.nino
-      (response.json \ "saUtr").as[String]                     shouldBe saUtr.utr
       (response.json \ "routeToIV").as[Boolean]                shouldBe false
       (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
       (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
+      (response.json \ "routeToTEN").as[Boolean]               shouldBe false
 
     }
 
@@ -265,6 +265,23 @@ trait LivePreFlightControllerTests extends BaseISpec {
       (response.json \ "nino").as[String]       shouldBe nino.nino
       (response.json \ "routeToIV").as[Boolean] shouldBe false
       (response.json \ "utr").isEmpty           shouldBe true
+
+    }
+
+    "return routeToTEN = true if HMRC-PT enrolment found" in {
+      accountsFoundMultipleGGIDs(nino.nino, saUtr.utr)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                                          shouldBe 200
+      (response.json \ "nino").as[String]                      shouldBe nino.nino
+      (response.json \ "routeToIV").as[Boolean]                shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
+      (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
+      (response.json \ "routeToTEN").as[Boolean]               shouldBe true
 
     }
 

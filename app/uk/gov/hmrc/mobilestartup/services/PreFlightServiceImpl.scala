@@ -35,12 +35,7 @@ abstract class PreFlightServiceImpl[F[_]](
   // The authentication and auditing calls from the platform are based on Future so declare a couple of
   // methods that adapt away from Future to F that the live implementation can define.
   def retrieveAccounts(implicit hc: HeaderCarrier): F[
-    (Option[Nino],
-     Option[SaUtr],
-     Option[Credentials],
-     ConfidenceLevel,
-     Option[AnnualTaxSummaryLink],
-     Enrolments)
+    (Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[AnnualTaxSummaryLink], Enrolments)
   ]
 
   def getUtr(
@@ -68,6 +63,8 @@ abstract class PreFlightServiceImpl[F[_]](
       getPreFlightCheckResponse(journeyId)
     }
 
+  def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean
+
   private def getPreFlightCheckResponse(
     journeyId:   JourneyId
   )(implicit hc: HeaderCarrier,
@@ -94,7 +91,8 @@ abstract class PreFlightServiceImpl[F[_]](
                              account.routeToIV,
                              account.annualTaxSummaryLink,
                              utrDetails,
-                             account.enrolments)
+                             account.enrolments,
+                             doesUserHaveMultipleGGIDs(account.enrolments))
     }
   }
 

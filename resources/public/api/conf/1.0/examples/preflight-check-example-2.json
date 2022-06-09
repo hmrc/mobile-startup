@@ -1,6 +1,5 @@
 {
   "nino": "CS700100A",
-  "saUtr:": "123456789",
   "routeToIV": true,
   "annualTaxSummaryLink": {
     "link": "/",
@@ -9,5 +8,6 @@
   "utr": {
     "saUtr": 123456789,
     "inactiveEnrolmentLink": "/"
-  }
+  },
+  "routeToTEN": false
 }
