@@ -93,7 +93,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
       (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
       (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
-      (response.json \ "routeToTEN").as[Boolean]               shouldBe false
+      (response.json \ "routeToTEN").as[Boolean]               shouldBe true
 
     }
 
@@ -268,7 +268,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     }
 
-    "return routeToTEN = true if HMRC-PT enrolment found" in {
+    "return routeToTEN = false if HMRC-PT enrolment found" in {
       accountsFoundMultipleGGIDs(nino.nino, saUtr.utr)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
@@ -281,7 +281,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
       (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
       (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
-      (response.json \ "routeToTEN").as[Boolean]               shouldBe true
+      (response.json \ "routeToTEN").as[Boolean]               shouldBe false
 
     }
 
