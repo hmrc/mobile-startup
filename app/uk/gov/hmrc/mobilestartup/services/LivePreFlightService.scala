@@ -108,7 +108,7 @@ class LivePreFlightService @Inject() (
   }
 
   override def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean =
-    if (multipleGGIDCheckEnabled) enrolments.enrolments.exists(_.key == "HMRC-PT") else false
+    if (multipleGGIDCheckEnabled) !enrolments.enrolments.exists(_.key == "HMRC-PT") else false
 
   private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] =
     if (showATSLink) {
