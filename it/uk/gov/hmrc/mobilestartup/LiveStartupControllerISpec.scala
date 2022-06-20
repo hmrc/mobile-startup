@@ -32,7 +32,7 @@ class LiveStartupControllerISpec extends BaseISpec {
   val journeyId: JourneyId = "b6ef25bc-8f5e-49c8-98c5-f039f39e4557"
   val url:       String    = s"/startup?journeyId=$journeyId"
 
-  def getRequestWithAcceptHeader(url: String): Future[WSResponse] =
+  def getRequestWithAuthHeaders(url: String): Future[WSResponse] =
     wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader).get()
 
   def postRequestWithAcceptHeader(
@@ -110,7 +110,7 @@ class LiveStartupControllerISpec extends BaseISpec {
       stubRenewalsResponse()
       stubCitizenDetailsResponse()
 
-      val response = await(getRequestWithAcceptHeader(url))
+      val response = await(getRequestWithAuthHeaders(url))
 
       response.status                                                       shouldBe 200
       (response.json \ "feature" \ 0 \ "name").as[String]                   shouldBe "userPanelSignUp"
@@ -147,7 +147,7 @@ class LiveStartupControllerISpec extends BaseISpec {
     "return 403 when user has insufficient confidence level" in {
       userIsLoggedInWithInsufficientConfidenceLevel()
 
-      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader).get())
+      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader).get())
       response.status shouldBe 403
     }
 
@@ -166,6 +166,18 @@ class LiveStartupControllerISpec extends BaseISpec {
           .get()
       )
       response.status shouldBe 400
+    }
+
+    "return 401 when no accept header is supplied" in {
+      userIsNotLoggedIn()
+      val response = await(wsUrl(url).addHttpHeaders(authorizationJsonHeader).get())
+      response.status shouldBe 401
+    }
+
+    "return 401 when no bearerToken is supplied" in {
+      userIsNotLoggedIn()
+      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader).get())
+      response.status shouldBe 401
     }
   }
 }

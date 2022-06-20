@@ -39,7 +39,7 @@ class BaseISpec
   override implicit lazy val app: Application = appBuilder.build()
 
   protected val acceptJsonHeader:        (String, String) = "Accept"        -> "application/vnd.hmrc.1.0+json"
-  protected val authorizationJsonHeader: (String, String) = "Authorization" -> "Bearer test"
+  protected val authorizationJsonHeader: (String, String) = "AUTHORIZATION" -> "Bearer test"
 
   def config: Map[String, Any] =
     Map(
