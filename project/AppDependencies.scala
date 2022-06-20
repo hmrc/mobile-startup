@@ -3,11 +3,11 @@ import sbt._
 
 object AppDependencies {
 
-  private val bootstrapPlayVersion = "5.12.0"
+  private val bootstrapPlayVersion = "5.24.0"
   private val scalaTestPlusVersion = "5.1.0"
-  private val domainVersion        = "6.2.0-play-28"
-  private val playHmrcApiVersion   = "6.4.0-play-28"
-  private val taxYearVersion       = "1.0.0"
+  private val domainVersion        = "8.1.0-play-28"
+  private val playHmrcApiVersion   = "7.0.0-play-28"
+  private val taxYearVersion       = "3.0.0"
 
   private val scalaTestVersion              = "3.2.3"
   private val pegdownVersion                = "1.6.0"
