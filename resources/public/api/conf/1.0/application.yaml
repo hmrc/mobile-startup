@@ -1,0 +1,578 @@
+openapi: 3.0.0
+info:
+  title: Mobile Startup
+  description: >-
+    ### What is this API for?
+
+    The API provides data that the mobile apps need at startup. It aggregates information from
+
+    a number of other api endpoints.
+  contact: {}
+  version: '1.0'
+servers:
+  - url: https://api.service.hmrc.gov.uk/
+    variables: {}
+paths:
+  /mobile-startup/startup:
+    get:
+      tags:
+        - mobile-startup
+      summary: Get startup data
+      description: This endpoint retrieves the startup data that the mobile apps use to initialize themselves. The service will use the authentication token to identify the NINO for the user that using the app. The json response will contain keys for `helpToSave` and `taxCreditsRenewals`. The values for each of these is the json returned from the relevant service. The response will also contain a `features` key that references a set of feature flags.
+      operationId: Getstartupdata
+      parameters:
+        - name: journeyId
+          in: query
+          description: ''
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/MobileStartupStartupresponse'
+                  - example:
+                      user:
+                        name: John Smith
+                      taxCreditRenewals:
+                        submissionsState: open
+                      helpToSave:
+                        shuttering:
+                          shuttered: false
+                          title: ''
+                          message: ''
+                        enabled: true
+                        balanceEnabled: true
+                        paidInThisMonthEnabled: true
+                        firstBonusEnabled: true
+                        savingRemindersEnabled: true
+                        infoUrl: https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme
+                        accessAccountUrl: /
+                        user:
+                          state: Enrolled
+                      feature:
+                        - name: userPanelSignUp
+                          enabled: false
+                        - name: enablePushNotificationTokenRegistration
+                          enabled: false
+                        - name: paperlessAlertDialogs
+                          enabled: false
+                        - name: paperlessAdverts
+                          enabled: false
+                        - name: htsAdverts
+                          enabled: true
+                      messages:
+                        paye: []
+                        tc: []
+                        hts: []
+                        tcp: []
+                        money:
+                          - type: Info
+                            id: your-details-signpost
+                            headlineContent:
+                              title: Looking for your Unique Taxpayer Reference (UTR)?
+                              links:
+                                - url: your-details
+                                  urlType: InApp
+                                  type: Secondary
+                                  message: Go to your details
+                        communication: []
+                        details: []
+              examples:
+                example-1:
+                  value:
+                    user:
+                      name: John Smith
+                    taxCreditRenewals:
+                      submissionsState: open
+                    helpToSave:
+                      shuttering:
+                        shuttered: false
+                        title: ''
+                        message: ''
+                      enabled: true
+                      balanceEnabled: true
+                      paidInThisMonthEnabled: true
+                      firstBonusEnabled: true
+                      savingRemindersEnabled: true
+                      infoUrl: https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme
+                      accessAccountUrl: /
+                      user:
+                        state: Enrolled
+                    feature:
+                      - name: userPanelSignUp
+                        enabled: false
+                      - name: enablePushNotificationTokenRegistration
+                        enabled: false
+                      - name: paperlessAlertDialogs
+                        enabled: false
+                      - name: paperlessAdverts
+                        enabled: false
+                      - name: htsAdverts
+                        enabled: true
+                    messages:
+                      paye: []
+                      tc: []
+                      hts: []
+                      tcp: []
+                      money:
+                        - type: Info
+                          id: your-details-signpost
+                          headlineContent:
+                            title: Looking for your Unique Taxpayer Reference (UTR)?
+                            links:
+                              - url: your-details
+                                urlType: InApp
+                                type: Secondary
+                                message: Go to your details
+                      communication: []
+                      details: []
+      deprecated: false
+      security:
+        - userRestricted:
+            - read:native-apps-api-orchestration
+  /mobile-startup/preflight-check:
+    get:
+      tags:
+        - mobile-startup
+      summary: Return account identifiers for the user
+      description: This endpoint retrieves the account identifiers associated with the auth record
+      operationId: Returnaccountidentifiersfortheuser
+      parameters:
+        - name: journeyId
+          in: query
+          description: ''
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/MobileStartupPreflightCheckresponse'
+                  - example:
+                      nino: CS700100A
+                      routeToIV: false
+                      routeToTEN: false
+              examples:
+                example-1:
+                  value:
+                    nino: CS700100A
+                    routeToIV: false
+                    routeToTEN: false
+                example-2:
+                  value:
+                    nino: CS700100A
+                    routeToIV: true
+                    annualTaxSummaryLink:
+                      link: /
+                      destination: PAYE
+                    utr:
+                      saUtr: 123456789,
+                      status: activated,
+                      inactiveEnrolmentLink: /
+                    routeToTEN: false
+      deprecated: false
+      security:
+        - userRestricted:
+            - read:native-apps-api-orchestration
+components:
+  securitySchemes:
+    userRestricted:
+      type: oauth2
+      description: |
+        HMRC supports OAuth 2.0 for authenticating user-restricted API requests using an OAuth 2.0 Bearer Token in the
+        AUTHORIZATION header.
+        See https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints for details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.service.hmrc.gov.uk/oauth/authorize
+          tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
+          refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
+          scopes:
+            read:native-apps-api-orchestration: Expose API to provide data the apps need at the time that they start up
+  schemas:
+    errorResponse:
+      title: errorResponse
+      required:
+        - code
+      type: object
+      properties:
+        code:
+          type: string
+    AnnualTaxSummaryLink:
+      title: AnnualTaxSummaryLink
+      required:
+        - link
+        - destination
+      type: object
+      properties:
+        link:
+          type: string
+        destination:
+          type: string
+      example:
+        link: /
+        destination: PAYE
+    Feature:
+      title: Feature
+      required:
+        - name
+        - enabled
+      type: object
+      properties:
+        name:
+          type: string
+        enabled:
+          type: boolean
+      example:
+        name: userPanelSignUp
+        enabled: false
+    HeadlineContent:
+      title: HeadlineContent
+      required:
+        - title
+        - links
+      type: object
+      properties:
+        title:
+          type: string
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+          description: ''
+      example:
+        title: Looking for your Unique Taxpayer Reference (UTR)?
+        links:
+          - url: your-details
+            urlType: InApp
+            type: Secondary
+            message: Go to your details
+    HelpToSave:
+      title: HelpToSave
+      required:
+        - shuttering
+        - enabled
+        - balanceEnabled
+        - paidInThisMonthEnabled
+        - firstBonusEnabled
+        - savingRemindersEnabled
+        - infoUrl
+        - accessAccountUrl
+        - user
+      type: object
+      properties:
+        shuttering:
+          $ref: '#/components/schemas/Shuttering'
+        enabled:
+          type: boolean
+        balanceEnabled:
+          type: boolean
+        paidInThisMonthEnabled:
+          type: boolean
+        firstBonusEnabled:
+          type: boolean
+        savingRemindersEnabled:
+          type: boolean
+        infoUrl:
+          type: string
+        accessAccountUrl:
+          type: string
+        user:
+          $ref: '#/components/schemas/User1'
+      example:
+        shuttering:
+          shuttered: false
+          title: ''
+          message: ''
+        enabled: true
+        balanceEnabled: true
+        paidInThisMonthEnabled: true
+        firstBonusEnabled: true
+        savingRemindersEnabled: true
+        infoUrl: https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme
+        accessAccountUrl: /
+        user:
+          state: Enrolled
+    Link:
+      title: Link
+      required:
+        - url
+        - urlType
+        - type
+        - message
+      type: object
+      properties:
+        url:
+          type: string
+        urlType:
+          type: string
+        type:
+          type: string
+        message:
+          type: string
+      example:
+        url: your-details
+        urlType: InApp
+        type: Secondary
+        message: Go to your details
+    Messages:
+      title: Messages
+      required:
+        - paye
+        - tc
+        - hts
+        - tcp
+        - money
+        - communication
+        - details
+      type: object
+      properties:
+        paye:
+          type: array
+          items:
+            type: string
+          description: ''
+        tc:
+          type: array
+          items:
+            type: string
+          description: ''
+        hts:
+          type: array
+          items:
+            type: string
+          description: ''
+        tcp:
+          type: array
+          items:
+            type: string
+          description: ''
+        money:
+          type: array
+          items:
+            $ref: '#/components/schemas/Money'
+          description: ''
+        communication:
+          type: array
+          items:
+            type: string
+          description: ''
+        details:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        paye: []
+        tc: []
+        hts: []
+        tcp: []
+        money:
+          - type: Info
+            id: your-details-signpost
+            headlineContent:
+              title: Looking for your Unique Taxpayer Reference (UTR)?
+              links:
+                - url: your-details
+                  urlType: InApp
+                  type: Secondary
+                  message: Go to your details
+        communication: []
+        details: []
+    MobileStartupPreflightCheckresponse:
+      title: MobileStartupPreflightCheckresponse
+      required:
+        - routeToIV
+        - routeToTEN
+      type: object
+      properties:
+        nino:
+          type: string
+        routeToIV:
+          type: boolean
+        annualTaxSummaryLink:
+          $ref: '#/components/schemas/AnnualTaxSummaryLink'
+        utr:
+          $ref: '#/components/schemas/Utr'
+        routeToTEN:
+          type: boolean
+      example:
+        nino: CS700100A
+        routeToIV: false
+        routeToTEN: false
+    MobileStartupStartupresponse:
+      title: MobileStartupStartupresponse
+      required:
+        - user
+        - taxCreditRenewals
+        - helpToSave
+        - feature
+        - messages
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        taxCreditRenewals:
+          $ref: '#/components/schemas/TaxCreditRenewals'
+        helpToSave:
+          $ref: '#/components/schemas/HelpToSave'
+        feature:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
+          description: ''
+        messages:
+          $ref: '#/components/schemas/Messages'
+      example:
+        user:
+          name: John Smith
+        taxCreditRenewals:
+          submissionsState: open
+        helpToSave:
+          shuttering:
+            shuttered: false
+            title: ''
+            message: ''
+          enabled: true
+          balanceEnabled: true
+          paidInThisMonthEnabled: true
+          firstBonusEnabled: true
+          savingRemindersEnabled: true
+          infoUrl: https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme
+          accessAccountUrl: /
+          user:
+            state: Enrolled
+        feature:
+          - name: userPanelSignUp
+            enabled: false
+          - name: enablePushNotificationTokenRegistration
+            enabled: false
+          - name: paperlessAlertDialogs
+            enabled: false
+          - name: paperlessAdverts
+            enabled: false
+          - name: htsAdverts
+            enabled: true
+        messages:
+          paye: []
+          tc: []
+          hts: []
+          tcp: []
+          money:
+            - type: Info
+              id: your-details-signpost
+              headlineContent:
+                title: Looking for your Unique Taxpayer Reference (UTR)?
+                links:
+                  - url: your-details
+                    urlType: InApp
+                    type: Secondary
+                    message: Go to your details
+          communication: []
+          details: []
+    Money:
+      title: Money
+      required:
+        - type
+        - id
+        - headlineContent
+      type: object
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+        headlineContent:
+          $ref: '#/components/schemas/HeadlineContent'
+      example:
+        type: Info
+        id: your-details-signpost
+        headlineContent:
+          title: Looking for your Unique Taxpayer Reference (UTR)?
+          links:
+            - url: your-details
+              urlType: InApp
+              type: Secondary
+              message: Go to your details
+    Shuttering:
+      title: Shuttering
+      required:
+        - shuttered
+        - title
+        - message
+      type: object
+      properties:
+        shuttered:
+          type: boolean
+        title:
+          type: string
+        message:
+          type: string
+      example:
+        shuttered: false
+        title: ''
+        message: ''
+    TaxCreditRenewals:
+      title: TaxCreditRenewals
+      required:
+        - submissionsState
+      type: object
+      properties:
+        submissionsState:
+          type: string
+      example:
+        submissionsState: open
+    User:
+      title: User
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+      example:
+        name: John Smith
+    User1:
+      title: User1
+      required:
+        - state
+      type: object
+      properties:
+        state:
+          type: string
+      example:
+        state: Enrolled
+    Utr:
+      title: Utr
+      required:
+        - status
+      type: object
+      properties:
+        saUtr:
+          type: string
+        status:
+          type: string
+        inactiveEnrolmentUrl:
+          type: string
+      example:
+        saUtr: 123456789,
+        status: activated,
+        inactiveEnrolmentUrl: /
+tags:
+  - name: mobile-startup
+    description: ''
