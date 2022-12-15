@@ -107,8 +107,13 @@ class LivePreFlightService @Inject() (
     }
   }
 
-  override def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean =
+  override def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean = {
+    logger.info(
+      if (!enrolments.enrolments.exists(_.key == "HMRC-PT")) "Missing enrolment, routing user to TENS"
+      else "User has new enrolment"
+    )
     if (multipleGGIDCheckEnabled) !enrolments.enrolments.exists(_.key == "HMRC-PT") else false
+  }
 
   private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] =
     if (showATSLink) {
