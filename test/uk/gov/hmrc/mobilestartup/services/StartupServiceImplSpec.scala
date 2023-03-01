@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -188,7 +188,11 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
                                               enableHtsAdverts                        = false,
-                                              enableAnnualTaxSummaryLink              = false)
+                                              enableAnnualTaxSummaryLink              = false,
+                                              cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
+                                              cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                              cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
+                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"))
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -205,6 +209,13 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
+      (result \ "urls").get
+        .as[List[URL]] shouldBe List(
+        URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
+        URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
+        URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
+        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy")
+      )
     }
   }
 
@@ -216,7 +227,11 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
                                               enableHtsAdverts                        = false,
-                                              enableAnnualTaxSummaryLink              = false)
+                                              enableAnnualTaxSummaryLink              = false,
+                                              cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
+                                              cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                              cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
+                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"))
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -233,6 +248,13 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
+      (result \ "urls").get
+        .as[List[URL]] shouldBe List(
+        URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
+        URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
+        URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
+        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy")
+      )
     }
 
     "contain an error entry for tcr when the tcr call fails" in {
@@ -242,7 +264,11 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
                                               enableHtsAdverts                        = false,
-                                              enableAnnualTaxSummaryLink              = false)
+                                              enableAnnualTaxSummaryLink              = false,
+                                              cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
+                                              cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                              cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
+                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"))
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -259,6 +285,13 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
+      (result \ "urls").get
+        .as[List[URL]] shouldBe List(
+        URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
+        URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
+        URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
+        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy")
+      )
     }
 
     "contain an empty lists entry for messages when the messages call fails" in {
@@ -269,7 +302,12 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         enablePaperlessAlertDialogs             = false,
         enablePaperlessAdverts                  = false,
         enableHtsAdverts                        = false,
-        enableAnnualTaxSummaryLink              = false)
+        enableAnnualTaxSummaryLink              = false,
+        cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
+        cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
+        cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
+        cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy")
+      )
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -292,6 +330,13 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                                                |}
                                                                |""".stripMargin)
       (result \ user).toOption.value     shouldBe userExpectedResponse
+      (result \ "urls").get
+        .as[List[URL]] shouldBe List(
+        URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
+        URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
+        URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
+        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy")
+      )
     }
 
     "not contain an entry for user when the citizen details call fails" in {
@@ -302,7 +347,11 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       enablePaperlessAlertDialogs             = false,
                                       enablePaperlessAdverts                  = false,
                                       enableHtsAdverts                        = false,
-                                      enableAnnualTaxSummaryLink              = false)
+                                      enableAnnualTaxSummaryLink              = false,
+                                      cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
+                                      cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                      cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
+                                      cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"))
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -319,6 +368,49 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption           shouldBe None
+      (result \ "urls").get
+        .as[List[URL]] shouldBe List(
+        URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
+        URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
+        URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
+        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy")
+      )
     }
+  }
+
+  "not contain an entry for URLs that have no value" in {
+    val sut =
+      new StartupServiceImpl[TestF](dummyConnector(citizenDetailsResponse = new Exception("cid failed").error),
+        false,
+        enablePushNotificationTokenRegistration = false,
+        enablePaperlessAlertDialogs = false,
+        enablePaperlessAdverts = false,
+        enableHtsAdverts = false,
+        enableAnnualTaxSummaryLink = false,
+        cbProofOfEntitlementUrl = Some("/cb/cbProofOfEntitlementUrl"),
+        cbProofOfEntitlementUrlCy = None,
+        cbPaymentHistoryUrl = Some("/cb/cbPaymentHistoryUrl"),
+        cbPaymentHistoryUrlCy = None)
+
+    val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
+
+    (result \ helpToSave).toOption.value shouldBe htsSuccessResponse
+    (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
+    (result \ "feature").get
+      .as[List[FeatureFlag]] shouldBe List(
+      FeatureFlag("userPanelSignUp", enabled = false),
+      FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
+      FeatureFlag("paperlessAlertDialogs", enabled = false),
+      FeatureFlag("paperlessAdverts", enabled = false),
+      FeatureFlag("htsAdverts", enabled = false),
+      FeatureFlag("annualTaxSummaryLink", enabled = false)
+    )
+    (result \ messages).toOption.value shouldBe messagesSuccessResponse
+    (result \ user).toOption shouldBe None
+    (result \ "urls").get
+      .as[List[URL]] shouldBe List(
+      URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
+      URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
+    )
   }
 }

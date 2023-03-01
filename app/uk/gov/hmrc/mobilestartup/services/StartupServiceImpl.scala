@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,14 @@ object FeatureFlag {
   implicit val formats: Format[FeatureFlag] = Json.format[FeatureFlag]
 }
 
+case class URL(
+  name: String,
+  url:  String)
+
+object URL {
+  implicit val formats: Format[URL] = Json.format[URL]
+}
+
 /**
   * Decided to implement this generically using Tagless as an example of how it can be introduced
   * into a codebase without necessarily converting everything. It did require introducing a type parameter
@@ -50,7 +58,11 @@ class StartupServiceImpl[F[_]] @Inject() (
   enablePaperlessAlertDialogs:             Boolean,
   enablePaperlessAdverts:                  Boolean,
   enableHtsAdverts:                        Boolean,
-  enableAnnualTaxSummaryLink:              Boolean
+  enableAnnualTaxSummaryLink:              Boolean,
+  cbProofOfEntitlementUrl:                 Option[String],
+  cbProofOfEntitlementUrlCy:               Option[String],
+  cbPaymentHistoryUrl:                     Option[String],
+  cbPaymentHistoryUrlCy:                   Option[String]
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -65,7 +77,8 @@ class StartupServiceImpl[F[_]] @Inject() (
      callService("taxCreditRenewals")(tcrStartup(journeyId)),
      callService("messages")(inAppMsgsStartup),
      callService("user")(citizenDetailsStartup(nino)),
-     featureFlags.pure[F]).mapN((a, b, c, d, e) => a ++ b ++ c ++ d ++ e)
+     featureFlags.pure[F],
+     urls.pure[F]).mapN((a, b, c, d, e, f) => a ++ b ++ c ++ d ++ e ++ f)
 
   private val featureFlags: JsObject =
     obj(
@@ -77,6 +90,16 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("htsAdverts", enableHtsAdverts),
         FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink)
       )
+    )
+
+  private val urls: JsObject =
+    obj(
+      "urls" -> List(
+        cbProofOfEntitlementUrl.map(URL("cbProofOfEntitlementUrl", _)),
+        cbProofOfEntitlementUrlCy.map(URL("cbProofOfEntitlementUrlCy", _)),
+        cbPaymentHistoryUrl.map(URL("cbPaymentHistoryUrl", _)),
+        cbPaymentHistoryUrlCy.map(URL("cbPaymentHistoryUrlCy", _))
+      ).filter(_.isDefined)
     )
 
   private def callService(name: String)(f: => F[Option[JsValue]]): F[JsObject] =

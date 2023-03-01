@@ -75,5 +75,23 @@
   },
   "user": {
     "name": "Nia Jackson"
-  }
+  },
+  "urls": [
+    {
+      "name": "cbProofOfEntitlementUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbProofOfEntitlementUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "cbPaymentHistoryUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbPaymentHistoryUrlCy",
+      "url": "/"
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ class BaseISpec
 
   def config: Map[String, Any] =
     Map(
-      "auditing.enabled"                                      -> true,
+      "auditing.enabled"                                      -> false,
       "microservice.services.auth.port"                       -> wireMockPort,
       "microservice.services.datastream.port"                 -> wireMockPort,
       "microservice.services.mobile-tax-credits-renewal.port" -> wireMockPort,
@@ -58,7 +58,11 @@ class BaseISpec
       "feature.htsAdverts"                                    -> true,
       "feature.saTile"                                        -> true,
       "feature.annualTaxSummaryLink"                          -> true,
-      "enableMultipleGGIDCheck"                               -> true
+      "enableMultipleGGIDCheck"                               -> true,
+      "url.cbProofOfEntitlementUrl"                           -> "/child-benefit/view-proof-entitlement",
+      "url.cbProofOfEntitlementUrlCy"                         -> "/child-benefit/view-proof-entitlementCy",
+      "url.cbPaymentHistoryUrl"                               -> "/child-benefit/view-payment-history",
+      "url.cbPaymentHistoryUrlCy"                             -> "/child-benefit/view-payment-historyCy"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)

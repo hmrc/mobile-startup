@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,10 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.htsAdverts")
     bindConfigBoolean("feature.annualTaxSummaryLink")
     bindConfigBoolean("enableMultipleGGIDCheck")
+    bindConfigOptionalString("cbProofOfEntitlementUrl", "url.cbProofOfEntitlementUrl")
+    bindConfigOptionalString("cbProofOfEntitlementUrlCy", "url.cbProofOfEntitlementUrlCy")
+    bindConfigOptionalString("cbPaymentHistoryUrl", "url.cbPaymentHistoryUrl")
+    bindConfigOptionalString("cbPaymentHistoryUrlCy", "url.cbPaymentHistoryUrlCy")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
@@ -75,6 +79,17 @@ class GuiceModule @Inject() (
     path: String
   ): Unit =
     bindConstant().annotatedWith(named(name)).to(configuration.underlying.getString(path))
+
+  private def bindConfigOptionalString(
+    name: String,
+    path: String
+  ): Unit = {
+    val configValue: Option[String] = configuration
+      .getOptional[String](path)
+    bind(new TypeLiteral[Option[String]] {})
+      .annotatedWith(named(name))
+      .toInstance(configValue)
+  }
 
   private def bindConfigBoolean(path: String): Unit =
     bindConstant().annotatedWith(named(path)).to(configuration.underlying.getBoolean(path))
