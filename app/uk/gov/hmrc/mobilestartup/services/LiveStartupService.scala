@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,11 @@ class LiveStartupService @Inject() (
   @Named("feature.paperlessAlertDialogs") enablePaperlessAlertDialogs:                               Boolean,
   @Named("feature.paperlessAdverts") enablePaperlessAdverts:                                         Boolean,
   @Named("feature.htsAdverts") enableHtsAdverts:                                                     Boolean,
-  @Named("feature.annualTaxSummaryLink") enableAnnualTaxSummaryLink:                                 Boolean
+  @Named("feature.annualTaxSummaryLink") enableAnnualTaxSummaryLink:                                 Boolean,
+  @Named("cbProofOfEntitlementUrl") cbProofOfEntitlementUrl:                                         Option[String],
+  @Named("cbProofOfEntitlementUrlCy") cbProofOfEntitlementUrlCy:                                     Option[String],
+  @Named("cbPaymentHistoryUrl") cbPaymentHistoryUrl:                                                 Option[String],
+  @Named("cbPaymentHistoryUrlCy") cbPaymentHistoryUrlCy:                                             Option[String]
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -37,4 +41,8 @@ class LiveStartupService @Inject() (
                                        enablePaperlessAlertDialogs,
                                        enablePaperlessAdverts,
                                        enableHtsAdverts,
-                                       enableAnnualTaxSummaryLink)
+                                       enableAnnualTaxSummaryLink,
+                                       cbProofOfEntitlementUrl,
+                                       cbProofOfEntitlementUrlCy,
+                                       cbPaymentHistoryUrl,
+                                       cbPaymentHistoryUrlCy)

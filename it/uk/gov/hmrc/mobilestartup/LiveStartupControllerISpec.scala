@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,6 +127,14 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 5 \ "enabled").as[Boolean]               shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
+      (response.json \ "urls" \ 0 \ "name").as[String]                      shouldBe "cbProofOfEntitlementUrl"
+      (response.json \ "urls" \ 0 \ "url").as[String]                       shouldBe "/child-benefit/view-proof-entitlement"
+      (response.json \ "urls" \ 1 \ "name").as[String]                      shouldBe "cbProofOfEntitlementUrlCy"
+      (response.json \ "urls" \ 1 \ "url").as[String]                       shouldBe "/child-benefit/view-proof-entitlementCy"
+      (response.json \ "urls" \ 2 \ "name").as[String]                      shouldBe "cbPaymentHistoryUrl"
+      (response.json \ "urls" \ 2 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-history"
+      (response.json \ "urls" \ 3 \ "name").as[String]                      shouldBe "cbPaymentHistoryUrlCy"
+      (response.json \ "urls" \ 3 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-historyCy"
 
     }
 
