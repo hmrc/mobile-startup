@@ -7,11 +7,11 @@ info:
     The API provides data that the mobile apps need at startup. It aggregates information from
 
     a number of other api endpoints.
-  contact: {}
+  contact: { }
   version: '1.0'
 servers:
   - url: https://api.service.hmrc.gov.uk/
-    variables: {}
+    variables: { }
 paths:
   /mobile-startup/startup:
     get:
@@ -32,7 +32,7 @@ paths:
       responses:
         '200':
           description: ''
-          headers: {}
+          headers: { }
           content:
             application/json:
               schema:
@@ -69,10 +69,10 @@ paths:
                         - name: htsAdverts
                           enabled: true
                       messages:
-                        paye: []
-                        tc: []
-                        hts: []
-                        tcp: []
+                        paye: [ ]
+                        tc: [ ]
+                        hts: [ ]
+                        tcp: [ ]
                         money:
                           - type: Info
                             id: your-details-signpost
@@ -83,8 +83,8 @@ paths:
                                   urlType: InApp
                                   type: Secondary
                                   message: Go to your details
-                        communication: []
-                        details: []
+                        communication: [ ]
+                        details: [ ]
               examples:
                 example-1:
                   value:
@@ -118,10 +118,10 @@ paths:
                       - name: htsAdverts
                         enabled: true
                     messages:
-                      paye: []
-                      tc: []
-                      hts: []
-                      tcp: []
+                      paye: [ ]
+                      tc: [ ]
+                      hts: [ ]
+                      tcp: [ ]
                       money:
                         - type: Info
                           id: your-details-signpost
@@ -132,8 +132,8 @@ paths:
                                 urlType: InApp
                                 type: Secondary
                                 message: Go to your details
-                      communication: []
-                      details: []
+                      communication: [ ]
+                      details: [ ]
       deprecated: false
       security:
         - userRestricted:
@@ -157,7 +157,7 @@ paths:
       responses:
         '200':
           description: ''
-          headers: {}
+          headers: { }
           content:
             application/json:
               schema:
@@ -378,10 +378,10 @@ components:
             type: string
           description: ''
       example:
-        paye: []
-        tc: []
-        hts: []
-        tcp: []
+        paye: [ ]
+        tc: [ ]
+        hts: [ ]
+        tcp: [ ]
         money:
           - type: Info
             id: your-details-signpost
@@ -392,8 +392,8 @@ components:
                   urlType: InApp
                   type: Secondary
                   message: Go to your details
-        communication: []
-        details: []
+        communication: [ ]
+        details: [ ]
     MobileStartupPreflightCheckresponse:
       title: MobileStartupPreflightCheckresponse
       required:
@@ -441,6 +441,12 @@ components:
       example:
         user:
           name: John Smith
+          address:
+            line1: 999 Big Street
+            line2: Worthing
+            line3: West Sussex
+            postcode: BN99 8IG
+            country: United Kingdom
         taxCreditRenewals:
           submissionsState: open
         helpToSave:
@@ -469,10 +475,10 @@ components:
           - name: htsAdverts
             enabled: true
         messages:
-          paye: []
-          tc: []
-          hts: []
-          tcp: []
+          paye: [ ]
+          tc: [ ]
+          hts: [ ]
+          tcp: [ ]
           money:
             - type: Info
               id: your-details-signpost
@@ -483,8 +489,8 @@ components:
                     urlType: InApp
                     type: Secondary
                     message: Go to your details
-          communication: []
-          details: []
+          communication: [ ]
+          details: [ ]
     Money:
       title: Money
       required:
@@ -545,8 +551,16 @@ components:
       properties:
         name:
           type: string
+        address:
+          $ref: '#/components/schemas/Address'
       example:
         name: John Smith
+        address:
+          line1: 999 Big Street
+          line2: Worthing
+          line3: West Sussex
+          postcode: BN99 8IG
+          country: United Kingdom
     User1:
       title: User1
       required:
@@ -573,6 +587,30 @@ components:
         saUtr: 123456789,
         status: activated,
         inactiveEnrolmentUrl: /
+    Address:
+      title: Address
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        line4:
+          type: string
+        line5:
+          type: string
+        postcode:
+          type: string
+        country:
+          type: string
+      example:
+        line1: 999 Big Street
+        line2: Worthing
+        line3: West Sussex
+        postcode: BN99 8IG
+        country: United Kingdom
 tags:
   - name: mobile-startup
     description: ''

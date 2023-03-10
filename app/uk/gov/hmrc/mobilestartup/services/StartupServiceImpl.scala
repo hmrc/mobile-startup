@@ -160,7 +160,11 @@ class StartupServiceImpl[F[_]] @Inject() (
       .doGet("citizen-details", s"/citizen-details/$nino/designatory-details", hc)
       .map { p =>
         val person = p.as[PersonDetails]
-        Option(Json.toJson(new JsObject(Map("name" -> Json.toJson(person.person.shortName)))))
+        Option(
+          Json.toJson(
+            new JsObject(Map("name" -> Json.toJson(person.person.shortName), "address" -> Json.toJson(person.address)))
+          )
+        )
       }
       .recover {
         case e: Upstream4xxResponse if e.upstreamResponseCode == LOCKED =>

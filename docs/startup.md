@@ -60,6 +60,15 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "enabled": false
     }
   ],
+  "user": {
+    "name": "BELINDA MARY OAKES",
+    "address": {
+      "line1": "999 Big Street",
+      "line2": "Worthing",
+      "line3": "West Sussex",
+      "postcode": "BN99 8IG"
+    }
+  },
   "urls": [
     {
       "name": "cbProofOfEntitlementUrl",
