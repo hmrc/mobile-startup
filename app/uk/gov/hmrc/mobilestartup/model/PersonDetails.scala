@@ -32,8 +32,23 @@ case class Person(
     List(firstName, middleName, lastName).flatten.mkString(" ")
 }
 
+object Address {
+  implicit val formats: OFormat[Address] = format[Address]
+}
+
+case class Address(
+  line1:    Option[String] = None,
+  line2:    Option[String] = None,
+  line3:    Option[String] = None,
+  line4:    Option[String] = None,
+  line5:    Option[String] = None,
+  postcode: Option[String] = None,
+  country:  Option[String] = None)
+
 object PersonDetails {
   implicit val formats: OFormat[PersonDetails] = format[PersonDetails]
 }
 
-case class PersonDetails(person: Person)
+case class PersonDetails(
+  person:  Person,
+  address: Option[Address])

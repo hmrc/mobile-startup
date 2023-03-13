@@ -127,6 +127,13 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 5 \ "enabled").as[Boolean]               shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
+      (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"
+      (response.json \ "user" \ "address" \ "line2").as[String]             shouldBe "23456"
+      (response.json \ "user" \ "address" \ "line3").as[String]             shouldBe "3456"
+      (response.json \ "user" \ "address" \ "line4").as[String]             shouldBe "456"
+      (response.json \ "user" \ "address" \ "line5").as[String]             shouldBe "55555"
+      (response.json \ "user" \ "address" \ "postcode").as[String]          shouldBe "98765"
+      (response.json \ "user" \ "address" \ "country").as[String]           shouldBe "Test Country"
       (response.json \ "urls" \ 0 \ "name").as[String]                      shouldBe "cbProofOfEntitlementUrl"
       (response.json \ "urls" \ 0 \ "url").as[String]                       shouldBe "/child-benefit/view-proof-entitlement"
       (response.json \ "urls" \ 1 \ "name").as[String]                      shouldBe "cbProofOfEntitlementUrlCy"

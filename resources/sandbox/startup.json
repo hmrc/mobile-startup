@@ -74,7 +74,13 @@
     "details": []
   },
   "user": {
-    "name": "Nia Jackson"
+    "name": "Nia Jackson",
+    "address": {
+      "line1": "999 Big Street",
+      "line2": "Worthing",
+      "line3": "West Sussex",
+      "postcode": "BN99 8IG"
+    }
   },
   "urls": [
     {
