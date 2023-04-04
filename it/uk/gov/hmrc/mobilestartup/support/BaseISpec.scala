@@ -59,6 +59,7 @@ class BaseISpec
       "feature.saTile"                                        -> true,
       "feature.annualTaxSummaryLink"                          -> true,
       "enableMultipleGGIDCheck"                               -> true,
+      "feature.payeCustomerSatisfactionSurveyAdverts"         -> true,
       "url.cbProofOfEntitlementUrl"                           -> "/child-benefit/view-proof-entitlement",
       "url.cbProofOfEntitlementUrlCy"                         -> "/child-benefit/view-proof-entitlementCy",
       "url.cbPaymentHistoryUrl"                               -> "/child-benefit/view-payment-history",

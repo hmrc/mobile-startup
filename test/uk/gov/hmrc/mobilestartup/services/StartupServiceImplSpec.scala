@@ -201,7 +201,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
                                               cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
                                               cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"))
+                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -214,7 +215,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -240,7 +242,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
                                               cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
                                               cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"))
+                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -253,7 +256,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -277,7 +281,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
                                               cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
                                               cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"))
+                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -290,7 +295,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -315,8 +321,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
         cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
         cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-        cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy")
-      )
+        cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
+        enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -329,7 +335,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
       )
       (result \ messages).toOption.value shouldBe Json.parse("""{
                                                                |  "paye": [],
@@ -360,7 +367,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
                                       cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
                                       cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-                                      cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"))
+                                      cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
+                                      enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -373,7 +381,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption           shouldBe None
@@ -399,7 +408,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         cbProofOfEntitlementUrl = Some("/cb/cbProofOfEntitlementUrl"),
         cbProofOfEntitlementUrlCy = None,
         cbPaymentHistoryUrl = Some("/cb/cbPaymentHistoryUrl"),
-        cbPaymentHistoryUrlCy = None)
+        cbPaymentHistoryUrlCy = None,
+        enablePayeCustomerSatisfactionSurveyAdverts = false)
 
     val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -412,7 +422,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       FeatureFlag("paperlessAlertDialogs", enabled = false),
       FeatureFlag("paperlessAdverts", enabled = false),
       FeatureFlag("htsAdverts", enabled = false),
-      FeatureFlag("annualTaxSummaryLink", enabled = false)
+      FeatureFlag("annualTaxSummaryLink", enabled = false),
+      FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
     )
     (result \ messages).toOption.value shouldBe messagesSuccessResponse
     (result \ user).toOption shouldBe None

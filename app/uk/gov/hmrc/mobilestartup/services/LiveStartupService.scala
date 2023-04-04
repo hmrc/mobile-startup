@@ -33,7 +33,8 @@ class LiveStartupService @Inject() (
   @Named("cbProofOfEntitlementUrl") cbProofOfEntitlementUrl:                                         Option[String],
   @Named("cbProofOfEntitlementUrlCy") cbProofOfEntitlementUrlCy:                                     Option[String],
   @Named("cbPaymentHistoryUrl") cbPaymentHistoryUrl:                                                 Option[String],
-  @Named("cbPaymentHistoryUrlCy") cbPaymentHistoryUrlCy:                                             Option[String]
+  @Named("cbPaymentHistoryUrlCy") cbPaymentHistoryUrlCy:                                             Option[String],
+  @Named("feature.payeCustomerSatisfactionSurveyAdverts") enablePayeCustomerSatisfactionSurveyAdverts: Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -45,4 +46,5 @@ class LiveStartupService @Inject() (
                                        cbProofOfEntitlementUrl,
                                        cbProofOfEntitlementUrlCy,
                                        cbPaymentHistoryUrl,
-                                       cbPaymentHistoryUrlCy)
+                                       cbPaymentHistoryUrlCy,
+                                       enablePayeCustomerSatisfactionSurveyAdverts)

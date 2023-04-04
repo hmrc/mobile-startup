@@ -62,7 +62,8 @@ class StartupServiceImpl[F[_]] @Inject() (
   cbProofOfEntitlementUrl:                 Option[String],
   cbProofOfEntitlementUrlCy:               Option[String],
   cbPaymentHistoryUrl:                     Option[String],
-  cbPaymentHistoryUrlCy:                   Option[String]
+  cbPaymentHistoryUrlCy:                   Option[String],
+  enablePayeCustomerSatisfactionSurveyAdverts: Boolean
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -88,7 +89,8 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("paperlessAlertDialogs", enablePaperlessAlertDialogs),
         FeatureFlag("paperlessAdverts", enablePaperlessAdverts),
         FeatureFlag("htsAdverts", enableHtsAdverts),
-        FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink)
+        FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enablePayeCustomerSatisfactionSurveyAdverts)
       )
     )
 
