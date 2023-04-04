@@ -26,6 +26,10 @@
     {
       "name": "annualTaxSummaryLink",
       "enabled": true
+    },
+    {
+      "name": "payeCustomerSatisfactionSurveyAdverts",
+      "enabled": true
     }
   ],
   "helpToSave": {
