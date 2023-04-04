@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -188,7 +188,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
                                               enableHtsAdverts                        = false,
-                                              enableAnnualTaxSummaryLink              = false)
+                                              enableAnnualTaxSummaryLink              = false,
+                                              enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -302,7 +303,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       enablePaperlessAlertDialogs             = false,
                                       enablePaperlessAdverts                  = false,
                                       enableHtsAdverts                        = false,
-                                      enableAnnualTaxSummaryLink              = false)
+                                      enableAnnualTaxSummaryLink              = false,
+                                      enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
