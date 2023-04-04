@@ -202,7 +202,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -217,7 +218,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
                                               enableHtsAdverts                        = false,
-                                              enableAnnualTaxSummaryLink              = false)
+                                              enableAnnualTaxSummaryLink              = false,
+                                              enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -230,7 +232,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -243,7 +246,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enablePaperlessAlertDialogs             = false,
                                               enablePaperlessAdverts                  = false,
                                               enableHtsAdverts                        = false,
-                                              enableAnnualTaxSummaryLink              = false)
+                                              enableAnnualTaxSummaryLink              = false,
+                                              enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -256,7 +260,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -270,7 +275,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         enablePaperlessAlertDialogs             = false,
         enablePaperlessAdverts                  = false,
         enableHtsAdverts                        = false,
-        enableAnnualTaxSummaryLink              = false)
+        enableAnnualTaxSummaryLink              = false,
+        enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -283,7 +289,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
       )
       (result \ messages).toOption.value shouldBe Json.parse("""{
                                                                |  "paye": [],
@@ -317,7 +324,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("paperlessAlertDialogs", enabled                   = false),
         FeatureFlag("paperlessAdverts", enabled                        = false),
         FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption           shouldBe None

@@ -58,7 +58,8 @@ class BaseISpec
       "feature.htsAdverts"                                    -> true,
       "feature.saTile"                                        -> true,
       "feature.annualTaxSummaryLink"                          -> true,
-      "enableMultipleGGIDCheck"                               -> true
+      "enableMultipleGGIDCheck"                               -> true,
+      "feature.payeCustomerSatisfactionSurveyAdverts"         -> true
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)

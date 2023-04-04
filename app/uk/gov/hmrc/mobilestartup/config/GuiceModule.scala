@@ -49,6 +49,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.htsAdverts")
     bindConfigBoolean("feature.annualTaxSummaryLink")
     bindConfigBoolean("enableMultipleGGIDCheck")
+    bindConfigBoolean("feature.payeCustomerSatisfactionSurveyAdverts")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
