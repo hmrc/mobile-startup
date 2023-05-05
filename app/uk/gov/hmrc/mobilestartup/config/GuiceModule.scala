@@ -53,6 +53,8 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("cbProofOfEntitlementUrlCy", "url.cbProofOfEntitlementUrlCy")
     bindConfigOptionalString("cbPaymentHistoryUrl", "url.cbPaymentHistoryUrl")
     bindConfigOptionalString("cbPaymentHistoryUrlCy", "url.cbPaymentHistoryUrlCy")
+    bindConfigOptionalString("cbChangeBankAccountUrl", "url.cbChangeBankAccountUrl")
+    bindConfigOptionalString("cbChangeBankAccountUrlCy", "url.cbChangeBankAccountUrlCy")
     bindConfigBoolean("feature.payeCustomerSatisfactionSurveyAdverts")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 

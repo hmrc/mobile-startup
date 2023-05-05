@@ -34,10 +34,11 @@ object AppDependencies {
   }
 
   private def testCommon(scope: String) = Seq(
-    "org.pegdown"            % "pegdown"             % pegdownVersion       % scope,
-    "com.typesafe.play"      %% "play-test"          % PlayVersion.current  % scope,
-    "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
-    "com.vladsch.flexmark"   % "flexmark-all"        % flexmarkAllVersion   % scope
+    "org.pegdown"            % "pegdown"                 % pegdownVersion       % scope,
+    "com.typesafe.play"      %% "play-test"              % PlayVersion.current  % scope,
+    "org.scalatestplus.play" %% "scalatestplus-play"     % scalaTestPlusVersion % scope,
+    "com.vladsch.flexmark"   % "flexmark-all"            % flexmarkAllVersion   % scope,
+    "uk.gov.hmrc"            %% "bootstrap-test-play-28" % bootstrapPlayVersion % scope
   )
 
   object Test {

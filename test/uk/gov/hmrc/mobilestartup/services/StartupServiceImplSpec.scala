@@ -192,16 +192,18 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
   "a fully successful response" should {
     "contain success entries for each service" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(),
-                                              userPanelSignUp                         = false,
-                                              enablePushNotificationTokenRegistration = false,
-                                              enablePaperlessAlertDialogs             = false,
-                                              enablePaperlessAdverts                  = false,
-                                              enableHtsAdverts                        = false,
-                                              enableAnnualTaxSummaryLink              = false,
-                                              cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
-                                              cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                              cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              userPanelSignUp                             = false,
+                                              enablePushNotificationTokenRegistration     = false,
+                                              enablePaperlessAlertDialogs                 = false,
+                                              enablePaperlessAdverts                      = false,
+                                              enableHtsAdverts                            = false,
+                                              enableAnnualTaxSummaryLink                  = false,
+                                              cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
+                                              cbProofOfEntitlementUrlCy                   = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                              cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
+                                              cbPaymentHistoryUrlCy                       = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
+                                              cbChangeBankAccountUrlCy                    = Some("/cb/cbChangeBankAccountUrlCy"),
                                               enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -225,7 +227,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
         URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
         URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
-        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy")
+        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
+        URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
+        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy")
       )
     }
   }
@@ -234,15 +238,17 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "not contain an entry for help-to-save when the hts call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error),
                                               false,
-                                              enablePushNotificationTokenRegistration = false,
-                                              enablePaperlessAlertDialogs             = false,
-                                              enablePaperlessAdverts                  = false,
-                                              enableHtsAdverts                        = false,
-                                              enableAnnualTaxSummaryLink              = false,
-                                              cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
-                                              cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                              cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              enablePushNotificationTokenRegistration     = false,
+                                              enablePaperlessAlertDialogs                 = false,
+                                              enablePaperlessAdverts                      = false,
+                                              enableHtsAdverts                            = false,
+                                              enableAnnualTaxSummaryLink                  = false,
+                                              cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
+                                              cbProofOfEntitlementUrlCy                   = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                              cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
+                                              cbPaymentHistoryUrlCy                       = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
+                                              cbChangeBankAccountUrlCy                    = Some("/cb/cbChangeBankAccountUrlCy"),
                                               enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -266,22 +272,26 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
         URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
         URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
-        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy")
+        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
+        URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
+        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy")
       )
     }
 
     "contain an error entry for tcr when the tcr call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error),
                                               false,
-                                              enablePushNotificationTokenRegistration = false,
-                                              enablePaperlessAlertDialogs             = false,
-                                              enablePaperlessAdverts                  = false,
-                                              enableHtsAdverts                        = false,
-                                              enableAnnualTaxSummaryLink              = false,
-                                              cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
-                                              cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                              cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              enablePushNotificationTokenRegistration     = false,
+                                              enablePaperlessAlertDialogs                 = false,
+                                              enablePaperlessAdverts                      = false,
+                                              enableHtsAdverts                            = false,
+                                              enableAnnualTaxSummaryLink                  = false,
+                                              cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
+                                              cbProofOfEntitlementUrlCy                   = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                              cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
+                                              cbPaymentHistoryUrlCy                       = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
+                                              cbChangeBankAccountUrlCy                    = Some("/cb/cbChangeBankAccountUrlCy"),
                                               enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -305,7 +315,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
         URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
         URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
-        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy")
+        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
+        URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
+        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy")
       )
     }
 
@@ -313,16 +325,19 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       val sut = new StartupServiceImpl[TestF](
         dummyConnector(inAppMessagesResponse = new Exception("message call failed").error),
         false,
-        enablePushNotificationTokenRegistration = false,
-        enablePaperlessAlertDialogs             = false,
-        enablePaperlessAdverts                  = false,
-        enableHtsAdverts                        = false,
-        enableAnnualTaxSummaryLink              = false,
-        cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
-        cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
-        cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-        cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
-        enablePayeCustomerSatisfactionSurveyAdverts = false)
+        enablePushNotificationTokenRegistration     = false,
+        enablePaperlessAlertDialogs                 = false,
+        enablePaperlessAdverts                      = false,
+        enableHtsAdverts                            = false,
+        enableAnnualTaxSummaryLink                  = false,
+        cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
+        cbProofOfEntitlementUrlCy                   = Some("/cb/cbProofOfEntitlementUrlCy"),
+        cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
+        cbPaymentHistoryUrlCy                       = Some("/cb/cbPaymentHistoryUrlCy"),
+        cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
+        cbChangeBankAccountUrlCy                    = Some("/cb/cbChangeBankAccountUrlCy"),
+        enablePayeCustomerSatisfactionSurveyAdverts = false
+      )
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -351,7 +366,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
         URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
         URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
-        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy")
+        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
+        URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
+        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy")
       )
     }
 
@@ -359,15 +376,17 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       val sut =
         new StartupServiceImpl[TestF](dummyConnector(citizenDetailsResponse = new Exception("cid failed").error),
                                       false,
-                                      enablePushNotificationTokenRegistration = false,
-                                      enablePaperlessAlertDialogs             = false,
-                                      enablePaperlessAdverts                  = false,
-                                      enableHtsAdverts                        = false,
-                                      enableAnnualTaxSummaryLink              = false,
-                                      cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
-                                      cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                      cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-                                      cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
+                                      enablePushNotificationTokenRegistration     = false,
+                                      enablePaperlessAlertDialogs                 = false,
+                                      enablePaperlessAdverts                      = false,
+                                      enableHtsAdverts                            = false,
+                                      enableAnnualTaxSummaryLink                  = false,
+                                      cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
+                                      cbProofOfEntitlementUrlCy                   = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                      cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
+                                      cbPaymentHistoryUrlCy                       = Some("/cb/cbPaymentHistoryUrlCy"),
+                                      cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
+                                      cbChangeBankAccountUrlCy                    = Some("/cb/cbChangeBankAccountUrlCy"),
                                       enablePayeCustomerSatisfactionSurveyAdverts = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -391,7 +410,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
         URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
         URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
-        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy")
+        URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
+        URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
+        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy")
       )
     }
   }
@@ -399,38 +420,41 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
   "not contain an entry for URLs that have no value" in {
     val sut =
       new StartupServiceImpl[TestF](dummyConnector(citizenDetailsResponse = new Exception("cid failed").error),
-        false,
-        enablePushNotificationTokenRegistration = false,
-        enablePaperlessAlertDialogs = false,
-        enablePaperlessAdverts = false,
-        enableHtsAdverts = false,
-        enableAnnualTaxSummaryLink = false,
-        cbProofOfEntitlementUrl = Some("/cb/cbProofOfEntitlementUrl"),
-        cbProofOfEntitlementUrlCy = None,
-        cbPaymentHistoryUrl = Some("/cb/cbPaymentHistoryUrl"),
-        cbPaymentHistoryUrlCy = None,
-        enablePayeCustomerSatisfactionSurveyAdverts = false)
+                                    false,
+                                    enablePushNotificationTokenRegistration     = false,
+                                    enablePaperlessAlertDialogs                 = false,
+                                    enablePaperlessAdverts                      = false,
+                                    enableHtsAdverts                            = false,
+                                    enableAnnualTaxSummaryLink                  = false,
+                                    cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
+                                    cbProofOfEntitlementUrlCy                   = None,
+                                    cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
+                                    cbPaymentHistoryUrlCy                       = None,
+                                    cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
+                                    cbChangeBankAccountUrlCy                    = None,
+                                    enablePayeCustomerSatisfactionSurveyAdverts = false)
 
     val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
-    (result \ helpToSave).toOption.value shouldBe htsSuccessResponse
+    (result \ helpToSave).toOption.value         shouldBe htsSuccessResponse
     (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
     (result \ "feature").get
       .as[List[FeatureFlag]] shouldBe List(
-      FeatureFlag("userPanelSignUp", enabled = false),
+      FeatureFlag("userPanelSignUp", enabled                         = false),
       FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
-      FeatureFlag("paperlessAlertDialogs", enabled = false),
-      FeatureFlag("paperlessAdverts", enabled = false),
-      FeatureFlag("htsAdverts", enabled = false),
-      FeatureFlag("annualTaxSummaryLink", enabled = false),
+      FeatureFlag("paperlessAlertDialogs", enabled                   = false),
+      FeatureFlag("paperlessAdverts", enabled                        = false),
+      FeatureFlag("htsAdverts", enabled                              = false),
+      FeatureFlag("annualTaxSummaryLink", enabled                    = false),
       FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
     )
     (result \ messages).toOption.value shouldBe messagesSuccessResponse
-    (result \ user).toOption shouldBe None
+    (result \ user).toOption           shouldBe None
     (result \ "urls").get
       .as[List[URL]] shouldBe List(
       URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
       URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
+      URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl")
     )
   }
 }

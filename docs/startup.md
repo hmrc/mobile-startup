@@ -85,6 +85,15 @@ about the user's help-to-save-account (if they have one) and any global feature 
     {
       "name": "cbPaymentHistoryUrlCy",
       "url": "/"
+    },
+    {
+      "name": "cbChangeBankAccountUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbChangeBankAccountUrlCy",
+      "url": "/"
     }
+  ]
 }
 ```
