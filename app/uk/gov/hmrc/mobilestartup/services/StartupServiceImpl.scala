@@ -52,19 +52,21 @@ object URL {
   * onto the `GenericConnector` trait but that had very little impact beyond the change to the guice wiring.
   */
 class StartupServiceImpl[F[_]] @Inject() (
-  connector:                               GenericConnector[F],
-  userPanelSignUp:                         Boolean,
-  enablePushNotificationTokenRegistration: Boolean,
-  enablePaperlessAlertDialogs:             Boolean,
-  enablePaperlessAdverts:                  Boolean,
-  enableHtsAdverts:                        Boolean,
-  enableAnnualTaxSummaryLink:              Boolean,
-  cbProofOfEntitlementUrl:                 Option[String],
-  cbProofOfEntitlementUrlCy:               Option[String],
-  cbPaymentHistoryUrl:                     Option[String],
-  cbPaymentHistoryUrlCy:                   Option[String],
+  connector:                                   GenericConnector[F],
+  userPanelSignUp:                             Boolean,
+  enablePushNotificationTokenRegistration:     Boolean,
+  enablePaperlessAlertDialogs:                 Boolean,
+  enablePaperlessAdverts:                      Boolean,
+  enableHtsAdverts:                            Boolean,
+  enableAnnualTaxSummaryLink:                  Boolean,
+  cbProofOfEntitlementUrl:                     Option[String],
+  cbProofOfEntitlementUrlCy:                   Option[String],
+  cbPaymentHistoryUrl:                         Option[String],
+  cbPaymentHistoryUrlCy:                       Option[String],
+  cbChangeBankAccountUrl:                      Option[String],
+  cbChangeBankAccountUrlCy:                    Option[String],
   enablePayeCustomerSatisfactionSurveyAdverts: Boolean
-)(implicit F:                              MonadError[F, Throwable])
+)(implicit F:                                  MonadError[F, Throwable])
     extends StartupService[F] {
 
   val logger: Logger = Logger(this.getClass)
@@ -100,7 +102,9 @@ class StartupServiceImpl[F[_]] @Inject() (
         cbProofOfEntitlementUrl.map(URL("cbProofOfEntitlementUrl", _)),
         cbProofOfEntitlementUrlCy.map(URL("cbProofOfEntitlementUrlCy", _)),
         cbPaymentHistoryUrl.map(URL("cbPaymentHistoryUrl", _)),
-        cbPaymentHistoryUrlCy.map(URL("cbPaymentHistoryUrlCy", _))
+        cbPaymentHistoryUrlCy.map(URL("cbPaymentHistoryUrlCy", _)),
+        cbChangeBankAccountUrl.map(URL("cbChangeBankAccountUrl", _)),
+        cbChangeBankAccountUrlCy.map(URL("cbChangeBankAccountUrlCy", _))
       ).filter(_.isDefined)
     )
 

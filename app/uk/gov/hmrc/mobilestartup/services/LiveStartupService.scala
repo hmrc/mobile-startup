@@ -23,19 +23,21 @@ import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import scala.concurrent.{ExecutionContext, Future}
 
 class LiveStartupService @Inject() (
-  connector:                                                                                         GenericConnector[Future],
-  @Named("feature.userPanelSignUp") userPanelSignUp:                                                 Boolean,
-  @Named("feature.enablePushNotificationTokenRegistration") enablePushNotificationTokenRegistration: Boolean,
-  @Named("feature.paperlessAlertDialogs") enablePaperlessAlertDialogs:                               Boolean,
-  @Named("feature.paperlessAdverts") enablePaperlessAdverts:                                         Boolean,
-  @Named("feature.htsAdverts") enableHtsAdverts:                                                     Boolean,
-  @Named("feature.annualTaxSummaryLink") enableAnnualTaxSummaryLink:                                 Boolean,
-  @Named("cbProofOfEntitlementUrl") cbProofOfEntitlementUrl:                                         Option[String],
-  @Named("cbProofOfEntitlementUrlCy") cbProofOfEntitlementUrlCy:                                     Option[String],
-  @Named("cbPaymentHistoryUrl") cbPaymentHistoryUrl:                                                 Option[String],
-  @Named("cbPaymentHistoryUrlCy") cbPaymentHistoryUrlCy:                                             Option[String],
+  connector:                                                                                           GenericConnector[Future],
+  @Named("feature.userPanelSignUp") userPanelSignUp:                                                   Boolean,
+  @Named("feature.enablePushNotificationTokenRegistration") enablePushNotificationTokenRegistration:   Boolean,
+  @Named("feature.paperlessAlertDialogs") enablePaperlessAlertDialogs:                                 Boolean,
+  @Named("feature.paperlessAdverts") enablePaperlessAdverts:                                           Boolean,
+  @Named("feature.htsAdverts") enableHtsAdverts:                                                       Boolean,
+  @Named("feature.annualTaxSummaryLink") enableAnnualTaxSummaryLink:                                   Boolean,
+  @Named("cbProofOfEntitlementUrl") cbProofOfEntitlementUrl:                                           Option[String],
+  @Named("cbProofOfEntitlementUrlCy") cbProofOfEntitlementUrlCy:                                       Option[String],
+  @Named("cbPaymentHistoryUrl") cbPaymentHistoryUrl:                                                   Option[String],
+  @Named("cbPaymentHistoryUrlCy") cbPaymentHistoryUrlCy:                                               Option[String],
+  @Named("cbChangeBankAccountUrl") cbChangeBankAccountUrl:                                             Option[String],
+  @Named("cbChangeBankAccountUrlCy") cbChangeBankAccountUrlCy:                                         Option[String],
   @Named("feature.payeCustomerSatisfactionSurveyAdverts") enablePayeCustomerSatisfactionSurveyAdverts: Boolean
-)(implicit ec:                                                                                       ExecutionContext)
+)(implicit ec:                                                                                         ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
                                        enablePushNotificationTokenRegistration,
@@ -47,4 +49,6 @@ class LiveStartupService @Inject() (
                                        cbProofOfEntitlementUrlCy,
                                        cbPaymentHistoryUrl,
                                        cbPaymentHistoryUrlCy,
+                                       cbChangeBankAccountUrl,
+                                       cbChangeBankAccountUrlCy,
                                        enablePayeCustomerSatisfactionSurveyAdverts)
