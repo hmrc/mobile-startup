@@ -48,6 +48,17 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.paperlessAdverts")
     bindConfigBoolean("feature.htsAdverts")
     bindConfigBoolean("feature.annualTaxSummaryLink")
+
+    bindConfigBoolean("feature.payeCustomerSatisfactionSurveyAdverts")
+    bindConfigBoolean("feature.selfAssessmentCustomerSatisfactionSurveyAdverts")
+    bindConfigBoolean("feature.selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts")
+    bindConfigBoolean("feature.taxCreditsCustomerSatisfactionSurveyAdverts")
+    bindConfigBoolean("feature.helpToSaveCustomerSatisfactionSurveyAdverts")
+    bindConfigBoolean("feature.messagesCustomerSatisfactionSurveyAdverts")
+    bindConfigBoolean("feature.formTrackerCustomerSatisfactionSurveyAdverts")
+    bindConfigBoolean("feature.taxCalculatorCustomerSatisfactionSurveyAdverts")
+    bindConfigBoolean("feature.yourDetailsCustomerSatisfactionSurveyAdverts")
+
     bindConfigBoolean("enableMultipleGGIDCheck")
     bindConfigOptionalString("cbProofOfEntitlementUrl", "url.cbProofOfEntitlementUrl")
     bindConfigOptionalString("cbProofOfEntitlementUrlCy", "url.cbProofOfEntitlementUrlCy")
@@ -55,7 +66,6 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("cbPaymentHistoryUrlCy", "url.cbPaymentHistoryUrlCy")
     bindConfigOptionalString("cbChangeBankAccountUrl", "url.cbChangeBankAccountUrl")
     bindConfigOptionalString("cbChangeBankAccountUrlCy", "url.cbChangeBankAccountUrlCy")
-    bindConfigBoolean("feature.payeCustomerSatisfactionSurveyAdverts")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])

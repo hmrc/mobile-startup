@@ -30,6 +30,38 @@
     {
       "name": "payeCustomerSatisfactionSurveyAdverts",
       "enabled": true
+    },
+    {
+      "name": "selfAssessmentCustomerSatisfactionSurveyAdverts",
+      "enabled": true
+    },
+    {
+      "name": "selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts",
+      "enabled": true
+    },
+    {
+      "name": "taxCreditsCustomerSatisfactionSurveyAdverts",
+      "enabled": true
+    },
+    {
+      "name": "helpToSaveCustomerSatisfactionSurveyAdverts",
+      "enabled": true
+    },
+    {
+      "name": "messagesCustomerSatisfactionSurveyAdverts",
+      "enabled": true
+    },
+    {
+      "name": "formTrackerCustomerSatisfactionSurveyAdverts",
+      "enabled": true
+    },
+    {
+      "name": "taxCalculatorCustomerSatisfactionSurveyAdverts",
+      "enabled": true
+    },
+    {
+      "name": "yourDetailsCustomerSatisfactionSurveyAdverts",
+      "enabled": true
     }
   ],
   "helpToSave": {
