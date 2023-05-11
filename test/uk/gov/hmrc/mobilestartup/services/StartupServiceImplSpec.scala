@@ -192,19 +192,27 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
   "a fully successful response" should {
     "contain success entries for each service" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(),
-                                              userPanelSignUp                             = false,
-                                              enablePushNotificationTokenRegistration     = false,
-                                              enablePaperlessAlertDialogs                 = false,
-                                              enablePaperlessAdverts                      = false,
-                                              enableHtsAdverts                            = false,
-                                              enableAnnualTaxSummaryLink                  = false,
-                                              cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
-                                              cbProofOfEntitlementUrlCy                   = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                              cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                       = Some("/cb/cbPaymentHistoryUrlCy"),
-                                              cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
-                                              cbChangeBankAccountUrlCy                    = Some("/cb/cbChangeBankAccountUrlCy"),
-                                              enablePayeCustomerSatisfactionSurveyAdverts = false)
+                                              userPanelSignUp                                               = false,
+                                              enablePushNotificationTokenRegistration                       = false,
+                                              enablePaperlessAlertDialogs                                   = false,
+                                              enablePaperlessAdverts                                        = false,
+                                              enableHtsAdverts                                              = false,
+                                              enableAnnualTaxSummaryLink                                    = false,
+                                              cbProofOfEntitlementUrl                                       = Some("/cb/cbProofOfEntitlementUrl"),
+                                              cbProofOfEntitlementUrlCy                                     = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                              cbPaymentHistoryUrl                                           = Some("/cb/cbPaymentHistoryUrl"),
+                                              cbPaymentHistoryUrlCy                                         = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
+                                              cbChangeBankAccountUrlCy                                      = Some("/cb/cbChangeBankAccountUrlCy"),
+                                              enablePayeCustomerSatisfactionSurveyAdverts                   = false,
+                                              enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
+                                              enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
+                                              enableTaxCreditsCustomerSatisfactionSurveyAdverts             = false,
+                                              enableHelpToSaveCustomerSatisfactionSurveyAdverts             = false,
+                                              enableMessagesCustomerSatisfactionSurveyAdverts               = false,
+                                              enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
+                                              enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
+                                              enableYourDetailsCustomerSatisfactionSurveyAdverts            = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -212,13 +220,21 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
-        FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
-        FeatureFlag("paperlessAlertDialogs", enabled                   = false),
-        FeatureFlag("paperlessAdverts", enabled                        = false),
-        FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
-        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
+        FeatureFlag("userPanelSignUp", enabled                                         = false),
+        FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
+        FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
+        FeatureFlag("paperlessAdverts", enabled                                        = false),
+        FeatureFlag("htsAdverts", enabled                                              = false),
+        FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled                   = false),
+        FeatureFlag("selfAssessmentCustomerSatisfactionSurveyAdverts", enabled         = false),
+        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
+        FeatureFlag("taxCreditsCustomerSatisfactionSurveyAdverts", enabled             = false),
+        FeatureFlag("helpToSaveCustomerSatisfactionSurveyAdverts", enabled             = false),
+        FeatureFlag("messagesCustomerSatisfactionSurveyAdverts", enabled               = false),
+        FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
+        FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
+        FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -238,18 +254,26 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "not contain an entry for help-to-save when the hts call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error),
                                               false,
-                                              enablePushNotificationTokenRegistration     = false,
-                                              enablePaperlessAlertDialogs                 = false,
-                                              enablePaperlessAdverts                      = false,
-                                              enableHtsAdverts                            = false,
-                                              enableAnnualTaxSummaryLink                  = false,
-                                              cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
-                                              cbProofOfEntitlementUrlCy                   = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                              cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                       = Some("/cb/cbPaymentHistoryUrlCy"),
-                                              cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
-                                              cbChangeBankAccountUrlCy                    = Some("/cb/cbChangeBankAccountUrlCy"),
-                                              enablePayeCustomerSatisfactionSurveyAdverts = false)
+                                              enablePushNotificationTokenRegistration                       = false,
+                                              enablePaperlessAlertDialogs                                   = false,
+                                              enablePaperlessAdverts                                        = false,
+                                              enableHtsAdverts                                              = false,
+                                              enableAnnualTaxSummaryLink                                    = false,
+                                              cbProofOfEntitlementUrl                                       = Some("/cb/cbProofOfEntitlementUrl"),
+                                              cbProofOfEntitlementUrlCy                                     = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                              cbPaymentHistoryUrl                                           = Some("/cb/cbPaymentHistoryUrl"),
+                                              cbPaymentHistoryUrlCy                                         = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
+                                              cbChangeBankAccountUrlCy                                      = Some("/cb/cbChangeBankAccountUrlCy"),
+                                              enablePayeCustomerSatisfactionSurveyAdverts                   = false,
+                                              enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
+                                              enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
+                                              enableTaxCreditsCustomerSatisfactionSurveyAdverts             = false,
+                                              enableHelpToSaveCustomerSatisfactionSurveyAdverts             = false,
+                                              enableMessagesCustomerSatisfactionSurveyAdverts               = false,
+                                              enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
+                                              enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
+                                              enableYourDetailsCustomerSatisfactionSurveyAdverts            = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -257,13 +281,21 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
-        FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
-        FeatureFlag("paperlessAlertDialogs", enabled                   = false),
-        FeatureFlag("paperlessAdverts", enabled                        = false),
-        FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
-        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
+        FeatureFlag("userPanelSignUp", enabled                                         = false),
+        FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
+        FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
+        FeatureFlag("paperlessAdverts", enabled                                        = false),
+        FeatureFlag("htsAdverts", enabled                                              = false),
+        FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled                   = false),
+        FeatureFlag("selfAssessmentCustomerSatisfactionSurveyAdverts", enabled         = false),
+        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
+        FeatureFlag("taxCreditsCustomerSatisfactionSurveyAdverts", enabled             = false),
+        FeatureFlag("helpToSaveCustomerSatisfactionSurveyAdverts", enabled             = false),
+        FeatureFlag("messagesCustomerSatisfactionSurveyAdverts", enabled               = false),
+        FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
+        FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
+        FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -281,18 +313,26 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain an error entry for tcr when the tcr call fails" in {
       val sut = new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error),
                                               false,
-                                              enablePushNotificationTokenRegistration     = false,
-                                              enablePaperlessAlertDialogs                 = false,
-                                              enablePaperlessAdverts                      = false,
-                                              enableHtsAdverts                            = false,
-                                              enableAnnualTaxSummaryLink                  = false,
-                                              cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
-                                              cbProofOfEntitlementUrlCy                   = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                              cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                       = Some("/cb/cbPaymentHistoryUrlCy"),
-                                              cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
-                                              cbChangeBankAccountUrlCy                    = Some("/cb/cbChangeBankAccountUrlCy"),
-                                              enablePayeCustomerSatisfactionSurveyAdverts = false)
+                                              enablePushNotificationTokenRegistration                       = false,
+                                              enablePaperlessAlertDialogs                                   = false,
+                                              enablePaperlessAdverts                                        = false,
+                                              enableHtsAdverts                                              = false,
+                                              enableAnnualTaxSummaryLink                                    = false,
+                                              cbProofOfEntitlementUrl                                       = Some("/cb/cbProofOfEntitlementUrl"),
+                                              cbProofOfEntitlementUrlCy                                     = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                              cbPaymentHistoryUrl                                           = Some("/cb/cbPaymentHistoryUrl"),
+                                              cbPaymentHistoryUrlCy                                         = Some("/cb/cbPaymentHistoryUrlCy"),
+                                              cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
+                                              cbChangeBankAccountUrlCy                                      = Some("/cb/cbChangeBankAccountUrlCy"),
+                                              enablePayeCustomerSatisfactionSurveyAdverts                   = false,
+                                              enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
+                                              enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
+                                              enableTaxCreditsCustomerSatisfactionSurveyAdverts             = false,
+                                              enableHelpToSaveCustomerSatisfactionSurveyAdverts             = false,
+                                              enableMessagesCustomerSatisfactionSurveyAdverts               = false,
+                                              enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
+                                              enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
+                                              enableYourDetailsCustomerSatisfactionSurveyAdverts            = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -300,13 +340,21 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ taxCreditsRenewals).toOption.value shouldBe obj("submissionsState" -> "error")
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
-        FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
-        FeatureFlag("paperlessAlertDialogs", enabled                   = false),
-        FeatureFlag("paperlessAdverts", enabled                        = false),
-        FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
-        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
+        FeatureFlag("userPanelSignUp", enabled                                         = false),
+        FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
+        FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
+        FeatureFlag("paperlessAdverts", enabled                                        = false),
+        FeatureFlag("htsAdverts", enabled                                              = false),
+        FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled                   = false),
+        FeatureFlag("selfAssessmentCustomerSatisfactionSurveyAdverts", enabled         = false),
+        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
+        FeatureFlag("taxCreditsCustomerSatisfactionSurveyAdverts", enabled             = false),
+        FeatureFlag("helpToSaveCustomerSatisfactionSurveyAdverts", enabled             = false),
+        FeatureFlag("messagesCustomerSatisfactionSurveyAdverts", enabled               = false),
+        FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
+        FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
+        FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -325,18 +373,26 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       val sut = new StartupServiceImpl[TestF](
         dummyConnector(inAppMessagesResponse = new Exception("message call failed").error),
         false,
-        enablePushNotificationTokenRegistration     = false,
-        enablePaperlessAlertDialogs                 = false,
-        enablePaperlessAdverts                      = false,
-        enableHtsAdverts                            = false,
-        enableAnnualTaxSummaryLink                  = false,
-        cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
-        cbProofOfEntitlementUrlCy                   = Some("/cb/cbProofOfEntitlementUrlCy"),
-        cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
-        cbPaymentHistoryUrlCy                       = Some("/cb/cbPaymentHistoryUrlCy"),
-        cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
-        cbChangeBankAccountUrlCy                    = Some("/cb/cbChangeBankAccountUrlCy"),
-        enablePayeCustomerSatisfactionSurveyAdverts = false
+        enablePushNotificationTokenRegistration                       = false,
+        enablePaperlessAlertDialogs                                   = false,
+        enablePaperlessAdverts                                        = false,
+        enableHtsAdverts                                              = false,
+        enableAnnualTaxSummaryLink                                    = false,
+        cbProofOfEntitlementUrl                                       = Some("/cb/cbProofOfEntitlementUrl"),
+        cbProofOfEntitlementUrlCy                                     = Some("/cb/cbProofOfEntitlementUrlCy"),
+        cbPaymentHistoryUrl                                           = Some("/cb/cbPaymentHistoryUrl"),
+        cbPaymentHistoryUrlCy                                         = Some("/cb/cbPaymentHistoryUrlCy"),
+        cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
+        cbChangeBankAccountUrlCy                                      = Some("/cb/cbChangeBankAccountUrlCy"),
+        enablePayeCustomerSatisfactionSurveyAdverts                   = false,
+        enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
+        enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
+        enableTaxCreditsCustomerSatisfactionSurveyAdverts             = false,
+        enableHelpToSaveCustomerSatisfactionSurveyAdverts             = false,
+        enableMessagesCustomerSatisfactionSurveyAdverts               = false,
+        enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
+        enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
+        enableYourDetailsCustomerSatisfactionSurveyAdverts            = false
       )
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -345,13 +401,21 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ taxCreditsRenewals).toOption.value shouldBe obj("submissionsState" -> "open")
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
-        FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
-        FeatureFlag("paperlessAlertDialogs", enabled                   = false),
-        FeatureFlag("paperlessAdverts", enabled                        = false),
-        FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
-        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
+        FeatureFlag("userPanelSignUp", enabled                                         = false),
+        FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
+        FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
+        FeatureFlag("paperlessAdverts", enabled                                        = false),
+        FeatureFlag("htsAdverts", enabled                                              = false),
+        FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled                   = false),
+        FeatureFlag("selfAssessmentCustomerSatisfactionSurveyAdverts", enabled         = false),
+        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
+        FeatureFlag("taxCreditsCustomerSatisfactionSurveyAdverts", enabled             = false),
+        FeatureFlag("helpToSaveCustomerSatisfactionSurveyAdverts", enabled             = false),
+        FeatureFlag("messagesCustomerSatisfactionSurveyAdverts", enabled               = false),
+        FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
+        FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
+        FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false)
       )
       (result \ messages).toOption.value shouldBe Json.parse("""{
                                                                |  "paye": [],
@@ -376,18 +440,26 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       val sut =
         new StartupServiceImpl[TestF](dummyConnector(citizenDetailsResponse = new Exception("cid failed").error),
                                       false,
-                                      enablePushNotificationTokenRegistration     = false,
-                                      enablePaperlessAlertDialogs                 = false,
-                                      enablePaperlessAdverts                      = false,
-                                      enableHtsAdverts                            = false,
-                                      enableAnnualTaxSummaryLink                  = false,
-                                      cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
-                                      cbProofOfEntitlementUrlCy                   = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                      cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
-                                      cbPaymentHistoryUrlCy                       = Some("/cb/cbPaymentHistoryUrlCy"),
-                                      cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
-                                      cbChangeBankAccountUrlCy                    = Some("/cb/cbChangeBankAccountUrlCy"),
-                                      enablePayeCustomerSatisfactionSurveyAdverts = false)
+                                      enablePushNotificationTokenRegistration                       = false,
+                                      enablePaperlessAlertDialogs                                   = false,
+                                      enablePaperlessAdverts                                        = false,
+                                      enableHtsAdverts                                              = false,
+                                      enableAnnualTaxSummaryLink                                    = false,
+                                      cbProofOfEntitlementUrl                                       = Some("/cb/cbProofOfEntitlementUrl"),
+                                      cbProofOfEntitlementUrlCy                                     = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                      cbPaymentHistoryUrl                                           = Some("/cb/cbPaymentHistoryUrl"),
+                                      cbPaymentHistoryUrlCy                                         = Some("/cb/cbPaymentHistoryUrlCy"),
+                                      cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
+                                      cbChangeBankAccountUrlCy                                      = Some("/cb/cbChangeBankAccountUrlCy"),
+                                      enablePayeCustomerSatisfactionSurveyAdverts                   = false,
+                                      enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
+                                      enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
+                                      enableTaxCreditsCustomerSatisfactionSurveyAdverts             = false,
+                                      enableHelpToSaveCustomerSatisfactionSurveyAdverts             = false,
+                                      enableMessagesCustomerSatisfactionSurveyAdverts               = false,
+                                      enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
+                                      enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
+                                      enableYourDetailsCustomerSatisfactionSurveyAdverts            = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -395,13 +467,21 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
-        FeatureFlag("userPanelSignUp", enabled                         = false),
-        FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
-        FeatureFlag("paperlessAlertDialogs", enabled                   = false),
-        FeatureFlag("paperlessAdverts", enabled                        = false),
-        FeatureFlag("htsAdverts", enabled                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                    = false),
-        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
+        FeatureFlag("userPanelSignUp", enabled                                         = false),
+        FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
+        FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
+        FeatureFlag("paperlessAdverts", enabled                                        = false),
+        FeatureFlag("htsAdverts", enabled                                              = false),
+        FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled                   = false),
+        FeatureFlag("selfAssessmentCustomerSatisfactionSurveyAdverts", enabled         = false),
+        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
+        FeatureFlag("taxCreditsCustomerSatisfactionSurveyAdverts", enabled             = false),
+        FeatureFlag("helpToSaveCustomerSatisfactionSurveyAdverts", enabled             = false),
+        FeatureFlag("messagesCustomerSatisfactionSurveyAdverts", enabled               = false),
+        FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
+        FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
+        FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption           shouldBe None
@@ -421,18 +501,26 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     val sut =
       new StartupServiceImpl[TestF](dummyConnector(citizenDetailsResponse = new Exception("cid failed").error),
                                     false,
-                                    enablePushNotificationTokenRegistration     = false,
-                                    enablePaperlessAlertDialogs                 = false,
-                                    enablePaperlessAdverts                      = false,
-                                    enableHtsAdverts                            = false,
-                                    enableAnnualTaxSummaryLink                  = false,
-                                    cbProofOfEntitlementUrl                     = Some("/cb/cbProofOfEntitlementUrl"),
-                                    cbProofOfEntitlementUrlCy                   = None,
-                                    cbPaymentHistoryUrl                         = Some("/cb/cbPaymentHistoryUrl"),
-                                    cbPaymentHistoryUrlCy                       = None,
-                                    cbChangeBankAccountUrl                      = Some("/cb/cbChangeBankAccountUrl"),
-                                    cbChangeBankAccountUrlCy                    = None,
-                                    enablePayeCustomerSatisfactionSurveyAdverts = false)
+                                    enablePushNotificationTokenRegistration                       = false,
+                                    enablePaperlessAlertDialogs                                   = false,
+                                    enablePaperlessAdverts                                        = false,
+                                    enableHtsAdverts                                              = false,
+                                    enableAnnualTaxSummaryLink                                    = false,
+                                    cbProofOfEntitlementUrl                                       = Some("/cb/cbProofOfEntitlementUrl"),
+                                    cbProofOfEntitlementUrlCy                                     = None,
+                                    cbPaymentHistoryUrl                                           = Some("/cb/cbPaymentHistoryUrl"),
+                                    cbPaymentHistoryUrlCy                                         = None,
+                                    cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
+                                    cbChangeBankAccountUrlCy                                      = None,
+                                    enablePayeCustomerSatisfactionSurveyAdverts                   = false,
+                                    enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
+                                    enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
+                                    enableTaxCreditsCustomerSatisfactionSurveyAdverts             = false,
+                                    enableHelpToSaveCustomerSatisfactionSurveyAdverts             = false,
+                                    enableMessagesCustomerSatisfactionSurveyAdverts               = false,
+                                    enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
+                                    enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
+                                    enableYourDetailsCustomerSatisfactionSurveyAdverts            = false)
 
     val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -440,13 +528,21 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
     (result \ "feature").get
       .as[List[FeatureFlag]] shouldBe List(
-      FeatureFlag("userPanelSignUp", enabled                         = false),
-      FeatureFlag("enablePushNotificationTokenRegistration", enabled = false),
-      FeatureFlag("paperlessAlertDialogs", enabled                   = false),
-      FeatureFlag("paperlessAdverts", enabled                        = false),
-      FeatureFlag("htsAdverts", enabled                              = false),
-      FeatureFlag("annualTaxSummaryLink", enabled                    = false),
-      FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled   = false)
+      FeatureFlag("userPanelSignUp", enabled                                         = false),
+      FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
+      FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
+      FeatureFlag("paperlessAdverts", enabled                                        = false),
+      FeatureFlag("htsAdverts", enabled                                              = false),
+      FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
+      FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enabled                   = false),
+      FeatureFlag("selfAssessmentCustomerSatisfactionSurveyAdverts", enabled         = false),
+      FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
+      FeatureFlag("taxCreditsCustomerSatisfactionSurveyAdverts", enabled             = false),
+      FeatureFlag("helpToSaveCustomerSatisfactionSurveyAdverts", enabled             = false),
+      FeatureFlag("messagesCustomerSatisfactionSurveyAdverts", enabled               = false),
+      FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
+      FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
+      FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false)
     )
     (result \ messages).toOption.value shouldBe messagesSuccessResponse
     (result \ user).toOption           shouldBe None

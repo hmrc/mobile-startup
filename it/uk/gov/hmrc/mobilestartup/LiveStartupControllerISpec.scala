@@ -112,21 +112,37 @@ class LiveStartupControllerISpec extends BaseISpec {
 
       val response = await(getRequestWithAuthHeaders(url))
 
-      response.status                                                       shouldBe 200
-      (response.json \ "feature" \ 0 \ "name").as[String]                   shouldBe "userPanelSignUp"
-      (response.json \ "feature" \ 0 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 1 \ "name").as[String]                   shouldBe "enablePushNotificationTokenRegistration"
-      (response.json \ "feature" \ 1 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 2 \ "name").as[String]                   shouldBe "paperlessAlertDialogs"
-      (response.json \ "feature" \ 2 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 3 \ "name").as[String]                   shouldBe "paperlessAdverts"
-      (response.json \ "feature" \ 3 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 4 \ "name").as[String]                   shouldBe "htsAdverts"
-      (response.json \ "feature" \ 4 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 5 \ "name").as[String]                   shouldBe "annualTaxSummaryLink"
-      (response.json \ "feature" \ 5 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 6 \ "name").as[String]                   shouldBe "payeCustomerSatisfactionSurveyAdverts"
-      (response.json \ "feature" \ 6 \ "enabled").as[Boolean]               shouldBe true
+      response.status                                         shouldBe 200
+      (response.json \ "feature" \ 0 \ "name").as[String]     shouldBe "userPanelSignUp"
+      (response.json \ "feature" \ 0 \ "enabled").as[Boolean] shouldBe true
+      (response.json \ "feature" \ 1 \ "name").as[String]     shouldBe "enablePushNotificationTokenRegistration"
+      (response.json \ "feature" \ 1 \ "enabled").as[Boolean] shouldBe true
+      (response.json \ "feature" \ 2 \ "name").as[String]     shouldBe "paperlessAlertDialogs"
+      (response.json \ "feature" \ 2 \ "enabled").as[Boolean] shouldBe true
+      (response.json \ "feature" \ 3 \ "name").as[String]     shouldBe "paperlessAdverts"
+      (response.json \ "feature" \ 3 \ "enabled").as[Boolean] shouldBe true
+      (response.json \ "feature" \ 4 \ "name").as[String]     shouldBe "htsAdverts"
+      (response.json \ "feature" \ 4 \ "enabled").as[Boolean] shouldBe true
+      (response.json \ "feature" \ 5 \ "name").as[String]     shouldBe "annualTaxSummaryLink"
+      (response.json \ "feature" \ 5 \ "enabled").as[Boolean] shouldBe true
+      (response.json \ "feature" \ 6 \ "name").as[String]     shouldBe "payeCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 6 \ "enabled").as[Boolean] shouldBe true
+      (response.json \ "feature" \ 7 \ "name").as[String]     shouldBe "selfAssessmentCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 7 \ "enabled").as[Boolean] shouldBe true
+      (response.json \ "feature" \ 8 \ "name").as[String]                   shouldBe "selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 8 \ "enabled").as[Boolean]               shouldBe true
+      (response.json \ "feature" \ 9 \ "name").as[String]                   shouldBe "taxCreditsCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 9 \ "enabled").as[Boolean]               shouldBe true
+      (response.json \ "feature" \ 10 \ "name").as[String]                  shouldBe "helpToSaveCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 10 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 11 \ "name").as[String]                  shouldBe "messagesCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 11 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 12 \ "name").as[String]                  shouldBe "formTrackerCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 12 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 13 \ "name").as[String]                  shouldBe "taxCalculatorCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 13 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "yourDetailsCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 14 \ "enabled").as[Boolean]              shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
       (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"
@@ -144,7 +160,6 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "urls" \ 2 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-history"
       (response.json \ "urls" \ 3 \ "name").as[String]                      shouldBe "cbPaymentHistoryUrlCy"
       (response.json \ "urls" \ 3 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-historyCy"
-
     }
 
     "return 401 when user is not logged in" in {

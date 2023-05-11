@@ -52,21 +52,29 @@ object URL {
   * onto the `GenericConnector` trait but that had very little impact beyond the change to the guice wiring.
   */
 class StartupServiceImpl[F[_]] @Inject() (
-  connector:                                   GenericConnector[F],
-  userPanelSignUp:                             Boolean,
-  enablePushNotificationTokenRegistration:     Boolean,
-  enablePaperlessAlertDialogs:                 Boolean,
-  enablePaperlessAdverts:                      Boolean,
-  enableHtsAdverts:                            Boolean,
-  enableAnnualTaxSummaryLink:                  Boolean,
-  cbProofOfEntitlementUrl:                     Option[String],
-  cbProofOfEntitlementUrlCy:                   Option[String],
-  cbPaymentHistoryUrl:                         Option[String],
-  cbPaymentHistoryUrlCy:                       Option[String],
-  cbChangeBankAccountUrl:                      Option[String],
-  cbChangeBankAccountUrlCy:                    Option[String],
-  enablePayeCustomerSatisfactionSurveyAdverts: Boolean
-)(implicit F:                                  MonadError[F, Throwable])
+  connector:                                                     GenericConnector[F],
+  userPanelSignUp:                                               Boolean,
+  enablePushNotificationTokenRegistration:                       Boolean,
+  enablePaperlessAlertDialogs:                                   Boolean,
+  enablePaperlessAdverts:                                        Boolean,
+  enableHtsAdverts:                                              Boolean,
+  enableAnnualTaxSummaryLink:                                    Boolean,
+  cbProofOfEntitlementUrl:                                       Option[String],
+  cbProofOfEntitlementUrlCy:                                     Option[String],
+  cbPaymentHistoryUrl:                                           Option[String],
+  cbPaymentHistoryUrlCy:                                         Option[String],
+  cbChangeBankAccountUrl:                                        Option[String],
+  cbChangeBankAccountUrlCy:                                      Option[String],
+  enablePayeCustomerSatisfactionSurveyAdverts:                   Boolean,
+  enableSelfAssessmentCustomerSatisfactionSurveyAdverts:         Boolean,
+  enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts: Boolean,
+  enableTaxCreditsCustomerSatisfactionSurveyAdverts:             Boolean,
+  enableHelpToSaveCustomerSatisfactionSurveyAdverts:             Boolean,
+  enableMessagesCustomerSatisfactionSurveyAdverts:               Boolean,
+  enableFormTrackerCustomerSatisfactionSurveyAdverts:            Boolean,
+  enableTaxCalculatorCustomerSatisfactionSurveyAdverts:          Boolean,
+  enableYourDetailsCustomerSatisfactionSurveyAdverts:            Boolean
+)(implicit F:                                                    MonadError[F, Throwable])
     extends StartupService[F] {
 
   val logger: Logger = Logger(this.getClass)
@@ -92,7 +100,15 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("paperlessAdverts", enablePaperlessAdverts),
         FeatureFlag("htsAdverts", enableHtsAdverts),
         FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink),
-        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enablePayeCustomerSatisfactionSurveyAdverts)
+        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enablePayeCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("selfAssessmentCustomerSatisfactionSurveyAdverts", enableSelfAssessmentCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("taxCreditsCustomerSatisfactionSurveyAdverts", enableTaxCreditsCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("helpToSaveCustomerSatisfactionSurveyAdverts", enableHelpToSaveCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("messagesCustomerSatisfactionSurveyAdverts", enableMessagesCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enableFormTrackerCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enableTaxCalculatorCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enableYourDetailsCustomerSatisfactionSurveyAdverts)
       )
     )
 
