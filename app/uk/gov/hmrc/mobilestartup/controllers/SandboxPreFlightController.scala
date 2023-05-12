@@ -16,17 +16,11 @@
 
 package uk.gov.hmrc.mobilestartup.controllers
 import javax.inject.Inject
-import play.api.libs.json.Json.toJson
 import play.api.mvc._
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.api.sandbox.FileResource
-import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
-import uk.gov.hmrc.mobilestartup.services.{AnnualTaxSummaryLink, PreFlightCheckResponse, Utr}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendBaseController
-import eu.timepit.refined.auto._
-import uk.gov.hmrc.auth.core.Enrolments
-import uk.gov.hmrc.mobilestartup.model.Activated
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -49,42 +43,21 @@ class SandboxPreFlightController @Inject() (
           case Some("ERROR-403") => Forbidden
           case Some("ERROR-500") => InternalServerError
           case Some("ROUTE-TO-IV") =>
-            Ok(
-              toJson(
-                PreFlightCheckResponse(
-                  Some(Nino("CS700100A")),
-                  None,
-                  routeToIV  = true,
-                  utr        = None,
-                  enrolments = Enrolments(Set.empty)
-                )
-              )
-            )
+            Ok(readData("preflight.json", routeToIV = "true"))
           case Some("ROUTE-TO-TEN") =>
-            Ok(
-              toJson(
-                PreFlightCheckResponse(
-                  Some(Nino("CS700100A")),
-                  Some(SaUtr("1555369056")),
-                  routeToIV  = false,
-                  utr        = Some(Utr(Some(SaUtr("1555369056")), Activated)),
-                  enrolments = Enrolments(Set.empty),
-                  routeToTEN = true
-                )
-              )
-            )
-          case _ => Ok(toJson(buildPreFlightResponse(false)))
+            Ok(readData("preflight.json", routeToTEN = "true"))
+          case _ => Ok(readData("preflight.json"))
         }
       }
     }
 
-  def buildPreFlightResponse(toIV: Boolean): PreFlightCheckResponse =
-    PreFlightCheckResponse(
-      Some(Nino("CS700100A")),
-      Some(SaUtr("1555369056")),
-      toIV,
-      Some(AnnualTaxSummaryLink("/", "PAYE")),
-      Some(Utr(Some(SaUtr("1555369056")), Activated)),
-      Enrolments(Set.empty)
-    )
+  private def readData(
+    resource:   String,
+    routeToIV:  String = "false",
+    routeToTEN: String = "false"
+  ) =
+    findResource(s"/sandbox/$resource")
+      .getOrElse(throw new IllegalArgumentException("Resource not found!"))
+      .replace("<ROUTE_TO_IV>", routeToIV)
+      .replace("<ROUTE_TO_TEN>", routeToTEN)
 }
