@@ -1,0 +1,13 @@
+{
+  "nino" : "QQ123456C",
+  "routeToIV" : <ROUTE_TO_IV>,
+  "annualTaxSummaryLink" : {
+    "link" : "/",
+    "destination" : "PAYE"
+  },
+  "utr" : {
+    "saUtr" : "1234567890",
+    "status" : "activated"
+  },
+  "routeToTEN" : <ROUTE_TO_TEN>
+}

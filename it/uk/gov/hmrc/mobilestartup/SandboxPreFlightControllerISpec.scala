@@ -20,6 +20,7 @@ import play.api.http.HeaderNames
 import uk.gov.hmrc.mobilestartup.services.AnnualTaxSummaryLink
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 import eu.timepit.refined.auto._
+import play.api.libs.json.Json
 
 class SandboxPreFlightControllerISpec extends BaseISpec {
 
@@ -32,7 +33,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
 
   def withJourneyParam(journeyId: String) = s"journeyId=$journeyId"
 
-  val nino = "CS700100A"
+  val nino = "QQ123456C"
 
   "POST of /preflight-check with X-MOBILE-USER-ID header" should {
 

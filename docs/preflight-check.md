@@ -37,7 +37,11 @@ The response to this service includes a set of account identifiers for the user.
     "status": "activated"
   },
   "routeToIV": false,
-  "routeToTEN": false
+  "routeToTEN": false,
+  "annualTaxSummaryLink" : {
+    "link" : "/",
+    "destination" : "PAYE"
+  }
 }
 ```
 
