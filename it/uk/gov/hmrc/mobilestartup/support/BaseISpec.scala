@@ -71,7 +71,10 @@ class BaseISpec
       "url.cbProofOfEntitlementUrl"                                     -> "/child-benefit/view-proof-entitlement",
       "url.cbProofOfEntitlementUrlCy"                                   -> "/child-benefit/view-proof-entitlementCy",
       "url.cbPaymentHistoryUrl"                                         -> "/child-benefit/view-payment-history",
-      "url.cbPaymentHistoryUrlCy"                                       -> "/child-benefit/view-payment-historyCy"
+      "url.cbPaymentHistoryUrlCy"                                       -> "/child-benefit/view-payment-historyCy",
+      "url.statePensionUrl"                                             -> "/statePensionUrl",
+      "url.niSummaryUrl"                                                -> "/niSummaryUrl",
+      "url.niContributionsUrl"                                          -> "/niContributionsUrl"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)

@@ -66,6 +66,9 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("cbPaymentHistoryUrlCy", "url.cbPaymentHistoryUrlCy")
     bindConfigOptionalString("cbChangeBankAccountUrl", "url.cbChangeBankAccountUrl")
     bindConfigOptionalString("cbChangeBankAccountUrlCy", "url.cbChangeBankAccountUrlCy")
+    bindConfigOptionalString("statePensionUrl", "url.statePensionUrl")
+    bindConfigOptionalString("niSummaryUrl", "url.niSummaryUrl")
+    bindConfigOptionalString("niContributionsUrl", "url.niContributionsUrl")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])

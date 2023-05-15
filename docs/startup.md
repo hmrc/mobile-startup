@@ -93,6 +93,18 @@ about the user's help-to-save-account (if they have one) and any global feature 
     {
       "name": "cbChangeBankAccountUrlCy",
       "url": "/"
+    },
+    {
+      "name": "statePensionUrl",
+      "url": "/"
+    },
+    {
+      "name": "niSummaryUrl",
+      "url": "/"
+    },
+    {
+      "name": "niContributionsUrl",
+      "url": "/"
     }
   ]
 }

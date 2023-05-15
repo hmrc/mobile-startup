@@ -65,6 +65,9 @@ class StartupServiceImpl[F[_]] @Inject() (
   cbPaymentHistoryUrlCy:                                         Option[String],
   cbChangeBankAccountUrl:                                        Option[String],
   cbChangeBankAccountUrlCy:                                      Option[String],
+  statePensionUrl:                                               Option[String],
+  niSummaryUrl:                                                  Option[String],
+  niContributionsUrl:                                            Option[String],
   enablePayeCustomerSatisfactionSurveyAdverts:                   Boolean,
   enableSelfAssessmentCustomerSatisfactionSurveyAdverts:         Boolean,
   enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts: Boolean,
@@ -101,13 +104,16 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("htsAdverts", enableHtsAdverts),
         FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink),
         FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enablePayeCustomerSatisfactionSurveyAdverts),
-        FeatureFlag("selfAssessmentCustomerSatisfactionSurveyAdverts", enableSelfAssessmentCustomerSatisfactionSurveyAdverts),
-        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("selfAssessmentCustomerSatisfactionSurveyAdverts",
+                    enableSelfAssessmentCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts",
+                    enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts),
         FeatureFlag("taxCreditsCustomerSatisfactionSurveyAdverts", enableTaxCreditsCustomerSatisfactionSurveyAdverts),
         FeatureFlag("helpToSaveCustomerSatisfactionSurveyAdverts", enableHelpToSaveCustomerSatisfactionSurveyAdverts),
         FeatureFlag("messagesCustomerSatisfactionSurveyAdverts", enableMessagesCustomerSatisfactionSurveyAdverts),
         FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enableFormTrackerCustomerSatisfactionSurveyAdverts),
-        FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enableTaxCalculatorCustomerSatisfactionSurveyAdverts),
+        FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts",
+                    enableTaxCalculatorCustomerSatisfactionSurveyAdverts),
         FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enableYourDetailsCustomerSatisfactionSurveyAdverts)
       )
     )
@@ -120,7 +126,10 @@ class StartupServiceImpl[F[_]] @Inject() (
         cbPaymentHistoryUrl.map(URL("cbPaymentHistoryUrl", _)),
         cbPaymentHistoryUrlCy.map(URL("cbPaymentHistoryUrlCy", _)),
         cbChangeBankAccountUrl.map(URL("cbChangeBankAccountUrl", _)),
-        cbChangeBankAccountUrlCy.map(URL("cbChangeBankAccountUrlCy", _))
+        cbChangeBankAccountUrlCy.map(URL("cbChangeBankAccountUrlCy", _)),
+        statePensionUrl.map(URL("statePensionUrl", _)),
+        niSummaryUrl.map(URL("niSummaryUrl", _)),
+        niContributionsUrl.map(URL("niContributionsUrl", _))
       ).filter(_.isDefined)
     )
 
