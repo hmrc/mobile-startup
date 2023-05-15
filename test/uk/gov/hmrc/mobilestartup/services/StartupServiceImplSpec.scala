@@ -204,6 +204,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               cbPaymentHistoryUrlCy                                         = Some("/cb/cbPaymentHistoryUrlCy"),
                                               cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
                                               cbChangeBankAccountUrlCy                                      = Some("/cb/cbChangeBankAccountUrlCy"),
+                                              statePensionUrl                                               = Some("/statePensionUrl"),
+                                              niSummaryUrl                                                  = Some("/niSummaryUrl"),
+                                              niContributionsUrl                                            = Some("/niContributionsUrl"),
                                               enablePayeCustomerSatisfactionSurveyAdverts                   = false,
                                               enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
                                               enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
@@ -245,7 +248,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
         URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
         URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
-        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy")
+        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy"),
+        URL("statePensionUrl", "/statePensionUrl"),
+        URL("niSummaryUrl", "/niSummaryUrl"),
+        URL("niContributionsUrl", "/niContributionsUrl")
       )
     }
   }
@@ -265,6 +271,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               cbPaymentHistoryUrlCy                                         = Some("/cb/cbPaymentHistoryUrlCy"),
                                               cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
                                               cbChangeBankAccountUrlCy                                      = Some("/cb/cbChangeBankAccountUrlCy"),
+                                              statePensionUrl                                               = Some("/statePensionUrl"),
+                                              niSummaryUrl                                                  = Some("/niSummaryUrl"),
+                                              niContributionsUrl                                            = Some("/niContributionsUrl"),
                                               enablePayeCustomerSatisfactionSurveyAdverts                   = false,
                                               enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
                                               enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
@@ -306,7 +315,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
         URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
         URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
-        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy")
+        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy"),
+        URL("statePensionUrl", "/statePensionUrl"),
+        URL("niSummaryUrl", "/niSummaryUrl"),
+        URL("niContributionsUrl", "/niContributionsUrl")
       )
     }
 
@@ -324,6 +336,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               cbPaymentHistoryUrlCy                                         = Some("/cb/cbPaymentHistoryUrlCy"),
                                               cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
                                               cbChangeBankAccountUrlCy                                      = Some("/cb/cbChangeBankAccountUrlCy"),
+                                              statePensionUrl                                               = Some("/statePensionUrl"),
+                                              niSummaryUrl                                                  = Some("/niSummaryUrl"),
+                                              niContributionsUrl                                            = Some("/niContributionsUrl"),
                                               enablePayeCustomerSatisfactionSurveyAdverts                   = false,
                                               enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
                                               enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
@@ -365,7 +380,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
         URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
         URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
-        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy")
+        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy"),
+        URL("statePensionUrl", "/statePensionUrl"),
+        URL("niSummaryUrl", "/niSummaryUrl"),
+        URL("niContributionsUrl", "/niContributionsUrl")
       )
     }
 
@@ -384,6 +402,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         cbPaymentHistoryUrlCy                                         = Some("/cb/cbPaymentHistoryUrlCy"),
         cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
         cbChangeBankAccountUrlCy                                      = Some("/cb/cbChangeBankAccountUrlCy"),
+        statePensionUrl                                               = Some("/statePensionUrl"),
+        niSummaryUrl                                                  = Some("/niSummaryUrl"),
+        niContributionsUrl                                            = Some("/niContributionsUrl"),
         enablePayeCustomerSatisfactionSurveyAdverts                   = false,
         enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
         enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
@@ -432,7 +453,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
         URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
         URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
-        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy")
+        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy"),
+        URL("statePensionUrl", "/statePensionUrl"),
+        URL("niSummaryUrl", "/niSummaryUrl"),
+        URL("niContributionsUrl", "/niContributionsUrl")
       )
     }
 
@@ -451,6 +475,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       cbPaymentHistoryUrlCy                                         = Some("/cb/cbPaymentHistoryUrlCy"),
                                       cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
                                       cbChangeBankAccountUrlCy                                      = Some("/cb/cbChangeBankAccountUrlCy"),
+                                      statePensionUrl                                               = Some("/statePensionUrl"),
+                                      niSummaryUrl                                                  = Some("/niSummaryUrl"),
+                                      niContributionsUrl                                            = Some("/niContributionsUrl"),
                                       enablePayeCustomerSatisfactionSurveyAdverts                   = false,
                                       enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
                                       enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
@@ -492,7 +519,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
         URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
         URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
-        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy")
+        URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy"),
+        URL("statePensionUrl", "/statePensionUrl"),
+        URL("niSummaryUrl", "/niSummaryUrl"),
+        URL("niContributionsUrl", "/niContributionsUrl")
       )
     }
   }
@@ -512,6 +542,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     cbPaymentHistoryUrlCy                                         = None,
                                     cbChangeBankAccountUrl                                        = Some("/cb/cbChangeBankAccountUrl"),
                                     cbChangeBankAccountUrlCy                                      = None,
+                                    statePensionUrl                                               = Some("/statePensionUrl"),
+                                    niSummaryUrl                                                  = Some("/niSummaryUrl"),
+                                    niContributionsUrl                                            = Some("/niContributionsUrl"),
                                     enablePayeCustomerSatisfactionSurveyAdverts                   = false,
                                     enableSelfAssessmentCustomerSatisfactionSurveyAdverts         = false,
                                     enableSelfAssessmentPaymentsCustomerSatisfactionSurveyAdverts = false,
@@ -550,7 +583,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       .as[List[URL]] shouldBe List(
       URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
       URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
-      URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl")
+      URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
+      URL("statePensionUrl", "/statePensionUrl"),
+      URL("niSummaryUrl", "/niSummaryUrl"),
+      URL("niContributionsUrl", "/niContributionsUrl")
     )
   }
 }

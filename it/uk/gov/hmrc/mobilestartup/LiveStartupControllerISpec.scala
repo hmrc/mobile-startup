@@ -129,7 +129,8 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 6 \ "enabled").as[Boolean] shouldBe true
       (response.json \ "feature" \ 7 \ "name").as[String]     shouldBe "selfAssessmentCustomerSatisfactionSurveyAdverts"
       (response.json \ "feature" \ 7 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 8 \ "name").as[String]                   shouldBe "selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 8 \ "name")
+        .as[String]                                                         shouldBe "selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts"
       (response.json \ "feature" \ 8 \ "enabled").as[Boolean]               shouldBe true
       (response.json \ "feature" \ 9 \ "name").as[String]                   shouldBe "taxCreditsCustomerSatisfactionSurveyAdverts"
       (response.json \ "feature" \ 9 \ "enabled").as[Boolean]               shouldBe true
@@ -160,6 +161,12 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "urls" \ 2 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-history"
       (response.json \ "urls" \ 3 \ "name").as[String]                      shouldBe "cbPaymentHistoryUrlCy"
       (response.json \ "urls" \ 3 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-historyCy"
+      (response.json \ "urls" \ 4 \ "name").as[String]                      shouldBe "statePensionUrl"
+      (response.json \ "urls" \ 4 \ "url").as[String]                       shouldBe "/statePensionUrl"
+      (response.json \ "urls" \ 5 \ "name").as[String]                      shouldBe "niSummaryUrl"
+      (response.json \ "urls" \ 5 \ "url").as[String]                       shouldBe "/niSummaryUrl"
+      (response.json \ "urls" \ 6 \ "name").as[String]                      shouldBe "niContributionsUrl"
+      (response.json \ "urls" \ 6 \ "url").as[String]                       shouldBe "/niContributionsUrl"
     }
 
     "return 401 when user is not logged in" in {
