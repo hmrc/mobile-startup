@@ -33,7 +33,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
 
   def withJourneyParam(journeyId: String) = s"journeyId=$journeyId"
 
-  val nino = "QQ123456C"
+  val nino = "CS700100A"
 
   "POST of /preflight-check with X-MOBILE-USER-ID header" should {
 
