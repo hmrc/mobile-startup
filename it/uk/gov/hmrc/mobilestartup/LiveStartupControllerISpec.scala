@@ -144,7 +144,7 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 13 \ "enabled").as[Boolean]              shouldBe true
       (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "yourDetailsCustomerSatisfactionSurveyAdverts"
       (response.json \ "feature" \ 14 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 15 \ "name").as[String]                  shouldBe "findMyNinoAddToAppleWallet"
+      (response.json \ "feature" \ 15 \ "name").as[String]                  shouldBe "findMyNinoAddToWallet"
       (response.json \ "feature" \ 15 \ "enabled").as[Boolean]              shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"

@@ -216,7 +216,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
                                               enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
                                               enableYourDetailsCustomerSatisfactionSurveyAdverts            = false,
-                                              findMyNinoAddToAppleWallet                                     = false)
+                                              findMyNinoAddToWallet                                          = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -239,7 +239,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
         FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
         FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false),
-        FeatureFlag("findMyNinoAddToAppleWallet", enabled                                    = false)
+        FeatureFlag("findMyNinoAddToWallet", enabled                                    = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -285,7 +285,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
                                               enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
                                               enableYourDetailsCustomerSatisfactionSurveyAdverts            = false,
-                                              findMyNinoAddToAppleWallet                                     = false)
+                                              findMyNinoAddToWallet                                          = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -308,7 +308,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
         FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
         FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false),
-        FeatureFlag("findMyNinoAddToAppleWallet", enabled                               = false)
+        FeatureFlag("findMyNinoAddToWallet", enabled                                    = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -352,7 +352,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
                                               enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
                                               enableYourDetailsCustomerSatisfactionSurveyAdverts            = false,
-                                              findMyNinoAddToAppleWallet                                     = false)
+                                              findMyNinoAddToWallet                                          = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -375,7 +375,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
         FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
         FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false),
-        FeatureFlag("findMyNinoAddToAppleWallet", enabled                               = false)
+        FeatureFlag("findMyNinoAddToWallet", enabled                                    = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -420,7 +420,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
         enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
         enableYourDetailsCustomerSatisfactionSurveyAdverts            = false,
-        findMyNinoAddToAppleWallet                                     = false
+        findMyNinoAddToWallet                                          = false
       )
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -444,7 +444,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
         FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
         FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false),
-        FeatureFlag("findMyNinoAddToAppleWallet", enabled                               = false)
+        FeatureFlag("findMyNinoAddToWallet", enabled                                    = false)
       )
       (result \ messages).toOption.value shouldBe Json.parse("""{
                                                                |  "paye": [],
@@ -495,7 +495,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
                                       enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
                                       enableYourDetailsCustomerSatisfactionSurveyAdverts            = false,
-                                      findMyNinoAddToAppleWallet                                     = false)
+                                      findMyNinoAddToWallet                                          = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -518,7 +518,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
         FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
         FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false),
-        FeatureFlag("findMyNinoAddToAppleWallet", enabled                               = false)
+        FeatureFlag("findMyNinoAddToWallet", enabled                                    = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption           shouldBe None
@@ -564,7 +564,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     enableFormTrackerCustomerSatisfactionSurveyAdverts            = false,
                                     enableTaxCalculatorCustomerSatisfactionSurveyAdverts          = false,
                                     enableYourDetailsCustomerSatisfactionSurveyAdverts            = false,
-                                    findMyNinoAddToAppleWallet                                     = false)
+                                    findMyNinoAddToWallet                                          = false)
 
     val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -587,7 +587,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       FeatureFlag("formTrackerCustomerSatisfactionSurveyAdverts", enabled            = false),
       FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts", enabled          = false),
       FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enabled            = false),
-      FeatureFlag("findMyNinoAddToAppleWallet", enabled                               = false)
+      FeatureFlag("findMyNinoAddToWallet", enabled                                    = false)
     )
     (result \ messages).toOption.value shouldBe messagesSuccessResponse
     (result \ user).toOption           shouldBe None

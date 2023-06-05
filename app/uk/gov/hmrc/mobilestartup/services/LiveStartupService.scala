@@ -48,7 +48,7 @@ class LiveStartupService @Inject() (
   @Named("feature.formTrackerCustomerSatisfactionSurveyAdverts") enableFormTrackerCustomerSatisfactionSurveyAdverts:                       Boolean,
   @Named("feature.taxCalculatorCustomerSatisfactionSurveyAdverts") enableTaxCalculatorCustomerSatisfactionSurveyAdverts:                   Boolean,
   @Named("feature.yourDetailsCustomerSatisfactionSurveyAdverts") enableYourDetailsCustomerSatisfactionSurveyAdverts:                       Boolean,
-  @Named("feature.findMyNinoAddToAppleWallet") findMyNinoAddToAppleWallet:                                                                   Boolean
+  @Named("feature.findMyNinoAddToWallet") findMyNinoAddToWallet:                                                                             Boolean
 )(implicit ec:                                                                                                                             ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -75,4 +75,4 @@ class LiveStartupService @Inject() (
                                        enableFormTrackerCustomerSatisfactionSurveyAdverts,
                                        enableTaxCalculatorCustomerSatisfactionSurveyAdverts,
                                        enableYourDetailsCustomerSatisfactionSurveyAdverts,
-                                       findMyNinoAddToAppleWallet)
+                                       findMyNinoAddToWallet)
