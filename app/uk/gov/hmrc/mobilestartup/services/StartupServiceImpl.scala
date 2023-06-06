@@ -116,7 +116,7 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("taxCalculatorCustomerSatisfactionSurveyAdverts",
                     enableTaxCalculatorCustomerSatisfactionSurveyAdverts),
         FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enableYourDetailsCustomerSatisfactionSurveyAdverts),
-        FeatureFlag("findMyNinoAddToAppleWallet", findMyNinoAddToWallet)
+        FeatureFlag("findMyNinoAddToWallet", findMyNinoAddToWallet)
       )
     )
 
