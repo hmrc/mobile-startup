@@ -58,7 +58,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.formTrackerCustomerSatisfactionSurveyAdverts")
     bindConfigBoolean("feature.taxCalculatorCustomerSatisfactionSurveyAdverts")
     bindConfigBoolean("feature.yourDetailsCustomerSatisfactionSurveyAdverts")
-    bindConfigBoolean("feature.findMyNinoAddToAppleWallet")
+    bindConfigBoolean("feature.findMyNinoAddToWallet")
     bindConfigBoolean("enableMultipleGGIDCheck")
     bindConfigOptionalString("cbProofOfEntitlementUrl", "url.cbProofOfEntitlementUrl")
     bindConfigOptionalString("cbProofOfEntitlementUrlCy", "url.cbProofOfEntitlementUrlCy")

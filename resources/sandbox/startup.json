@@ -64,7 +64,7 @@
       "enabled": true
     },
     {
-      "name" : "findMyNinoAddToAppleWallet",
+      "name" : "findMyNinoAddToWallet",
       "enabled" : true
     }
   ],
