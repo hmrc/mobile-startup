@@ -163,13 +163,20 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "urls" \ 2 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-history"
       (response.json \ "urls" \ 3 \ "name").as[String]                      shouldBe "cbPaymentHistoryUrlCy"
       (response.json \ "urls" \ 3 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-historyCy"
-      (response.json \ "urls" \ 4 \ "name").as[String]                      shouldBe "statePensionUrl"
-      (response.json \ "urls" \ 4 \ "url").as[String]                       shouldBe "/statePensionUrl"
-      (response.json \ "urls" \ 5 \ "name").as[String]                      shouldBe "niSummaryUrl"
-      (response.json \ "urls" \ 5 \ "url").as[String]                       shouldBe "/niSummaryUrl"
-      (response.json \ "urls" \ 6 \ "name").as[String]                      shouldBe "niContributionsUrl"
-      (response.json \ "urls" \ 6 \ "url").as[String]                       shouldBe "/niContributionsUrl"
-    }
+      (response.json \ "urls" \ 4 \ "name").as[String]                      shouldBe "cbHomeUrl"
+      (response.json \ "urls" \ 4 \ "url").as[String]                       shouldBe "/child-benefit/home"
+      (response.json \ "urls" \ 5 \ "name").as[String]                      shouldBe "cbHomeUrlCy"
+      (response.json \ "urls" \ 5 \ "url").as[String]                       shouldBe "/child-benefit/homeCy"
+      (response.json \ "urls" \ 6 \ "name").as[String]                      shouldBe "cbHowToClaimUrl"
+      (response.json \ "urls" \ 6 \ "url").as[String]                       shouldBe "/child-benefit/how-to-claim"
+      (response.json \ "urls" \ 7 \ "name").as[String]                      shouldBe "cbHowToClaimUrlCy"
+      (response.json \ "urls" \ 7 \ "url").as[String]                       shouldBe "/child-benefit/how-to-claimCy"
+      (response.json \ "urls" \ 8 \ "name").as[String]                      shouldBe "statePensionUrl"
+      (response.json \ "urls" \ 8 \ "url").as[String]                       shouldBe "/statePensionUrl"
+      (response.json \ "urls" \ 9 \ "name").as[String]                      shouldBe "niSummaryUrl"
+      (response.json \ "urls" \ 9 \ "url").as[String]                       shouldBe "/niSummaryUrl"
+      (response.json \ "urls" \ 10 \ "name").as[String]                     shouldBe "niContributionsUrl"
+      (response.json \ "urls" \ 10 \ "url").as[String]                      shouldBe "/niContributionsUrl"}
 
     "return 401 when user is not logged in" in {
       userIsNotLoggedIn()
