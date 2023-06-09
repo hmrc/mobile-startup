@@ -148,6 +148,22 @@
       "url": "/"
     },
     {
+      "name": "cbHomeUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbHomeUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "cbHowToClaimUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbHowToClaimUrlCy",
+      "url": "/"
+    },
+    {
       "name": "statePensionUrl",
       "url": "/"
     },

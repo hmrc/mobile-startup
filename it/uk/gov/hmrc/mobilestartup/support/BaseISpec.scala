@@ -73,6 +73,10 @@ class BaseISpec
       "url.cbProofOfEntitlementUrlCy"                                   -> "/child-benefit/view-proof-entitlementCy",
       "url.cbPaymentHistoryUrl"                                         -> "/child-benefit/view-payment-history",
       "url.cbPaymentHistoryUrlCy"                                       -> "/child-benefit/view-payment-historyCy",
+      "url.cbHomeUrl"                                                   -> "/child-benefit/home",
+      "url.cbHomeUrlCy"                                                 -> "/child-benefit/homeCy",
+      "url.cbHowToClaimUrl"                                             -> "/child-benefit/how-to-claim",
+      "url.cbHowToClaimUrlCy"                                           -> "/child-benefit/how-to-claimCy",
       "url.statePensionUrl"                                             -> "/statePensionUrl",
       "url.niSummaryUrl"                                                -> "/niSummaryUrl",
       "url.niContributionsUrl"                                          -> "/niContributionsUrl"

@@ -105,6 +105,22 @@ about the user's help-to-save-account (if they have one) and any global feature 
     {
       "name": "niContributionsUrl",
       "url": "/"
+    },
+    {
+      "name": "cbHomeUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbHomeUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "cbHowToClaimUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbHowToClaimUrlCy",
+      "url": "/"
     }
   ]
 }
