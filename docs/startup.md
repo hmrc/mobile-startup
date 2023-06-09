@@ -115,8 +115,7 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "url": "/"
     },
     {
-      "name": "      "url.cbHomeUrlCy"                                                 -> "/child-benefit/home",
-      ",
+      "name": "cbHowToClaimUrl",
       "url": "/"
     },
     {
