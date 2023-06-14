@@ -69,6 +69,7 @@ class BaseISpec
       "feature.taxCalculatorCustomerSatisfactionSurveyAdverts"          -> true,
       "feature.yourDetailsCustomerSatisfactionSurveyAdverts"            -> true,
       "feature.findMyNinoAddToWallet"                                    -> true,
+      "feature.payeYourEmploymentIncomeChart"                           -> true,
       "url.cbProofOfEntitlementUrl"                                     -> "/child-benefit/view-proof-entitlement",
       "url.cbProofOfEntitlementUrlCy"                                   -> "/child-benefit/view-proof-entitlementCy",
       "url.cbPaymentHistoryUrl"                                         -> "/child-benefit/view-payment-history",

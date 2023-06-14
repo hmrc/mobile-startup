@@ -66,6 +66,10 @@
     {
       "name" : "findMyNinoAddToWallet",
       "enabled" : true
+    },
+    {
+      "name" : "payeYourEmploymentIncomeChart",
+      "enabled" : true
     }
   ],
   "helpToSave": {
