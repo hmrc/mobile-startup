@@ -51,7 +51,7 @@ class BaseISpec
       "microservice.services.enrolment-store-proxy.port"                -> wireMockPort,
       "auditing.consumer.baseUri.port"                                  -> wireMockPort,
       "feature.userPanelSignUp"                                         -> true,
-      "feature.enablePushNotificationTokenRegistration"                 -> true,
+      "feature.enablePushNotificationTokenRegistration"                  -> true,
       "feature.helpToSave.enableBadge"                                  -> true,
       "feature.paperlessAlertDialogs"                                   -> true,
       "feature.paperlessAdverts"                                        -> true,
