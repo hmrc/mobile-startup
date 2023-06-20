@@ -168,6 +168,22 @@
       "url": "/"
     },
     {
+      "name": "cbFullTimeEducationUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbFullTimeEducationUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "cbWhatChangesUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbWhatChangesUrlCy",
+      "url": "/"
+    },
+    {
       "name": "statePensionUrl",
       "url": "/"
     },
