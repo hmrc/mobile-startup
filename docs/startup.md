@@ -121,6 +121,22 @@ about the user's help-to-save-account (if they have one) and any global feature 
     {
       "name": "cbHowToClaimUrlCy",
       "url": "/"
+    },
+    {
+      "name": "cbFullTimeEducationUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbFullTimeEducationUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "cbWhatChangesUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbWhatChangesUrlCy",
+      "url": "/"
     }
   ]
 }
