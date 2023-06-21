@@ -82,7 +82,7 @@ class StartupServiceImpl[F[_]] @Inject() (
   enableTaxCalculatorCustomerSatisfactionSurveyAdverts:          Boolean,
   enableYourDetailsCustomerSatisfactionSurveyAdverts:            Boolean,
   findMyNinoAddToWallet:                                          Boolean,
-  payeYourEmploymentIncomeChart:                                 Boolean
+  disableYourEmploymentIncomeChart:                              Boolean
 )(implicit F:                                                    MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -122,7 +122,7 @@ class StartupServiceImpl[F[_]] @Inject() (
                     enableTaxCalculatorCustomerSatisfactionSurveyAdverts),
         FeatureFlag("yourDetailsCustomerSatisfactionSurveyAdverts", enableYourDetailsCustomerSatisfactionSurveyAdverts),
         FeatureFlag("findMyNinoAddToWallet", findMyNinoAddToWallet),
-        FeatureFlag("payeYourEmploymentIncomeChart", payeYourEmploymentIncomeChart)
+        FeatureFlag("disableYourEmploymentIncomeChart", disableYourEmploymentIncomeChart)
       )
     )
 
