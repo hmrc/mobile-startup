@@ -53,7 +53,7 @@ class LiveStartupService @Inject() (
   @Named("feature.taxCalculatorCustomerSatisfactionSurveyAdverts") enableTaxCalculatorCustomerSatisfactionSurveyAdverts:                   Boolean,
   @Named("feature.yourDetailsCustomerSatisfactionSurveyAdverts") enableYourDetailsCustomerSatisfactionSurveyAdverts:                       Boolean,
   @Named("feature.findMyNinoAddToWallet") findMyNinoAddToWallet:                                                                             Boolean,
-  @Named("feature.payeYourEmploymentIncomeChart") payeYourEmploymentIncomeChart:                                                           Boolean
+  @Named("feature.disableYourEmploymentIncomeChart") disableYourEmploymentIncomeChart:                                                           Boolean
 )(implicit ec:                                                                                                                             ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -85,4 +85,4 @@ class LiveStartupService @Inject() (
                                        enableTaxCalculatorCustomerSatisfactionSurveyAdverts,
                                        enableYourDetailsCustomerSatisfactionSurveyAdverts,
                                        findMyNinoAddToWallet,
-                                       payeYourEmploymentIncomeChart)
+                                       disableYourEmploymentIncomeChart)
