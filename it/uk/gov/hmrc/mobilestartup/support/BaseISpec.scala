@@ -78,6 +78,10 @@ class BaseISpec
       "url.cbHomeUrlCy"                                                 -> "/child-benefit/homeCy",
       "url.cbHowToClaimUrl"                                             -> "/child-benefit/how-to-claim",
       "url.cbHowToClaimUrlCy"                                           -> "/child-benefit/how-to-claimCy",
+      "url.cbFullTimeEducationUrl"                                      -> "/gov-uk/child-benefit-16-19",
+      "url.cbFullTimeEducationUrlCy"                                    -> "/gov-uk/child-benefit-16-19Cy",
+      "url.cbWhatChangesUrl"                                            -> "/personal-account/child-benefit-forms",
+      "url.cbWhatChangesUrlCy"                                          -> "/personal-account/child-benefit-formsCy",
       "url.statePensionUrl"                                             -> "/statePensionUrl",
       "url.niSummaryUrl"                                                -> "/niSummaryUrl",
       "url.niContributionsUrl"                                          -> "/niContributionsUrl"
