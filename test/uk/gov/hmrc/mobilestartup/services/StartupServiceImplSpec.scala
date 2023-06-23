@@ -252,7 +252,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
-      (result \ user).toOption.value     shouldBe userExpectedResponse
+      (result \ user).toOption     shouldBe None
       (result \ "urls").get
         .as[List[URL]] shouldBe List(
         URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
@@ -339,7 +339,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
-      (result \ user).toOption.value     shouldBe userExpectedResponse
+      (result \ user).toOption     shouldBe None
       (result \ "urls").get
         .as[List[URL]] shouldBe List(
         URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
@@ -424,7 +424,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
-      (result \ user).toOption.value     shouldBe userExpectedResponse
+      (result \ user).toOption     shouldBe None
       (result \ "urls").get
         .as[List[URL]] shouldBe List(
         URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
@@ -517,7 +517,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                                                |  "tcp": []
                                                                |}
                                                                |""".stripMargin)
-      (result \ user).toOption.value     shouldBe userExpectedResponse
+      (result \ user).toOption     shouldBe None
       (result \ "urls").get
         .as[List[URL]] shouldBe List(
         URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
