@@ -206,28 +206,27 @@ class StartupServiceImpl[F[_]] @Inject() (
                             |""".stripMargin))
       }
 
-  private def citizenDetailsStartup(nino: String)(implicit hc: HeaderCarrier): F[Option[JsValue]] = F.pure(None)
-  // *** REMOVED FOR NPS OUTAGE - REVERT WHEN OUTAGE FINISHED ***
-//    connector
-//      .doGet("citizen-details", s"/citizen-details/$nino/designatory-details", hc)
-//      .map { p =>
-//        val person = p.as[PersonDetails]
-//        Option(
-//          Json.toJson(
-//            new JsObject(Map("name" -> Json.toJson(person.person.shortName), "address" -> Json.toJson(person.address)))
-//          )
-//        )
-//      }
-//      .recover {
-//        case e: Upstream4xxResponse if e.upstreamResponseCode == LOCKED =>
-//          logger.info("Person details are hidden")
-//          None
-//        case e: NotFoundException =>
-//          logger.info(s"No details found for nino '$nino'")
-//          None
-//        case _ =>
-//          logger.info(s"CID call failed for nino '$nino'")
-//          None
-//      }
+  private def citizenDetailsStartup(nino: String)(implicit hc: HeaderCarrier): F[Option[JsValue]] =
+    connector
+      .doGet("citizen-details", s"/citizen-details/$nino/designatory-details", hc)
+      .map { p =>
+        val person = p.as[PersonDetails]
+        Option(
+          Json.toJson(
+            new JsObject(Map("name" -> Json.toJson(person.person.shortName), "address" -> Json.toJson(person.address)))
+          )
+        )
+      }
+      .recover {
+        case e: Upstream4xxResponse if e.upstreamResponseCode == LOCKED =>
+          logger.info("Person details are hidden")
+          None
+        case e: NotFoundException =>
+          logger.info(s"No details found for nino '$nino'")
+          None
+        case _ =>
+          logger.info(s"CID call failed for nino '$nino'")
+          None
+      }
 
 }
