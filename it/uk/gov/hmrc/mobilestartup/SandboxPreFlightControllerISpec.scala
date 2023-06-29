@@ -21,19 +21,18 @@ import uk.gov.hmrc.mobilestartup.services.AnnualTaxSummaryLink
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 import eu.timepit.refined.auto._
 import play.api.libs.json.Json
+import uk.gov.hmrc.domain.Nino
 
 class SandboxPreFlightControllerISpec extends BaseISpec {
 
   private val headerThatSucceeds =
     Seq(HeaderNames.ACCEPT -> "application/vnd.hmrc.1.0+json", "X-MOBILE-USER-ID" -> "208606423740")
 
-  private val journeyId = "f7a5d556-9f34-47cb-9d84-7e904f2fe704"
-
   private def withSandboxControl(value: String) = Seq("SANDBOX-CONTROL" -> value)
 
   def withJourneyParam(journeyId: String) = s"journeyId=$journeyId"
 
-  val nino = "CS700100A"
+  override val nino = Nino("CS700100A")
 
   "POST of /preflight-check with X-MOBILE-USER-ID header" should {
 
@@ -42,7 +41,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
         await(wsUrl(s"/preflight-check?${withJourneyParam(journeyId)}").addHttpHeaders(headerThatSucceeds: _*).get)
 
       response.status                                                   shouldBe 200
-      (response.json \ "nino").as[String]                               shouldBe nino
+      (response.json \ "nino").as[String]                               shouldBe nino.nino
       (response.json \ "routeToIV").as[Boolean]                         shouldBe false
       (response.json \ "routeToTEN").as[Boolean]                        shouldBe false
       (response.json \ "annualTaxSummaryLink").as[AnnualTaxSummaryLink] shouldBe AnnualTaxSummaryLink("/", "PAYE")
@@ -56,7 +55,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       )
 
       response.status                           shouldBe 200
-      (response.json \ "nino").as[String]       shouldBe nino
+      (response.json \ "nino").as[String]       shouldBe nino.nino
       (response.json \ "routeToIV").as[Boolean] shouldBe true
     }
 
@@ -68,7 +67,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       )
 
       response.status                            shouldBe 200
-      (response.json \ "nino").as[String]        shouldBe nino
+      (response.json \ "nino").as[String]        shouldBe nino.nino
       (response.json \ "routeToIV").as[Boolean]  shouldBe false
       (response.json \ "routeToTEN").as[Boolean] shouldBe true
     }

@@ -20,17 +20,14 @@ import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, stubFor,
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.libs.json.JsValue
 import play.api.libs.ws.WSResponse
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 import uk.gov.hmrc.mobilestartup.stubs.AuthStub._
 import uk.gov.hmrc.mobilestartup.stubs.AuditStub._
-import eu.timepit.refined.auto._
 
 import scala.concurrent.Future
 
 class LiveStartupControllerISpec extends BaseISpec {
-  val journeyId: JourneyId = "b6ef25bc-8f5e-49c8-98c5-f039f39e4557"
-  val url:       String    = s"/startup?journeyId=$journeyId"
+  override val url: String = s"/startup?journeyId=$journeyId"
 
   def getRequestWithAuthHeaders(url: String): Future[WSResponse] =
     wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader).get()
@@ -157,36 +154,36 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "user" \ "address" \ "line5").as[String]             shouldBe "55555"
       (response.json \ "user" \ "address" \ "postcode").as[String]          shouldBe "98765"
       (response.json \ "user" \ "address" \ "country").as[String]           shouldBe "Test Country"
-      (response.json \ "urls" \ 0 \ "name").as[String]  shouldBe "cbProofOfEntitlementUrl"
-      (response.json \ "urls" \ 0 \ "url").as[String]   shouldBe "/child-benefit/view-proof-entitlement"
-      (response.json \ "urls" \ 1 \ "name").as[String]  shouldBe "cbProofOfEntitlementUrlCy"
-      (response.json \ "urls" \ 1 \ "url").as[String]   shouldBe "/child-benefit/view-proof-entitlementCy"
-      (response.json \ "urls" \ 2 \ "name").as[String]  shouldBe "cbPaymentHistoryUrl"
-      (response.json \ "urls" \ 2 \ "url").as[String]   shouldBe "/child-benefit/view-payment-history"
-      (response.json \ "urls" \ 3 \ "name").as[String]  shouldBe "cbPaymentHistoryUrlCy"
-      (response.json \ "urls" \ 3 \ "url").as[String]   shouldBe "/child-benefit/view-payment-historyCy"
-      (response.json \ "urls" \ 4 \ "name").as[String]  shouldBe "cbHomeUrl"
-      (response.json \ "urls" \ 4 \ "url").as[String]   shouldBe "/child-benefit/home"
-      (response.json \ "urls" \ 5 \ "name").as[String]  shouldBe "cbHomeUrlCy"
-      (response.json \ "urls" \ 5 \ "url").as[String]   shouldBe "/child-benefit/homeCy"
-      (response.json \ "urls" \ 6 \ "name").as[String]  shouldBe "cbHowToClaimUrl"
-      (response.json \ "urls" \ 6 \ "url").as[String]   shouldBe "/child-benefit/how-to-claim"
-      (response.json \ "urls" \ 7 \ "name").as[String]  shouldBe "cbHowToClaimUrlCy"
-      (response.json \ "urls" \ 7 \ "url").as[String]   shouldBe "/child-benefit/how-to-claimCy"
-      (response.json \ "urls" \ 8 \ "name").as[String]  shouldBe "cbFullTimeEducationUrl"
-      (response.json \ "urls" \ 8 \ "url").as[String]   shouldBe "/gov-uk/child-benefit-16-19"
-      (response.json \ "urls" \ 9 \ "name").as[String]  shouldBe "cbFullTimeEducationUrlCy"
-      (response.json \ "urls" \ 9 \ "url").as[String]   shouldBe "/gov-uk/child-benefit-16-19Cy"
-      (response.json \ "urls" \ 10 \ "name").as[String] shouldBe "cbWhatChangesUrl"
-      (response.json \ "urls" \ 10 \ "url").as[String]  shouldBe "/personal-account/child-benefit-forms"
-      (response.json \ "urls" \ 11 \ "name").as[String] shouldBe "cbWhatChangesUrlCy"
-      (response.json \ "urls" \ 11 \ "url").as[String]  shouldBe "/personal-account/child-benefit-formsCy"
-      (response.json \ "urls" \ 12 \ "name").as[String] shouldBe "statePensionUrl"
-      (response.json \ "urls" \ 12 \ "url").as[String]  shouldBe "/statePensionUrl"
-      (response.json \ "urls" \ 13 \ "name").as[String] shouldBe "niSummaryUrl"
-      (response.json \ "urls" \ 13 \ "url").as[String]  shouldBe "/niSummaryUrl"
-      (response.json \ "urls" \ 14 \ "name").as[String] shouldBe "niContributionsUrl"
-      (response.json \ "urls" \ 14 \ "url").as[String]  shouldBe "/niContributionsUrl"
+      (response.json \ "urls" \ 0 \ "name").as[String]                      shouldBe "cbProofOfEntitlementUrl"
+      (response.json \ "urls" \ 0 \ "url").as[String]                       shouldBe "/child-benefit/view-proof-entitlement"
+      (response.json \ "urls" \ 1 \ "name").as[String]                      shouldBe "cbProofOfEntitlementUrlCy"
+      (response.json \ "urls" \ 1 \ "url").as[String]                       shouldBe "/child-benefit/view-proof-entitlementCy"
+      (response.json \ "urls" \ 2 \ "name").as[String]                      shouldBe "cbPaymentHistoryUrl"
+      (response.json \ "urls" \ 2 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-history"
+      (response.json \ "urls" \ 3 \ "name").as[String]                      shouldBe "cbPaymentHistoryUrlCy"
+      (response.json \ "urls" \ 3 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-historyCy"
+      (response.json \ "urls" \ 4 \ "name").as[String]                      shouldBe "cbHomeUrl"
+      (response.json \ "urls" \ 4 \ "url").as[String]                       shouldBe "/child-benefit/home"
+      (response.json \ "urls" \ 5 \ "name").as[String]                      shouldBe "cbHomeUrlCy"
+      (response.json \ "urls" \ 5 \ "url").as[String]                       shouldBe "/child-benefit/homeCy"
+      (response.json \ "urls" \ 6 \ "name").as[String]                      shouldBe "cbHowToClaimUrl"
+      (response.json \ "urls" \ 6 \ "url").as[String]                       shouldBe "/child-benefit/how-to-claim"
+      (response.json \ "urls" \ 7 \ "name").as[String]                      shouldBe "cbHowToClaimUrlCy"
+      (response.json \ "urls" \ 7 \ "url").as[String]                       shouldBe "/child-benefit/how-to-claimCy"
+      (response.json \ "urls" \ 8 \ "name").as[String]                      shouldBe "cbFullTimeEducationUrl"
+      (response.json \ "urls" \ 8 \ "url").as[String]                       shouldBe "/gov-uk/child-benefit-16-19"
+      (response.json \ "urls" \ 9 \ "name").as[String]                      shouldBe "cbFullTimeEducationUrlCy"
+      (response.json \ "urls" \ 9 \ "url").as[String]                       shouldBe "/gov-uk/child-benefit-16-19Cy"
+      (response.json \ "urls" \ 10 \ "name").as[String]                     shouldBe "cbWhatChangesUrl"
+      (response.json \ "urls" \ 10 \ "url").as[String]                      shouldBe "/personal-account/child-benefit-forms"
+      (response.json \ "urls" \ 11 \ "name").as[String]                     shouldBe "cbWhatChangesUrlCy"
+      (response.json \ "urls" \ 11 \ "url").as[String]                      shouldBe "/personal-account/child-benefit-formsCy"
+      (response.json \ "urls" \ 12 \ "name").as[String]                     shouldBe "statePensionUrl"
+      (response.json \ "urls" \ 12 \ "url").as[String]                      shouldBe "/statePensionUrl"
+      (response.json \ "urls" \ 13 \ "name").as[String]                     shouldBe "niSummaryUrl"
+      (response.json \ "urls" \ 13 \ "url").as[String]                      shouldBe "/niSummaryUrl"
+      (response.json \ "urls" \ 14 \ "name").as[String]                     shouldBe "niContributionsUrl"
+      (response.json \ "urls" \ 14 \ "url").as[String]                      shouldBe "/niContributionsUrl"
     }
 
     "return 401 when user is not logged in" in {
