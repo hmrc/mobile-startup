@@ -23,8 +23,13 @@ import org.scalatestplus.play.WsScalaTestClient
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.ws.WSClient
+import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
+import uk.gov.hmrc.domain.{Nino, SaUtr}
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import eu.timepit.refined.auto._
+
+import scala.concurrent.Future
 
 class BaseISpec
     extends AnyWordSpecLike
@@ -40,6 +45,18 @@ class BaseISpec
 
   protected val acceptJsonHeader:        (String, String) = "Accept"        -> "application/vnd.hmrc.1.0+json"
   protected val authorizationJsonHeader: (String, String) = "AUTHORIZATION" -> "Bearer test"
+  protected val userAgentJsonHeaderIos
+    : (String, String) = "User-Agent" -> "HMRCNextGenConsumer/uk.gov.hmrc.TaxCalc 14.12.0 (iOS 16.1.1)"
+  protected val userAgentJsonHeaderAndroid
+  : (String, String) = "User-Agent" -> "HMRCNextGenConsumer/uk.gov.hmrc.TaxCalc 15.3.0 (Android 10; SM-G960F Build/QP1A.190711.020)"
+
+  val nino: Nino = Nino("AA000006C")
+  val saUtr: SaUtr = SaUtr("123456789")
+  val journeyId: JourneyId = "b6ef25bc-8f5e-49c8-98c5-f039f39e4557"
+  val url: String = s"/preflight-check?journeyId=$journeyId"
+
+  def getRequestWithAcceptHeader(url: String): Future[WSResponse] =
+    wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderIos).get()
 
   def config: Map[String, Any] =
     Map(
@@ -51,14 +68,15 @@ class BaseISpec
       "microservice.services.enrolment-store-proxy.port"                -> wireMockPort,
       "auditing.consumer.baseUri.port"                                  -> wireMockPort,
       "feature.userPanelSignUp"                                         -> true,
-      "feature.enablePushNotificationTokenRegistration"                  -> true,
+      "feature.enablePushNotificationTokenRegistration"                 -> true,
       "feature.helpToSave.enableBadge"                                  -> true,
       "feature.paperlessAlertDialogs"                                   -> true,
       "feature.paperlessAdverts"                                        -> true,
       "feature.htsAdverts"                                              -> true,
       "feature.saTile"                                                  -> true,
       "feature.annualTaxSummaryLink"                                    -> true,
-      "enableMultipleGGIDCheck"                                         -> true,
+      "enableMultipleGGIDCheck.ios"                                     -> true,
+      "enableMultipleGGIDCheck.android"                                 -> true,
       "feature.payeCustomerSatisfactionSurveyAdverts"                   -> true,
       "feature.selfAssessmentCustomerSatisfactionSurveyAdverts"         -> true,
       "feature.selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts" -> true,
@@ -68,7 +86,7 @@ class BaseISpec
       "feature.formTrackerCustomerSatisfactionSurveyAdverts"            -> true,
       "feature.taxCalculatorCustomerSatisfactionSurveyAdverts"          -> true,
       "feature.yourDetailsCustomerSatisfactionSurveyAdverts"            -> true,
-      "feature.findMyNinoAddToWallet"                                    -> true,
+      "feature.findMyNinoAddToWallet"                                   -> true,
       "feature.disableYourEmploymentIncomeChart"                        -> false,
       "url.cbProofOfEntitlementUrl"                                     -> "/child-benefit/view-proof-entitlement",
       "url.cbProofOfEntitlementUrlCy"                                   -> "/child-benefit/view-proof-entitlementCy",

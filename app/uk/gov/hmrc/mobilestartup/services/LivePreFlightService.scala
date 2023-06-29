@@ -35,14 +35,15 @@ import play.api.http.Status.{BAD_REQUEST, NOT_FOUND}
 import scala.concurrent.{ExecutionContext, Future}
 
 class LivePreFlightService @Inject() (
-  genericConnector:                                               GenericConnector[Future],
-  val auditConnector:                                             AuditConnector,
-  val authConnector:                                              AuthConnector,
-  @Named("appName") val appName:                                  String,
-  @Named("controllers.confidenceLevel") val confLevel:            Int,
-  @Named("feature.annualTaxSummaryLink") val showATSLink:         Boolean,
-  @Named("enableMultipleGGIDCheck") val multipleGGIDCheckEnabled: Boolean
-)(implicit executionContext:                                      ExecutionContext)
+  genericConnector:                                                              GenericConnector[Future],
+  val auditConnector:                                                            AuditConnector,
+  val authConnector:                                                             AuthConnector,
+  @Named("appName") val appName:                                                 String,
+  @Named("controllers.confidenceLevel") val confLevel:                           Int,
+  @Named("feature.annualTaxSummaryLink") val showATSLink:                        Boolean,
+  @Named("enableMultipleGGIDCheck.ios") val multipleGGIDCheckEnabledIos:         Boolean,
+  @Named("enableMultipleGGIDCheck.android") val multipleGGIDCheckEnabledAndroid: Boolean
+)(implicit executionContext:                                                     ExecutionContext)
     extends PreFlightServiceImpl[Future](genericConnector, confLevel)
     with AuthorisedFunctions
     with Auditor {
@@ -108,11 +109,18 @@ class LivePreFlightService @Inject() (
   }
 
   override def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean = {
-    logger.info(
-      if (!enrolments.enrolments.exists(_.key == "HMRC-PT")) "Missing enrolment, routing user to TENS"
-      else "User has new enrolment"
-    )
-    if (multipleGGIDCheckEnabled) !enrolments.enrolments.exists(_.key == "HMRC-PT") else false
+    val userAgentHeader            = hc.otherHeaders.toMap.getOrElse("User-Agent", "No User-Agent").toLowerCase
+    val userMissingHmrcPtEnrolment = !enrolments.enrolments.exists(_.key == "HMRC-PT")
+    if (userAgentHeader.contains("ios")) {
+      logger.info("iOS user missing HMRC-PT enrolment")
+      if (multipleGGIDCheckEnabledIos) userMissingHmrcPtEnrolment else false
+    } else if (userAgentHeader.contains("android")) {
+      logger.info("Android user missing HMRC-PT enrolment")
+      if (multipleGGIDCheckEnabledAndroid) userMissingHmrcPtEnrolment else false
+    } else {
+      logger.info(s"User-Agent not recognised or missing: $userAgentHeader")
+      false
+    }
   }
 
   private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] =

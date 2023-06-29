@@ -16,29 +16,18 @@
 
 package uk.gov.hmrc.mobilestartup
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.JsValue
 import play.api.libs.ws.WSResponse
-import uk.gov.hmrc.domain.{Nino, SaUtr}
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 import uk.gov.hmrc.mobilestartup.stubs.AuthStub._
 import uk.gov.hmrc.mobilestartup.stubs.AuditStub._
 import uk.gov.hmrc.mobilestartup.stubs.CitizenDetailsStub._
 import uk.gov.hmrc.mobilestartup.stubs.EnrolmentStoreStub._
-import eu.timepit.refined.auto._
 import play.api.inject.guice.GuiceApplicationBuilder
-import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.http.RequestMethod
-import com.github.tomakehurst.wiremock.matching.{RequestPatternBuilder, StringValuePattern, UrlPattern}
-import uk.gov.hmrc.http.HttpVerbs.GET
 
 import scala.concurrent.Future
 
 trait LivePreFlightControllerTests extends BaseISpec {
-  val nino:      Nino      = Nino("AA000006C")
-  val saUtr:     SaUtr     = SaUtr("123456789")
-  val journeyId: JourneyId = "b6ef25bc-8f5e-49c8-98c5-f039f39e4557"
-  val url:       String    = s"/preflight-check?journeyId=$journeyId"
 
   private val cidPersonJson = s"""{
                                  |  "ids": {
@@ -66,9 +55,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
                                       |    "principalUserIds": []
                                       |}""".stripMargin
 
-  def getRequestWithAcceptHeader(url: String): Future[WSResponse] =
-    wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader).get()
-
   def postRequestWithAcceptHeader(
     url:  String,
     form: JsValue
@@ -93,7 +79,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
       (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
       (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
-      (response.json \ "routeToTEN").as[Boolean]               shouldBe true
 
     }
 
@@ -344,6 +329,46 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
       (response.json \ "utr" \ "saUtr").as[String]                        shouldBe "123456789"
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty            shouldBe true
     }
+
+    "return routeToTEN = true on ios if check enabled and HMRC-PT enrolment not found" in {
+      accountsFound(nino.nino, saUtr.utr)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status shouldBe 200
+      (response.json \ "routeToTEN").as[Boolean] shouldBe true
+
+    }
+
+    "return routeToTEN = true on android if check enabled and HMRC-PT enrolment not found" in {
+      accountsFound(nino.nino, saUtr.utr)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response =
+        await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
+
+      response.status shouldBe 200
+      (response.json \ "routeToTEN").as[Boolean] shouldBe true
+
+    }
+
+    "return routeToTEN = false if User-Agent not recognised" in {
+      val unrecognisedUserAgentJsonHeader = "User-Agent" -> "Chrome 48.9"
+
+      accountsFound(nino.nino, saUtr.utr)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response =
+        await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, unrecognisedUserAgentJsonHeader ).get())
+
+      response.status shouldBe 200
+      (response.json \ "routeToTEN").as[Boolean] shouldBe false
+
+    }
   }
 }
 
@@ -366,6 +391,42 @@ class LivePreflightControllerATSLinkDisabledISpec extends LivePreFlightControlle
       val response = await(getRequestWithAcceptHeader(url))
 
       (response.json \ "annualTaxSummaryLink").isEmpty shouldBe true
+    }
+  }
+}
+
+class LivePreflightControllerMultipleGGIDCheckDisabledISpec extends BaseISpec {
+
+  override protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(
+    config ++
+    Map(
+      "enableMultipleGGIDCheck.ios"     -> false,
+      "enableMultipleGGIDCheck.android" -> false
+    )
+  )
+
+  "GET /preflight-check" should {
+
+    "return routeToTEN false if check disabled on ios" in {
+      accountsFound(nino.nino, saUtr.utr, activateUtr = false)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response =
+        await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderIos).get())
+
+      (response.json \ "routeToTEN").as[Boolean] shouldBe false
+    }
+
+    "return routeToTEN false if check disabled on android" in {
+      accountsFound(nino.nino, saUtr.utr, activateUtr = false)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response =
+        await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
+
+      (response.json \ "routeToTEN").as[Boolean] shouldBe false
     }
   }
 }
