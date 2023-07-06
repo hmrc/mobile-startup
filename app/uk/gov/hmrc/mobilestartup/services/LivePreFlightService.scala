@@ -109,6 +109,7 @@ class LivePreFlightService @Inject() (
   }
 
   override def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean = {
+    logger.info(s"HEADER CARRIER OTHER HEADERS: \n\n${hc.otherHeaders.toMap.toString()}")
     val userAgentHeader            = hc.otherHeaders.toMap.getOrElse("User-Agent", "No User-Agent").toLowerCase
     val userMissingHmrcPtEnrolment = !enrolments.enrolments.exists(_.key == "HMRC-PT")
     if (userAgentHeader.contains("ios")) {
