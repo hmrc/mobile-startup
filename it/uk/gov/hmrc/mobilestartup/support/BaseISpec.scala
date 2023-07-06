@@ -46,9 +46,9 @@ class BaseISpec
   protected val acceptJsonHeader:        (String, String) = "Accept"        -> "application/vnd.hmrc.1.0+json"
   protected val authorizationJsonHeader: (String, String) = "AUTHORIZATION" -> "Bearer test"
   protected val userAgentJsonHeaderIos
-    : (String, String) = "User-Agent" -> "HMRCNextGenConsumer/uk.gov.hmrc.TaxCalc 14.12.0 (iOS 16.1.1)"
+    : (String, String) = "user-agent" -> "HMRCNextGenConsumer/uk.gov.hmrc.TaxCalc 14.12.0 (iOS 16.1.1)"
   protected val userAgentJsonHeaderAndroid
-  : (String, String) = "User-Agent" -> "HMRCNextGenConsumer/uk.gov.hmrc.TaxCalc 15.3.0 (Android 10; SM-G960F Build/QP1A.190711.020)"
+  : (String, String) = "user-agent" -> "HMRCNextGenConsumer/uk.gov.hmrc.TaxCalc 15.3.0 (Android 10; SM-G960F Build/QP1A.190711.020)"
 
   val nino: Nino = Nino("AA000006C")
   val saUtr: SaUtr = SaUtr("123456789")
