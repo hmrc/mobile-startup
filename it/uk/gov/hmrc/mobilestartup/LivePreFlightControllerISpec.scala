@@ -356,7 +356,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
     }
 
     "return routeToTEN = false if User-Agent not recognised" in {
-      val unrecognisedUserAgentJsonHeader = "User-Agent" -> "Chrome 48.9"
+      val unrecognisedUserAgentJsonHeader = "user-agent" -> "Chrome 48.9"
 
       accountsFound(nino.nino, saUtr.utr)
       respondToAuditMergedWithNoBody
