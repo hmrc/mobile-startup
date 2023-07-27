@@ -123,8 +123,8 @@ class LivePreFlightService @Inject() (
 
   override def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean = {
     val userAgentHeader = hc.otherHeaders.toMap.getOrElse("user-agent", "No User-Agent").toLowerCase
-    val userMissingHmrcPtEnrolment = enrolments.enrolments.exists(_.key == "HMRC-PT")
-    val userMissingHmrcNiEnrolment = enrolments.enrolments.exists(_.key == "HMRC-NI")
+    val userHasHmrcPtEnrolment = enrolments.enrolments.exists(_.key == "HMRC-PT")
+    val userHasHmrcNiEnrolment = enrolments.enrolments.exists(_.key == "HMRC-NI")
     val getEnrolment : String => Option[Nino] = key => enrolments.enrolments
       .find(_.key == s"$key")
       .flatMap { enrolment =>
@@ -135,9 +135,9 @@ class LivePreFlightService @Inject() (
 
     userAgentHeader match {
       case _ if userAgentHeader.contains("ios") =>
-        routeToTens(multipleGGIDCheckEnabledIos,userMissingHmrcPtEnrolment,userMissingHmrcNiEnrolment,getEnrolment("HMRC-PT"),getEnrolment("HMRC-NI"))
+        routeToTens(multipleGGIDCheckEnabledIos,userHasHmrcPtEnrolment,userHasHmrcNiEnrolment,getEnrolment("HMRC-PT"),getEnrolment("HMRC-NI"))
       case _ if userAgentHeader.contains("android") =>
-        routeToTens(multipleGGIDCheckEnabledAndroid, userMissingHmrcPtEnrolment,userMissingHmrcNiEnrolment, getEnrolment("HMRC-PT"),getEnrolment("HMRC-NI"))
+        routeToTens(multipleGGIDCheckEnabledAndroid, userHasHmrcPtEnrolment,userHasHmrcNiEnrolment, getEnrolment("HMRC-PT"),getEnrolment("HMRC-NI"))
       case _ =>
         logger.info(s"User-Agent not recognised or missing: $userAgentHeader")
         false
