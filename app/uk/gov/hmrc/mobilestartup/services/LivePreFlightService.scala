@@ -108,28 +108,23 @@ class LivePreFlightService @Inject() (
     }
   }
 
-  def routeToTens(featureFlag: Boolean,
-                      ptEnrolment: Boolean,
-                      niEnrolment: Boolean,
+  def routeToTens(checkEnabled: Boolean,
+                  hasPTEnrolment: Boolean,
+                  hasNIEnrolment: Boolean,
                       ninoNiValue: Option[Nino],
                       ninoPtValue: Option[Nino]): Boolean = {
-    if (featureFlag) {
-      if (ptEnrolment) {
-        true
-      } else if (niEnrolment) {
-        false
-      } else {
-        !(ninoNiValue == ninoPtValue)
-      }
-    } else {
-      false
+    (checkEnabled, hasPTEnrolment, hasNIEnrolment) match {
+      case (false, _, _) => false
+      case (true, false, _) => true
+      case (true, true, false) => false
+      case (true, true, true) => !(ninoNiValue == ninoPtValue)
     }
   }
 
   override def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean = {
     val userAgentHeader = hc.otherHeaders.toMap.getOrElse("user-agent", "No User-Agent").toLowerCase
-    val userMissingHmrcPtEnrolment = !enrolments.enrolments.exists(_.key == "HMRC-PT")
-    val userMissingHmrcNiEnrolment = !enrolments.enrolments.exists(_.key == "HMRC-NI")
+    val userMissingHmrcPtEnrolment = enrolments.enrolments.exists(_.key == "HMRC-PT")
+    val userMissingHmrcNiEnrolment = enrolments.enrolments.exists(_.key == "HMRC-NI")
     val getEnrolment : String => Option[Nino] = key => enrolments.enrolments
       .find(_.key == s"$key")
       .flatMap { enrolment =>
