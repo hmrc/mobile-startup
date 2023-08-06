@@ -124,7 +124,7 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 5 \ "enabled").as[Boolean] shouldBe true
       (response.json \ "feature" \ 6 \ "name").as[String]     shouldBe "customerSatisfactionSurvey.childBenefit"
       (response.json \ "feature" \ 6 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 7 \ "name").as[String]     shouldBe "customerSatisfactionSurvey.payeAsYouEarn"
+      (response.json \ "feature" \ 7 \ "name").as[String]     shouldBe "customerSatisfactionSurvey.payAsYouEarn"
       (response.json \ "feature" \ 7 \ "enabled").as[Boolean] shouldBe true
       (response.json \ "feature" \ 8 \ "name").as[String]     shouldBe "customerSatisfactionSurvey.selfAssessment"
       (response.json \ "feature" \ 8 \ "enabled").as[Boolean] shouldBe true

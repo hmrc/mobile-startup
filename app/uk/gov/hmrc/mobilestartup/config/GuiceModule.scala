@@ -49,7 +49,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.htsAdverts")
     bindConfigBoolean("feature.annualTaxSummaryLink")
     bindConfigBoolean("feature.customerSatisfactionSurvey.childBenefit")
-    bindConfigBoolean("feature.customerSatisfactionSurvey.payeAsYouEarn")
+    bindConfigBoolean("feature.customerSatisfactionSurvey.payAsYouEarn")
     bindConfigBoolean("feature.customerSatisfactionSurvey.selfAssessment")
     bindConfigBoolean("feature.customerSatisfactionSurvey.selfAssessmentPayments")
     bindConfigBoolean("feature.customerSatisfactionSurvey.taxCredits")

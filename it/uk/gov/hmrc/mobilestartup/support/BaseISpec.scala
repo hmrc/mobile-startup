@@ -78,7 +78,7 @@ class BaseISpec
       "enableMultipleGGIDCheck.ios"                                     -> true,
       "enableMultipleGGIDCheck.android"                                 -> true,
       "feature.customerSatisfactionSurvey.childBenefit"                  -> true,
-      "feature.customerSatisfactionSurvey.payeAsYouEarn"                -> true,
+      "feature.customerSatisfactionSurvey.payAsYouEarn"                 -> true,
       "feature.customerSatisfactionSurvey.selfAssessment"               -> true,
       "feature.customerSatisfactionSurvey.selfAssessmentPayments"       -> true,
       "feature.customerSatisfactionSurvey.taxCredits"                   -> true,
