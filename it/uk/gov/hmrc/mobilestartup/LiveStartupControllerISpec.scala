@@ -122,29 +122,33 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 4 \ "enabled").as[Boolean] shouldBe true
       (response.json \ "feature" \ 5 \ "name").as[String]     shouldBe "annualTaxSummaryLink"
       (response.json \ "feature" \ 5 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 6 \ "name").as[String]     shouldBe "payeCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 6 \ "name").as[String]     shouldBe "customerSatisfactionSurvey.childBenefit"
       (response.json \ "feature" \ 6 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 7 \ "name").as[String]     shouldBe "selfAssessmentCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 7 \ "name").as[String]     shouldBe "customerSatisfactionSurvey.payAsYouEarn"
       (response.json \ "feature" \ 7 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 8 \ "name")
-        .as[String]                                                         shouldBe "selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts"
-      (response.json \ "feature" \ 8 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 9 \ "name").as[String]                   shouldBe "taxCreditsCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 8 \ "name").as[String]     shouldBe "customerSatisfactionSurvey.selfAssessment"
+      (response.json \ "feature" \ 8 \ "enabled").as[Boolean] shouldBe true
+      (response.json \ "feature" \ 9 \ "name")
+        .as[String]                                                         shouldBe "customerSatisfactionSurvey.selfAssessmentPayments"
       (response.json \ "feature" \ 9 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 10 \ "name").as[String]                  shouldBe "helpToSaveCustomerSatisfactionSurveyAdverts"
-      (response.json \ "feature" \ 10 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 11 \ "name").as[String]                  shouldBe "messagesCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 10 \ "name").as[String]                   shouldBe "customerSatisfactionSurvey.taxCredits"
+      (response.json \ "feature" \ 10 \ "enabled").as[Boolean]               shouldBe true
+      (response.json \ "feature" \ 11 \ "name").as[String]                  shouldBe "customerSatisfactionSurvey.helpToSave"
       (response.json \ "feature" \ 11 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 12 \ "name").as[String]                  shouldBe "formTrackerCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 12 \ "name").as[String]                  shouldBe "customerSatisfactionSurvey.messages"
       (response.json \ "feature" \ 12 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 13 \ "name").as[String]                  shouldBe "taxCalculatorCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 13 \ "name").as[String]                  shouldBe "customerSatisfactionSurvey.formTracker"
       (response.json \ "feature" \ 13 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "yourDetailsCustomerSatisfactionSurveyAdverts"
+      (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "customerSatisfactionSurvey.taxCalculator"
       (response.json \ "feature" \ 14 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 15 \ "name").as[String]                  shouldBe "findMyNinoAddToWallet"
+      (response.json \ "feature" \ 15 \ "name").as[String]                  shouldBe "customerSatisfactionSurvey.yourDetails"
       (response.json \ "feature" \ 15 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 16 \ "name").as[String]                  shouldBe "disableYourEmploymentIncomeChart"
-      (response.json \ "feature" \ 16 \ "enabled").as[Boolean]              shouldBe false
+      (response.json \ "feature" \ 16 \ "name").as[String]                   shouldBe "customerSatisfactionSurvey.signingIntoTheApp"
+      (response.json \ "feature" \ 16 \ "enabled").as[Boolean]               shouldBe true
+      (response.json \ "feature" \ 17 \ "name").as[String]                  shouldBe "findMyNinoAddToWallet"
+      (response.json \ "feature" \ 17 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 18 \ "name").as[String]                  shouldBe "disableYourEmploymentIncomeChart"
+      (response.json \ "feature" \ 18 \ "enabled").as[Boolean]              shouldBe false
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
       (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"
