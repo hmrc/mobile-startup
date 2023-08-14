@@ -270,22 +270,6 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     }
 
-    "return routeToTen = true if HMRC-NI enrolment found" in {
-      accountsFoundMultipleGGIDsNiEnrolment(nino.nino, saUtr.utr)
-      respondToAuditMergedWithNoBody
-      respondToAuditWithNoBody
-
-      val response = await(getRequestWithAcceptHeader(url))
-
-      response.status shouldBe 200
-      (response.json \ "nino").as[String] shouldBe nino.nino
-      (response.json \ "routeToIV").as[Boolean] shouldBe false
-      (response.json \ "utr" \ "saUtr").as[String] shouldBe "123456789"
-      (response.json \ "utr" \ "status").as[String] shouldBe "activated"
-      (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
-      (response.json \ "routeToTEN").as[Boolean] shouldBe true
-    }
-
     "return 401 when auth fails" in {
       accountsFound()
 
@@ -346,7 +330,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty            shouldBe true
     }
 
-    "return routeToTEN = true on ios if check enabled and HMRC-PT and HMRC-NI enrolment not found" in {
+    "return routeToTEN = true on ios if check enabled and HMRC-PT enrolment not found" in {
       accountsFound(nino.nino, saUtr.utr)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
@@ -358,61 +342,13 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
     }
 
-    "return routeToTEN = false on ios if HMRC-PT and HMRC-NI found with duplicate NINO's" in {
-      accountsFoundMultipleGGIDsDuplicateNino(nino.nino)
-      respondToAuditMergedWithNoBody
-      respondToAuditWithNoBody
-
-      val response = await(getRequestWithAcceptHeader(url))
-
-      response.status shouldBe 200
-      (response.json \ "routeToTEN").as[Boolean] shouldBe false
-
-    }
-
-    "return routeToTEN = true on ios if HMRC-PT and HMRC-NI found but ninos are different" in {
-      accountsFoundMultipleGGIDsDifferentNinos(nino.nino)
-      respondToAuditMergedWithNoBody
-      respondToAuditWithNoBody
-
-      val response = await(getRequestWithAcceptHeader(url))
-
-      response.status shouldBe 200
-      (response.json \ "routeToTEN").as[Boolean] shouldBe true
-
-    }
-
-    "return routeToTEN = true on android if check enabled and HMRC-PT and HMRC-NI enrolment not found" in {
+    "return routeToTEN = true on android if check enabled and HMRC-PT enrolment not found" in {
       accountsFound(nino.nino, saUtr.utr)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
       val response =
         await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
-
-      response.status shouldBe 200
-      (response.json \ "routeToTEN").as[Boolean] shouldBe true
-
-    }
-
-    "return routeToTEN = false on android if HMRC-PT and HMRC-NI found with duplicate NINO's" in {
-      accountsFoundMultipleGGIDsDuplicateNino(nino.nino)
-      respondToAuditMergedWithNoBody
-      respondToAuditWithNoBody
-
-      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
-
-      response.status shouldBe 200
-      (response.json \ "routeToTEN").as[Boolean] shouldBe false
-
-    }
-
-    "return routeToTEN = true on android if HMRC-PT and HMRC-NI found but ninos are different" in {
-      accountsFoundMultipleGGIDsDifferentNinos(nino.nino)
-      respondToAuditMergedWithNoBody
-      respondToAuditWithNoBody
-
-      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
 
       response.status shouldBe 200
       (response.json \ "routeToTEN").as[Boolean] shouldBe true

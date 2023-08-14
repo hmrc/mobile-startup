@@ -108,39 +108,16 @@ class LivePreFlightService @Inject() (
     }
   }
 
-  def routeToTens(checkEnabled: Boolean,
-                  hasPTEnrolment: Boolean,
-                  hasNIEnrolment: Boolean,
-                      ninoNiValue: Option[Nino],
-                      ninoPtValue: Option[Nino]): Boolean = {
-    (checkEnabled, hasPTEnrolment, hasNIEnrolment) match {
-      case (false, _, _) => false
-      case (true, false, _) => true
-      case (true, true, false) => false
-      case (true, true, true) => !(ninoNiValue == ninoPtValue)
-    }
-  }
-
   override def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean = {
-    val userAgentHeader = hc.otherHeaders.toMap.getOrElse("user-agent", "No User-Agent").toLowerCase
-    val userHasHmrcPtEnrolment = enrolments.enrolments.exists(_.key == "HMRC-PT")
-    val userHasHmrcNiEnrolment = enrolments.enrolments.exists(_.key == "HMRC-NI")
-    val getEnrolment : String => Option[Nino] = key => enrolments.enrolments
-      .find(_.key == s"$key")
-      .flatMap { enrolment =>
-        enrolment.identifiers
-          .find(id => id.key == "nino" && enrolment.state == "Activated")
-          .map(key => Nino(key.value))
-      }
-
-    userAgentHeader match {
-      case _ if userAgentHeader.contains("ios") =>
-        routeToTens(multipleGGIDCheckEnabledIos,userHasHmrcPtEnrolment,userHasHmrcNiEnrolment,getEnrolment("HMRC-PT"),getEnrolment("HMRC-NI"))
-      case _ if userAgentHeader.contains("android") =>
-        routeToTens(multipleGGIDCheckEnabledAndroid, userHasHmrcPtEnrolment,userHasHmrcNiEnrolment, getEnrolment("HMRC-PT"),getEnrolment("HMRC-NI"))
-      case _ =>
-        logger.info(s"User-Agent not recognised or missing: $userAgentHeader")
-        false
+    val userAgentHeader            = hc.otherHeaders.toMap.getOrElse("user-agent", "No User-Agent").toLowerCase
+    val userMissingHmrcPtEnrolment = !enrolments.enrolments.exists(_.key == "HMRC-PT")
+    if (userAgentHeader.contains("ios")) {
+      if (multipleGGIDCheckEnabledIos) userMissingHmrcPtEnrolment else false
+    } else if (userAgentHeader.contains("android")) {
+      if (multipleGGIDCheckEnabledAndroid) userMissingHmrcPtEnrolment else false
+    } else {
+      logger.info(s"User-Agent not recognised or missing: $userAgentHeader")
+      false
     }
   }
 
