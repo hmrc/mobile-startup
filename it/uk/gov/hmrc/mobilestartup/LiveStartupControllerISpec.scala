@@ -33,9 +33,9 @@ class LiveStartupControllerISpec extends BaseISpec {
     wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader).get()
 
   def postRequestWithAcceptHeader(
-    url:  String,
-    form: JsValue
-  ): Future[WSResponse] =
+                                   url: String,
+                                   form: JsValue
+                                 ): Future[WSResponse] =
     wsUrl(url).addHttpHeaders(acceptJsonHeader).post(form)
 
   def postRequestWithAcceptHeader(url: String): Future[WSResponse] =
@@ -47,10 +47,11 @@ class LiveStartupControllerISpec extends BaseISpec {
         .willReturn(
           aResponse()
             .withStatus(200)
-            .withBody("""
-                        |{
-                        |  "submissionsState": "open"
-                        |}
+            .withBody(
+              """
+                |{
+                |  "submissionsState": "open"
+                |}
            """.stripMargin)
         )
     )
@@ -61,41 +62,42 @@ class LiveStartupControllerISpec extends BaseISpec {
         .willReturn(
           aResponse()
             .withStatus(200)
-            .withBody("""{
-                        |    "person": {
-                        |      "firstName": "Angus",
-                        |      "middleName": "John",
-                        |      "lastName": "Smith",
-                        |      "title": "Mr",
-                        |      "honours": null,
-                        |      "sex": "M",
-                        |      "dateOfBirth": -26092800000,
-                        |      "nino": "AA000006C"
-                        |    },
-                        |    "address": {
-                        |      "line1": "123456",
-                        |      "line2": "23456",
-                        |      "line3": "3456",
-                        |      "line4": "456",
-                        |      "line5": "55555",
-                        |      "postcode": "98765",
-                        |      "startDate": 946684800000,
-                        |      "country": "Test Country",
-                        |      "type": "Residential"
-                        |    },
-                        |    "correspondenceAddress": {
-                        |      "line1": "1 Main Street",
-                        |      "line2": "Central",
-                        |      "line3": "Anothertown",
-                        |      "line4": "Anothershire",
-                        |      "line5": "Anotherline",
-                        |      "postcode": "AA1 1AA",
-                        |      "startDate": 1341100800000,
-                        |      "country": null,
-                        |      "type": "Correspondence"
-                        |    }
-                        |  }
-                        |""".stripMargin.stripMargin)
+            .withBody(
+              """{
+                |    "person": {
+                |      "firstName": "Angus",
+                |      "middleName": "John",
+                |      "lastName": "Smith",
+                |      "title": "Mr",
+                |      "honours": null,
+                |      "sex": "M",
+                |      "dateOfBirth": -26092800000,
+                |      "nino": "AA000006C"
+                |    },
+                |    "address": {
+                |      "line1": "123456",
+                |      "line2": "23456",
+                |      "line3": "3456",
+                |      "line4": "456",
+                |      "line5": "55555",
+                |      "postcode": "98765",
+                |      "startDate": 946684800000,
+                |      "country": "Test Country",
+                |      "type": "Residential"
+                |    },
+                |    "correspondenceAddress": {
+                |      "line1": "1 Main Street",
+                |      "line2": "Central",
+                |      "line3": "Anothertown",
+                |      "line4": "Anothershire",
+                |      "line5": "Anotherline",
+                |      "postcode": "AA1 1AA",
+                |      "startDate": 1341100800000,
+                |      "country": null,
+                |      "type": "Correspondence"
+                |    }
+                |  }
+                |""".stripMargin.stripMargin)
         )
     )
 
@@ -109,85 +111,69 @@ class LiveStartupControllerISpec extends BaseISpec {
 
       val response = await(getRequestWithAuthHeaders(url))
 
-      response.status                                         shouldBe 200
-      (response.json \ "feature" \ 0 \ "name").as[String]     shouldBe "userPanelSignUp"
+      response.status shouldBe 200
+      (response.json \ "feature" \ 0 \ "name").as[String] shouldBe "userPanelSignUp"
       (response.json \ "feature" \ 0 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 1 \ "name").as[String]     shouldBe "enablePushNotificationTokenRegistration"
+      (response.json \ "feature" \ 1 \ "name").as[String] shouldBe "enablePushNotificationTokenRegistration"
       (response.json \ "feature" \ 1 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 2 \ "name").as[String]     shouldBe "paperlessAlertDialogs"
+      (response.json \ "feature" \ 2 \ "name").as[String] shouldBe "paperlessAlertDialogs"
       (response.json \ "feature" \ 2 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 3 \ "name").as[String]     shouldBe "paperlessAdverts"
+      (response.json \ "feature" \ 3 \ "name").as[String] shouldBe "paperlessAdverts"
       (response.json \ "feature" \ 3 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 4 \ "name").as[String]     shouldBe "htsAdverts"
+      (response.json \ "feature" \ 4 \ "name").as[String] shouldBe "htsAdverts"
       (response.json \ "feature" \ 4 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 5 \ "name").as[String]     shouldBe "annualTaxSummaryLink"
+      (response.json \ "feature" \ 5 \ "name").as[String] shouldBe "annualTaxSummaryLink"
       (response.json \ "feature" \ 5 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 6 \ "name").as[String]     shouldBe "customerSatisfactionSurvey.childBenefit"
+      (response.json \ "feature" \ 6 \ "name").as[String] shouldBe "payeCustomerSatisfactionSurveyAdverts"
       (response.json \ "feature" \ 6 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 7 \ "name").as[String]     shouldBe "customerSatisfactionSurvey.payAsYouEarn"
+      (response.json \ "feature" \ 7 \ "name").as[String] shouldBe "selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts"
       (response.json \ "feature" \ 7 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 8 \ "name").as[String]     shouldBe "customerSatisfactionSurvey.selfAssessment"
+      (response.json \ "feature" \ 8 \ "name")
+        .as[String] shouldBe "customerSatisfactionSurveys"
       (response.json \ "feature" \ 8 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 9 \ "name")
-        .as[String]                                                         shouldBe "customerSatisfactionSurvey.selfAssessmentPayments"
-      (response.json \ "feature" \ 9 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 10 \ "name").as[String]                   shouldBe "customerSatisfactionSurvey.taxCredits"
-      (response.json \ "feature" \ 10 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 11 \ "name").as[String]                  shouldBe "customerSatisfactionSurvey.helpToSave"
-      (response.json \ "feature" \ 11 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 12 \ "name").as[String]                  shouldBe "customerSatisfactionSurvey.messages"
-      (response.json \ "feature" \ 12 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 13 \ "name").as[String]                  shouldBe "customerSatisfactionSurvey.formTracker"
-      (response.json \ "feature" \ 13 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "customerSatisfactionSurvey.taxCalculator"
-      (response.json \ "feature" \ 14 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 15 \ "name").as[String]                  shouldBe "customerSatisfactionSurvey.yourDetails"
-      (response.json \ "feature" \ 15 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 16 \ "name").as[String]                   shouldBe "customerSatisfactionSurvey.signingIntoTheApp"
-      (response.json \ "feature" \ 16 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 17 \ "name").as[String]                  shouldBe "findMyNinoAddToWallet"
-      (response.json \ "feature" \ 17 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 18 \ "name").as[String]                  shouldBe "disableYourEmploymentIncomeChart"
-      (response.json \ "feature" \ 18 \ "enabled").as[Boolean]              shouldBe false
+      (response.json \ "feature" \ 9 \ "name").as[String] shouldBe "findMyNinoAddToWallet"
+      (response.json \ "feature" \ 9 \ "enabled").as[Boolean] shouldBe true
+      (response.json \ "feature" \ 10 \ "name").as[String] shouldBe "disableYourEmploymentIncomeChart"
+      (response.json \ "feature" \ 10 \ "enabled").as[Boolean] shouldBe false
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
-      (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
-      (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"
-      (response.json \ "user" \ "address" \ "line2").as[String]             shouldBe "23456"
-      (response.json \ "user" \ "address" \ "line3").as[String]             shouldBe "3456"
-      (response.json \ "user" \ "address" \ "line4").as[String]             shouldBe "456"
-      (response.json \ "user" \ "address" \ "line5").as[String]             shouldBe "55555"
-      (response.json \ "user" \ "address" \ "postcode").as[String]          shouldBe "98765"
-      (response.json \ "user" \ "address" \ "country").as[String]           shouldBe "Test Country"
-      (response.json \ "urls" \ 0 \ "name").as[String]                      shouldBe "cbProofOfEntitlementUrl"
-      (response.json \ "urls" \ 0 \ "url").as[String]                       shouldBe "/child-benefit/view-proof-entitlement"
-      (response.json \ "urls" \ 1 \ "name").as[String]                      shouldBe "cbProofOfEntitlementUrlCy"
-      (response.json \ "urls" \ 1 \ "url").as[String]                       shouldBe "/child-benefit/view-proof-entitlementCy"
-      (response.json \ "urls" \ 2 \ "name").as[String]                      shouldBe "cbPaymentHistoryUrl"
-      (response.json \ "urls" \ 2 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-history"
-      (response.json \ "urls" \ 3 \ "name").as[String]                      shouldBe "cbPaymentHistoryUrlCy"
-      (response.json \ "urls" \ 3 \ "url").as[String]                       shouldBe "/child-benefit/view-payment-historyCy"
-      (response.json \ "urls" \ 4 \ "name").as[String]                      shouldBe "cbHomeUrl"
-      (response.json \ "urls" \ 4 \ "url").as[String]                       shouldBe "/child-benefit/home"
-      (response.json \ "urls" \ 5 \ "name").as[String]                      shouldBe "cbHomeUrlCy"
-      (response.json \ "urls" \ 5 \ "url").as[String]                       shouldBe "/child-benefit/homeCy"
-      (response.json \ "urls" \ 6 \ "name").as[String]                      shouldBe "cbHowToClaimUrl"
-      (response.json \ "urls" \ 6 \ "url").as[String]                       shouldBe "/child-benefit/how-to-claim"
-      (response.json \ "urls" \ 7 \ "name").as[String]                      shouldBe "cbHowToClaimUrlCy"
-      (response.json \ "urls" \ 7 \ "url").as[String]                       shouldBe "/child-benefit/how-to-claimCy"
-      (response.json \ "urls" \ 8 \ "name").as[String]                      shouldBe "cbFullTimeEducationUrl"
-      (response.json \ "urls" \ 8 \ "url").as[String]                       shouldBe "/gov-uk/child-benefit-16-19"
-      (response.json \ "urls" \ 9 \ "name").as[String]                      shouldBe "cbFullTimeEducationUrlCy"
-      (response.json \ "urls" \ 9 \ "url").as[String]                       shouldBe "/gov-uk/child-benefit-16-19Cy"
-      (response.json \ "urls" \ 10 \ "name").as[String]                     shouldBe "cbWhatChangesUrl"
-      (response.json \ "urls" \ 10 \ "url").as[String]                      shouldBe "/personal-account/child-benefit-forms"
-      (response.json \ "urls" \ 11 \ "name").as[String]                     shouldBe "cbWhatChangesUrlCy"
-      (response.json \ "urls" \ 11 \ "url").as[String]                      shouldBe "/personal-account/child-benefit-formsCy"
-      (response.json \ "urls" \ 12 \ "name").as[String]                     shouldBe "statePensionUrl"
-      (response.json \ "urls" \ 12 \ "url").as[String]                      shouldBe "/statePensionUrl"
-      (response.json \ "urls" \ 13 \ "name").as[String]                     shouldBe "niSummaryUrl"
-      (response.json \ "urls" \ 13 \ "url").as[String]                      shouldBe "/niSummaryUrl"
-      (response.json \ "urls" \ 14 \ "name").as[String]                     shouldBe "niContributionsUrl"
-      (response.json \ "urls" \ 14 \ "url").as[String]                      shouldBe "/niContributionsUrl"
+      (response.json \ "user" \ "name").as[String] shouldBe "Angus John Smith"
+      (response.json \ "user" \ "address" \ "line1").as[String] shouldBe "123456"
+      (response.json \ "user" \ "address" \ "line2").as[String] shouldBe "23456"
+      (response.json \ "user" \ "address" \ "line3").as[String] shouldBe "3456"
+      (response.json \ "user" \ "address" \ "line4").as[String] shouldBe "456"
+      (response.json \ "user" \ "address" \ "line5").as[String] shouldBe "55555"
+      (response.json \ "user" \ "address" \ "postcode").as[String] shouldBe "98765"
+      (response.json \ "user" \ "address" \ "country").as[String] shouldBe "Test Country"
+      (response.json \ "urls" \ 0 \ "name").as[String] shouldBe "cbProofOfEntitlementUrl"
+      (response.json \ "urls" \ 0 \ "url").as[String] shouldBe "/child-benefit/view-proof-entitlement"
+      (response.json \ "urls" \ 1 \ "name").as[String] shouldBe "cbProofOfEntitlementUrlCy"
+      (response.json \ "urls" \ 1 \ "url").as[String] shouldBe "/child-benefit/view-proof-entitlementCy"
+      (response.json \ "urls" \ 2 \ "name").as[String] shouldBe "cbPaymentHistoryUrl"
+      (response.json \ "urls" \ 2 \ "url").as[String] shouldBe "/child-benefit/view-payment-history"
+      (response.json \ "urls" \ 3 \ "name").as[String] shouldBe "cbPaymentHistoryUrlCy"
+      (response.json \ "urls" \ 3 \ "url").as[String] shouldBe "/child-benefit/view-payment-historyCy"
+      (response.json \ "urls" \ 4 \ "name").as[String] shouldBe "cbHomeUrl"
+      (response.json \ "urls" \ 4 \ "url").as[String] shouldBe "/child-benefit/home"
+      (response.json \ "urls" \ 5 \ "name").as[String] shouldBe "cbHomeUrlCy"
+      (response.json \ "urls" \ 5 \ "url").as[String] shouldBe "/child-benefit/homeCy"
+      (response.json \ "urls" \ 6 \ "name").as[String] shouldBe "cbHowToClaimUrl"
+      (response.json \ "urls" \ 6 \ "url").as[String] shouldBe "/child-benefit/how-to-claim"
+      (response.json \ "urls" \ 7 \ "name").as[String] shouldBe "cbHowToClaimUrlCy"
+      (response.json \ "urls" \ 7 \ "url").as[String] shouldBe "/child-benefit/how-to-claimCy"
+      (response.json \ "urls" \ 8 \ "name").as[String] shouldBe "cbFullTimeEducationUrl"
+      (response.json \ "urls" \ 8 \ "url").as[String] shouldBe "/gov-uk/child-benefit-16-19"
+      (response.json \ "urls" \ 9 \ "name").as[String] shouldBe "cbFullTimeEducationUrlCy"
+      (response.json \ "urls" \ 9 \ "url").as[String] shouldBe "/gov-uk/child-benefit-16-19Cy"
+      (response.json \ "urls" \ 10 \ "name").as[String] shouldBe "cbWhatChangesUrl"
+      (response.json \ "urls" \ 10 \ "url").as[String] shouldBe "/personal-account/child-benefit-forms"
+      (response.json \ "urls" \ 11 \ "name").as[String] shouldBe "cbWhatChangesUrlCy"
+      (response.json \ "urls" \ 11 \ "url").as[String] shouldBe "/personal-account/child-benefit-formsCy"
+      (response.json \ "urls" \ 12 \ "name").as[String] shouldBe "statePensionUrl"
+      (response.json \ "urls" \ 12 \ "url").as[String] shouldBe "/statePensionUrl"
+      (response.json \ "urls" \ 13 \ "name").as[String] shouldBe "niSummaryUrl"
+      (response.json \ "urls" \ 13 \ "url").as[String] shouldBe "/niSummaryUrl"
+      (response.json \ "urls" \ 14 \ "name").as[String] shouldBe "niContributionsUrl"
+      (response.json \ "urls" \ 14 \ "url").as[String] shouldBe "/niContributionsUrl"
     }
 
     "return 401 when user is not logged in" in {
