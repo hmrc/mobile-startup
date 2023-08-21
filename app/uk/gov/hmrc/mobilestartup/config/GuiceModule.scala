@@ -52,6 +52,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts")
     bindConfigBoolean("feature.customerSatisfactionSurveys")
     bindConfigBoolean("feature.findMyNinoAddToWallet")
+    bindConfigBoolean("feature.findMyNinoAddToGoogleWallet")
     bindConfigBoolean("feature.disableYourEmploymentIncomeChart")
     bindConfigBoolean("enableMultipleGGIDCheck.ios")
     bindConfigBoolean("enableMultipleGGIDCheck.android")

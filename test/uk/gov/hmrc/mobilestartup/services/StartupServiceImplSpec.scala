@@ -21,7 +21,7 @@ import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
-import uk.gov.hmrc.mobilestartup.{BaseSpec, TestF}
+import uk.gov.hmrc.mobilestartup.{BaseSpec, TestF, services}
 
 class StartupServiceImplSpec extends BaseSpec with TestF {
 
@@ -219,7 +219,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enableSelfAssessmentPaymentsCustomerSatisfactionSurvey        = false,
                                               enableCustomerSatisfactionSurveys                             = false,
                                               findMyNinoAddToWallet                                          = false,
-                                              disableYourEmploymentIncomeChart                              = true)
+                                              disableYourEmploymentIncomeChart                              = true,
+                                              findMyNinoAddToGoogleWallet                                    = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -237,7 +238,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled   = false),
         FeatureFlag("customerSatisfactionSurveys", enabled                               = false),
         FeatureFlag("findMyNinoAddToWallet", enabled                                      = false),
-        FeatureFlag("disableYourEmploymentIncomeChart", enabled                          =  true)
+        FeatureFlag("disableYourEmploymentIncomeChart", enabled                          =  true),
+        FeatureFlag("findMyNinoAddToGoogleWallet", enabled                                = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -294,7 +296,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enableSelfAssessmentPaymentsCustomerSatisfactionSurvey        = false,
                                               enableCustomerSatisfactionSurveys                             = false,
                                               findMyNinoAddToWallet                                          = false,
-                                              disableYourEmploymentIncomeChart                              = true)
+                                              disableYourEmploymentIncomeChart                              = true,
+                                              findMyNinoAddToGoogleWallet                                    = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -312,7 +315,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
         FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
         FeatureFlag("findMyNinoAddToWallet", enabled                                    = false),
-        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true)
+        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
+        FeatureFlag("findMyNinoAddToGoogleWallet", enabled                              = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -367,7 +371,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               enableSelfAssessmentPaymentsCustomerSatisfactionSurvey        = false,
                                               enableCustomerSatisfactionSurveys                             = false,
                                               findMyNinoAddToWallet                                          = false,
-                                              disableYourEmploymentIncomeChart                              = true)
+                                              disableYourEmploymentIncomeChart                              = true,
+                                              findMyNinoAddToGoogleWallet                                    = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -385,7 +390,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
         FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
         FeatureFlag("findMyNinoAddToWallet", enabled                                    = false),
-        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true)
+        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
+        FeatureFlag("findMyNinoAddToGoogleWallet", enabled                              = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -441,7 +447,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         enableSelfAssessmentPaymentsCustomerSatisfactionSurvey        = false,
         enableCustomerSatisfactionSurveys                             = false,
         findMyNinoAddToWallet                                          = false,
-        disableYourEmploymentIncomeChart                              = true
+        disableYourEmploymentIncomeChart                              = true,
+        findMyNinoAddToGoogleWallet                                    = false
       )
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -460,7 +467,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
         FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
         FeatureFlag("findMyNinoAddToWallet", enabled                                    = false),
-        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true)
+        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
+        FeatureFlag("findMyNinoAddToGoogleWallet", enabled                              = false)
       )
       (result \ messages).toOption.value shouldBe Json.parse("""{
                                                                |  "paye": [],
@@ -522,7 +530,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       enableSelfAssessmentPaymentsCustomerSatisfactionSurvey        = false,
                                       enableCustomerSatisfactionSurveys                             = false,
                                       findMyNinoAddToWallet                                          = false,
-                                      disableYourEmploymentIncomeChart                              = true)
+                                      disableYourEmploymentIncomeChart                              = true,
+                                      findMyNinoAddToGoogleWallet                                    = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -540,7 +549,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
         FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
         FeatureFlag("findMyNinoAddToWallet", enabled                                    = false),
-        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true)
+        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
+        FeatureFlag("findMyNinoAddToGoogleWallet", enabled                              = false),
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption           shouldBe None
@@ -597,7 +607,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     enableSelfAssessmentPaymentsCustomerSatisfactionSurvey        = false,
                                     enableCustomerSatisfactionSurveys                             = false,
                                     findMyNinoAddToWallet                                          = false,
-                                    disableYourEmploymentIncomeChart                              = true)
+                                    disableYourEmploymentIncomeChart                              = true,
+                                    findMyNinoAddToGoogleWallet                                    = false)
 
 
     val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -616,7 +627,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enabled = false),
       FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
       FeatureFlag("findMyNinoAddToWallet", enabled                                    = false),
-      FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true)
+      FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
+      FeatureFlag("findMyNinoAddToGoogleWallet", enabled                              = false)
     )
     (result \ messages).toOption.value shouldBe messagesSuccessResponse
     (result \ user).toOption           shouldBe None

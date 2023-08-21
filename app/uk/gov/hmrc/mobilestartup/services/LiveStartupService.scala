@@ -51,7 +51,8 @@ class LiveStartupService @Inject() (
   @Named("feature.selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts") enableSelfAssessmentPaymentsCustomerSatisfactionSurvey:                       Boolean,
   @Named("feature.customerSatisfactionSurveys") enableCustomerSatisfactionSurveys:                                                                Boolean,
   @Named("feature.findMyNinoAddToWallet") findMyNinoAddToWallet:                                                                                    Boolean,
-  @Named("feature.disableYourEmploymentIncomeChart") disableYourEmploymentIncomeChart:                                                            Boolean
+  @Named("feature.disableYourEmploymentIncomeChart") disableYourEmploymentIncomeChart:                                                            Boolean,
+  @Named("feature.findMyNinoAddToGoogleWallet") findMyNinoAddToGoogleWallet:                                                                        Boolean
 )(implicit ec:                                                                                                                           ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -81,4 +82,5 @@ class LiveStartupService @Inject() (
                                        enableSelfAssessmentPaymentsCustomerSatisfactionSurvey,
                                        enableCustomerSatisfactionSurveys,
                                        findMyNinoAddToWallet,
-                                       disableYourEmploymentIncomeChart)
+                                       disableYourEmploymentIncomeChart,
+                                       findMyNinoAddToGoogleWallet)

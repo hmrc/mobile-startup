@@ -82,6 +82,7 @@ class BaseISpec
       "feature.customerSatisfactionSurveys"                             -> true,
       "feature.findMyNinoAddToWallet"                                    -> true,
       "feature.disableYourEmploymentIncomeChart"                        -> false,
+      "feature.findMyNinoAddToGoogleWallet"                              -> true,
       "url.cbProofOfEntitlementUrl"                                     -> "/child-benefit/view-proof-entitlement",
       "url.cbProofOfEntitlementUrlCy"                                   -> "/child-benefit/view-proof-entitlementCy",
       "url.cbPaymentHistoryUrl"                                         -> "/child-benefit/view-payment-history",
