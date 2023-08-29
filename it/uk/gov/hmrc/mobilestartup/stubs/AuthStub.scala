@@ -80,7 +80,14 @@ object AuthStub {
        |      "identifiers": [{
        |        "key": "UTR",
        |        "value": "$saUtr"
-       |      }],
+       |      },
+       |      {
+       |      "key": "HMRC-PT",
+       |      "identifiers": [{
+       |        "key": "NINO",
+       |        "value": "CS700100A"
+       |      }
+       |      ],
        |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
        |}],
        |  "groupIdentifier": "groupId",
@@ -184,6 +191,81 @@ object AuthStub {
        |}
            """.stripMargin
 
+  private def loggedInResponseMultipleGGIDsDuplicateNino(
+                                             nino: String
+                                           ): String =
+    s"""
+       |{
+       |  "nino": "$nino",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "allEnrolments": [{
+       |      "key": "HMRC-PT",
+       |      "identifiers": [{
+       |        "key": "nino",
+       |        "value": "$nino"
+       |      }],
+       |      "state": "Activated"
+       |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200
+       |}
+           """.stripMargin
+
+  private def loggedInResponseMultipleGGIDsDifferentNinos(
+                                             nino: String
+                                           ): String =
+    s"""
+       |{
+       |  "nino": "$nino",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "allEnrolments": [{
+       |      "key": "HMRC-PT",
+       |      "identifiers": [{
+       |        "key": "nino",
+       |        "value": "CS700100A"
+       |      }
+       |      ],
+       |      "state": "Activated"
+       |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200
+       |}
+           """.stripMargin
+
+  private def loggedInResponseMultipleGGIDsNoNino(
+                                             saUtr: String
+                                           ): String =
+    s"""
+       |{
+       |  "saUtr": "$saUtr",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "allEnrolments": [{
+       |      "key": "IR-SA",
+       |      "identifiers": [{
+       |        "key": "UTR",
+       |        "value": "$saUtr"
+       |      }],
+       |      "state": "Activated"
+       |},
+       |{
+       |      "key": "HMRC-PT",
+       |      "identifiers": [],
+       |      "state": "Activated"
+       |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200
+       |}
+           """.stripMargin
+
   def accountsFound(
     nino:        String  = "AA000006C",
     saUtr:       String  = "123456789",
@@ -241,6 +323,45 @@ object AuthStub {
           aResponse()
             .withStatus(200)
             .withBody(loggedInResponseMultipleGGIDs(nino, saUtr))
+        )
+    )
+
+  def accountsFoundMultipleGGIDsDuplicateNino(
+                                  nino: String = "AA000006C"
+                                ): StubMapping =
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(accountsRequestJson, true, false))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(loggedInResponseMultipleGGIDsDuplicateNino(nino))
+        )
+    )
+
+  def accountsFoundMultipleGGIDsDifferentNino(
+                                               nino: String
+                                             ): StubMapping =
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(accountsRequestJson, true, false))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(loggedInResponseMultipleGGIDsDifferentNinos(nino))
+        )
+    )
+
+  def accountsFoundMultipleGGIDNoNino(
+                                  saUtr: String = "123456789"
+                                ): StubMapping =
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(accountsRequestJson, true, false))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(loggedInResponseMultipleGGIDsNoNino(saUtr))
         )
     )
 

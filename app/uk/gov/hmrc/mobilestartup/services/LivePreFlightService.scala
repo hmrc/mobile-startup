@@ -108,16 +108,38 @@ class LivePreFlightService @Inject() (
     }
   }
 
-  override def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean = {
-    val userAgentHeader            = hc.otherHeaders.toMap.getOrElse("user-agent", "No User-Agent").toLowerCase
-    val userMissingHmrcPtEnrolment = !enrolments.enrolments.exists(_.key == "HMRC-PT")
-    if (userAgentHeader.contains("ios")) {
-      if (multipleGGIDCheckEnabledIos) userMissingHmrcPtEnrolment else false
-    } else if (userAgentHeader.contains("android")) {
-      if (multipleGGIDCheckEnabledAndroid) userMissingHmrcPtEnrolment else false
-    } else {
-      logger.info(s"User-Agent not recognised or missing: $userAgentHeader")
-      false
+  def routeToTens(checkEnabled: Boolean,
+                  hasPTEnrolment: Boolean,
+                  ninoFromAuth: Boolean,
+                  ninoAuthValue: Option[Nino],
+                  ninoPtValue: Option[Nino]): Boolean = {
+    (checkEnabled, hasPTEnrolment, ninoFromAuth) match {
+      case (false, _, _) => false
+      case (true, false, _) => true
+      case (true, true, false) => false
+      case (true, true, true) => !(ninoAuthValue.map(_.nino) == ninoPtValue.map(_.nino))
+    }
+  }
+
+  override def doesUserHaveMultipleGGIDs(enrolments: Enrolments, nino: Option[Nino])(implicit hc: HeaderCarrier): Boolean = {
+    val userAgentHeader = hc.otherHeaders.toMap.getOrElse("user-agent", "No User-Agent").toLowerCase
+    val userHasHmrcPtEnrolment = enrolments.enrolments.exists(_.key == "HMRC-PT")
+    val getEnrolment: String => Option[Nino] = key => enrolments.enrolments
+      .find(_.key == s"$key")
+      .flatMap { enrolment =>
+        enrolment.identifiers
+          .find(id => id.key == "nino" && enrolment.state == "Activated")
+          .map(key => Nino(key.value))
+      }
+
+    userAgentHeader match {
+      case _ if userAgentHeader.contains("ios") =>
+        routeToTens(multipleGGIDCheckEnabledIos, userHasHmrcPtEnrolment, nino.isDefined, nino, getEnrolment("HMRC-PT"))
+      case _ if userAgentHeader.contains("android") =>
+        routeToTens(multipleGGIDCheckEnabledAndroid, userHasHmrcPtEnrolment, nino.isDefined, nino, getEnrolment("HMRC-PT"))
+      case _ =>
+        logger.info(s"User-Agent not recognised or missing: $userAgentHeader")
+        false
     }
   }
 

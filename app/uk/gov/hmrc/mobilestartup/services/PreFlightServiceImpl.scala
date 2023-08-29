@@ -63,7 +63,7 @@ abstract class PreFlightServiceImpl[F[_]](
       getPreFlightCheckResponse(journeyId)
     }
 
-  def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean
+  def doesUserHaveMultipleGGIDs(enrolments: Enrolments, nino: Option[Nino])(implicit hc: HeaderCarrier): Boolean
 
   private def getPreFlightCheckResponse(
     journeyId:   JourneyId
@@ -92,7 +92,7 @@ abstract class PreFlightServiceImpl[F[_]](
                              account.annualTaxSummaryLink,
                              utrDetails,
                              account.enrolments,
-                             doesUserHaveMultipleGGIDs(account.enrolments))
+                             doesUserHaveMultipleGGIDs(account.enrolments, account.nino))
     }
   }
 

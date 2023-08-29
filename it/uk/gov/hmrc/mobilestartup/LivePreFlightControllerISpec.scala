@@ -254,14 +254,13 @@ trait LivePreFlightControllerTests extends BaseISpec {
     }
 
     "return routeToTEN = false if HMRC-PT enrolment found" in {
-      accountsFoundMultipleGGIDs(nino.nino, saUtr.utr)
+      accountsFoundMultipleGGIDNoNino(saUtr.utr)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
       val response = await(getRequestWithAcceptHeader(url))
 
       response.status                                          shouldBe 200
-      (response.json \ "nino").as[String]                      shouldBe nino.nino
       (response.json \ "routeToIV").as[Boolean]                shouldBe false
       (response.json \ "utr" \ "saUtr").as[String]             shouldBe "123456789"
       (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
@@ -330,6 +329,31 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty            shouldBe true
     }
 
+    "return routeToTEN = false on ios if check enabled and HMRC-PT enrolment found" in {
+      accountsFoundMultipleGGIDNoNino(saUtr.utr)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status shouldBe 200
+      (response.json \ "routeToTEN").as[Boolean] shouldBe false
+
+    }
+
+    "return routeToTEN = false on android if check enabled and HMRC-PT enrolment found" in {
+      accountsFoundMultipleGGIDNoNino(saUtr.utr)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response =
+        await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
+
+      response.status shouldBe 200
+      (response.json \ "routeToTEN").as[Boolean] shouldBe false
+
+    }
+
     "return routeToTEN = true on ios if check enabled and HMRC-PT enrolment not found" in {
       accountsFound(nino.nino, saUtr.utr)
       respondToAuditMergedWithNoBody
@@ -368,6 +392,29 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
       response.status shouldBe 200
       (response.json \ "routeToTEN").as[Boolean] shouldBe false
 
+    }
+
+    "return routeToTEN = false on ios if HMRC-PT and auth found with duplicate NINO's" in {
+      accountsFoundMultipleGGIDsDuplicateNino(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status shouldBe 200
+      (response.json \ "routeToTEN").as[Boolean] shouldBe false
+
+    }
+
+    "return routeToTEN = true on ios if HMRC-PT and Auth nino found but are different" in {
+      accountsFoundMultipleGGIDsDifferentNino(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status shouldBe 200
+      (response.json \ "routeToTEN").as[Boolean] shouldBe true
     }
   }
 }
@@ -427,6 +474,30 @@ class LivePreflightControllerMultipleGGIDCheckDisabledISpec extends BaseISpec {
         await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
 
       (response.json \ "routeToTEN").as[Boolean] shouldBe false
+    }
+
+    "return routeToTEN = false on android if HMRC-PT and HMRC-NI found with duplicate NINO's" in {
+      accountsFoundMultipleGGIDsDuplicateNino(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
+
+      response.status shouldBe 200
+      (response.json \ "routeToTEN").as[Boolean] shouldBe false
+
+    }
+
+    "return routeToTEN = true on android if HMRC-PT and HMRC-NI found but ninos are different" in {
+      accountsFoundMultipleGGIDsDifferentNino(nino.nino)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
+
+      response.status shouldBe 200
+      (response.json \ "routeToTEN").as[Boolean] shouldBe true
+
     }
   }
 }
