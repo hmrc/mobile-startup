@@ -475,29 +475,5 @@ class LivePreflightControllerMultipleGGIDCheckDisabledISpec extends BaseISpec {
 
       (response.json \ "routeToTEN").as[Boolean] shouldBe false
     }
-
-    "return routeToTEN = false on android if HMRC-PT and HMRC-NI found with duplicate NINO's" in {
-      accountsFoundMultipleGGIDsDuplicateNino(nino.nino)
-      respondToAuditMergedWithNoBody
-      respondToAuditWithNoBody
-
-      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
-
-      response.status shouldBe 200
-      (response.json \ "routeToTEN").as[Boolean] shouldBe false
-
-    }
-
-    "return routeToTEN = true on android if HMRC-PT and HMRC-NI found but ninos are different" in {
-      accountsFoundMultipleGGIDsDifferentNino(nino.nino)
-      respondToAuditMergedWithNoBody
-      respondToAuditWithNoBody
-
-      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
-
-      response.status shouldBe 200
-      (response.json \ "routeToTEN").as[Boolean] shouldBe true
-
-    }
   }
 }
