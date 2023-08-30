@@ -89,7 +89,7 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
     )(implicit hc: HeaderCarrier
     ): TestF[T] = f
 
-    def doesUserHaveMultipleGGIDs(enrolments: Enrolments)(implicit hc: HeaderCarrier): Boolean = false
+    def doesUserHaveMultipleGGIDs(enrolments: Enrolments, nino: Option[Nino])(implicit hc: HeaderCarrier): Boolean = false
 
     def getUtr(
       foundUtr:    Option[SaUtr],
