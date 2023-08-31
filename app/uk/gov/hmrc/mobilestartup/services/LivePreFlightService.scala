@@ -128,7 +128,7 @@ class LivePreFlightService @Inject() (
       .find(_.key == s"$key")
       .flatMap { enrolment =>
         enrolment.identifiers
-          .find(id => id.key == "nino" && enrolment.state == "Activated")
+          .find(id => id.key.toUpperCase == "NINO" && enrolment.state == "Activated")
           .map(key => Nino(key.value))
       }
 
@@ -154,7 +154,7 @@ class LivePreFlightService @Inject() (
       .find(_.key == "IR-SA")
       .flatMap { enrolment =>
         enrolment.identifiers
-          .find(id => id.key == "UTR" && enrolment.state == "Activated")
+          .find(id => id.key.toUpperCase == "UTR" && enrolment.state == "Activated")
           .map(key => SaUtr(key.value))
       }
 
