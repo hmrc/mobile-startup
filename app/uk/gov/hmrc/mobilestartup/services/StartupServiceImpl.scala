@@ -22,7 +22,7 @@ import javax.inject.Inject
 import play.api.Logger
 import play.api.libs.json.Json._
 import play.api.libs.json._
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream4xxResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream4xxResponse, UpstreamErrorResponse}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.PersonDetails
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
@@ -52,37 +52,38 @@ object URL {
   * onto the `GenericConnector` trait but that had very little impact beyond the change to the guice wiring.
   */
 class StartupServiceImpl[F[_]] @Inject() (
-  connector:                                                     GenericConnector[F],
-  userPanelSignUp:                                               Boolean,
-  enablePushNotificationTokenRegistration:                        Boolean,
-  enablePaperlessAlertDialogs:                                   Boolean,
-  enablePaperlessAdverts:                                        Boolean,
-  enableHtsAdverts:                                              Boolean,
-  enableAnnualTaxSummaryLink:                                    Boolean,
-  cbProofOfEntitlementUrl:                                       Option[String],
-  cbProofOfEntitlementUrlCy:                                     Option[String],
-  cbPaymentHistoryUrl:                                           Option[String],
-  cbPaymentHistoryUrlCy:                                         Option[String],
-  cbChangeBankAccountUrl:                                        Option[String],
-  cbChangeBankAccountUrlCy:                                      Option[String],
-  cbHomeUrl:                                                     Option[String],
-  cbHomeUrlCy:                                                   Option[String],
-  cbHowToClaimUrl:                                               Option[String],
-  cbHowToClaimUrlCy:                                             Option[String],
-  cbFullTimeEducationUrl:                                        Option[String],
-  cbFullTimeEducationUrlCy:                                      Option[String],
-  cbWhatChangesUrl:                                              Option[String],
-  cbWhatChangesUrlCy:                                            Option[String],
-  statePensionUrl:                                               Option[String],
-  niSummaryUrl:                                                  Option[String],
-  niContributionsUrl:                                            Option[String],
-  enablePayAsYouEarnCustomerSatisfactionSurvey:                         Boolean,
-  enableSelfAssessmentPaymentsCustomerSatisfactionSurvey:               Boolean,
-  enableCustomerSatisfactionSurveys:                                    Boolean,
-  findMyNinoAddToWallet:                                                 Boolean,
-  disableYourEmploymentIncomeChart:                                     Boolean,
-  findMyNinoAddToGoogleWallet:                                           Boolean
-)(implicit F:                                                    MonadError[F, Throwable])
+  connector:                                              GenericConnector[F],
+  userPanelSignUp:                                        Boolean,
+  enablePushNotificationTokenRegistration:                Boolean,
+  enablePaperlessAlertDialogs:                            Boolean,
+  enablePaperlessAdverts:                                 Boolean,
+  enableHtsAdverts:                                       Boolean,
+  enableAnnualTaxSummaryLink:                             Boolean,
+  cbProofOfEntitlementUrl:                                Option[String],
+  cbProofOfEntitlementUrlCy:                              Option[String],
+  cbPaymentHistoryUrl:                                    Option[String],
+  cbPaymentHistoryUrlCy:                                  Option[String],
+  cbChangeBankAccountUrl:                                 Option[String],
+  cbChangeBankAccountUrlCy:                               Option[String],
+  cbHomeUrl:                                              Option[String],
+  cbHomeUrlCy:                                            Option[String],
+  cbHowToClaimUrl:                                        Option[String],
+  cbHowToClaimUrlCy:                                      Option[String],
+  cbFullTimeEducationUrl:                                 Option[String],
+  cbFullTimeEducationUrlCy:                               Option[String],
+  cbWhatChangesUrl:                                       Option[String],
+  cbWhatChangesUrlCy:                                     Option[String],
+  statePensionUrl:                                        Option[String],
+  niSummaryUrl:                                           Option[String],
+  niContributionsUrl:                                     Option[String],
+  enablePayAsYouEarnCustomerSatisfactionSurvey:           Boolean,
+  enableSelfAssessmentPaymentsCustomerSatisfactionSurvey: Boolean,
+  enableCustomerSatisfactionSurveys:                      Boolean,
+  findMyNinoAddToWallet:                                  Boolean,
+  disableYourEmploymentIncomeChart:                       Boolean,
+  disableYourEmploymentIncomeChartAndroid:                Boolean,
+  findMyNinoAddToGoogleWallet:                            Boolean
+)(implicit F:                                             MonadError[F, Throwable])
     extends StartupService[F] {
 
   val logger: Logger = Logger(this.getClass)
@@ -109,10 +110,12 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("htsAdverts", enableHtsAdverts),
         FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink),
         FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enablePayAsYouEarnCustomerSatisfactionSurvey),
-        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts", enableSelfAssessmentPaymentsCustomerSatisfactionSurvey),
+        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts",
+                    enableSelfAssessmentPaymentsCustomerSatisfactionSurvey),
         FeatureFlag("customerSatisfactionSurveys", enableCustomerSatisfactionSurveys),
         FeatureFlag("findMyNinoAddToWallet", findMyNinoAddToWallet),
         FeatureFlag("disableYourEmploymentIncomeChart", disableYourEmploymentIncomeChart),
+        FeatureFlag("disableYourEmploymentIncomeChartAndroid", disableYourEmploymentIncomeChartAndroid),
         FeatureFlag("findMyNinoAddToGoogleWallet", findMyNinoAddToGoogleWallet)
       )
     )
@@ -205,7 +208,7 @@ class StartupServiceImpl[F[_]] @Inject() (
         )
       }
       .recover {
-        case e: Upstream4xxResponse if e.upstreamResponseCode == LOCKED =>
+        case e: UpstreamErrorResponse if e.statusCode == LOCKED =>
           logger.info("Person details are hidden")
           None
         case e: NotFoundException =>

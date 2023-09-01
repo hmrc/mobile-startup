@@ -45,15 +45,17 @@ class BaseISpec
 
   protected val acceptJsonHeader:        (String, String) = "Accept"        -> "application/vnd.hmrc.1.0+json"
   protected val authorizationJsonHeader: (String, String) = "AUTHORIZATION" -> "Bearer test"
+
   protected val userAgentJsonHeaderIos
     : (String, String) = "user-agent" -> "HMRCNextGenConsumer/uk.gov.hmrc.TaxCalc 14.12.0 (iOS 16.1.1)"
-  protected val userAgentJsonHeaderAndroid
-  : (String, String) = "user-agent" -> "HMRCNextGenConsumer/uk.gov.hmrc.TaxCalc 15.3.0 (Android 10; SM-G960F Build/QP1A.190711.020)"
 
-  val nino: Nino = Nino("AA000006C")
-  val saUtr: SaUtr = SaUtr("123456789")
+  protected val userAgentJsonHeaderAndroid
+    : (String, String) = "user-agent" -> "HMRCNextGenConsumer/uk.gov.hmrc.TaxCalc 15.3.0 (Android 10; SM-G960F Build/QP1A.190711.020)"
+
+  val nino:      Nino      = Nino("AA000006C")
+  val saUtr:     SaUtr     = SaUtr("123456789")
   val journeyId: JourneyId = "b6ef25bc-8f5e-49c8-98c5-f039f39e4557"
-  val url: String = s"/preflight-check?journeyId=$journeyId"
+  val url:       String    = s"/preflight-check?journeyId=$journeyId"
 
   def getRequestWithAcceptHeader(url: String): Future[WSResponse] =
     wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderIos).get()
@@ -68,7 +70,7 @@ class BaseISpec
       "microservice.services.enrolment-store-proxy.port"                -> wireMockPort,
       "auditing.consumer.baseUri.port"                                  -> wireMockPort,
       "feature.userPanelSignUp"                                         -> true,
-      "feature.enablePushNotificationTokenRegistration"                  -> true,
+      "feature.enablePushNotificationTokenRegistration"                 -> true,
       "feature.helpToSave.enableBadge"                                  -> true,
       "feature.paperlessAlertDialogs"                                   -> true,
       "feature.paperlessAdverts"                                        -> true,
@@ -80,9 +82,10 @@ class BaseISpec
       "feature.payeCustomerSatisfactionSurveyAdverts"                   -> true,
       "feature.selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts" -> true,
       "feature.customerSatisfactionSurveys"                             -> true,
-      "feature.findMyNinoAddToWallet"                                    -> true,
+      "feature.findMyNinoAddToWallet"                                   -> true,
       "feature.disableYourEmploymentIncomeChart"                        -> false,
-      "feature.findMyNinoAddToGoogleWallet"                              -> true,
+      "feature.disableYourEmploymentIncomeChartAndroid"                 -> false,
+      "feature.findMyNinoAddToGoogleWallet"                             -> true,
       "url.cbProofOfEntitlementUrl"                                     -> "/child-benefit/view-proof-entitlement",
       "url.cbProofOfEntitlementUrlCy"                                   -> "/child-benefit/view-proof-entitlementCy",
       "url.cbPaymentHistoryUrl"                                         -> "/child-benefit/view-payment-history",

@@ -54,6 +54,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.findMyNinoAddToWallet")
     bindConfigBoolean("feature.findMyNinoAddToGoogleWallet")
     bindConfigBoolean("feature.disableYourEmploymentIncomeChart")
+    bindConfigBoolean("feature.disableYourEmploymentIncomeChartAndroid")
     bindConfigBoolean("enableMultipleGGIDCheck.ios")
     bindConfigBoolean("enableMultipleGGIDCheck.android")
     bindConfigOptionalString("cbProofOfEntitlementUrl", "url.cbProofOfEntitlementUrl")
