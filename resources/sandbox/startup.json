@@ -73,7 +73,7 @@
     },
     {
       "name" : "disableYourEmploymentIncomeChartAndroid",
-      "enabled" : true
+      "enabled" : false
     }
   ],
   "helpToSave": {
