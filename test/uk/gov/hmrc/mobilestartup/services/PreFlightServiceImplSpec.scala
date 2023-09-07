@@ -27,7 +27,6 @@ import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import eu.timepit.refined.auto._
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.ExecutionContext
 
 class PreFlightServiceImplSpec extends BaseSpec with TestF {

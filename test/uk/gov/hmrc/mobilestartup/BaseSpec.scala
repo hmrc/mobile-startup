@@ -25,8 +25,6 @@ import eu.timepit.refined.auto._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 trait BaseSpec
     extends AnyWordSpecLike
     with Matchers

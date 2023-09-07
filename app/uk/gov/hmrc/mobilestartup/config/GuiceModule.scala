@@ -19,7 +19,7 @@ package uk.gov.hmrc.mobilestartup.config
 import com.google.inject.name.Names.named
 import com.google.inject.{AbstractModule, TypeLiteral}
 import javax.inject.Inject
-import play.api.{Configuration, Environment, Logger, LoggerLike}
+import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.http.CorePost
 import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorImpl}
@@ -63,10 +63,10 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("cbPaymentHistoryUrlCy", "url.cbPaymentHistoryUrlCy")
     bindConfigOptionalString("cbChangeBankAccountUrl", "url.cbChangeBankAccountUrl")
     bindConfigOptionalString("cbChangeBankAccountUrlCy", "url.cbChangeBankAccountUrlCy")
-    bindConfigOptionalString("cbHomeUrl","url.cbHomeUrl")
-    bindConfigOptionalString("cbHomeUrlCy","url.cbHomeUrlCy")
-    bindConfigOptionalString("cbHowToClaimUrl","url.cbHowToClaimUrl")
-    bindConfigOptionalString("cbHowToClaimUrlCy","url.cbHowToClaimUrlCy")
+    bindConfigOptionalString("cbHomeUrl", "url.cbHomeUrl")
+    bindConfigOptionalString("cbHomeUrlCy", "url.cbHomeUrlCy")
+    bindConfigOptionalString("cbHowToClaimUrl", "url.cbHowToClaimUrl")
+    bindConfigOptionalString("cbHowToClaimUrlCy", "url.cbHowToClaimUrlCy")
     bindConfigOptionalString("cbFullTimeEducationUrl", "url.cbFullTimeEducationUrl")
     bindConfigOptionalString("cbFullTimeEducationUrlCy", "url.cbFullTimeEducationUrlCy")
     bindConfigOptionalString("cbWhatChangesUrl", "url.cbWhatChangesUrl")
@@ -74,6 +74,8 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("statePensionUrl", "url.statePensionUrl")
     bindConfigOptionalString("niSummaryUrl", "url.niSummaryUrl")
     bindConfigOptionalString("niContributionsUrl", "url.niContributionsUrl")
+    bindConfigOptionalString("digitalAssistantUrl", "url.digitalAssistantUrl")
+    bindConfigOptionalString("digitalAssistantUrlCy", "url.digitalAssistantUrlCy")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])

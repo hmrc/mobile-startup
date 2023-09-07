@@ -100,7 +100,9 @@ class BaseISpec
       "url.cbWhatChangesUrlCy"                                          -> "/personal-account/child-benefit-formsCy",
       "url.statePensionUrl"                                             -> "/statePensionUrl",
       "url.niSummaryUrl"                                                -> "/niSummaryUrl",
-      "url.niContributionsUrl"                                          -> "/niContributionsUrl"
+      "url.niContributionsUrl"                                          -> "/niContributionsUrl",
+      "url.digitalAssistantUrl"                                         -> "/digitalAssistantUrl",
+      "url.digitalAssistantUrlCy"                                       -> "/digitalAssistantUrlCy"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)

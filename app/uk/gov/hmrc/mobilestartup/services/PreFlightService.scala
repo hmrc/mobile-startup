@@ -24,7 +24,7 @@ import uk.gov.hmrc.mobilestartup.model.{EnrolmentStatus, NoUtr}
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.{JourneyId, LinkDestination}
 import uk.gov.hmrc.mobilestartup.model.types._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 case class PreFlightCheckResponse(
   nino:                 Option[Nino],
