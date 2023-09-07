@@ -21,7 +21,7 @@ import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
-import uk.gov.hmrc.mobilestartup.{BaseSpec, TestF, services}
+import uk.gov.hmrc.mobilestartup.{BaseSpec, TestF}
 
 class StartupServiceImplSpec extends BaseSpec with TestF {
 
@@ -215,6 +215,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               statePensionUrl                                        = Some("/statePensionUrl"),
                                               niSummaryUrl                                           = Some("/niSummaryUrl"),
                                               niContributionsUrl                                     = Some("/niContributionsUrl"),
+                                              digitalAssistantUrl                                    = Some("/digitalAssistantUrl"),
+                                              digitalAssistantUrlCy                                  = Some("/digitalAssistantUrlCy"),
                                               enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
                                               enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
                                               enableCustomerSatisfactionSurveys                      = false,
@@ -263,7 +265,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbWhatChangesUrlCy", "/cb/cbWhatChangesUrlCy"),
         URL("statePensionUrl", "/statePensionUrl"),
         URL("niSummaryUrl", "/niSummaryUrl"),
-        URL("niContributionsUrl", "/niContributionsUrl")
+        URL("niContributionsUrl", "/niContributionsUrl"),
+        URL("digitalAssistantUrl", "/digitalAssistantUrl"),
+        URL("digitalAssistantUrlCy", "/digitalAssistantUrlCy")
       )
     }
   }
@@ -294,6 +298,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               statePensionUrl                                        = Some("/statePensionUrl"),
                                               niSummaryUrl                                           = Some("/niSummaryUrl"),
                                               niContributionsUrl                                     = Some("/niContributionsUrl"),
+                                              digitalAssistantUrl                                    = Some("/digitalAssistantUrl"),
+                                              digitalAssistantUrlCy                                  = Some("/digitalAssistantUrlCy"),
                                               enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
                                               enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
                                               enableCustomerSatisfactionSurveys                      = false,
@@ -342,7 +348,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbWhatChangesUrlCy", "/cb/cbWhatChangesUrlCy"),
         URL("statePensionUrl", "/statePensionUrl"),
         URL("niSummaryUrl", "/niSummaryUrl"),
-        URL("niContributionsUrl", "/niContributionsUrl")
+        URL("niContributionsUrl", "/niContributionsUrl"),
+        URL("digitalAssistantUrl", "/digitalAssistantUrl"),
+        URL("digitalAssistantUrlCy", "/digitalAssistantUrlCy")
       )
     }
 
@@ -371,6 +379,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                               statePensionUrl                                        = Some("/statePensionUrl"),
                                               niSummaryUrl                                           = Some("/niSummaryUrl"),
                                               niContributionsUrl                                     = Some("/niContributionsUrl"),
+                                              digitalAssistantUrl                                    = Some("/digitalAssistantUrl"),
+                                              digitalAssistantUrlCy                                  = Some("/digitalAssistantUrlCy"),
                                               enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
                                               enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
                                               enableCustomerSatisfactionSurveys                      = false,
@@ -419,7 +429,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbWhatChangesUrlCy", "/cb/cbWhatChangesUrlCy"),
         URL("statePensionUrl", "/statePensionUrl"),
         URL("niSummaryUrl", "/niSummaryUrl"),
-        URL("niContributionsUrl", "/niContributionsUrl")
+        URL("niContributionsUrl", "/niContributionsUrl"),
+        URL("digitalAssistantUrl", "/digitalAssistantUrl"),
+        URL("digitalAssistantUrlCy", "/digitalAssistantUrlCy")
       )
     }
 
@@ -449,6 +461,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         statePensionUrl                                        = Some("/statePensionUrl"),
         niSummaryUrl                                           = Some("/niSummaryUrl"),
         niContributionsUrl                                     = Some("/niContributionsUrl"),
+        digitalAssistantUrl                                    = Some("/digitalAssistantUrl"),
+        digitalAssistantUrlCy                                  = Some("/digitalAssistantUrlCy"),
         enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
         enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
         enableCustomerSatisfactionSurveys                      = false,
@@ -504,7 +518,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbWhatChangesUrlCy", "/cb/cbWhatChangesUrlCy"),
         URL("statePensionUrl", "/statePensionUrl"),
         URL("niSummaryUrl", "/niSummaryUrl"),
-        URL("niContributionsUrl", "/niContributionsUrl")
+        URL("niContributionsUrl", "/niContributionsUrl"),
+        URL("digitalAssistantUrl", "/digitalAssistantUrl"),
+        URL("digitalAssistantUrlCy", "/digitalAssistantUrlCy")
       )
     }
 
@@ -534,6 +550,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       statePensionUrl                                        = Some("/statePensionUrl"),
                                       niSummaryUrl                                           = Some("/niSummaryUrl"),
                                       niContributionsUrl                                     = Some("/niContributionsUrl"),
+                                      digitalAssistantUrl                                    = Some("/digitalAssistantUrl"),
+                                      digitalAssistantUrlCy                                  = Some("/digitalAssistantUrlCy"),
                                       enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
                                       enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
                                       enableCustomerSatisfactionSurveys                      = false,
@@ -582,7 +600,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("cbWhatChangesUrlCy", "/cb/cbWhatChangesUrlCy"),
         URL("statePensionUrl", "/statePensionUrl"),
         URL("niSummaryUrl", "/niSummaryUrl"),
-        URL("niContributionsUrl", "/niContributionsUrl")
+        URL("niContributionsUrl", "/niContributionsUrl"),
+        URL("digitalAssistantUrl", "/digitalAssistantUrl"),
+        URL("digitalAssistantUrlCy", "/digitalAssistantUrlCy")
       )
     }
   }
@@ -613,6 +633,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     statePensionUrl                                        = Some("/statePensionUrl"),
                                     niSummaryUrl                                           = Some("/niSummaryUrl"),
                                     niContributionsUrl                                     = Some("/niContributionsUrl"),
+                                    digitalAssistantUrl                                    = Some("/digitalAssistantUrl"),
+                                    digitalAssistantUrlCy                                  = Some("/digitalAssistantUrlCy"),
                                     enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
                                     enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
                                     enableCustomerSatisfactionSurveys                      = false,
@@ -654,7 +676,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       URL("cbWhatChangesUrl", "/cb/cbWhatChangesUrl"),
       URL("statePensionUrl", "/statePensionUrl"),
       URL("niSummaryUrl", "/niSummaryUrl"),
-      URL("niContributionsUrl", "/niContributionsUrl")
+      URL("niContributionsUrl", "/niContributionsUrl"),
+      URL("digitalAssistantUrl", "/digitalAssistantUrl"),
+      URL("digitalAssistantUrlCy", "/digitalAssistantUrlCy")
     )
   }
 }

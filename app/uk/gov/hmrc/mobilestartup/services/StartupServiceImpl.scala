@@ -22,7 +22,7 @@ import javax.inject.Inject
 import play.api.Logger
 import play.api.libs.json.Json._
 import play.api.libs.json._
-import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, Upstream4xxResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, UpstreamErrorResponse}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.PersonDetails
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
@@ -76,6 +76,8 @@ class StartupServiceImpl[F[_]] @Inject() (
   statePensionUrl:                                        Option[String],
   niSummaryUrl:                                           Option[String],
   niContributionsUrl:                                     Option[String],
+  digitalAssistantUrl:                                    Option[String],
+  digitalAssistantUrlCy:                                  Option[String],
   enablePayAsYouEarnCustomerSatisfactionSurvey:           Boolean,
   enableSelfAssessmentPaymentsCustomerSatisfactionSurvey: Boolean,
   enableCustomerSatisfactionSurveys:                      Boolean,
@@ -139,7 +141,9 @@ class StartupServiceImpl[F[_]] @Inject() (
         cbWhatChangesUrlCy.map(URL("cbWhatChangesUrlCy", _)),
         statePensionUrl.map(URL("statePensionUrl", _)),
         niSummaryUrl.map(URL("niSummaryUrl", _)),
-        niContributionsUrl.map(URL("niContributionsUrl", _))
+        niContributionsUrl.map(URL("niContributionsUrl", _)),
+        digitalAssistantUrl.map(URL("digitalAssistantUrl", _)),
+        digitalAssistantUrlCy.map(URL("digitalAssistantUrlCy", _))
       ).filter(_.isDefined)
     )
 

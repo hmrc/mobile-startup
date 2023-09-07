@@ -18,7 +18,6 @@ package uk.gov.hmrc.mobilestartup.model
 
 import eu.timepit.refined.api.{RefType, Refined, Validate}
 import eu.timepit.refined.refineV
-import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads, Writes}
 import play.api.mvc.QueryStringBindable
 
