@@ -74,8 +74,8 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("statePensionUrl", "url.statePensionUrl")
     bindConfigOptionalString("niSummaryUrl", "url.niSummaryUrl")
     bindConfigOptionalString("niContributionsUrl", "url.niContributionsUrl")
-    bindConfigOptionalString("digitalAssistantUrl", "url.digitalAssistantUrl")
-    bindConfigOptionalString("digitalAssistantUrlCy", "url.digitalAssistantUrlCy")
+    bindConfigOptionalString("otherTaxesDigitalAssistantUrl", "url.otherTaxesDigitalAssistantUrl")
+    bindConfigOptionalString("otherTaxesDigitalAssistantUrlCy", "url.otherTaxesDigitalAssistantUrlCy")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
