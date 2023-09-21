@@ -76,8 +76,8 @@ class StartupServiceImpl[F[_]] @Inject() (
   statePensionUrl:                                        Option[String],
   niSummaryUrl:                                           Option[String],
   niContributionsUrl:                                     Option[String],
-  digitalAssistantUrl:                                    Option[String],
-  digitalAssistantUrlCy:                                  Option[String],
+  otherTaxesDigitalAssistantUrl:                          Option[String],
+  otherTaxesDigitalAssistantUrlCy:                        Option[String],
   enablePayAsYouEarnCustomerSatisfactionSurvey:           Boolean,
   enableSelfAssessmentPaymentsCustomerSatisfactionSurvey: Boolean,
   enableCustomerSatisfactionSurveys:                      Boolean,
@@ -142,8 +142,8 @@ class StartupServiceImpl[F[_]] @Inject() (
         statePensionUrl.map(URL("statePensionUrl", _)),
         niSummaryUrl.map(URL("niSummaryUrl", _)),
         niContributionsUrl.map(URL("niContributionsUrl", _)),
-        digitalAssistantUrl.map(URL("digitalAssistantUrl", _)),
-        digitalAssistantUrlCy.map(URL("digitalAssistantUrlCy", _))
+        otherTaxesDigitalAssistantUrl.map(URL("otherTaxesDigitalAssistantUrl", _)),
+        otherTaxesDigitalAssistantUrlCy.map(URL("otherTaxesDigitalAssistantUrlCy", _))
       ).filter(_.isDefined)
     )
 

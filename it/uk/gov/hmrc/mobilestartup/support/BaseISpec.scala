@@ -101,8 +101,8 @@ class BaseISpec
       "url.statePensionUrl"                                             -> "/statePensionUrl",
       "url.niSummaryUrl"                                                -> "/niSummaryUrl",
       "url.niContributionsUrl"                                          -> "/niContributionsUrl",
-      "url.digitalAssistantUrl"                                         -> "/digitalAssistantUrl",
-      "url.digitalAssistantUrlCy"                                       -> "/digitalAssistantUrlCy"
+      "url.otherTaxesDigitalAssistantUrl"                               -> "/otherTaxesDigitalAssistantUrl",
+      "url.otherTaxesDigitalAssistantUrlCy"                             -> "/otherTaxesDigitalAssistantUrlCy"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)
