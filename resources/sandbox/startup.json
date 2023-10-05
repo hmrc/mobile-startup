@@ -69,7 +69,7 @@
     },
     {
       "name" : "disableYourEmploymentIncomeChart",
-      "enabled" : true
+      "enabled" : false
     }
   ],
   "helpToSave": {
