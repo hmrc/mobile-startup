@@ -16,7 +16,6 @@ object AppDependencies {
   private val catsCoreVersion               = "2.1.0"
   private val scalaMockVersion              = "4.1.0"
   private val scalaCheckVersion             = "3.2.3.0"
-  private val serviceIntegrationTestVersion = "1.2.0-play-28"
   private val flexmarkAllVersion            = "0.36.8"
 
   val compile = Seq(
@@ -62,7 +61,6 @@ object AppDependencies {
 
         override lazy val test: Seq[ModuleID] = testCommon(scope) ++ Seq(
             "org.scalatest"          %% "scalatest"                % scalaTestVersion              % "it",
-            "uk.gov.hmrc"            %% "service-integration-test" % serviceIntegrationTestVersion % "it",
             "com.github.tomakehurst" % "wiremock-jre8"             % wireMockVersion               % "it"
           )
       }.test
