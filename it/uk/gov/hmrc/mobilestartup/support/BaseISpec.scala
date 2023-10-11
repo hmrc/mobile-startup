@@ -85,6 +85,7 @@ class BaseISpec
       "feature.findMyNinoAddToWallet"                                   -> true,
       "feature.disableYourEmploymentIncomeChart"                        -> false,
       "feature.disableYourEmploymentIncomeChartAndroid"                 -> false,
+      "feature.disableYourEmploymentIncomeChartIos"                     -> false,
       "feature.findMyNinoAddToGoogleWallet"                             -> true,
       "url.cbProofOfEntitlementUrl"                                     -> "/child-benefit/view-proof-entitlement",
       "url.cbProofOfEntitlementUrlCy"                                   -> "/child-benefit/view-proof-entitlementCy",

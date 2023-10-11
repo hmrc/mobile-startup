@@ -191,39 +191,41 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
 
   "a fully successful response" should {
     "contain success entries for each service" in {
-      val sut = new StartupServiceImpl[TestF](dummyConnector(),
-                                              userPanelSignUp                                        = false,
-                                              enablePushNotificationTokenRegistration                = false,
-                                              enablePaperlessAlertDialogs                            = false,
-                                              enablePaperlessAdverts                                 = false,
-                                              enableHtsAdverts                                       = false,
-                                              enableAnnualTaxSummaryLink                             = false,
-                                              cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
-                                              cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                              cbPaymentHistoryUrl                                    = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                                  = Some("/cb/cbPaymentHistoryUrlCy"),
-                                              cbChangeBankAccountUrl                                 = Some("/cb/cbChangeBankAccountUrl"),
-                                              cbChangeBankAccountUrlCy                               = Some("/cb/cbChangeBankAccountUrlCy"),
-                                              cbHomeUrl                                              = Some("/cb/cbHomeUrl"),
-                                              cbHomeUrlCy                                            = Some("/cb/cbHomeUrlCy"),
-                                              cbHowToClaimUrl                                        = Some("/cb/cbHowToClaimUrl"),
-                                              cbHowToClaimUrlCy                                      = Some("/cb/cbHowToClaimUrlCy"),
-                                              cbFullTimeEducationUrl                                 = Some("/cb/cbFullTimeEducationUrl"),
-                                              cbFullTimeEducationUrlCy                               = Some("/cb/cbFullTimeEducationUrlCy"),
-                                              cbWhatChangesUrl                                       = Some("/cb/cbWhatChangesUrl"),
-                                              cbWhatChangesUrlCy                                     = Some("/cb/cbWhatChangesUrlCy"),
-                                              statePensionUrl                                        = Some("/statePensionUrl"),
-                                              niSummaryUrl                                           = Some("/niSummaryUrl"),
-                                              niContributionsUrl                                     = Some("/niContributionsUrl"),
-                                              otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
-                                              otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
-                                              enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
-                                              enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
-                                              enableCustomerSatisfactionSurveys                      = false,
-                                              findMyNinoAddToWallet                                  = false,
-                                              disableYourEmploymentIncomeChart                       = true,
-                                              disableYourEmploymentIncomeChartAndroid                = true,
-                                              findMyNinoAddToGoogleWallet                            = false)
+      val sut =
+        new StartupServiceImpl[TestF](dummyConnector(),
+                                      userPanelSignUp                                        = false,
+                                      enablePushNotificationTokenRegistration                = false,
+                                      enablePaperlessAlertDialogs                            = false,
+                                      enablePaperlessAdverts                                 = false,
+                                      enableHtsAdverts                                       = false,
+                                      enableAnnualTaxSummaryLink                             = false,
+                                      cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
+                                      cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                      cbPaymentHistoryUrl                                    = Some("/cb/cbPaymentHistoryUrl"),
+                                      cbPaymentHistoryUrlCy                                  = Some("/cb/cbPaymentHistoryUrlCy"),
+                                      cbChangeBankAccountUrl                                 = Some("/cb/cbChangeBankAccountUrl"),
+                                      cbChangeBankAccountUrlCy                               = Some("/cb/cbChangeBankAccountUrlCy"),
+                                      cbHomeUrl                                              = Some("/cb/cbHomeUrl"),
+                                      cbHomeUrlCy                                            = Some("/cb/cbHomeUrlCy"),
+                                      cbHowToClaimUrl                                        = Some("/cb/cbHowToClaimUrl"),
+                                      cbHowToClaimUrlCy                                      = Some("/cb/cbHowToClaimUrlCy"),
+                                      cbFullTimeEducationUrl                                 = Some("/cb/cbFullTimeEducationUrl"),
+                                      cbFullTimeEducationUrlCy                               = Some("/cb/cbFullTimeEducationUrlCy"),
+                                      cbWhatChangesUrl                                       = Some("/cb/cbWhatChangesUrl"),
+                                      cbWhatChangesUrlCy                                     = Some("/cb/cbWhatChangesUrlCy"),
+                                      statePensionUrl                                        = Some("/statePensionUrl"),
+                                      niSummaryUrl                                           = Some("/niSummaryUrl"),
+                                      niContributionsUrl                                     = Some("/niContributionsUrl"),
+                                      otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
+                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
+                                      enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
+                                      enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
+                                      enableCustomerSatisfactionSurveys                      = false,
+                                      findMyNinoAddToWallet                                  = false,
+                                      disableYourEmploymentIncomeChart                       = true,
+                                      disableYourEmploymentIncomeChartAndroid                = true,
+                                      disableYourEmploymentIncomeChartIos                    = true,
+                                      findMyNinoAddToGoogleWallet                            = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -243,6 +245,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
         FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
         FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
+        FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
         FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
@@ -274,39 +277,41 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
 
   "a response" should {
     "not contain an entry for help-to-save when the hts call fails" in {
-      val sut = new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error),
-                                              false,
-                                              enablePushNotificationTokenRegistration                = false,
-                                              enablePaperlessAlertDialogs                            = false,
-                                              enablePaperlessAdverts                                 = false,
-                                              enableHtsAdverts                                       = false,
-                                              enableAnnualTaxSummaryLink                             = false,
-                                              cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
-                                              cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                              cbPaymentHistoryUrl                                    = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                                  = Some("/cb/cbPaymentHistoryUrlCy"),
-                                              cbChangeBankAccountUrl                                 = Some("/cb/cbChangeBankAccountUrl"),
-                                              cbChangeBankAccountUrlCy                               = Some("/cb/cbChangeBankAccountUrlCy"),
-                                              cbHomeUrl                                              = Some("/cb/cbHomeUrl"),
-                                              cbHomeUrlCy                                            = Some("/cb/cbHomeUrlCy"),
-                                              cbHowToClaimUrl                                        = Some("/cb/cbHowToClaimUrl"),
-                                              cbHowToClaimUrlCy                                      = Some("/cb/cbHowToClaimUrlCy"),
-                                              cbFullTimeEducationUrl                                 = Some("/cb/cbFullTimeEducationUrl"),
-                                              cbFullTimeEducationUrlCy                               = Some("/cb/cbFullTimeEducationUrlCy"),
-                                              cbWhatChangesUrl                                       = Some("/cb/cbWhatChangesUrl"),
-                                              cbWhatChangesUrlCy                                     = Some("/cb/cbWhatChangesUrlCy"),
-                                              statePensionUrl                                        = Some("/statePensionUrl"),
-                                              niSummaryUrl                                           = Some("/niSummaryUrl"),
-                                              niContributionsUrl                                     = Some("/niContributionsUrl"),
-                                              otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
-                                              otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
-                                              enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
-                                              enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
-                                              enableCustomerSatisfactionSurveys                      = false,
-                                              findMyNinoAddToWallet                                  = false,
-                                              disableYourEmploymentIncomeChart                       = true,
-                                              disableYourEmploymentIncomeChartAndroid                = true,
-                                              findMyNinoAddToGoogleWallet                            = false)
+      val sut =
+        new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error),
+                                      false,
+                                      enablePushNotificationTokenRegistration                = false,
+                                      enablePaperlessAlertDialogs                            = false,
+                                      enablePaperlessAdverts                                 = false,
+                                      enableHtsAdverts                                       = false,
+                                      enableAnnualTaxSummaryLink                             = false,
+                                      cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
+                                      cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                      cbPaymentHistoryUrl                                    = Some("/cb/cbPaymentHistoryUrl"),
+                                      cbPaymentHistoryUrlCy                                  = Some("/cb/cbPaymentHistoryUrlCy"),
+                                      cbChangeBankAccountUrl                                 = Some("/cb/cbChangeBankAccountUrl"),
+                                      cbChangeBankAccountUrlCy                               = Some("/cb/cbChangeBankAccountUrlCy"),
+                                      cbHomeUrl                                              = Some("/cb/cbHomeUrl"),
+                                      cbHomeUrlCy                                            = Some("/cb/cbHomeUrlCy"),
+                                      cbHowToClaimUrl                                        = Some("/cb/cbHowToClaimUrl"),
+                                      cbHowToClaimUrlCy                                      = Some("/cb/cbHowToClaimUrlCy"),
+                                      cbFullTimeEducationUrl                                 = Some("/cb/cbFullTimeEducationUrl"),
+                                      cbFullTimeEducationUrlCy                               = Some("/cb/cbFullTimeEducationUrlCy"),
+                                      cbWhatChangesUrl                                       = Some("/cb/cbWhatChangesUrl"),
+                                      cbWhatChangesUrlCy                                     = Some("/cb/cbWhatChangesUrlCy"),
+                                      statePensionUrl                                        = Some("/statePensionUrl"),
+                                      niSummaryUrl                                           = Some("/niSummaryUrl"),
+                                      niContributionsUrl                                     = Some("/niContributionsUrl"),
+                                      otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
+                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
+                                      enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
+                                      enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
+                                      enableCustomerSatisfactionSurveys                      = false,
+                                      findMyNinoAddToWallet                                  = false,
+                                      disableYourEmploymentIncomeChart                       = true,
+                                      disableYourEmploymentIncomeChartAndroid                = true,
+                                      disableYourEmploymentIncomeChartIos                    = true,
+                                      findMyNinoAddToGoogleWallet                            = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -326,6 +331,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
         FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
         FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
+        FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
         FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
@@ -355,39 +361,41 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     }
 
     "contain an error entry for tcr when the tcr call fails" in {
-      val sut = new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error),
-                                              false,
-                                              enablePushNotificationTokenRegistration                = false,
-                                              enablePaperlessAlertDialogs                            = false,
-                                              enablePaperlessAdverts                                 = false,
-                                              enableHtsAdverts                                       = false,
-                                              enableAnnualTaxSummaryLink                             = false,
-                                              cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
-                                              cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
-                                              cbPaymentHistoryUrl                                    = Some("/cb/cbPaymentHistoryUrl"),
-                                              cbPaymentHistoryUrlCy                                  = Some("/cb/cbPaymentHistoryUrlCy"),
-                                              cbChangeBankAccountUrl                                 = Some("/cb/cbChangeBankAccountUrl"),
-                                              cbChangeBankAccountUrlCy                               = Some("/cb/cbChangeBankAccountUrlCy"),
-                                              cbHomeUrl                                              = Some("/cb/cbHomeUrl"),
-                                              cbHomeUrlCy                                            = Some("/cb/cbHomeUrlCy"),
-                                              cbHowToClaimUrl                                        = Some("/cb/cbHowToClaimUrl"),
-                                              cbHowToClaimUrlCy                                      = Some("/cb/cbHowToClaimUrlCy"),
-                                              cbFullTimeEducationUrl                                 = Some("/cb/cbFullTimeEducationUrl"),
-                                              cbFullTimeEducationUrlCy                               = Some("/cb/cbFullTimeEducationUrlCy"),
-                                              cbWhatChangesUrl                                       = Some("/cb/cbWhatChangesUrl"),
-                                              cbWhatChangesUrlCy                                     = Some("/cb/cbWhatChangesUrlCy"),
-                                              statePensionUrl                                        = Some("/statePensionUrl"),
-                                              niSummaryUrl                                           = Some("/niSummaryUrl"),
-                                              niContributionsUrl                                     = Some("/niContributionsUrl"),
-                                              otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
-                                              otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
-                                              enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
-                                              enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
-                                              enableCustomerSatisfactionSurveys                      = false,
-                                              findMyNinoAddToWallet                                  = false,
-                                              disableYourEmploymentIncomeChart                       = true,
-                                              disableYourEmploymentIncomeChartAndroid                = true,
-                                              findMyNinoAddToGoogleWallet                            = false)
+      val sut =
+        new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error),
+                                      false,
+                                      enablePushNotificationTokenRegistration                = false,
+                                      enablePaperlessAlertDialogs                            = false,
+                                      enablePaperlessAdverts                                 = false,
+                                      enableHtsAdverts                                       = false,
+                                      enableAnnualTaxSummaryLink                             = false,
+                                      cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
+                                      cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
+                                      cbPaymentHistoryUrl                                    = Some("/cb/cbPaymentHistoryUrl"),
+                                      cbPaymentHistoryUrlCy                                  = Some("/cb/cbPaymentHistoryUrlCy"),
+                                      cbChangeBankAccountUrl                                 = Some("/cb/cbChangeBankAccountUrl"),
+                                      cbChangeBankAccountUrlCy                               = Some("/cb/cbChangeBankAccountUrlCy"),
+                                      cbHomeUrl                                              = Some("/cb/cbHomeUrl"),
+                                      cbHomeUrlCy                                            = Some("/cb/cbHomeUrlCy"),
+                                      cbHowToClaimUrl                                        = Some("/cb/cbHowToClaimUrl"),
+                                      cbHowToClaimUrlCy                                      = Some("/cb/cbHowToClaimUrlCy"),
+                                      cbFullTimeEducationUrl                                 = Some("/cb/cbFullTimeEducationUrl"),
+                                      cbFullTimeEducationUrlCy                               = Some("/cb/cbFullTimeEducationUrlCy"),
+                                      cbWhatChangesUrl                                       = Some("/cb/cbWhatChangesUrl"),
+                                      cbWhatChangesUrlCy                                     = Some("/cb/cbWhatChangesUrlCy"),
+                                      statePensionUrl                                        = Some("/statePensionUrl"),
+                                      niSummaryUrl                                           = Some("/niSummaryUrl"),
+                                      niContributionsUrl                                     = Some("/niContributionsUrl"),
+                                      otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
+                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
+                                      enablePayAsYouEarnCustomerSatisfactionSurvey           = false,
+                                      enableSelfAssessmentPaymentsCustomerSatisfactionSurvey = false,
+                                      enableCustomerSatisfactionSurveys                      = false,
+                                      findMyNinoAddToWallet                                  = false,
+                                      disableYourEmploymentIncomeChart                       = true,
+                                      disableYourEmploymentIncomeChartAndroid                = true,
+                                      disableYourEmploymentIncomeChartIos                    = true,
+                                      findMyNinoAddToGoogleWallet                            = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -407,6 +415,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
         FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
         FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
+        FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
         FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
@@ -469,6 +478,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         findMyNinoAddToWallet                                  = false,
         disableYourEmploymentIncomeChart                       = true,
         disableYourEmploymentIncomeChartAndroid                = true,
+        disableYourEmploymentIncomeChartIos                    = true,
         findMyNinoAddToGoogleWallet                            = false
       )
 
@@ -490,6 +500,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
         FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
         FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
+        FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
         FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
       )
       (result \ messages).toOption.value shouldBe Json.parse("""{
@@ -558,6 +569,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       findMyNinoAddToWallet                                  = false,
                                       disableYourEmploymentIncomeChart                       = true,
                                       disableYourEmploymentIncomeChartAndroid                = true,
+                                      disableYourEmploymentIncomeChartIos                    = true,
                                       findMyNinoAddToGoogleWallet                            = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -578,6 +590,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
         FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
         FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
+        FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
         FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
@@ -641,6 +654,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     findMyNinoAddToWallet                                  = false,
                                     disableYourEmploymentIncomeChart                       = true,
                                     disableYourEmploymentIncomeChartAndroid                = true,
+                                    disableYourEmploymentIncomeChartIos                    = true,
                                     findMyNinoAddToGoogleWallet                            = false)
 
     val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -661,6 +675,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
       FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
       FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
+      FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
       FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
     )
     (result \ messages).toOption.value shouldBe messagesSuccessResponse

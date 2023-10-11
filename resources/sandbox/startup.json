@@ -74,6 +74,10 @@
     {
       "name" : "disableYourEmploymentIncomeChartAndroid",
       "enabled" : false
+    },
+    {
+      "name" : "disableYourEmploymentIncomeChartIos",
+      "enabled" : false
     }
   ],
   "helpToSave": {
