@@ -78,14 +78,12 @@ class StartupServiceImpl[F[_]] @Inject() (
   niContributionsUrl:                                     Option[String],
   otherTaxesDigitalAssistantUrl:                          Option[String],
   otherTaxesDigitalAssistantUrlCy:                        Option[String],
-  enablePayAsYouEarnCustomerSatisfactionSurvey:           Boolean,
-  enableSelfAssessmentPaymentsCustomerSatisfactionSurvey: Boolean,
   enableCustomerSatisfactionSurveys:                      Boolean,
-  findMyNinoAddToWallet:                                  Boolean,
+  findMyNinoAddToWallet:                                   Boolean,
   disableYourEmploymentIncomeChart:                       Boolean,
   disableYourEmploymentIncomeChartAndroid:                Boolean,
   disableYourEmploymentIncomeChartIos:                    Boolean,
-  findMyNinoAddToGoogleWallet:                            Boolean
+  findMyNinoAddToGoogleWallet:                             Boolean
 )(implicit F:                                             MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -112,9 +110,6 @@ class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("paperlessAdverts", enablePaperlessAdverts),
         FeatureFlag("htsAdverts", enableHtsAdverts),
         FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink),
-        FeatureFlag("payeCustomerSatisfactionSurveyAdverts", enablePayAsYouEarnCustomerSatisfactionSurvey),
-        FeatureFlag("selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts",
-                    enableSelfAssessmentPaymentsCustomerSatisfactionSurvey),
         FeatureFlag("customerSatisfactionSurveys", enableCustomerSatisfactionSurveys),
         FeatureFlag("findMyNinoAddToWallet", findMyNinoAddToWallet),
         FeatureFlag("disableYourEmploymentIncomeChart", disableYourEmploymentIncomeChart),

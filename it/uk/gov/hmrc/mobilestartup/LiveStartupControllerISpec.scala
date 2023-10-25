@@ -122,24 +122,19 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 4 \ "enabled").as[Boolean] shouldBe true
       (response.json \ "feature" \ 5 \ "name").as[String]     shouldBe "annualTaxSummaryLink"
       (response.json \ "feature" \ 5 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 6 \ "name").as[String]     shouldBe "payeCustomerSatisfactionSurveyAdverts"
-      (response.json \ "feature" \ 6 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 7 \ "name")
-        .as[String]                                           shouldBe "selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts"
-      (response.json \ "feature" \ 7 \ "enabled").as[Boolean] shouldBe true
-      (response.json \ "feature" \ 8 \ "name")
+      (response.json \ "feature" \ 6 \ "name")
         .as[String]                                                         shouldBe "customerSatisfactionSurveys"
-      (response.json \ "feature" \ 8 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 9 \ "name").as[String]                   shouldBe "findMyNinoAddToWallet"
-      (response.json \ "feature" \ 9 \ "enabled").as[Boolean]               shouldBe true
-      (response.json \ "feature" \ 10 \ "name").as[String]                  shouldBe "disableYourEmploymentIncomeChart"
+      (response.json \ "feature" \ 6 \ "enabled").as[Boolean]               shouldBe true
+      (response.json \ "feature" \ 7 \ "name").as[String]                   shouldBe "findMyNinoAddToWallet"
+      (response.json \ "feature" \ 7 \ "enabled").as[Boolean]               shouldBe true
+      (response.json \ "feature" \ 8 \ "name").as[String]                  shouldBe "disableYourEmploymentIncomeChart"
+      (response.json \ "feature" \ 8 \ "enabled").as[Boolean]              shouldBe false
+      (response.json \ "feature" \ 9 \ "name").as[String]                  shouldBe "disableYourEmploymentIncomeChartAndroid"
+      (response.json \ "feature" \ 9 \ "enabled").as[Boolean]              shouldBe false
+      (response.json \ "feature" \ 10 \ "name").as[String]                  shouldBe "disableYourEmploymentIncomeChartIos"
       (response.json \ "feature" \ 10 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 11 \ "name").as[String]                  shouldBe "disableYourEmploymentIncomeChartAndroid"
-      (response.json \ "feature" \ 11 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 12 \ "name").as[String]                  shouldBe "disableYourEmploymentIncomeChartIos"
-      (response.json \ "feature" \ 12 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 13 \ "name").as[String]                  shouldBe "findMyNinoAddToGoogleWallet"
-      (response.json \ "feature" \ 13 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 11 \ "name").as[String]                  shouldBe "findMyNinoAddToGoogleWallet"
+      (response.json \ "feature" \ 11 \ "enabled").as[Boolean]              shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
       (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"

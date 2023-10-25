@@ -79,8 +79,6 @@ class BaseISpec
       "feature.annualTaxSummaryLink"                                    -> true,
       "enableMultipleGGIDCheck.ios"                                     -> true,
       "enableMultipleGGIDCheck.android"                                 -> true,
-      "feature.payeCustomerSatisfactionSurveyAdverts"                   -> true,
-      "feature.selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts" -> true,
       "feature.customerSatisfactionSurveys"                             -> true,
       "feature.findMyNinoAddToWallet"                                   -> true,
       "feature.disableYourEmploymentIncomeChart"                        -> false,

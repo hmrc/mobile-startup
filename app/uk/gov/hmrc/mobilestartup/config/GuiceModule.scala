@@ -48,8 +48,6 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.paperlessAdverts")
     bindConfigBoolean("feature.htsAdverts")
     bindConfigBoolean("feature.annualTaxSummaryLink")
-    bindConfigBoolean("feature.payeCustomerSatisfactionSurveyAdverts")
-    bindConfigBoolean("feature.selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts")
     bindConfigBoolean("feature.customerSatisfactionSurveys")
     bindConfigBoolean("feature.findMyNinoAddToWallet")
     bindConfigBoolean("feature.findMyNinoAddToGoogleWallet")

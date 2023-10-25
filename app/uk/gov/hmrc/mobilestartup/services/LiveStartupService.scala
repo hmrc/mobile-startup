@@ -49,14 +49,12 @@ class LiveStartupService @Inject() (
   @Named("niContributionsUrl") niContributionsUrl:                                                                                  Option[String],
   @Named("otherTaxesDigitalAssistantUrl") otherTaxesDigitalAssistantUrl:                                                            Option[String],
   @Named("otherTaxesDigitalAssistantUrlCy") otherTaxesDigitalAssistantUrlCy:                                                        Option[String],
-  @Named("feature.payeCustomerSatisfactionSurveyAdverts") enablePayAsYouEarnCustomerSatisfactionSurvey:                             Boolean,
-  @Named("feature.selfAssessmentPaymentsCustomerSatisfactionSurveyAdverts") enableSelfAssessmentPaymentsCustomerSatisfactionSurvey: Boolean,
   @Named("feature.customerSatisfactionSurveys") enableCustomerSatisfactionSurveys:                                                  Boolean,
-  @Named("feature.findMyNinoAddToWallet") findMyNinoAddToWallet:                                                                    Boolean,
+  @Named("feature.findMyNinoAddToWallet") findMyNinoAddToWallet:                                                                      Boolean,
   @Named("feature.disableYourEmploymentIncomeChart") disableYourEmploymentIncomeChart:                                              Boolean,
   @Named("feature.disableYourEmploymentIncomeChartAndroid") disableYourEmploymentIncomeChartAndroid:                                Boolean,
   @Named("feature.disableYourEmploymentIncomeChartIos") disableYourEmploymentIncomeChartIos:                                        Boolean,
-  @Named("feature.findMyNinoAddToGoogleWallet") findMyNinoAddToGoogleWallet:                                                        Boolean
+  @Named("feature.findMyNinoAddToGoogleWallet") findMyNinoAddToGoogleWallet:                                                          Boolean
 )(implicit ec:                                                                                                                      ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -84,8 +82,6 @@ class LiveStartupService @Inject() (
                                        niContributionsUrl,
                                        otherTaxesDigitalAssistantUrl,
                                        otherTaxesDigitalAssistantUrlCy,
-                                       enablePayAsYouEarnCustomerSatisfactionSurvey,
-                                       enableSelfAssessmentPaymentsCustomerSatisfactionSurvey,
                                        enableCustomerSatisfactionSurveys,
                                        findMyNinoAddToWallet,
                                        disableYourEmploymentIncomeChart,
