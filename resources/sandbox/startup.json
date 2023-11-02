@@ -4,48 +4,8 @@
   },
   "feature": [
     {
-      "name": "userPanelSignUp",
-      "enabled": false
-    },
-    {
-      "name": "enablePushNotificationTokenRegistration",
-      "enabled": false
-    },
-    {
-      "name": "paperlessAlertDialogs",
-      "enabled": false
-    },
-    {
-      "name": "paperlessAdverts",
-      "enabled": true
-    },
-    {
-      "name": "htsAdverts",
-      "enabled": true
-    },
-    {
       "name": "annualTaxSummaryLink",
       "enabled": true
-    },
-    {
-      "name": "customerSatisfactionSurveys",
-      "enabled": true
-    },
-    {
-      "name" : "findMyNinoAddToWallet",
-      "enabled" : true
-    },
-    {
-      "name" : "disableYourEmploymentIncomeChart",
-      "enabled" : false
-    },
-    {
-      "name" : "disableYourEmploymentIncomeChartAndroid",
-      "enabled" : false
-    },
-    {
-      "name" : "disableYourEmploymentIncomeChartIos",
-      "enabled" : false
     }
   ],
   "helpToSave": {
