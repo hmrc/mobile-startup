@@ -53,11 +53,6 @@ object URL {
   */
 class StartupServiceImpl[F[_]] @Inject() (
   connector:                                              GenericConnector[F],
-  userPanelSignUp:                                        Boolean,
-  enablePushNotificationTokenRegistration:                Boolean,
-  enablePaperlessAlertDialogs:                            Boolean,
-  enablePaperlessAdverts:                                 Boolean,
-  enableHtsAdverts:                                       Boolean,
   enableAnnualTaxSummaryLink:                             Boolean,
   cbProofOfEntitlementUrl:                                Option[String],
   cbProofOfEntitlementUrlCy:                              Option[String],
@@ -77,13 +72,7 @@ class StartupServiceImpl[F[_]] @Inject() (
   niSummaryUrl:                                           Option[String],
   niContributionsUrl:                                     Option[String],
   otherTaxesDigitalAssistantUrl:                          Option[String],
-  otherTaxesDigitalAssistantUrlCy:                        Option[String],
-  enableCustomerSatisfactionSurveys:                      Boolean,
-  findMyNinoAddToWallet:                                   Boolean,
-  disableYourEmploymentIncomeChart:                       Boolean,
-  disableYourEmploymentIncomeChartAndroid:                Boolean,
-  disableYourEmploymentIncomeChartIos:                    Boolean,
-  findMyNinoAddToGoogleWallet:                             Boolean
+  otherTaxesDigitalAssistantUrlCy:                        Option[String]
 )(implicit F:                                             MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -104,18 +93,7 @@ class StartupServiceImpl[F[_]] @Inject() (
   private val featureFlags: JsObject =
     obj(
       "feature" -> List(
-        FeatureFlag("userPanelSignUp", userPanelSignUp),
-        FeatureFlag("enablePushNotificationTokenRegistration", enablePushNotificationTokenRegistration),
-        FeatureFlag("paperlessAlertDialogs", enablePaperlessAlertDialogs),
-        FeatureFlag("paperlessAdverts", enablePaperlessAdverts),
-        FeatureFlag("htsAdverts", enableHtsAdverts),
-        FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink),
-        FeatureFlag("customerSatisfactionSurveys", enableCustomerSatisfactionSurveys),
-        FeatureFlag("findMyNinoAddToWallet", findMyNinoAddToWallet),
-        FeatureFlag("disableYourEmploymentIncomeChart", disableYourEmploymentIncomeChart),
-        FeatureFlag("disableYourEmploymentIncomeChartAndroid", disableYourEmploymentIncomeChartAndroid),
-        FeatureFlag("disableYourEmploymentIncomeChartIos", disableYourEmploymentIncomeChartIos),
-        FeatureFlag("findMyNinoAddToGoogleWallet", findMyNinoAddToGoogleWallet)
+        FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink)
       )
     )
 

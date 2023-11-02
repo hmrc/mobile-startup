@@ -193,11 +193,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain success entries for each service" in {
       val sut =
         new StartupServiceImpl[TestF](dummyConnector(),
-                                      userPanelSignUp                                        = false,
-                                      enablePushNotificationTokenRegistration                = false,
-                                      enablePaperlessAlertDialogs                            = false,
-                                      enablePaperlessAdverts                                 = false,
-                                      enableHtsAdverts                                       = false,
                                       enableAnnualTaxSummaryLink                             = false,
                                       cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
                                       cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
@@ -217,13 +212,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       niSummaryUrl                                           = Some("/niSummaryUrl"),
                                       niContributionsUrl                                     = Some("/niContributionsUrl"),
                                       otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
-                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
-                                      enableCustomerSatisfactionSurveys                      = false,
-                                      findMyNinoAddToWallet                                  = false,
-                                      disableYourEmploymentIncomeChart                       = true,
-                                      disableYourEmploymentIncomeChartAndroid                = true,
-                                      disableYourEmploymentIncomeChartIos                    = true,
-                                      findMyNinoAddToGoogleWallet                            = false)
+                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"))
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -231,18 +220,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
-        FeatureFlag("userPanelSignUp", enabled                                         = false),
-        FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
-        FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
-        FeatureFlag("paperlessAdverts", enabled                                        = false),
-        FeatureFlag("htsAdverts", enabled                                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
-        FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
-        FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
-        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
-        FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
-        FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
-        FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                                    = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -275,11 +253,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "not contain an entry for help-to-save when the hts call fails" in {
       val sut =
         new StartupServiceImpl[TestF](dummyConnector(htsResponse = new Exception("hts failed").error),
-                                      false,
-                                      enablePushNotificationTokenRegistration                = false,
-                                      enablePaperlessAlertDialogs                            = false,
-                                      enablePaperlessAdverts                                 = false,
-                                      enableHtsAdverts                                       = false,
                                       enableAnnualTaxSummaryLink                             = false,
                                       cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
                                       cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
@@ -299,13 +272,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       niSummaryUrl                                           = Some("/niSummaryUrl"),
                                       niContributionsUrl                                     = Some("/niContributionsUrl"),
                                       otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
-                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
-                                      enableCustomerSatisfactionSurveys                      = false,
-                                      findMyNinoAddToWallet                                  = false,
-                                      disableYourEmploymentIncomeChart                       = true,
-                                      disableYourEmploymentIncomeChartAndroid                = true,
-                                      disableYourEmploymentIncomeChartIos                    = true,
-                                      findMyNinoAddToGoogleWallet                            = false)
+                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"))
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -313,18 +280,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
-        FeatureFlag("userPanelSignUp", enabled                                         = false),
-        FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
-        FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
-        FeatureFlag("paperlessAdverts", enabled                                        = false),
-        FeatureFlag("htsAdverts", enabled                                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
-        FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
-        FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
-        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
-        FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
-        FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
-        FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                                    = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -355,11 +311,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain an error entry for tcr when the tcr call fails" in {
       val sut =
         new StartupServiceImpl[TestF](dummyConnector(tcrResponse = new Exception("tcr failed").error),
-                                      false,
-                                      enablePushNotificationTokenRegistration                = false,
-                                      enablePaperlessAlertDialogs                            = false,
-                                      enablePaperlessAdverts                                 = false,
-                                      enableHtsAdverts                                       = false,
                                       enableAnnualTaxSummaryLink                             = false,
                                       cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
                                       cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
@@ -379,13 +330,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       niSummaryUrl                                           = Some("/niSummaryUrl"),
                                       niContributionsUrl                                     = Some("/niContributionsUrl"),
                                       otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
-                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
-                                      enableCustomerSatisfactionSurveys                      = false,
-                                      findMyNinoAddToWallet                                  = false,
-                                      disableYourEmploymentIncomeChart                       = true,
-                                      disableYourEmploymentIncomeChartAndroid                = true,
-                                      disableYourEmploymentIncomeChartIos                    = true,
-                                      findMyNinoAddToGoogleWallet                            = false)
+                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"))
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -393,18 +338,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ taxCreditsRenewals).toOption.value shouldBe obj("submissionsState" -> "error")
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
-        FeatureFlag("userPanelSignUp", enabled                                         = false),
-        FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
-        FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
-        FeatureFlag("paperlessAdverts", enabled                                        = false),
-        FeatureFlag("htsAdverts", enabled                                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
-        FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
-        FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
-        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
-        FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
-        FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
-        FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                                    = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption.value     shouldBe userExpectedResponse
@@ -435,12 +369,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "contain an empty lists entry for messages when the messages call fails" in {
       val sut = new StartupServiceImpl[TestF](
         dummyConnector(inAppMessagesResponse = new Exception("message call failed").error),
-        false,
-        enablePushNotificationTokenRegistration                = false,
-        enablePaperlessAlertDialogs                            = false,
-        enablePaperlessAdverts                                 = false,
-        enableHtsAdverts                                       = false,
-        enableAnnualTaxSummaryLink                             = false,
+        enableAnnualTaxSummaryLink = false,
         cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
         cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
         cbPaymentHistoryUrl                                    = Some("/cb/cbPaymentHistoryUrl"),
@@ -459,13 +388,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         niSummaryUrl                                           = Some("/niSummaryUrl"),
         niContributionsUrl                                     = Some("/niContributionsUrl"),
         otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
-        otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
-        enableCustomerSatisfactionSurveys                      = false,
-        findMyNinoAddToWallet                                  = false,
-        disableYourEmploymentIncomeChart                       = true,
-        disableYourEmploymentIncomeChartAndroid                = true,
-        disableYourEmploymentIncomeChartIos                    = true,
-        findMyNinoAddToGoogleWallet                            = false
+        otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy")
       )
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -474,18 +397,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ taxCreditsRenewals).toOption.value shouldBe obj("submissionsState" -> "open")
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
-        FeatureFlag("userPanelSignUp", enabled                                         = false),
-        FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
-        FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
-        FeatureFlag("paperlessAdverts", enabled                                        = false),
-        FeatureFlag("htsAdverts", enabled                                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
-        FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
-        FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
-        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
-        FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
-        FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
-        FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                                    = false)
       )
       (result \ messages).toOption.value shouldBe Json.parse("""{
                                                                |  "paye": [],
@@ -522,11 +434,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     "not contain an entry for user when the citizen details call fails" in {
       val sut =
         new StartupServiceImpl[TestF](dummyConnector(citizenDetailsResponse = new Exception("cid failed").error),
-                                      false,
-                                      enablePushNotificationTokenRegistration                = false,
-                                      enablePaperlessAlertDialogs                            = false,
-                                      enablePaperlessAdverts                                 = false,
-                                      enableHtsAdverts                                       = false,
                                       enableAnnualTaxSummaryLink                             = false,
                                       cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
                                       cbProofOfEntitlementUrlCy                              = Some("/cb/cbProofOfEntitlementUrlCy"),
@@ -546,13 +453,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       niSummaryUrl                                           = Some("/niSummaryUrl"),
                                       niContributionsUrl                                     = Some("/niContributionsUrl"),
                                       otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
-                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
-                                      enableCustomerSatisfactionSurveys                      = false,
-                                      findMyNinoAddToWallet                                  = false,
-                                      disableYourEmploymentIncomeChart                       = true,
-                                      disableYourEmploymentIncomeChartAndroid                = true,
-                                      disableYourEmploymentIncomeChartIos                    = true,
-                                      findMyNinoAddToGoogleWallet                            = false)
+                                      otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"))
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -560,18 +461,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
       (result \ "feature").get
         .as[List[FeatureFlag]] shouldBe List(
-        FeatureFlag("userPanelSignUp", enabled                                         = false),
-        FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
-        FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
-        FeatureFlag("paperlessAdverts", enabled                                        = false),
-        FeatureFlag("htsAdverts", enabled                                              = false),
-        FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
-        FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
-        FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
-        FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
-        FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
-        FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
-        FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
+        FeatureFlag("annualTaxSummaryLink", enabled                                    = false)
       )
       (result \ messages).toOption.value shouldBe messagesSuccessResponse
       (result \ user).toOption           shouldBe None
@@ -603,11 +493,6 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
   "not contain an entry for URLs that have no value" in {
     val sut =
       new StartupServiceImpl[TestF](dummyConnector(citizenDetailsResponse = new Exception("cid failed").error),
-                                    false,
-                                    enablePushNotificationTokenRegistration                = false,
-                                    enablePaperlessAlertDialogs                            = false,
-                                    enablePaperlessAdverts                                 = false,
-                                    enableHtsAdverts                                       = false,
                                     enableAnnualTaxSummaryLink                             = false,
                                     cbProofOfEntitlementUrl                                = Some("/cb/cbProofOfEntitlementUrl"),
                                     cbProofOfEntitlementUrlCy                              = None,
@@ -627,13 +512,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     niSummaryUrl                                           = Some("/niSummaryUrl"),
                                     niContributionsUrl                                     = Some("/niContributionsUrl"),
                                     otherTaxesDigitalAssistantUrl                          = Some("/otherTaxesDigitalAssistantUrl"),
-                                    otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"),
-                                    enableCustomerSatisfactionSurveys                      = false,
-                                    findMyNinoAddToWallet                                  = false,
-                                    disableYourEmploymentIncomeChart                       = true,
-                                    disableYourEmploymentIncomeChartAndroid                = true,
-                                    disableYourEmploymentIncomeChartIos                    = true,
-                                    findMyNinoAddToGoogleWallet                            = false)
+                                    otherTaxesDigitalAssistantUrlCy                        = Some("/otherTaxesDigitalAssistantUrlCy"))
 
     val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -641,18 +520,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
     (result \ taxCreditsRenewals).toOption.value shouldBe tcrSuccessResponse
     (result \ "feature").get
       .as[List[FeatureFlag]] shouldBe List(
-      FeatureFlag("userPanelSignUp", enabled                                         = false),
-      FeatureFlag("enablePushNotificationTokenRegistration", enabled                 = false),
-      FeatureFlag("paperlessAlertDialogs", enabled                                   = false),
-      FeatureFlag("paperlessAdverts", enabled                                        = false),
-      FeatureFlag("htsAdverts", enabled                                              = false),
-      FeatureFlag("annualTaxSummaryLink", enabled                                    = false),
-      FeatureFlag("customerSatisfactionSurveys", enabled                             = false),
-      FeatureFlag("findMyNinoAddToWallet", enabled                                   = false),
-      FeatureFlag("disableYourEmploymentIncomeChart", enabled                        = true),
-      FeatureFlag("disableYourEmploymentIncomeChartAndroid", enabled                 = true),
-      FeatureFlag("disableYourEmploymentIncomeChartIos", enabled                     = true),
-      FeatureFlag("findMyNinoAddToGoogleWallet", enabled                             = false)
+      FeatureFlag("annualTaxSummaryLink", enabled                                    = false)
     )
     (result \ messages).toOption.value shouldBe messagesSuccessResponse
     (result \ user).toOption           shouldBe None
