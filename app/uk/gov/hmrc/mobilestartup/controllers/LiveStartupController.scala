@@ -18,6 +18,7 @@ package uk.gov.hmrc.mobilestartup.controllers
 
 import javax.inject.{Inject, Named, Singleton}
 import play.api.mvc._
+import uk.gov.hmrc.auth.core.ConfidenceLevel.L250
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
@@ -55,7 +56,7 @@ class LiveStartupController @Inject() (
     */
   private def withNinoFromAuth(f: String => Future[Result])(implicit hc: HeaderCarrier): Future[Result] =
     authConnector
-      .authorise(ConfidenceLevel.L200, Retrievals.nino)
+      .authorise(ConfidenceLevel.fromInt(confLevel).getOrElse(L250), Retrievals.nino)
       .flatMap {
         case Some(ninoFromAuth) => f(ninoFromAuth)
         case None               => Future.successful(Unauthorized("Authorization failure [user is not enrolled for NI]"))
