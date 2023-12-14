@@ -28,7 +28,7 @@ object AuthStub {
     """
       |{
       | "authorise": [ {
-      |  "confidenceLevel" : 200
+      |  "confidenceLevel" : 250
       |  } ],
       | "retrieve": ["nino"]
       |}""".stripMargin
@@ -60,7 +60,7 @@ object AuthStub {
        |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200
+       |  "confidenceLevel": 250
        |}
            """.stripMargin
 
@@ -91,7 +91,7 @@ object AuthStub {
        |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200
+       |  "confidenceLevel": 250
        |}
            """.stripMargin
 
@@ -105,7 +105,7 @@ object AuthStub {
        |  },
        |  "allEnrolments": [],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200
+       |  "confidenceLevel": 250
        |}
            """.stripMargin
 
@@ -131,7 +131,7 @@ object AuthStub {
        |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200
+       |  "confidenceLevel": 250
        |}
            """.stripMargin
 
@@ -157,7 +157,7 @@ object AuthStub {
        |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200
+       |  "confidenceLevel": 250
        |}
            """.stripMargin
 
@@ -187,7 +187,7 @@ object AuthStub {
        |      "state": "Activated"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200
+       |  "confidenceLevel": 250
        |}
            """.stripMargin
 
@@ -210,7 +210,7 @@ object AuthStub {
        |      "state": "Activated"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200
+       |  "confidenceLevel": 250
        |}
            """.stripMargin
 
@@ -234,7 +234,7 @@ object AuthStub {
        |      "state": "Activated"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200
+       |  "confidenceLevel": 250
        |}
            """.stripMargin
 
@@ -262,7 +262,7 @@ object AuthStub {
        |      "state": "Activated"
        |}],
        |  "groupIdentifier": "groupId",
-       |  "confidenceLevel": 200
+       |  "confidenceLevel": 250
        |}
            """.stripMargin
 
