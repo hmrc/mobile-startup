@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,8 @@ class LiveStartupService @Inject() (
   @Named("niContributionsUrl") niContributionsUrl:                                                   Option[String],
   @Named("otherTaxesDigitalAssistantUrl") otherTaxesDigitalAssistantUrl:                             Option[String],
   @Named("otherTaxesDigitalAssistantUrlCy") otherTaxesDigitalAssistantUrlCy:                         Option[String],
+  @Named("payeDigitalAssistantUrl") payeDigitalAssistantUrl:                                         Option[String],
+  @Named("payeDigitalAssistantUrlCy") payeDigitalAssistantUrlCy:                                     Option[String],
   @Named("feature.customerSatisfactionSurveys") enableCustomerSatisfactionSurveys:                   Boolean,
   @Named("feature.findMyNinoAddToWallet") findMyNinoAddToWallet:                                     Boolean,
   @Named("feature.disableYourEmploymentIncomeChart") disableYourEmploymentIncomeChart:               Boolean,
@@ -82,6 +84,8 @@ class LiveStartupService @Inject() (
                                        niContributionsUrl,
                                        otherTaxesDigitalAssistantUrl,
                                        otherTaxesDigitalAssistantUrlCy,
+                                       payeDigitalAssistantUrl,
+                                       payeDigitalAssistantUrlCy,
                                        enableCustomerSatisfactionSurveys,
                                        findMyNinoAddToWallet,
                                        disableYourEmploymentIncomeChart,

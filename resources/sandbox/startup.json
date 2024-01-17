@@ -170,6 +170,22 @@
     {
       "name": "niContributionsUrl",
       "url": "/"
+    },
+    {
+      "name": "otherTaxesDigitalAssistantUrl",
+      "url": "/"
+    },
+    {
+      "name": "otherTaxesDigitalAssistantUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "payeDigitalAssistantUrl",
+      "url": "/"
+    },
+    {
+      "name": "payeDigitalAssistantUrlCy",
+      "url": "/"
     }
   ]
 }

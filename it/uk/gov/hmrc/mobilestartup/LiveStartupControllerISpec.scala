@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -178,6 +178,10 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "urls" \ 15 \ "url").as[String]                      shouldBe "/otherTaxesDigitalAssistantUrl"
       (response.json \ "urls" \ 16 \ "name").as[String]                     shouldBe "otherTaxesDigitalAssistantUrlCy"
       (response.json \ "urls" \ 16 \ "url").as[String]                      shouldBe "/otherTaxesDigitalAssistantUrlCy"
+      (response.json \ "urls" \ 17 \ "name").as[String]                     shouldBe "payeDigitalAssistantUrl"
+      (response.json \ "urls" \ 17 \ "url").as[String]                      shouldBe "/payeDigitalAssistantUrl"
+      (response.json \ "urls" \ 18 \ "name").as[String]                     shouldBe "payeDigitalAssistantUrlCy"
+      (response.json \ "urls" \ 18 \ "url").as[String]                      shouldBe "/payeDigitalAssistantUrlCy"
     }
 
     "return 401 when user is not logged in" in {

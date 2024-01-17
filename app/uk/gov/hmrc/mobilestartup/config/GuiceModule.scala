@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,6 +75,8 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("niContributionsUrl", "url.niContributionsUrl")
     bindConfigOptionalString("otherTaxesDigitalAssistantUrl", "url.otherTaxesDigitalAssistantUrl")
     bindConfigOptionalString("otherTaxesDigitalAssistantUrlCy", "url.otherTaxesDigitalAssistantUrlCy")
+    bindConfigOptionalString("payeDigitalAssistantUrl", "url.payeDigitalAssistantUrl")
+    bindConfigOptionalString("payeDigitalAssistantUrlCy", "url.payeDigitalAssistantUrlCy")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])

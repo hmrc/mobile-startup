@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -218,6 +218,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       niContributionsUrl                      = Some("/niContributionsUrl"),
                                       otherTaxesDigitalAssistantUrl           = Some("/otherTaxesDigitalAssistantUrl"),
                                       otherTaxesDigitalAssistantUrlCy         = Some("/otherTaxesDigitalAssistantUrlCy"),
+                                      payeDigitalAssistantUrl                 = Some("/payeDigitalAssistantUrl"),
+                                      payeDigitalAssistantUrlCy               = Some("/payeDigitalAssistantUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -267,7 +269,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("niSummaryUrl", "/niSummaryUrl"),
         URL("niContributionsUrl", "/niContributionsUrl"),
         URL("otherTaxesDigitalAssistantUrl", "/otherTaxesDigitalAssistantUrl"),
-        URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy")
+        URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy"),
+        URL("payeDigitalAssistantUrl", "/payeDigitalAssistantUrl"),
+        URL("payeDigitalAssistantUrlCy", "/payeDigitalAssistantUrlCy")
       )
     }
   }
@@ -301,6 +305,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       niContributionsUrl                      = Some("/niContributionsUrl"),
                                       otherTaxesDigitalAssistantUrl           = Some("/otherTaxesDigitalAssistantUrl"),
                                       otherTaxesDigitalAssistantUrlCy         = Some("/otherTaxesDigitalAssistantUrlCy"),
+                                      payeDigitalAssistantUrl                 = Some("/payeDigitalAssistantUrl"),
+                                      payeDigitalAssistantUrlCy               = Some("/payeDigitalAssistantUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -350,7 +356,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("niSummaryUrl", "/niSummaryUrl"),
         URL("niContributionsUrl", "/niContributionsUrl"),
         URL("otherTaxesDigitalAssistantUrl", "/otherTaxesDigitalAssistantUrl"),
-        URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy")
+        URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy"),
+        URL("payeDigitalAssistantUrl", "/payeDigitalAssistantUrl"),
+        URL("payeDigitalAssistantUrlCy", "/payeDigitalAssistantUrlCy")
       )
     }
 
@@ -382,6 +390,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       niContributionsUrl                      = Some("/niContributionsUrl"),
                                       otherTaxesDigitalAssistantUrl           = Some("/otherTaxesDigitalAssistantUrl"),
                                       otherTaxesDigitalAssistantUrlCy         = Some("/otherTaxesDigitalAssistantUrlCy"),
+                                      payeDigitalAssistantUrl                 = Some("/payeDigitalAssistantUrl"),
+                                      payeDigitalAssistantUrlCy               = Some("/payeDigitalAssistantUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -431,7 +441,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("niSummaryUrl", "/niSummaryUrl"),
         URL("niContributionsUrl", "/niContributionsUrl"),
         URL("otherTaxesDigitalAssistantUrl", "/otherTaxesDigitalAssistantUrl"),
-        URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy")
+        URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy"),
+        URL("payeDigitalAssistantUrl", "/payeDigitalAssistantUrl"),
+        URL("payeDigitalAssistantUrlCy", "/payeDigitalAssistantUrlCy")
       )
     }
 
@@ -463,6 +475,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         niContributionsUrl                      = Some("/niContributionsUrl"),
         otherTaxesDigitalAssistantUrl           = Some("/otherTaxesDigitalAssistantUrl"),
         otherTaxesDigitalAssistantUrlCy         = Some("/otherTaxesDigitalAssistantUrlCy"),
+        payeDigitalAssistantUrl                 = Some("/payeDigitalAssistantUrl"),
+        payeDigitalAssistantUrlCy               = Some("/payeDigitalAssistantUrlCy"),
         enableCustomerSatisfactionSurveys       = false,
         findMyNinoAddToWallet                   = false,
         disableYourEmploymentIncomeChart        = true,
@@ -519,7 +533,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("niSummaryUrl", "/niSummaryUrl"),
         URL("niContributionsUrl", "/niContributionsUrl"),
         URL("otherTaxesDigitalAssistantUrl", "/otherTaxesDigitalAssistantUrl"),
-        URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy")
+        URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy"),
+        URL("payeDigitalAssistantUrl", "/payeDigitalAssistantUrl"),
+        URL("payeDigitalAssistantUrlCy", "/payeDigitalAssistantUrlCy")
       )
     }
 
@@ -551,6 +567,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       niContributionsUrl                      = Some("/niContributionsUrl"),
                                       otherTaxesDigitalAssistantUrl           = Some("/otherTaxesDigitalAssistantUrl"),
                                       otherTaxesDigitalAssistantUrlCy         = Some("/otherTaxesDigitalAssistantUrlCy"),
+                                      payeDigitalAssistantUrl                 = Some("/payeDigitalAssistantUrl"),
+                                      payeDigitalAssistantUrlCy               = Some("/payeDigitalAssistantUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -600,7 +618,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("niSummaryUrl", "/niSummaryUrl"),
         URL("niContributionsUrl", "/niContributionsUrl"),
         URL("otherTaxesDigitalAssistantUrl", "/otherTaxesDigitalAssistantUrl"),
-        URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy")
+        URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy"),
+        URL("payeDigitalAssistantUrl", "/payeDigitalAssistantUrl"),
+        URL("payeDigitalAssistantUrlCy", "/payeDigitalAssistantUrlCy")
       )
     }
   }
@@ -633,6 +653,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     niContributionsUrl                      = Some("/niContributionsUrl"),
                                     otherTaxesDigitalAssistantUrl           = Some("/otherTaxesDigitalAssistantUrl"),
                                     otherTaxesDigitalAssistantUrlCy         = Some("/otherTaxesDigitalAssistantUrlCy"),
+                                    payeDigitalAssistantUrl                 = Some("/payeDigitalAssistantUrl"),
+                                    payeDigitalAssistantUrlCy               = Some("/payeDigitalAssistantUrlCy"),
                                     enableCustomerSatisfactionSurveys       = false,
                                     findMyNinoAddToWallet                   = false,
                                     disableYourEmploymentIncomeChart        = true,
@@ -675,7 +697,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       URL("niSummaryUrl", "/niSummaryUrl"),
       URL("niContributionsUrl", "/niContributionsUrl"),
       URL("otherTaxesDigitalAssistantUrl", "/otherTaxesDigitalAssistantUrl"),
-      URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy")
+      URL("otherTaxesDigitalAssistantUrlCy", "/otherTaxesDigitalAssistantUrlCy"),
+      URL("payeDigitalAssistantUrl", "/payeDigitalAssistantUrl"),
+      URL("payeDigitalAssistantUrlCy", "/payeDigitalAssistantUrlCy")
     )
   }
 }

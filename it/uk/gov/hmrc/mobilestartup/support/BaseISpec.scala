@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,7 +101,9 @@ class BaseISpec
       "url.niSummaryUrl"                                      -> "/niSummaryUrl",
       "url.niContributionsUrl"                                -> "/niContributionsUrl",
       "url.otherTaxesDigitalAssistantUrl"                     -> "/otherTaxesDigitalAssistantUrl",
-      "url.otherTaxesDigitalAssistantUrlCy"                   -> "/otherTaxesDigitalAssistantUrlCy"
+      "url.otherTaxesDigitalAssistantUrlCy"                   -> "/otherTaxesDigitalAssistantUrlCy",
+      "url.payeDigitalAssistantUrl"                           -> "/payeDigitalAssistantUrl",
+      "url.payeDigitalAssistantUrlCy"                         -> "/payeDigitalAssistantUrlCy"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)

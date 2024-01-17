@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,6 +78,8 @@ class StartupServiceImpl[F[_]] @Inject() (
   niContributionsUrl:                      Option[String],
   otherTaxesDigitalAssistantUrl:           Option[String],
   otherTaxesDigitalAssistantUrlCy:         Option[String],
+  payeDigitalAssistantUrl:                 Option[String],
+  payeDigitalAssistantUrlCy:               Option[String],
   enableCustomerSatisfactionSurveys:       Boolean,
   findMyNinoAddToWallet:                   Boolean,
   disableYourEmploymentIncomeChart:        Boolean,
@@ -141,7 +143,9 @@ class StartupServiceImpl[F[_]] @Inject() (
         niSummaryUrl.map(URL("niSummaryUrl", _)),
         niContributionsUrl.map(URL("niContributionsUrl", _)),
         otherTaxesDigitalAssistantUrl.map(URL("otherTaxesDigitalAssistantUrl", _)),
-        otherTaxesDigitalAssistantUrlCy.map(URL("otherTaxesDigitalAssistantUrlCy", _))
+        otherTaxesDigitalAssistantUrlCy.map(URL("otherTaxesDigitalAssistantUrlCy", _)),
+        payeDigitalAssistantUrl.map(URL("payeDigitalAssistantUrl", _)),
+        payeDigitalAssistantUrlCy.map(URL("payeDigitalAssistantUrlCy", _))
       ).filter(_.isDefined)
     )
 

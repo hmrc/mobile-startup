@@ -137,6 +137,22 @@ about the user's help-to-save-account (if they have one) and any global feature 
     {
       "name": "cbWhatChangesUrlCy",
       "url": "/"
+    },
+    {
+      "name": "otherTaxesDigitalAssistantUrl",
+      "url": "/"
+    },
+    {
+      "name": "otherTaxesDigitalAssistantUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "payeDigitalAssistantUrl",
+      "url": "/"
+    },
+    {
+      "name": "payeDigitalAssistantUrlCy",
+      "url": "/"
     }
   ]
 }
