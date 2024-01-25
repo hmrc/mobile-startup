@@ -103,7 +103,9 @@ class BaseISpec
       "url.otherTaxesDigitalAssistantUrl"                     -> "/otherTaxesDigitalAssistantUrl",
       "url.otherTaxesDigitalAssistantUrlCy"                   -> "/otherTaxesDigitalAssistantUrlCy",
       "url.payeDigitalAssistantUrl"                           -> "/payeDigitalAssistantUrl",
-      "url.payeDigitalAssistantUrlCy"                         -> "/payeDigitalAssistantUrlCy"
+      "url.payeDigitalAssistantUrlCy"                         -> "/payeDigitalAssistantUrlCy",
+      "url.incomeTaxGeneralEnquiriesUrl"                      -> "/incomeTaxGeneralEnquiriesUrl",
+      "url.learnAboutCallChargesUrl"                          -> "/learnAboutCallChargesUrl"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)

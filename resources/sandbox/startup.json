@@ -186,6 +186,14 @@
     {
       "name": "payeDigitalAssistantUrlCy",
       "url": "/"
+    },
+    {
+      "name": "incomeTaxGeneralEnquiriesUrl",
+      "url": "/"
+    },
+    {
+      "name": "learnAboutCallChargesUrl",
+      "url": "/"
     }
   ]
 }

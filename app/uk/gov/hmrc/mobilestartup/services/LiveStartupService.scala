@@ -25,7 +25,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LiveStartupService @Inject() (
   connector:                                                                                         GenericConnector[Future],
   @Named("feature.userPanelSignUp") userPanelSignUp:                                                 Boolean,
-  @Named("feature.enablePushNotificationTokenRegistration") enablePushNotificationTokenRegistration: Boolean,
+  @Named("feature.enablePushNotificationTokenRegistration") enablePushNotificationTokenRegistration:   Boolean,
   @Named("feature.paperlessAlertDialogs") enablePaperlessAlertDialogs:                               Boolean,
   @Named("feature.paperlessAdverts") enablePaperlessAdverts:                                         Boolean,
   @Named("feature.htsAdverts") enableHtsAdverts:                                                     Boolean,
@@ -51,12 +51,14 @@ class LiveStartupService @Inject() (
   @Named("otherTaxesDigitalAssistantUrlCy") otherTaxesDigitalAssistantUrlCy:                         Option[String],
   @Named("payeDigitalAssistantUrl") payeDigitalAssistantUrl:                                         Option[String],
   @Named("payeDigitalAssistantUrlCy") payeDigitalAssistantUrlCy:                                     Option[String],
+  @Named("incomeTaxGeneralEnquiriesUrl") incomeTaxGeneralEnquiriesUrl:                               Option[String],
+  @Named("learnAboutCallChargesUrl") learnAboutCallChargesUrl:                                       Option[String],
   @Named("feature.customerSatisfactionSurveys") enableCustomerSatisfactionSurveys:                   Boolean,
-  @Named("feature.findMyNinoAddToWallet") findMyNinoAddToWallet:                                     Boolean,
+  @Named("feature.findMyNinoAddToWallet") findMyNinoAddToWallet:                                       Boolean,
   @Named("feature.disableYourEmploymentIncomeChart") disableYourEmploymentIncomeChart:               Boolean,
   @Named("feature.disableYourEmploymentIncomeChartAndroid") disableYourEmploymentIncomeChartAndroid: Boolean,
   @Named("feature.disableYourEmploymentIncomeChartIos") disableYourEmploymentIncomeChartIos:         Boolean,
-  @Named("feature.findMyNinoAddToGoogleWallet") findMyNinoAddToGoogleWallet:                         Boolean
+  @Named("feature.findMyNinoAddToGoogleWallet") findMyNinoAddToGoogleWallet:                           Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -86,6 +88,8 @@ class LiveStartupService @Inject() (
                                        otherTaxesDigitalAssistantUrlCy,
                                        payeDigitalAssistantUrl,
                                        payeDigitalAssistantUrlCy,
+                                       incomeTaxGeneralEnquiriesUrl,
+                                       learnAboutCallChargesUrl,
                                        enableCustomerSatisfactionSurveys,
                                        findMyNinoAddToWallet,
                                        disableYourEmploymentIncomeChart,

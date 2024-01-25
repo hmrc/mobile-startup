@@ -77,6 +77,8 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("otherTaxesDigitalAssistantUrlCy", "url.otherTaxesDigitalAssistantUrlCy")
     bindConfigOptionalString("payeDigitalAssistantUrl", "url.payeDigitalAssistantUrl")
     bindConfigOptionalString("payeDigitalAssistantUrlCy", "url.payeDigitalAssistantUrlCy")
+    bindConfigOptionalString("incomeTaxGeneralEnquiriesUrl", "url.incomeTaxGeneralEnquiriesUrl")
+    bindConfigOptionalString("learnAboutCallChargesUrl", "url.learnAboutCallChargesUrl")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])

@@ -54,7 +54,7 @@ object URL {
 class StartupServiceImpl[F[_]] @Inject() (
   connector:                               GenericConnector[F],
   userPanelSignUp:                         Boolean,
-  enablePushNotificationTokenRegistration: Boolean,
+  enablePushNotificationTokenRegistration:  Boolean,
   enablePaperlessAlertDialogs:             Boolean,
   enablePaperlessAdverts:                  Boolean,
   enableHtsAdverts:                        Boolean,
@@ -80,12 +80,14 @@ class StartupServiceImpl[F[_]] @Inject() (
   otherTaxesDigitalAssistantUrlCy:         Option[String],
   payeDigitalAssistantUrl:                 Option[String],
   payeDigitalAssistantUrlCy:               Option[String],
+  incomeTaxGeneralEnquiriesUrl:            Option[String],
+  learnAboutCallChargesUrl:                Option[String],
   enableCustomerSatisfactionSurveys:       Boolean,
-  findMyNinoAddToWallet:                   Boolean,
+  findMyNinoAddToWallet:                    Boolean,
   disableYourEmploymentIncomeChart:        Boolean,
   disableYourEmploymentIncomeChartAndroid: Boolean,
   disableYourEmploymentIncomeChartIos:     Boolean,
-  findMyNinoAddToGoogleWallet:             Boolean
+  findMyNinoAddToGoogleWallet:              Boolean
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -145,7 +147,9 @@ class StartupServiceImpl[F[_]] @Inject() (
         otherTaxesDigitalAssistantUrl.map(URL("otherTaxesDigitalAssistantUrl", _)),
         otherTaxesDigitalAssistantUrlCy.map(URL("otherTaxesDigitalAssistantUrlCy", _)),
         payeDigitalAssistantUrl.map(URL("payeDigitalAssistantUrl", _)),
-        payeDigitalAssistantUrlCy.map(URL("payeDigitalAssistantUrlCy", _))
+        payeDigitalAssistantUrlCy.map(URL("payeDigitalAssistantUrlCy", _)),
+        incomeTaxGeneralEnquiriesUrl.map(URL("incomeTaxGeneralEnquiriesUrl", _)),
+        learnAboutCallChargesUrl.map(URL("learnAboutCallChargesUrl", _))
       ).filter(_.isDefined)
     )
 
