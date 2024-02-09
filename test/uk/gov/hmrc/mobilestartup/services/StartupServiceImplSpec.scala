@@ -224,12 +224,13 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       learnAboutCallChargesUrl                = Some("/learnAboutCallChargesUrl"),
                                       learnAboutCallChargesUrlCy              = Some("/learnAboutCallChargesUrlCy"),
                                       statePensionAgeUrl                      = Some("/statePensionAgeUrl"),
+                                      tcNationalInsuranceRatesLettersUrl      = Some("/tcNationalInsuranceRatesLettersUrl"),
                                       enableCustomerSatisfactionSurveys       = false,
-                                      findMyNinoAddToWallet                   = false,
+                                      findMyNinoAddToWallet                    = false,
                                       disableYourEmploymentIncomeChart        = true,
                                       disableYourEmploymentIncomeChartAndroid = true,
                                       disableYourEmploymentIncomeChartIos     = true,
-                                      findMyNinoAddToGoogleWallet             = false)
+                                      findMyNinoAddToGoogleWallet              = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -279,7 +280,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("incomeTaxGeneralEnquiriesUrl", "/incomeTaxGeneralEnquiriesUrl"),
         URL("learnAboutCallChargesUrl", "/learnAboutCallChargesUrl"),
         URL("learnAboutCallChargesUrlCy", "/learnAboutCallChargesUrlCy"),
-        URL("statePensionAgeUrl", "/statePensionAgeUrl")
+        URL("statePensionAgeUrl", "/statePensionAgeUrl"),
+        URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl")
       )
     }
   }
@@ -319,6 +321,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       learnAboutCallChargesUrl                = Some("/learnAboutCallChargesUrl"),
                                       learnAboutCallChargesUrlCy              = Some("/learnAboutCallChargesUrlCy"),
                                       statePensionAgeUrl                      = Some("/statePensionAgeUrl"),
+                                      tcNationalInsuranceRatesLettersUrl      = Some("/tcNationalInsuranceRatesLettersUrl"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -374,7 +377,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("incomeTaxGeneralEnquiriesUrl", "/incomeTaxGeneralEnquiriesUrl"),
         URL("learnAboutCallChargesUrl", "/learnAboutCallChargesUrl"),
         URL("learnAboutCallChargesUrlCy", "/learnAboutCallChargesUrlCy"),
-        URL("statePensionAgeUrl", "/statePensionAgeUrl")
+        URL("statePensionAgeUrl", "/statePensionAgeUrl"),
+        URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl")
+
       )
     }
 
@@ -412,6 +417,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       learnAboutCallChargesUrl                = Some("/learnAboutCallChargesUrl"),
                                       learnAboutCallChargesUrlCy              = Some("/learnAboutCallChargesUrlCy"),
                                       statePensionAgeUrl                      = Some("/statePensionAgeUrl"),
+                                      tcNationalInsuranceRatesLettersUrl      = Some("/tcNationalInsuranceRatesLettersUrl"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -467,7 +473,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("incomeTaxGeneralEnquiriesUrl", "/incomeTaxGeneralEnquiriesUrl"),
         URL("learnAboutCallChargesUrl", "/learnAboutCallChargesUrl"),
         URL("learnAboutCallChargesUrlCy", "/learnAboutCallChargesUrlCy"),
-        URL("statePensionAgeUrl", "/statePensionAgeUrl")
+        URL("statePensionAgeUrl", "/statePensionAgeUrl"),
+        URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl")
       )
     }
 
@@ -505,6 +512,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         learnAboutCallChargesUrl                = Some("/learnAboutCallChargesUrl"),
         learnAboutCallChargesUrlCy              = Some("/learnAboutCallChargesUrlCy"),
         statePensionAgeUrl                      = Some("/statePensionAgeUrl"),
+        tcNationalInsuranceRatesLettersUrl      = Some("/tcNationalInsuranceRatesLettersUrl"),
         enableCustomerSatisfactionSurveys       = false,
         findMyNinoAddToWallet                   = false,
         disableYourEmploymentIncomeChart        = true,
@@ -567,7 +575,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("incomeTaxGeneralEnquiriesUrl", "/incomeTaxGeneralEnquiriesUrl"),
         URL("learnAboutCallChargesUrl", "/learnAboutCallChargesUrl"),
         URL("learnAboutCallChargesUrlCy", "/learnAboutCallChargesUrlCy"),
-        URL("statePensionAgeUrl", "/statePensionAgeUrl")
+        URL("statePensionAgeUrl", "/statePensionAgeUrl"),
+        URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl")
       )
     }
 
@@ -605,6 +614,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       learnAboutCallChargesUrl                = Some("/learnAboutCallChargesUrl"),
                                       learnAboutCallChargesUrlCy              = Some("/learnAboutCallChargesUrlCy"),
                                       statePensionAgeUrl                      = Some("/statePensionAgeUrl"),
+                                      tcNationalInsuranceRatesLettersUrl      = Some("/tcNationalInsuranceRatesLettersUrl"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -660,7 +670,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("incomeTaxGeneralEnquiriesUrl", "/incomeTaxGeneralEnquiriesUrl"),
         URL("learnAboutCallChargesUrl", "/learnAboutCallChargesUrl"),
         URL("learnAboutCallChargesUrlCy", "/learnAboutCallChargesUrlCy"),
-        URL("statePensionAgeUrl", "/statePensionAgeUrl")
+        URL("statePensionAgeUrl", "/statePensionAgeUrl"),
+        URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl")
       )
     }
   }
@@ -699,6 +710,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     learnAboutCallChargesUrl                = Some("/learnAboutCallChargesUrl"),
                                     learnAboutCallChargesUrlCy              = Some("/learnAboutCallChargesUrlCy"),
                                     statePensionAgeUrl                      = Some("/statePensionAgeUrl"),
+                                    tcNationalInsuranceRatesLettersUrl      = Some("/tcNationalInsuranceRatesLettersUrl"),
                                     enableCustomerSatisfactionSurveys       = false,
                                     findMyNinoAddToWallet                   = false,
                                     disableYourEmploymentIncomeChart        = true,
@@ -747,7 +759,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       URL("incomeTaxGeneralEnquiriesUrl", "/incomeTaxGeneralEnquiriesUrl"),
       URL("learnAboutCallChargesUrl", "/learnAboutCallChargesUrl"),
       URL("learnAboutCallChargesUrlCy", "/learnAboutCallChargesUrlCy"),
-      URL("statePensionAgeUrl", "/statePensionAgeUrl")
+      URL("statePensionAgeUrl", "/statePensionAgeUrl"),
+      URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl")
     )
   }
 }

@@ -70,7 +70,7 @@ class BaseISpec
       "microservice.services.enrolment-store-proxy.port"      -> wireMockPort,
       "auditing.consumer.baseUri.port"                        -> wireMockPort,
       "feature.userPanelSignUp"                               -> true,
-      "feature.enablePushNotificationTokenRegistration"       -> true,
+      "feature.enablePushNotificationTokenRegistration"        -> true,
       "feature.helpToSave.enableBadge"                        -> true,
       "feature.paperlessAlertDialogs"                         -> true,
       "feature.paperlessAdverts"                              -> true,
@@ -80,11 +80,11 @@ class BaseISpec
       "enableMultipleGGIDCheck.ios"                           -> true,
       "enableMultipleGGIDCheck.android"                       -> true,
       "feature.customerSatisfactionSurveys"                   -> true,
-      "feature.findMyNinoAddToWallet"                         -> true,
+      "feature.findMyNinoAddToWallet"                          -> true,
       "feature.disableYourEmploymentIncomeChart"              -> false,
       "feature.disableYourEmploymentIncomeChartAndroid"       -> false,
       "feature.disableYourEmploymentIncomeChartIos"           -> false,
-      "feature.findMyNinoAddToGoogleWallet"                   -> true,
+      "feature.findMyNinoAddToGoogleWallet"                    -> true,
       "url.cbProofOfEntitlementUrl"                           -> "/child-benefit/view-proof-entitlement",
       "url.cbProofOfEntitlementUrlCy"                         -> "/child-benefit/view-proof-entitlementCy",
       "url.cbPaymentHistoryUrl"                               -> "/child-benefit/view-payment-history",
@@ -107,7 +107,8 @@ class BaseISpec
       "url.incomeTaxGeneralEnquiriesUrl"                      -> "/incomeTaxGeneralEnquiriesUrl",
       "url.learnAboutCallChargesUrl"                          -> "/learnAboutCallChargesUrl",
       "url.learnAboutCallChargesUrlCy"                        -> "/learnAboutCallChargesUrlCy",
-      "url.statePensionAgeUrl"                                -> "/statePensionAgeUrl"
+      "url.statePensionAgeUrl"                                -> "/statePensionAgeUrl",
+      "url.tcNationalInsuranceRatesLettersUrl"                -> "/tcNationalInsuranceRatesLettersUrl"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)

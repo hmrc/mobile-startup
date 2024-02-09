@@ -84,6 +84,7 @@ class StartupServiceImpl[F[_]] @Inject() (
   learnAboutCallChargesUrl:                Option[String],
   learnAboutCallChargesUrlCy:              Option[String],
   statePensionAgeUrl:                      Option[String],
+  tcNationalInsuranceRatesLettersUrl:      Option[String],
   enableCustomerSatisfactionSurveys:       Boolean,
   findMyNinoAddToWallet:                    Boolean,
   disableYourEmploymentIncomeChart:        Boolean,
@@ -153,7 +154,8 @@ class StartupServiceImpl[F[_]] @Inject() (
         incomeTaxGeneralEnquiriesUrl.map(URL("incomeTaxGeneralEnquiriesUrl", _)),
         learnAboutCallChargesUrl.map(URL("learnAboutCallChargesUrl", _)),
         learnAboutCallChargesUrlCy.map(URL("learnAboutCallChargesUrlCy", _)),
-        statePensionAgeUrl.map(URL("statePensionAgeUrl", _))
+        statePensionAgeUrl.map(URL("statePensionAgeUrl", _)),
+        tcNationalInsuranceRatesLettersUrl.map(URL("tcNationalInsuranceRatesLettersUrl", _))
       ).filter(_.isDefined)
     )
 
