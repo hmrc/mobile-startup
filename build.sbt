@@ -8,7 +8,7 @@ lazy val microservice = Project(appName, file("."))
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.12.15",
+    scalaVersion := "2.13.8",
     playDefaultPort := 8251,
     libraryDependencies ++= AppDependencies()
   )
@@ -22,7 +22,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
-  .settings( // based on https://tpolecat.github.io/2017/04/25/scalac-flags.html but cut down for scala 2.11
+  .settings(
     scalacOptions ++= Seq(
       "-deprecation",
       "-encoding",
@@ -30,13 +30,8 @@ lazy val microservice = Project(appName, file("."))
       "-language:higherKinds",
       "-language:postfixOps",
       "-feature",
-      "-Ypartial-unification",
       "-Ywarn-dead-code",
       "-Ywarn-value-discard",
-      "-Ywarn-inaccessible",
-      "-Ywarn-infer-any",
-      "-Ywarn-nullary-override",
-      "-Ywarn-nullary-unit",
       "-Ywarn-numeric-widen",
       "-Xlint"
     ),

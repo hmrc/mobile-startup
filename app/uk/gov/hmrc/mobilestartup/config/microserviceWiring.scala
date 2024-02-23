@@ -27,7 +27,6 @@ import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.hooks.{HttpHook, HttpHooks}
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.audit.model.Audit
 import uk.gov.hmrc.play.http.ws._
 
 trait Hooks extends HttpHooks with HttpAuditing {
@@ -50,8 +49,3 @@ class WSHttpImpl @Inject() (
 
   override protected def configuration: Config = config.underlying
 }
-
-class MicroserviceAudit @Inject() (
-  @Named("appName") val applicationName: String,
-  val auditConnector:                    AuditConnector)
-    extends Audit(applicationName, auditConnector)
