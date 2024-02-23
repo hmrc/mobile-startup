@@ -3,5 +3,3 @@
 ->         /sandbox              sandbox.Routes
 ->         /                     definition.Routes
 ->         /                     health.Routes
-
-GET        /admin/metrics        com.kenshoo.play.metrics.MetricsController.metrics

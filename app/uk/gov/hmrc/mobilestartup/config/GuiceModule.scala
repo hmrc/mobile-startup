@@ -28,7 +28,7 @@ import uk.gov.hmrc.mobilestartup.services.{LivePreFlightService, LiveStartupServ
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
 
 class GuiceModule @Inject() (

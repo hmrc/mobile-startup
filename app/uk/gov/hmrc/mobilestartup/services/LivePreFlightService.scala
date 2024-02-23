@@ -42,7 +42,8 @@ class LivePreFlightService @Inject() (
   @Named("controllers.confidenceLevel") val confLevel:                           Int,
   @Named("feature.annualTaxSummaryLink") val showATSLink:                        Boolean,
   @Named("enableMultipleGGIDCheck.ios") val multipleGGIDCheckEnabledIos:         Boolean,
-  @Named("enableMultipleGGIDCheck.android") val multipleGGIDCheckEnabledAndroid: Boolean
+  @Named("enableMultipleGGIDCheck.android") val multipleGGIDCheckEnabledAndroid: Boolean,
+  auditService:                                                                  AuditService
 )(implicit executionContext:                                                     ExecutionContext)
     extends PreFlightServiceImpl[Future](genericConnector, confLevel)
     with AuthorisedFunctions
@@ -57,7 +58,7 @@ class LivePreFlightService @Inject() (
   )(f:           => Future[T]
   )(implicit hc: HeaderCarrier
   ): Future[T] =
-    withAudit(service, details)(f)
+    auditService.withAudit(service, details)(f)
 
   // The retrieval function is really hard to dummy out in tests because of it's polymorphic nature, and the `~` trick doesn't
   // help, but isolating it here and adapting to the concrete tuple of results we are expecting makes testing of the logic in
@@ -108,35 +109,45 @@ class LivePreFlightService @Inject() (
     }
   }
 
-  def routeToTens(checkEnabled: Boolean,
-                  hasPTEnrolment: Boolean,
-                  ninoFromAuth: Boolean,
-                  ninoAuthValue: Option[Nino],
-                  ninoPtValue: Option[Nino]): Boolean = {
+  def routeToTens(
+    checkEnabled:   Boolean,
+    hasPTEnrolment: Boolean,
+    ninoFromAuth:   Boolean,
+    ninoAuthValue:  Option[Nino],
+    ninoPtValue:    Option[Nino]
+  ): Boolean =
     (checkEnabled, hasPTEnrolment, ninoFromAuth) match {
-      case (false, _, _) => false
-      case (true, false, _) => true
+      case (false, _, _)       => false
+      case (true, false, _)    => true
       case (true, true, false) => false
-      case (true, true, true) => !(ninoAuthValue.map(_.nino) == ninoPtValue.map(_.nino))
+      case (true, true, true)  => !(ninoAuthValue.map(_.nino) == ninoPtValue.map(_.nino))
     }
-  }
 
-  override def doesUserHaveMultipleGGIDs(enrolments: Enrolments, nino: Option[Nino])(implicit hc: HeaderCarrier): Boolean = {
-    val userAgentHeader = hc.otherHeaders.toMap.getOrElse("user-agent", "No User-Agent").toLowerCase
+  override def doesUserHaveMultipleGGIDs(
+    enrolments:  Enrolments,
+    nino:        Option[Nino]
+  )(implicit hc: HeaderCarrier
+  ): Boolean = {
+    val userAgentHeader        = hc.otherHeaders.toMap.getOrElse("user-agent", "No User-Agent").toLowerCase
     val userHasHmrcPtEnrolment = enrolments.enrolments.exists(_.key == "HMRC-PT")
-    val getEnrolment: String => Option[Nino] = key => enrolments.enrolments
-      .find(_.key == s"$key")
-      .flatMap { enrolment =>
-        enrolment.identifiers
-          .find(id => id.key.toUpperCase == "NINO" && enrolment.state == "Activated")
-          .map(key => Nino(key.value))
-      }
+    val getEnrolment: String => Option[Nino] = key =>
+      enrolments.enrolments
+        .find(_.key == s"$key")
+        .flatMap { enrolment =>
+          enrolment.identifiers
+            .find(id => id.key.toUpperCase == "NINO" && enrolment.state == "Activated")
+            .map(key => Nino(key.value))
+        }
 
     userAgentHeader match {
       case _ if userAgentHeader.contains("ios") =>
         routeToTens(multipleGGIDCheckEnabledIos, userHasHmrcPtEnrolment, nino.isDefined, nino, getEnrolment("HMRC-PT"))
       case _ if userAgentHeader.contains("android") =>
-        routeToTens(multipleGGIDCheckEnabledAndroid, userHasHmrcPtEnrolment, nino.isDefined, nino, getEnrolment("HMRC-PT"))
+        routeToTens(multipleGGIDCheckEnabledAndroid,
+                    userHasHmrcPtEnrolment,
+                    nino.isDefined,
+                    nino,
+                    getEnrolment("HMRC-PT"))
       case _ =>
         logger.info(s"User-Agent not recognised or missing: $userAgentHeader")
         false

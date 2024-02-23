@@ -336,7 +336,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
       val response = await(getRequestWithAcceptHeader(url))
 
-      response.status shouldBe 200
+      response.status                            shouldBe 200
       (response.json \ "routeToTEN").as[Boolean] shouldBe false
 
     }
@@ -349,7 +349,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
       val response =
         await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
 
-      response.status shouldBe 200
+      response.status                            shouldBe 200
       (response.json \ "routeToTEN").as[Boolean] shouldBe false
 
     }
@@ -361,7 +361,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
       val response = await(getRequestWithAcceptHeader(url))
 
-      response.status shouldBe 200
+      response.status                            shouldBe 200
       (response.json \ "routeToTEN").as[Boolean] shouldBe true
 
     }
@@ -374,7 +374,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
       val response =
         await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, userAgentJsonHeaderAndroid).get())
 
-      response.status shouldBe 200
+      response.status                            shouldBe 200
       (response.json \ "routeToTEN").as[Boolean] shouldBe true
 
     }
@@ -387,9 +387,11 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
       respondToAuditWithNoBody
 
       val response =
-        await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, unrecognisedUserAgentJsonHeader ).get())
+        await(
+          wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader, unrecognisedUserAgentJsonHeader).get()
+        )
 
-      response.status shouldBe 200
+      response.status                            shouldBe 200
       (response.json \ "routeToTEN").as[Boolean] shouldBe false
 
     }
@@ -401,7 +403,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
       val response = await(getRequestWithAcceptHeader(url))
 
-      response.status shouldBe 200
+      response.status                            shouldBe 200
       (response.json \ "routeToTEN").as[Boolean] shouldBe false
 
     }
@@ -413,7 +415,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
       val response = await(getRequestWithAcceptHeader(url))
 
-      response.status shouldBe 200
+      response.status                            shouldBe 200
       (response.json \ "routeToTEN").as[Boolean] shouldBe true
     }
   }
