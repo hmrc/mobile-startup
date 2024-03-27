@@ -82,6 +82,9 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("learnAboutCallChargesUrlCy", "url.learnAboutCallChargesUrlCy")
     bindConfigOptionalString("statePensionAgeUrl", "url.statePensionAgeUrl")
     bindConfigOptionalString("tcNationalInsuranceRatesLettersUrl", "url.tcNationalInsuranceRatesLettersUrl")
+    bindConfigOptionalString("tcPersonalAllowanceUrl", "url.tcPersonalAllowanceUrl")
+    bindConfigOptionalString("tcPersonalAllowanceUrlCy", "url.tcPersonalAllowanceUrlCy")
+    bindConfigOptionalString("scottishIncomeTaxUrl", "url.scottishIncomeTaxUrl")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
