@@ -54,7 +54,7 @@ object URL {
 class StartupServiceImpl[F[_]] @Inject() (
   connector:                               GenericConnector[F],
   userPanelSignUp:                         Boolean,
-  enablePushNotificationTokenRegistration:  Boolean,
+  enablePushNotificationTokenRegistration: Boolean,
   enablePaperlessAlertDialogs:             Boolean,
   enablePaperlessAdverts:                  Boolean,
   enableHtsAdverts:                        Boolean,
@@ -85,12 +85,15 @@ class StartupServiceImpl[F[_]] @Inject() (
   learnAboutCallChargesUrlCy:              Option[String],
   statePensionAgeUrl:                      Option[String],
   tcNationalInsuranceRatesLettersUrl:      Option[String],
+  tcPersonalAllowanceUrl:                  Option[String],
+  tcPersonalAllowanceUrlCy:                Option[String],
+  scottishIncomeTaxUrl:                    Option[String],
   enableCustomerSatisfactionSurveys:       Boolean,
-  findMyNinoAddToWallet:                    Boolean,
+  findMyNinoAddToWallet:                   Boolean,
   disableYourEmploymentIncomeChart:        Boolean,
   disableYourEmploymentIncomeChartAndroid: Boolean,
   disableYourEmploymentIncomeChartIos:     Boolean,
-  findMyNinoAddToGoogleWallet:              Boolean
+  findMyNinoAddToGoogleWallet:             Boolean
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -155,7 +158,10 @@ class StartupServiceImpl[F[_]] @Inject() (
         learnAboutCallChargesUrl.map(URL("learnAboutCallChargesUrl", _)),
         learnAboutCallChargesUrlCy.map(URL("learnAboutCallChargesUrlCy", _)),
         statePensionAgeUrl.map(URL("statePensionAgeUrl", _)),
-        tcNationalInsuranceRatesLettersUrl.map(URL("tcNationalInsuranceRatesLettersUrl", _))
+        tcNationalInsuranceRatesLettersUrl.map(URL("tcNationalInsuranceRatesLettersUrl", _)),
+        tcPersonalAllowanceUrl.map(URL("tcPersonalAllowanceUrl", _)),
+        tcPersonalAllowanceUrlCy.map(URL("tcPersonalAllowanceUrlCy", _)),
+        scottishIncomeTaxUrl.map(URL("scottishIncomeTaxUrl", _))
       ).filter(_.isDefined)
     )
 
