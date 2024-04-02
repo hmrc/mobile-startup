@@ -15,6 +15,7 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
+
 import cats.MonadError
 import cats.implicits._
 
@@ -88,6 +89,8 @@ class StartupServiceImpl[F[_]] @Inject() (
   tcPersonalAllowanceUrl:                  Option[String],
   tcPersonalAllowanceUrlCy:                Option[String],
   scottishIncomeTaxUrl:                    Option[String],
+  cbTaxChargeUrl:                          Option[String],
+  cbTaxChargeUrlCy:                        Option[String],
   enableCustomerSatisfactionSurveys:       Boolean,
   findMyNinoAddToWallet:                   Boolean,
   disableYourEmploymentIncomeChart:        Boolean,
@@ -161,7 +164,9 @@ class StartupServiceImpl[F[_]] @Inject() (
         tcNationalInsuranceRatesLettersUrl.map(URL("tcNationalInsuranceRatesLettersUrl", _)),
         tcPersonalAllowanceUrl.map(URL("tcPersonalAllowanceUrl", _)),
         tcPersonalAllowanceUrlCy.map(URL("tcPersonalAllowanceUrlCy", _)),
-        scottishIncomeTaxUrl.map(URL("scottishIncomeTaxUrl", _))
+        scottishIncomeTaxUrl.map(URL("scottishIncomeTaxUrl", _)),
+        cbTaxChargeUrl.map(URL("cbTaxChargeUrl", _)),
+        cbTaxChargeUrlCy.map(URL("cbTaxChargeUrlCy", _))
       ).filter(_.isDefined)
     )
 

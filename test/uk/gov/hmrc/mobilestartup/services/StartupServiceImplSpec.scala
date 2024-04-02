@@ -228,6 +228,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       tcPersonalAllowanceUrl                  = Some("/tcPersonalAllowanceUrl"),
                                       tcPersonalAllowanceUrlCy                = Some("/tcPersonalAllowanceUrlCy"),
                                       scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
+                                      cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
+                                      cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -287,7 +289,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl"),
         URL("tcPersonalAllowanceUrl", "/tcPersonalAllowanceUrl"),
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
-        URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl")
+        URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
+        URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
       )
     }
   }
@@ -331,6 +335,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       tcPersonalAllowanceUrl                  = Some("/tcPersonalAllowanceUrl"),
                                       tcPersonalAllowanceUrlCy                = Some("/tcPersonalAllowanceUrlCy"),
                                       scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
+                                      cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
+                                      cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -390,7 +396,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl"),
         URL("tcPersonalAllowanceUrl", "/tcPersonalAllowanceUrl"),
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
-        URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl")
+        URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
+        URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
       )
     }
 
@@ -432,6 +440,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       tcPersonalAllowanceUrl                  = Some("/tcPersonalAllowanceUrl"),
                                       tcPersonalAllowanceUrlCy                = Some("/tcPersonalAllowanceUrlCy"),
                                       scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
+                                      cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
+                                      cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -491,7 +501,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl"),
         URL("tcPersonalAllowanceUrl", "/tcPersonalAllowanceUrl"),
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
-        URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl")
+        URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
+        URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
       )
     }
 
@@ -533,6 +545,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         tcPersonalAllowanceUrl                  = Some("/tcPersonalAllowanceUrl"),
         tcPersonalAllowanceUrlCy                = Some("/tcPersonalAllowanceUrlCy"),
         scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
+        cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
+        cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
         enableCustomerSatisfactionSurveys       = false,
         findMyNinoAddToWallet                   = false,
         disableYourEmploymentIncomeChart        = true,
@@ -599,7 +613,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl"),
         URL("tcPersonalAllowanceUrl", "/tcPersonalAllowanceUrl"),
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
-        URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl")
+        URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
+        URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
       )
     }
 
@@ -641,6 +657,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       tcPersonalAllowanceUrl                  = Some("/tcPersonalAllowanceUrl"),
                                       tcPersonalAllowanceUrlCy                = Some("/tcPersonalAllowanceUrlCy"),
                                       scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
+                                      cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
+                                      cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -700,7 +718,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl"),
         URL("tcPersonalAllowanceUrl", "/tcPersonalAllowanceUrl"),
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
-        URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl")
+        URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
+        URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
       )
     }
   }
@@ -743,6 +763,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     tcPersonalAllowanceUrl                  = Some("/tcPersonalAllowanceUrl"),
                                     tcPersonalAllowanceUrlCy                = Some("/tcPersonalAllowanceUrlCy"),
                                     scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
+                                    cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
+                                    cbTaxChargeUrlCy                        = None,
                                     enableCustomerSatisfactionSurveys       = false,
                                     findMyNinoAddToWallet                   = false,
                                     disableYourEmploymentIncomeChart        = true,
@@ -795,7 +817,8 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl"),
       URL("tcPersonalAllowanceUrl", "/tcPersonalAllowanceUrl"),
       URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
-      URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl")
+      URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
+      URL("cbTaxChargeUrl", "/cbTaxChargeUrl")
     )
   }
 }
