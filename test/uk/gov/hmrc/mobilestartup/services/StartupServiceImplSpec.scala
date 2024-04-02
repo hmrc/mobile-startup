@@ -231,11 +231,11 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
                                       cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
-                                      findMyNinoAddToWallet                    = false,
+                                      findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
                                       disableYourEmploymentIncomeChartAndroid = true,
                                       disableYourEmploymentIncomeChartIos     = true,
-                                      findMyNinoAddToGoogleWallet              = false)
+                                      findMyNinoAddToGoogleWallet             = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -443,11 +443,11 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
                                       cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
-                                      findMyNinoAddToWallet                    = false,
+                                      findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
                                       disableYourEmploymentIncomeChartAndroid = true,
                                       disableYourEmploymentIncomeChartIos     = true,
-                                      findMyNinoAddToGoogleWallet              = false)
+                                      findMyNinoAddToGoogleWallet             = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -548,11 +548,11 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
         cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
         enableCustomerSatisfactionSurveys       = false,
-        findMyNinoAddToWallet                    = false,
+        findMyNinoAddToWallet                   = false,
         disableYourEmploymentIncomeChart        = true,
         disableYourEmploymentIncomeChartAndroid = true,
         disableYourEmploymentIncomeChartIos     = true,
-        findMyNinoAddToGoogleWallet              = false
+        findMyNinoAddToGoogleWallet             = false
       )
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -615,7 +615,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
         URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
         URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
-        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy"),
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
       )
     }
 
@@ -660,11 +660,11 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
                                       cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
-                                      findMyNinoAddToWallet                    = false,
+                                      findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
                                       disableYourEmploymentIncomeChartAndroid = true,
                                       disableYourEmploymentIncomeChartIos     = true,
-                                      findMyNinoAddToGoogleWallet              = false)
+                                      findMyNinoAddToGoogleWallet             = false)
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -720,7 +720,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
         URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
         URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
-        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy"),
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
       )
     }
   }
@@ -766,11 +766,11 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
                                     cbTaxChargeUrlCy                        = None,
                                     enableCustomerSatisfactionSurveys       = false,
-                                    findMyNinoAddToWallet                    = false,
+                                    findMyNinoAddToWallet                   = false,
                                     disableYourEmploymentIncomeChart        = true,
                                     disableYourEmploymentIncomeChartAndroid = true,
                                     disableYourEmploymentIncomeChartIos     = true,
-                                    findMyNinoAddToGoogleWallet              = false)
+                                    findMyNinoAddToGoogleWallet             = false)
 
     val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
 
@@ -818,7 +818,7 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       URL("tcPersonalAllowanceUrl", "/tcPersonalAllowanceUrl"),
       URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
       URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
-      URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
+      URL("cbTaxChargeUrl", "/cbTaxChargeUrl")
     )
   }
 }

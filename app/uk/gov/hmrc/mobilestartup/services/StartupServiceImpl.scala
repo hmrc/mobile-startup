@@ -15,6 +15,7 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
+
 import cats.MonadError
 import cats.implicits._
 
@@ -91,11 +92,11 @@ class StartupServiceImpl[F[_]] @Inject() (
   cbTaxChargeUrl:                          Option[String],
   cbTaxChargeUrlCy:                        Option[String],
   enableCustomerSatisfactionSurveys:       Boolean,
-  findMyNinoAddToWallet:                    Boolean,
+  findMyNinoAddToWallet:                   Boolean,
   disableYourEmploymentIncomeChart:        Boolean,
   disableYourEmploymentIncomeChartAndroid: Boolean,
   disableYourEmploymentIncomeChartIos:     Boolean,
-  findMyNinoAddToGoogleWallet:              Boolean
+  findMyNinoAddToGoogleWallet:             Boolean
 )(implicit F:                              MonadError[F, Throwable])
     extends StartupService[F] {
 

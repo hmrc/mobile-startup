@@ -62,11 +62,11 @@ class LiveStartupService @Inject() (
   @Named("cbTaxChargeUrl") cbTaxChargeUrl:                                                           Option[String],
   @Named("cbTaxChargeUrlCy") cbTaxChargeUrlCy:                                                       Option[String],
   @Named("feature.customerSatisfactionSurveys") enableCustomerSatisfactionSurveys:                   Boolean,
-  @Named("feature.findMyNinoAddToWallet") findMyNinoAddToWallet:                                       Boolean,
+  @Named("feature.findMyNinoAddToWallet") findMyNinoAddToWallet:                                     Boolean,
   @Named("feature.disableYourEmploymentIncomeChart") disableYourEmploymentIncomeChart:               Boolean,
   @Named("feature.disableYourEmploymentIncomeChartAndroid") disableYourEmploymentIncomeChartAndroid: Boolean,
   @Named("feature.disableYourEmploymentIncomeChartIos") disableYourEmploymentIncomeChartIos:         Boolean,
-  @Named("feature.findMyNinoAddToGoogleWallet") findMyNinoAddToGoogleWallet:                           Boolean
+  @Named("feature.findMyNinoAddToGoogleWallet") findMyNinoAddToGoogleWallet:                         Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
