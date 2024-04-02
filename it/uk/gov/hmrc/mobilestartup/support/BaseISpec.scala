@@ -111,7 +111,9 @@ class BaseISpec
       "url.tcNationalInsuranceRatesLettersUrl"                -> "/tcNationalInsuranceRatesLettersUrl",
       "url.tcPersonalAllowanceUrl"                            -> "/tcPersonalAllowanceUrl",
       "url.tcPersonalAllowanceUrlCy"                          -> "/tcPersonalAllowanceUrlCy",
-      "url.scottishIncomeTaxUrl"                              -> "/scottishIncomeTaxUrl"
+      "url.scottishIncomeTaxUrl"                              -> "/scottishIncomeTaxUrl",
+      "url.cbTaxChargeUrl"                                    -> "/cbTaxChargeUrl",
+      "url.cbTaxChargeUrlCy"                                  -> "/cbTaxChargeUrlCy"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)
