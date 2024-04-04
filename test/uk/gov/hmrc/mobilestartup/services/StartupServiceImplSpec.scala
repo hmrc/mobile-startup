@@ -230,6 +230,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
                                       cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
                                       cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
+                                      selfAssessmentHelpAppealingPenaltiesUrl =
+                                        Some("/selfAssessmentHelpAppealingPenaltiesUrl"),
+                                      selfAssessmentHelpAppealingPenaltiesUrlCy =
+                                        Some("/selfAssessmentHelpAppealingPenaltiesUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -291,7 +295,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
         URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
         URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
-        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy"),
+        URL("selfAssessmentHelpAppealingPenaltiesUrl", "/selfAssessmentHelpAppealingPenaltiesUrl"),
+        URL("selfAssessmentHelpAppealingPenaltiesUrlCy", "/selfAssessmentHelpAppealingPenaltiesUrlCy")
       )
     }
   }
@@ -337,6 +343,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
                                       cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
                                       cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
+                                      selfAssessmentHelpAppealingPenaltiesUrl =
+                                        Some("/selfAssessmentHelpAppealingPenaltiesUrl"),
+                                      selfAssessmentHelpAppealingPenaltiesUrlCy =
+                                        Some("/selfAssessmentHelpAppealingPenaltiesUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -398,7 +408,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
         URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
         URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
-        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy"),
+        URL("selfAssessmentHelpAppealingPenaltiesUrl", "/selfAssessmentHelpAppealingPenaltiesUrl"),
+        URL("selfAssessmentHelpAppealingPenaltiesUrlCy", "/selfAssessmentHelpAppealingPenaltiesUrlCy")
       )
     }
 
@@ -442,6 +454,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
                                       cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
                                       cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
+                                      selfAssessmentHelpAppealingPenaltiesUrl =
+                                        Some("/selfAssessmentHelpAppealingPenaltiesUrl"),
+                                      selfAssessmentHelpAppealingPenaltiesUrlCy =
+                                        Some("/selfAssessmentHelpAppealingPenaltiesUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -503,7 +519,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
         URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
         URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
-        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy"),
+        URL("selfAssessmentHelpAppealingPenaltiesUrl", "/selfAssessmentHelpAppealingPenaltiesUrl"),
+        URL("selfAssessmentHelpAppealingPenaltiesUrlCy", "/selfAssessmentHelpAppealingPenaltiesUrlCy")
       )
     }
 
@@ -511,48 +529,50 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       val sut = new StartupServiceImpl[TestF](
         dummyConnector(inAppMessagesResponse = new Exception("message call failed").error),
         false,
-        enablePushNotificationTokenRegistration = false,
-        enablePaperlessAlertDialogs             = false,
-        enablePaperlessAdverts                  = false,
-        enableHtsAdverts                        = false,
-        enableAnnualTaxSummaryLink              = false,
-        cbProofOfEntitlementUrl                 = Some("/cb/cbProofOfEntitlementUrl"),
-        cbProofOfEntitlementUrlCy               = Some("/cb/cbProofOfEntitlementUrlCy"),
-        cbPaymentHistoryUrl                     = Some("/cb/cbPaymentHistoryUrl"),
-        cbPaymentHistoryUrlCy                   = Some("/cb/cbPaymentHistoryUrlCy"),
-        cbChangeBankAccountUrl                  = Some("/cb/cbChangeBankAccountUrl"),
-        cbChangeBankAccountUrlCy                = Some("/cb/cbChangeBankAccountUrlCy"),
-        cbHomeUrl                               = Some("/cb/cbHomeUrl"),
-        cbHomeUrlCy                             = Some("/cb/cbHomeUrlCy"),
-        cbHowToClaimUrl                         = Some("/cb/cbHowToClaimUrl"),
-        cbHowToClaimUrlCy                       = Some("/cb/cbHowToClaimUrlCy"),
-        cbFullTimeEducationUrl                  = Some("/cb/cbFullTimeEducationUrl"),
-        cbFullTimeEducationUrlCy                = Some("/cb/cbFullTimeEducationUrlCy"),
-        cbWhatChangesUrl                        = Some("/cb/cbWhatChangesUrl"),
-        cbWhatChangesUrlCy                      = Some("/cb/cbWhatChangesUrlCy"),
-        statePensionUrl                         = Some("/statePensionUrl"),
-        niSummaryUrl                            = Some("/niSummaryUrl"),
-        niContributionsUrl                      = Some("/niContributionsUrl"),
-        otherTaxesDigitalAssistantUrl           = Some("/otherTaxesDigitalAssistantUrl"),
-        otherTaxesDigitalAssistantUrlCy         = Some("/otherTaxesDigitalAssistantUrlCy"),
-        payeDigitalAssistantUrl                 = Some("/payeDigitalAssistantUrl"),
-        payeDigitalAssistantUrlCy               = Some("/payeDigitalAssistantUrlCy"),
-        incomeTaxGeneralEnquiriesUrl            = Some("/incomeTaxGeneralEnquiriesUrl"),
-        learnAboutCallChargesUrl                = Some("/learnAboutCallChargesUrl"),
-        learnAboutCallChargesUrlCy              = Some("/learnAboutCallChargesUrlCy"),
-        statePensionAgeUrl                      = Some("/statePensionAgeUrl"),
-        tcNationalInsuranceRatesLettersUrl      = Some("/tcNationalInsuranceRatesLettersUrl"),
-        tcPersonalAllowanceUrl                  = Some("/tcPersonalAllowanceUrl"),
-        tcPersonalAllowanceUrlCy                = Some("/tcPersonalAllowanceUrlCy"),
-        scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
-        cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
-        cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
-        enableCustomerSatisfactionSurveys       = false,
-        findMyNinoAddToWallet                   = false,
-        disableYourEmploymentIncomeChart        = true,
-        disableYourEmploymentIncomeChartAndroid = true,
-        disableYourEmploymentIncomeChartIos     = true,
-        findMyNinoAddToGoogleWallet             = false
+        enablePushNotificationTokenRegistration   = false,
+        enablePaperlessAlertDialogs               = false,
+        enablePaperlessAdverts                    = false,
+        enableHtsAdverts                          = false,
+        enableAnnualTaxSummaryLink                = false,
+        cbProofOfEntitlementUrl                   = Some("/cb/cbProofOfEntitlementUrl"),
+        cbProofOfEntitlementUrlCy                 = Some("/cb/cbProofOfEntitlementUrlCy"),
+        cbPaymentHistoryUrl                       = Some("/cb/cbPaymentHistoryUrl"),
+        cbPaymentHistoryUrlCy                     = Some("/cb/cbPaymentHistoryUrlCy"),
+        cbChangeBankAccountUrl                    = Some("/cb/cbChangeBankAccountUrl"),
+        cbChangeBankAccountUrlCy                  = Some("/cb/cbChangeBankAccountUrlCy"),
+        cbHomeUrl                                 = Some("/cb/cbHomeUrl"),
+        cbHomeUrlCy                               = Some("/cb/cbHomeUrlCy"),
+        cbHowToClaimUrl                           = Some("/cb/cbHowToClaimUrl"),
+        cbHowToClaimUrlCy                         = Some("/cb/cbHowToClaimUrlCy"),
+        cbFullTimeEducationUrl                    = Some("/cb/cbFullTimeEducationUrl"),
+        cbFullTimeEducationUrlCy                  = Some("/cb/cbFullTimeEducationUrlCy"),
+        cbWhatChangesUrl                          = Some("/cb/cbWhatChangesUrl"),
+        cbWhatChangesUrlCy                        = Some("/cb/cbWhatChangesUrlCy"),
+        statePensionUrl                           = Some("/statePensionUrl"),
+        niSummaryUrl                              = Some("/niSummaryUrl"),
+        niContributionsUrl                        = Some("/niContributionsUrl"),
+        otherTaxesDigitalAssistantUrl             = Some("/otherTaxesDigitalAssistantUrl"),
+        otherTaxesDigitalAssistantUrlCy           = Some("/otherTaxesDigitalAssistantUrlCy"),
+        payeDigitalAssistantUrl                   = Some("/payeDigitalAssistantUrl"),
+        payeDigitalAssistantUrlCy                 = Some("/payeDigitalAssistantUrlCy"),
+        incomeTaxGeneralEnquiriesUrl              = Some("/incomeTaxGeneralEnquiriesUrl"),
+        learnAboutCallChargesUrl                  = Some("/learnAboutCallChargesUrl"),
+        learnAboutCallChargesUrlCy                = Some("/learnAboutCallChargesUrlCy"),
+        statePensionAgeUrl                        = Some("/statePensionAgeUrl"),
+        tcNationalInsuranceRatesLettersUrl        = Some("/tcNationalInsuranceRatesLettersUrl"),
+        tcPersonalAllowanceUrl                    = Some("/tcPersonalAllowanceUrl"),
+        tcPersonalAllowanceUrlCy                  = Some("/tcPersonalAllowanceUrlCy"),
+        scottishIncomeTaxUrl                      = Some("/scottishIncomeTaxUrl"),
+        cbTaxChargeUrl                            = Some("/cbTaxChargeUrl"),
+        cbTaxChargeUrlCy                          = Some("/cbTaxChargeUrlCy"),
+        selfAssessmentHelpAppealingPenaltiesUrl   = Some("/selfAssessmentHelpAppealingPenaltiesUrl"),
+        selfAssessmentHelpAppealingPenaltiesUrlCy = Some("/selfAssessmentHelpAppealingPenaltiesUrlCy"),
+        enableCustomerSatisfactionSurveys         = false,
+        findMyNinoAddToWallet                     = false,
+        disableYourEmploymentIncomeChart          = true,
+        disableYourEmploymentIncomeChartAndroid   = true,
+        disableYourEmploymentIncomeChartIos       = true,
+        findMyNinoAddToGoogleWallet               = false
       )
 
       val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
@@ -615,7 +635,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
         URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
         URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
-        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy"),
+        URL("selfAssessmentHelpAppealingPenaltiesUrl", "/selfAssessmentHelpAppealingPenaltiesUrl"),
+        URL("selfAssessmentHelpAppealingPenaltiesUrlCy", "/selfAssessmentHelpAppealingPenaltiesUrlCy")
       )
     }
 
@@ -659,6 +681,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                       scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
                                       cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
                                       cbTaxChargeUrlCy                        = Some("/cbTaxChargeUrlCy"),
+                                      selfAssessmentHelpAppealingPenaltiesUrl =
+                                        Some("/selfAssessmentHelpAppealingPenaltiesUrl"),
+                                      selfAssessmentHelpAppealingPenaltiesUrlCy =
+                                        Some("/selfAssessmentHelpAppealingPenaltiesUrlCy"),
                                       enableCustomerSatisfactionSurveys       = false,
                                       findMyNinoAddToWallet                   = false,
                                       disableYourEmploymentIncomeChart        = true,
@@ -720,7 +746,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
         URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
         URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
         URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
-        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy")
+        URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy"),
+        URL("selfAssessmentHelpAppealingPenaltiesUrl", "/selfAssessmentHelpAppealingPenaltiesUrl"),
+        URL("selfAssessmentHelpAppealingPenaltiesUrlCy", "/selfAssessmentHelpAppealingPenaltiesUrlCy")
       )
     }
   }
@@ -765,6 +793,10 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
                                     scottishIncomeTaxUrl                    = Some("/scottishIncomeTaxUrl"),
                                     cbTaxChargeUrl                          = Some("/cbTaxChargeUrl"),
                                     cbTaxChargeUrlCy                        = None,
+                                    selfAssessmentHelpAppealingPenaltiesUrl =
+                                      Some("/selfAssessmentHelpAppealingPenaltiesUrl"),
+                                    selfAssessmentHelpAppealingPenaltiesUrlCy =
+                                      Some("/selfAssessmentHelpAppealingPenaltiesUrlCy"),
                                     enableCustomerSatisfactionSurveys       = false,
                                     findMyNinoAddToWallet                   = false,
                                     disableYourEmploymentIncomeChart        = true,
@@ -818,7 +850,9 @@ class StartupServiceImplSpec extends BaseSpec with TestF {
       URL("tcPersonalAllowanceUrl", "/tcPersonalAllowanceUrl"),
       URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
       URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
-      URL("cbTaxChargeUrl", "/cbTaxChargeUrl")
+      URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
+      URL("selfAssessmentHelpAppealingPenaltiesUrl", "/selfAssessmentHelpAppealingPenaltiesUrl"),
+      URL("selfAssessmentHelpAppealingPenaltiesUrlCy", "/selfAssessmentHelpAppealingPenaltiesUrlCy")
     )
   }
 }

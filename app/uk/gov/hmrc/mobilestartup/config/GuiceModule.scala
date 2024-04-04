@@ -87,6 +87,8 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("scottishIncomeTaxUrl", "url.scottishIncomeTaxUrl")
     bindConfigOptionalString("cbTaxChargeUrl", "url.cbTaxChargeUrl")
     bindConfigOptionalString("cbTaxChargeUrlCy", "url.cbTaxChargeUrlCy")
+    bindConfigOptionalString("selfAssessmentHelpAppealingPenaltiesUrl", "url.selfAssessmentHelpAppealingPenaltiesUrl")
+    bindConfigOptionalString("selfAssessmentHelpAppealingPenaltiesUrlCy", "url.selfAssessmentHelpAppealingPenaltiesUrlCy")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
