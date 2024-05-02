@@ -55,7 +55,7 @@ object URL {
 case class StartupServiceImpl[F[_]] @Inject() (
   connector:                                 GenericConnector[F],
   userPanelSignUp:                           Boolean,
-  enablePushNotificationTokenRegistration:    Boolean,
+  enablePushNotificationTokenRegistration:   Boolean,
   enablePaperlessAlertDialogs:               Boolean,
   enablePaperlessAdverts:                    Boolean,
   enableHtsAdverts:                          Boolean,
@@ -93,7 +93,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
   cbTaxChargeUrlCy:                          Option[String],
   selfAssessmentHelpAppealingPenaltiesUrl:   Option[String],
   selfAssessmentHelpAppealingPenaltiesUrlCy: Option[String],
-  addMissingTaxableIncomeUrl: Option[String],
+  addMissingTaxableIncomeUrl:                Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
   findMyNinoAddToWallet:                     Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
