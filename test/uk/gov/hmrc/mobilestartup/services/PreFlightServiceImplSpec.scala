@@ -16,55 +16,23 @@
 
 package uk.gov.hmrc.mobilestartup.services
 import cats.implicits._
-import play.api.libs.json.JsValue
-import uk.gov.hmrc.auth.core.retrieve.{Credentials}
+import uk.gov.hmrc.auth.core.retrieve.Credentials
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
-import uk.gov.hmrc.mobilestartup.{BaseSpec, TestF}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import eu.timepit.refined.auto._
-import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
 
 import scala.concurrent.ExecutionContext
 
-class PreFlightServiceImplSpec extends BaseSpec with TestF {
+class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
 
   override val journeyId: JourneyId        = "7f1b5289-5f4d-4150-93a3-ff02dda28375"
   implicit val ec:        ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
   val nino:               Nino             = Nino("CS700100A")
   val utr:                SaUtr            = SaUtr("123123123")
-
-  private def dummyConnector: GenericConnector[TestF] =
-    new GenericConnector[TestF] {
-
-      override def doGet(
-        serviceName: String,
-        path:        String,
-        hc:          HeaderCarrier
-      ): TestF[JsValue] = ???
-
-      override def cidGet(
-        serviceName: String,
-        path:        String,
-        hc:          HeaderCarrier
-      ): TestF[CidPerson] = ???
-
-      override def enrolmentStoreGet(
-        serviceName: String,
-        path:        String,
-        hc:          HeaderCarrier
-      ): TestF[EnrolmentStoreResponse] = ???
-
-      override def doPost[T](
-        json:         JsValue,
-        serviceName:  String,
-        path:         String,
-        hc:           HeaderCarrier
-      )(implicit rds: HttpReads[T]
-      ): TestF[T] = ???
-    }
 
   private def service(
     nino:                 Option[Nino],
@@ -88,7 +56,11 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
     )(implicit hc: HeaderCarrier
     ): TestF[T] = f
 
-    def doesUserHaveMultipleGGIDs(enrolments: Enrolments, nino: Option[Nino])(implicit hc: HeaderCarrier): Boolean = false
+    def doesUserHaveMultipleGGIDs(
+      enrolments:  Enrolments,
+      nino:        Option[Nino]
+    )(implicit hc: HeaderCarrier
+    ): Boolean = false
 
     def getUtr(
       foundUtr:    Option[SaUtr],
@@ -108,7 +80,7 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
           ConfidenceLevel.L200,
           Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA")),
           Enrolments(Set.empty),
-          dummyConnector
+          dummyConnector()
         )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
@@ -125,7 +97,7 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
           ConfidenceLevel.L200,
           Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE")),
           Enrolments(Set.empty),
-          dummyConnector
+          dummyConnector()
         )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.saUtr shouldBe Some(utr)
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
@@ -141,7 +113,7 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
                 ConfidenceLevel.L250,
                 None,
                 Enrolments(Set.empty),
-                dummyConnector)
+                dummyConnector())
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
     }
 
@@ -153,7 +125,7 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
                 ConfidenceLevel.L50,
                 None,
                 Enrolments(Set.empty),
-                dummyConnector)
+                dummyConnector())
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe true
     }
 
@@ -165,7 +137,7 @@ class PreFlightServiceImplSpec extends BaseSpec with TestF {
                 ConfidenceLevel.L200,
                 None,
                 Enrolments(Set.empty),
-                dummyConnector)
+                dummyConnector())
       intercept[UnsupportedAuthProvider](sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet)
     }
   }

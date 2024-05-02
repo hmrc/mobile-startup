@@ -21,7 +21,7 @@ import play.api.mvc._
 import uk.gov.hmrc.auth.core.ConfidenceLevel.L200
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
+import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames, HttpException}
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.StartupService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendBaseController
@@ -43,6 +43,7 @@ class LiveStartupController @Inject() (
     Action.async { implicit request =>
       withNinoFromAuth { verifiedNino =>
         service.startup(verifiedNino, journeyId).map(Ok(_))
+        HeaderNames.
       }
     }
 
