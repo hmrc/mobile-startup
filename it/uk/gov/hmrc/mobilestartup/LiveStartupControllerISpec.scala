@@ -206,6 +206,8 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "urls" \ 29 \ "url").as[String]                      shouldBe "/selfAssessmentHelpAppealingPenaltiesUrl"
       (response.json \ "urls" \ 30 \ "name").as[String]                     shouldBe "selfAssessmentHelpAppealingPenaltiesUrlCy"
       (response.json \ "urls" \ 30 \ "url").as[String]                      shouldBe "/selfAssessmentHelpAppealingPenaltiesUrlCy"
+      (response.json \ "urls" \ 31 \ "name").as[String]                     shouldBe "addMissingTaxableIncomeUrl"
+      (response.json \ "urls" \ 31 \ "url").as[String]                      shouldBe "/addMissingTaxableIncomeUrl"
     }
 
     "return 401 when user is not logged in" in {

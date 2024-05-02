@@ -52,7 +52,7 @@ object URL {
   * into a codebase without necessarily converting everything. It did require introducing a type parameter
   * onto the `GenericConnector` trait but that had very little impact beyond the change to the guice wiring.
   */
-class StartupServiceImpl[F[_]] @Inject() (
+case class StartupServiceImpl[F[_]] @Inject() (
   connector:                                 GenericConnector[F],
   userPanelSignUp:                           Boolean,
   enablePushNotificationTokenRegistration:   Boolean,
@@ -93,6 +93,7 @@ class StartupServiceImpl[F[_]] @Inject() (
   cbTaxChargeUrlCy:                          Option[String],
   selfAssessmentHelpAppealingPenaltiesUrl:   Option[String],
   selfAssessmentHelpAppealingPenaltiesUrlCy: Option[String],
+  addMissingTaxableIncomeUrl:                Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
   findMyNinoAddToWallet:                     Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
@@ -170,7 +171,8 @@ class StartupServiceImpl[F[_]] @Inject() (
         cbTaxChargeUrl.map(URL("cbTaxChargeUrl", _)),
         cbTaxChargeUrlCy.map(URL("cbTaxChargeUrlCy", _)),
         selfAssessmentHelpAppealingPenaltiesUrl.map(URL("selfAssessmentHelpAppealingPenaltiesUrl", _)),
-        selfAssessmentHelpAppealingPenaltiesUrlCy.map(URL("selfAssessmentHelpAppealingPenaltiesUrlCy", _))
+        selfAssessmentHelpAppealingPenaltiesUrlCy.map(URL("selfAssessmentHelpAppealingPenaltiesUrlCy", _)),
+        addMissingTaxableIncomeUrl.map(URL("addMissingTaxableIncomeUrl", _))
       ).filter(_.isDefined)
     )
 

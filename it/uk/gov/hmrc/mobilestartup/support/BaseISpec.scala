@@ -115,7 +115,8 @@ class BaseISpec
       "url.cbTaxChargeUrl"                                    -> "/cbTaxChargeUrl",
       "url.cbTaxChargeUrlCy"                                  -> "/cbTaxChargeUrlCy",
       "url.selfAssessmentHelpAppealingPenaltiesUrl"           -> "/selfAssessmentHelpAppealingPenaltiesUrl",
-      "url.selfAssessmentHelpAppealingPenaltiesUrlCy"         -> "/selfAssessmentHelpAppealingPenaltiesUrlCy"
+      "url.selfAssessmentHelpAppealingPenaltiesUrlCy"         -> "/selfAssessmentHelpAppealingPenaltiesUrlCy",
+      "url.addMissingTaxableIncomeUrl"                        -> "/addMissingTaxableIncomeUrl"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)
