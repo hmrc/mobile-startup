@@ -17,7 +17,7 @@
 package uk.gov.hmrc.mobilestartup.stubs
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, getRequestedFor, stubFor, urlPathEqualTo, urlPathMatching}
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, getRequestedFor, stubFor, urlPathEqualTo}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 
 object EnrolmentStoreStub {
