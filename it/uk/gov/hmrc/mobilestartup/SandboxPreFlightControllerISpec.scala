@@ -20,7 +20,6 @@ import play.api.http.HeaderNames
 import uk.gov.hmrc.mobilestartup.services.AnnualTaxSummaryLink
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 import eu.timepit.refined.auto._
-import play.api.libs.json.Json
 import uk.gov.hmrc.domain.Nino
 
 class SandboxPreFlightControllerISpec extends BaseISpec {
@@ -38,7 +37,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
 
     "successfully switch to the sandbox preflight" in {
       val response =
-        await(wsUrl(s"/preflight-check?${withJourneyParam(journeyId)}").addHttpHeaders(headerThatSucceeds: _*).get)
+        await(wsUrl(s"/preflight-check?${withJourneyParam(journeyId)}").addHttpHeaders(headerThatSucceeds: _*).get())
 
       response.status                                                   shouldBe 200
       (response.json \ "nino").as[String]                               shouldBe nino.nino
@@ -51,7 +50,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       val response = await(
         wsUrl(s"/preflight-check?${withJourneyParam(journeyId)}")
           .addHttpHeaders(headerThatSucceeds ++ withSandboxControl("ROUTE-TO-IV"): _*)
-          .get
+          .get()
       )
 
       response.status                           shouldBe 200
@@ -63,7 +62,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       val response = await(
         wsUrl(s"/preflight-check?${withJourneyParam(journeyId)}")
           .addHttpHeaders(headerThatSucceeds ++ withSandboxControl("ROUTE-TO-TEN"): _*)
-          .get
+          .get()
       )
 
       response.status                            shouldBe 200
@@ -76,7 +75,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       val response = await(
         wsUrl(s"/preflight-check?${withJourneyParam(journeyId)}")
           .addHttpHeaders(headerThatSucceeds ++ withSandboxControl("ERROR-401"): _*)
-          .get
+          .get()
       )
 
       response.status shouldBe 401
@@ -86,7 +85,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       val response = await(
         wsUrl(s"/preflight-check?${withJourneyParam(journeyId)}")
           .addHttpHeaders(headerThatSucceeds ++ withSandboxControl("ERROR-403"): _*)
-          .get
+          .get()
       )
 
       response.status shouldBe 403
@@ -103,7 +102,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
     }
 
     "return 400 if journeyId not supplied" in {
-      val response = await(wsUrl("/preflight-check").addHttpHeaders(headerThatSucceeds: _*).get)
+      val response = await(wsUrl("/preflight-check").addHttpHeaders(headerThatSucceeds: _*).get())
 
       response.status shouldBe 400
     }
@@ -112,7 +111,7 @@ class SandboxPreFlightControllerISpec extends BaseISpec {
       val response = await(
         wsUrl(s"/preflight-check?${withJourneyParam("ThisIsAnInvalidJourneyId")}")
           .addHttpHeaders(headerThatSucceeds: _*)
-          .get
+          .get()
       )
       response.status shouldBe 400
     }

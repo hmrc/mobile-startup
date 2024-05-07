@@ -29,7 +29,6 @@ import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, UpstreamErrorResponse
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.{Activated, CidPerson, EnrolmentStoreResponse, NoEnrolment, NotYetActivated, WrongAccount}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.service.Auditor
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -46,8 +45,7 @@ class LivePreFlightService @Inject() (
   auditService:                                                                  AuditService
 )(implicit executionContext:                                                     ExecutionContext)
     extends PreFlightServiceImpl[Future](genericConnector, confLevel)
-    with AuthorisedFunctions
-    with Auditor {
+    with AuthorisedFunctions {
 
   val logger: Logger = Logger(this.getClass)
 

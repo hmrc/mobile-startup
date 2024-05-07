@@ -15,8 +15,9 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import org.scalacheck.{Arbitrary, Gen}
+
 import uk.gov.hmrc.domain.Nino
+import org.scalacheck.Gen
 
 trait NinoGen {
   val invalidPrefixes = List("BG", "GB", "NK", "KN", "TN", "NT", "ZZ")
@@ -41,6 +42,4 @@ trait NinoGen {
       suffix  <- Gen.oneOf('A' to 'D')
     } yield s"$prefix$numPart$suffix"
   }.map(Nino(_))
-
-  implicit val arbNino: Arbitrary[Nino] = Arbitrary(ninoGen)
 }

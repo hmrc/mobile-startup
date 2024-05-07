@@ -31,7 +31,7 @@ class SandboxStartupControllerISpec extends BaseISpec {
   "This integration test" should {
     "start services via smserver" in {
       val response =
-        await(wsUrl("/startup?journeyId=7f1b5289-5f4d-4150-93a3-ff02dda28375").addHttpHeaders(mobileHeader: _*).get)
+        await(wsUrl("/startup?journeyId=7f1b5289-5f4d-4150-93a3-ff02dda28375").addHttpHeaders(mobileHeader: _*).get())
       response.status shouldBe 200
     }
 
@@ -123,12 +123,12 @@ class SandboxStartupControllerISpec extends BaseISpec {
     }
 
     "return 400 if journeyId not supplied" in {
-      val response = await(wsUrl("/startup").addHttpHeaders(mobileHeader: _*).get)
+      val response = await(wsUrl("/startup").addHttpHeaders(mobileHeader: _*).get())
       response.status shouldBe 400
     }
 
     "return 400 if journeyId is invalid" in {
-      val response = await(wsUrl(s"/startup?journeyId=ThisIsAnInvalidJourneyId").addHttpHeaders(mobileHeader: _*).get)
+      val response = await(wsUrl(s"/startup?journeyId=ThisIsAnInvalidJourneyId").addHttpHeaders(mobileHeader: _*).get())
       response.status shouldBe 400
     }
   }
