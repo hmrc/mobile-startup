@@ -55,7 +55,7 @@ object URL {
 case class StartupServiceImpl[F[_]] @Inject() (
   connector:                                 GenericConnector[F],
   userPanelSignUp:                           Boolean,
-  enablePushNotificationTokenRegistration:    Boolean,
+  enablePushNotificationTokenRegistration:   Boolean,
   enablePaperlessAlertDialogs:               Boolean,
   enablePaperlessAdverts:                    Boolean,
   enableHtsAdverts:                          Boolean,
@@ -97,11 +97,11 @@ case class StartupServiceImpl[F[_]] @Inject() (
   helpToSaveGeneralEnquiriesUrl:             Option[String],
   helpToSaveGeneralEnquiriesUrlCy:           Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
-  findMyNinoAddToWallet:                      Boolean,
+  findMyNinoAddToWallet:                     Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
   disableYourEmploymentIncomeChartAndroid:   Boolean,
   disableYourEmploymentIncomeChartIos:       Boolean,
-  findMyNinoAddToGoogleWallet:                Boolean
+  findMyNinoAddToGoogleWallet:               Boolean
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
 
