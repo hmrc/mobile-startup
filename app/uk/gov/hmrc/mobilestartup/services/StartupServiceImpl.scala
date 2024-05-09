@@ -55,7 +55,7 @@ object URL {
 case class StartupServiceImpl[F[_]] @Inject() (
   connector:                                 GenericConnector[F],
   userPanelSignUp:                           Boolean,
-  enablePushNotificationTokenRegistration:   Boolean,
+  enablePushNotificationTokenRegistration:    Boolean,
   enablePaperlessAlertDialogs:               Boolean,
   enablePaperlessAdverts:                    Boolean,
   enableHtsAdverts:                          Boolean,
@@ -94,12 +94,14 @@ case class StartupServiceImpl[F[_]] @Inject() (
   selfAssessmentHelpAppealingPenaltiesUrl:   Option[String],
   selfAssessmentHelpAppealingPenaltiesUrlCy: Option[String],
   addMissingTaxableIncomeUrl:                Option[String],
+  helpToSaveGeneralEnquiriesUrl:             Option[String],
+  helpToSaveGeneralEnquiriesUrlCy:           Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
-  findMyNinoAddToWallet:                     Boolean,
+  findMyNinoAddToWallet:                      Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
   disableYourEmploymentIncomeChartAndroid:   Boolean,
   disableYourEmploymentIncomeChartIos:       Boolean,
-  findMyNinoAddToGoogleWallet:               Boolean
+  findMyNinoAddToGoogleWallet:                Boolean
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -172,7 +174,9 @@ case class StartupServiceImpl[F[_]] @Inject() (
         cbTaxChargeUrlCy.map(URL("cbTaxChargeUrlCy", _)),
         selfAssessmentHelpAppealingPenaltiesUrl.map(URL("selfAssessmentHelpAppealingPenaltiesUrl", _)),
         selfAssessmentHelpAppealingPenaltiesUrlCy.map(URL("selfAssessmentHelpAppealingPenaltiesUrlCy", _)),
-        addMissingTaxableIncomeUrl.map(URL("addMissingTaxableIncomeUrl", _))
+        addMissingTaxableIncomeUrl.map(URL("addMissingTaxableIncomeUrl", _)),
+        helpToSaveGeneralEnquiriesUrl.map(URL("helpToSaveGeneralEnquiriesUrl", _)),
+        helpToSaveGeneralEnquiriesUrlCy.map(URL("helpToSaveGeneralEnquiriesUrlCy", _))
       ).filter(_.isDefined)
     )
 
