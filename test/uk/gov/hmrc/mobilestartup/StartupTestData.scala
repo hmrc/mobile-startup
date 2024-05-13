@@ -193,6 +193,7 @@ trait StartupTestData extends TestF {
       addMissingTaxableIncomeUrl                = Some("/addMissingTaxableIncomeUrl"),
       helpToSaveGeneralEnquiriesUrl             = Some("/helpToSaveGeneralEnquiriesUrl"),
       helpToSaveGeneralEnquiriesUrlCy           = Some("/helpToSaveGeneralEnquiriesUrlCy"),
+      helpToSaveDigitalAssistantUrl             = Some("/helpToSaveDigitalAssistantUrl"),
       enableCustomerSatisfactionSurveys         = false,
       findMyNinoAddToWallet                     = false,
       disableYourEmploymentIncomeChart          = true,
@@ -253,7 +254,8 @@ trait StartupTestData extends TestF {
     URL("selfAssessmentHelpAppealingPenaltiesUrlCy", "/selfAssessmentHelpAppealingPenaltiesUrlCy"),
     URL("addMissingTaxableIncomeUrl", "/addMissingTaxableIncomeUrl"),
     URL("helpToSaveGeneralEnquiriesUrl", "/helpToSaveGeneralEnquiriesUrl"),
-    URL("helpToSaveGeneralEnquiriesUrlCy", "/helpToSaveGeneralEnquiriesUrlCy")
+    URL("helpToSaveGeneralEnquiriesUrlCy", "/helpToSaveGeneralEnquiriesUrlCy"),
+    URL("helpToSaveDigitalAssistantUrl", "/helpToSaveDigitalAssistantUrl")
   )
 
   def dummyConnector(

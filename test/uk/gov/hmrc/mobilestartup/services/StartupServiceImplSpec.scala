@@ -147,7 +147,8 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       URL("selfAssessmentHelpAppealingPenaltiesUrlCy", "/selfAssessmentHelpAppealingPenaltiesUrlCy"),
       URL("addMissingTaxableIncomeUrl", "/addMissingTaxableIncomeUrl"),
       URL("helpToSaveGeneralEnquiriesUrl", "/helpToSaveGeneralEnquiriesUrl"),
-      URL("helpToSaveGeneralEnquiriesUrlCy", "/helpToSaveGeneralEnquiriesUrlCy")
+      URL("helpToSaveGeneralEnquiriesUrlCy", "/helpToSaveGeneralEnquiriesUrlCy"),
+      URL("helpToSaveDigitalAssistantUrl", "/helpToSaveDigitalAssistantUrl")
     )
   }
 }
