@@ -118,7 +118,8 @@ class BaseISpec
       "url.selfAssessmentHelpAppealingPenaltiesUrlCy"         -> "/selfAssessmentHelpAppealingPenaltiesUrlCy",
       "url.addMissingTaxableIncomeUrl"                        -> "/addMissingTaxableIncomeUrl",
       "url.helpToSaveGeneralEnquiriesUrl"                     -> "/helpToSaveGeneralEnquiriesUrl",
-      "url.helpToSaveGeneralEnquiriesUrlCy"                   -> "/helpToSaveGeneralEnquiriesUrlCy"
+      "url.helpToSaveGeneralEnquiriesUrlCy"                   -> "/helpToSaveGeneralEnquiriesUrlCy",
+      "url.helpToSaveDigitalAssistantUrl"                     -> "/helpToSaveDigitalAssistantUrl"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)

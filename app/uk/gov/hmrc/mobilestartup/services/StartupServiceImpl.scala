@@ -96,6 +96,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
   addMissingTaxableIncomeUrl:                Option[String],
   helpToSaveGeneralEnquiriesUrl:             Option[String],
   helpToSaveGeneralEnquiriesUrlCy:           Option[String],
+  helpToSaveDigitalAssistantUrl:             Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
   findMyNinoAddToWallet:                     Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
@@ -176,7 +177,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
         selfAssessmentHelpAppealingPenaltiesUrlCy.map(URL("selfAssessmentHelpAppealingPenaltiesUrlCy", _)),
         addMissingTaxableIncomeUrl.map(URL("addMissingTaxableIncomeUrl", _)),
         helpToSaveGeneralEnquiriesUrl.map(URL("helpToSaveGeneralEnquiriesUrl", _)),
-        helpToSaveGeneralEnquiriesUrlCy.map(URL("helpToSaveGeneralEnquiriesUrlCy", _))
+        helpToSaveGeneralEnquiriesUrlCy.map(URL("helpToSaveGeneralEnquiriesUrlCy", _)),
+        helpToSaveDigitalAssistantUrl.map(URL("helpToSaveDigitalAssistantUrl", _))
       ).filter(_.isDefined)
     )
 
