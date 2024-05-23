@@ -94,6 +94,10 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("helpToSaveGeneralEnquiriesUrl", "url.helpToSaveGeneralEnquiriesUrl")
     bindConfigOptionalString("helpToSaveGeneralEnquiriesUrlCy", "url.helpToSaveGeneralEnquiriesUrlCy")
     bindConfigOptionalString("helpToSaveDigitalAssistantUrl", "url.helpToSaveDigitalAssistantUrl")
+    bindConfigOptionalString("selfAssessmentGeneralEnquiriesUrl", "url.selfAssessmentGeneralEnquiriesUrl")
+    bindConfigOptionalString("selfAssessmentGeneralEnquiriesUrlCy", "url.selfAssessmentGeneralEnquiriesUrlCy")
+    bindConfigOptionalString("simpleAssessmentGeneralEnquiriesUrl", "url.simpleAssessmentGeneralEnquiriesUrl")
+    bindConfigOptionalString("simpleAssessmentGeneralEnquiriesUrlCy", "url.simpleAssessmentGeneralEnquiriesUrlCy")
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])

@@ -194,6 +194,10 @@ trait StartupTestData extends TestF {
       helpToSaveGeneralEnquiriesUrl             = Some("/helpToSaveGeneralEnquiriesUrl"),
       helpToSaveGeneralEnquiriesUrlCy           = Some("/helpToSaveGeneralEnquiriesUrlCy"),
       helpToSaveDigitalAssistantUrl             = Some("/helpToSaveDigitalAssistantUrl"),
+      selfAssessmentGeneralEnquiriesUrl         = Some("/selfAssessmentGeneralEnquiriesUrl"),
+      selfAssessmentGeneralEnquiriesUrlCy       = Some("/selfAssessmentGeneralEnquiriesUrlCy"),
+      simpleAssessmentGeneralEnquiriesUrl       = Some("/simpleAssessmentGeneralEnquiriesUrl"),
+      simpleAssessmentGeneralEnquiriesUrlCy     = Some("/simpleAssessmentGeneralEnquiriesUrlCy"),
       enableCustomerSatisfactionSurveys         = false,
       findMyNinoAddToWallet                     = false,
       disableYourEmploymentIncomeChart          = true,
@@ -255,7 +259,11 @@ trait StartupTestData extends TestF {
     URL("addMissingTaxableIncomeUrl", "/addMissingTaxableIncomeUrl"),
     URL("helpToSaveGeneralEnquiriesUrl", "/helpToSaveGeneralEnquiriesUrl"),
     URL("helpToSaveGeneralEnquiriesUrlCy", "/helpToSaveGeneralEnquiriesUrlCy"),
-    URL("helpToSaveDigitalAssistantUrl", "/helpToSaveDigitalAssistantUrl")
+    URL("helpToSaveDigitalAssistantUrl", "/helpToSaveDigitalAssistantUrl"),
+    URL("selfAssessmentGeneralEnquiriesUrl", "/selfAssessmentGeneralEnquiriesUrl"),
+    URL("selfAssessmentGeneralEnquiriesUrlCy", "/selfAssessmentGeneralEnquiriesUrlCy"),
+    URL("simpleAssessmentGeneralEnquiriesUrl", "/simpleAssessmentGeneralEnquiriesUrl"),
+    URL("simpleAssessmentGeneralEnquiriesUrlCy", "/simpleAssessmentGeneralEnquiriesUrlCy")
   )
 
   def dummyConnector(
