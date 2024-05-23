@@ -97,6 +97,10 @@ case class StartupServiceImpl[F[_]] @Inject() (
   helpToSaveGeneralEnquiriesUrl:             Option[String],
   helpToSaveGeneralEnquiriesUrlCy:           Option[String],
   helpToSaveDigitalAssistantUrl:             Option[String],
+  selfAssessmentGeneralEnquiriesUrl:         Option[String],
+  selfAssessmentGeneralEnquiriesUrlCy:       Option[String],
+  simpleAssessmentGeneralEnquiriesUrl:       Option[String],
+  simpleAssessmentGeneralEnquiriesUrlCy:     Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
   findMyNinoAddToWallet:                     Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
@@ -178,7 +182,11 @@ case class StartupServiceImpl[F[_]] @Inject() (
         addMissingTaxableIncomeUrl.map(URL("addMissingTaxableIncomeUrl", _)),
         helpToSaveGeneralEnquiriesUrl.map(URL("helpToSaveGeneralEnquiriesUrl", _)),
         helpToSaveGeneralEnquiriesUrlCy.map(URL("helpToSaveGeneralEnquiriesUrlCy", _)),
-        helpToSaveDigitalAssistantUrl.map(URL("helpToSaveDigitalAssistantUrl", _))
+        helpToSaveDigitalAssistantUrl.map(URL("helpToSaveDigitalAssistantUrl", _)),
+        selfAssessmentGeneralEnquiriesUrl.map(URL("selfAssessmentGeneralEnquiriesUrl", _)),
+        selfAssessmentGeneralEnquiriesUrlCy.map(URL("selfAssessmentGeneralEnquiriesUrlCy", _)),
+        simpleAssessmentGeneralEnquiriesUrl.map(URL("simpleAssessmentGeneralEnquiriesUrl", _)),
+        simpleAssessmentGeneralEnquiriesUrlCy.map(URL("simpleAssessmentGeneralEnquiriesUrlCy", _))
       ).filter(_.isDefined)
     )
 
