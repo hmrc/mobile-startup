@@ -60,6 +60,160 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "enabled": false
     }
   ],
+  "messages": {
+    "paye": [
+      {
+        "id": "paye-message-1",
+        "type": "Info",
+        "headlineContent": {
+          "title": "Title2 - Has active date",
+          "body": "Content2"
+        },
+        "activeWindow": {
+          "startTime": "2020-03-01T20:06:12.726",
+          "endTime": "2030-05-24T20:06:12.726"
+        }
+      }
+    ],
+    "tc": [
+      {
+        "id": "tc-message-1",
+        "type": "Info",
+        "headlineContent": {
+          "title": "Title2 - Has active date",
+          "body": "Content2"
+        },
+        "activeWindow": {
+          "startTime": "2020-03-01T20:06:12.726",
+          "endTime": "2030-05-24T20:06:12.726"
+        }
+      },
+      {
+        "id": "tc-message-2",
+        "type": "Info",
+        "headlineContent": {
+          "title": "Title2 - Has active date",
+          "body": "Content2"
+        },
+        "activeWindow": {
+          "startTime": "2020-03-01T20:06:12.726",
+          "endTime": "2030-05-24T20:06:12.726"
+        }
+      },
+      {
+        "id": "tc-message-2",
+        "type": "Urgent",
+        "headlineContent": {
+          "title": "Ftnae is no more",
+          "body": "Content2"
+        },
+        "activeWindow": {
+          "startTime": "2020-02-01T20:06:12.726",
+          "endTime": "2030-05-24T20:06:12.726"
+        }
+      }
+    ],
+    "hts": [
+      {
+        "id": "hts-message-1",
+        "type": "Warning",
+        "headlineContent": {
+          "title": "Title3",
+          "body": "Content3",
+          "links": [
+            {
+              "url": "<REPLACE_URL>",
+              "urls": [
+                "URL3",
+                "URL2"
+              ],
+              "urlType": "Normal",
+              "type": "Secondary",
+              "message": "Click me",
+              "androidCampaignQueryString": "androidCampaignQueryString",
+              "iosCampaignQueryString": "iosCampaignQueryString"
+            }
+          ]
+        }
+      },
+      {
+        "id": "hts-message-2",
+        "type": "Urgent",
+        "headlineContent": {
+          "title": "Title4",
+          "body": "Content4",
+          "links": [
+            {
+              "url": "URL4",
+              "urls": [
+                "URL4"
+              ],
+              "urlType": "Normal",
+              "type": "Secondary",
+              "message": "Click me",
+              "androidCampaignQueryString": "androidCampaignQueryString",
+              "iosCampaignQueryString": "iosCampaignQueryString"
+            }
+          ]
+        },
+        "icon": "Info"
+      }
+    ],
+    "tcp": [
+      {
+        "id": "tcp-message-1",
+        "type": "Notice",
+        "headlineContent": {
+          "title": "Title3",
+          "links": [
+            {
+              "url": "/More Info",
+              "urls": [
+                "/More Info"
+              ],
+              "urlType": "NewScreen",
+              "type": "Secondary",
+              "message": "More Info"
+            }
+          ]
+        },
+        "newScreenContent": {
+          "title": "newScreenTitle",
+          "screenTitle": "newScreen screenTitle",
+          "body": "Content4",
+          "links": [
+            {
+              "url": "URL2",
+              "urls": [
+                "URL2"
+              ],
+              "urlType": "InApp",
+              "type": "Primary",
+              "message": "Click me first"
+            },
+            {
+              "url": "URL3",
+              "urls": [
+                "URL3"
+              ],
+              "urlType": "Normal",
+              "type": "Secondary",
+              "message": "Click me",
+              "androidCampaignQueryString": "androidCampaignQueryString",
+              "iosCampaignQueryString": "iosCampaignQueryString"
+            }
+          ]
+        },
+        "icon": "Warning"
+      }
+    ],
+    "money": [],
+    "communication": [],
+    "details": [],
+    "sa": [],
+    "cb": [],
+    "taxcalc": []
+  },
   "user": {
     "name": "BELINDA MARY OAKES",
     "address": {
