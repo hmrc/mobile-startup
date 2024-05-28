@@ -293,11 +293,11 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "url": "/"
     },
     {
-      "name": "otherTaxesDigitalAssistantUrl",
+      "name": "digitalAssistantUrl",
       "url": "/"
     },
     {
-      "name": "otherTaxesDigitalAssistantUrlCy",
+      "name": "digitalAssistantUrlCy",
       "url": "/"
     },
     {
@@ -306,6 +306,74 @@ about the user's help-to-save-account (if they have one) and any global feature 
     },
     {
       "name": "payeDigitalAssistantUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "cbWhatChangesUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbWhatChangesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "incomeTaxGeneralEnquiriesUrl",
+      "url": "/"
+    },
+    {
+      "name": "learnAboutCallChargesUrl",
+      "url": "/"
+    },
+    {
+      "name": "learnAboutCallChargesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "tcNationalInsuranceRatesLettersUrl",
+      "url": "/"
+    },
+    {
+      "name": "tcPersonalAllowanceUrl",
+      "url": "/"
+    },
+    {
+      "name": "tcPersonalAllowanceUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "scottishIncomeTaxUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbTaxChargeUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbTaxChargeUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "selfAssessmentHelpAppealingPenaltiesUrl",
+      "url": "/"
+    },
+    {
+      "name": "selfAssessmentHelpAppealingPenaltiesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "addMissingTaxableIncomeUrl",
+      "url": "/"
+    },
+    {
+      "name": "helpToSaveGeneralEnquiriesUrl",
+      "url": "/"
+    },
+    {
+      "name": "helpToSaveGeneralEnquiriesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "helpToSaveDigitalAssistantUrl",
       "url": "/"
     }
   ]
