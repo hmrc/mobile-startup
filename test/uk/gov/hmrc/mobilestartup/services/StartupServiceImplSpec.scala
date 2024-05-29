@@ -25,7 +25,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
   "a fully successful response" should {
     "contain success entries for each service" in {
 
-      val result: JsObject = startupService.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
+      val result: JsObject = startupService.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
@@ -39,7 +39,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
   "a response" should {
     "not contain an entry for help-to-save when the hts call fails" in {
       val sut = startupService.copy(connector = dummyConnector(htsResponse = new Exception("hts failed").error))
-      val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption                 shouldBe None
       (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
@@ -52,7 +52,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
     "contain an error entry for tcr when the tcr call fails" in {
       val sut = startupService.copy(connector = dummyConnector(tcrResponse = new Exception("tcr failed").error))
 
-      val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value   shouldBe obj("submissionsState" -> "error")
@@ -67,7 +67,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
         dummyConnector(inAppMessagesResponse = new Exception("message call failed").error)
       )
 
-      val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value   shouldBe obj("submissionsState" -> "open")
@@ -87,7 +87,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       val sut =
         startupService.copy(connector = dummyConnector(citizenDetailsResponse = new Exception("cid failed").error))
 
-      val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
@@ -111,7 +111,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       cbTaxChargeUrlCy          = None
     )
 
-    val result: JsObject = sut.startup("nino", journeyId)(HeaderCarrier()).unsafeGet
+    val result: JsObject = sut.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
 
     (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
     (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
@@ -154,5 +154,16 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       URL("simpleAssessmentGeneralEnquiriesUrl", "/simpleAssessmentGeneralEnquiriesUrl"),
       URL("simpleAssessmentGeneralEnquiriesUrlCy", "/simpleAssessmentGeneralEnquiriesUrlCy")
     )
+  }
+
+  "not contain an entry for user when NPS is shuttered" in {
+    val result: JsObject = startupService.startup("nino", journeyId, npsShuttered = true)(HeaderCarrier()).unsafeGet
+
+    (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
+    (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
+    (result \ "feature").get.as[List[FeatureFlag]] shouldBe expectedFeatureFlags
+    (result \ messages).toOption.value             shouldBe messagesSuccessResponse
+    (result \ user).toOption                       shouldBe None
+    (result \ "urls").get.as[List[URL]]            shouldBe expectedURLs
   }
 }

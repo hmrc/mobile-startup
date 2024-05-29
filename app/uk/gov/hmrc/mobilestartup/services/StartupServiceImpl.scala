@@ -28,7 +28,9 @@ import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.PersonDetails
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import play.api.http.Status.LOCKED
+import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
 
+import scala.concurrent.Future
 import scala.util.control.NonFatal
 
 case class FeatureFlag(
@@ -113,14 +115,15 @@ case class StartupServiceImpl[F[_]] @Inject() (
   val logger: Logger = Logger(this.getClass)
 
   override def startup(
-    nino:        String,
-    journeyId:   JourneyId
-  )(implicit hc: HeaderCarrier
+    nino:         String,
+    journeyId:    JourneyId,
+    npsShuttered: Boolean
+  )(implicit hc:  HeaderCarrier
   ): F[JsObject] =
     (callService("helpToSave")(mhtsStartup),
      callService("taxCreditRenewals")(tcrStartup(journeyId)),
      callService("messages")(inAppMsgsStartup),
-     callService("user")(citizenDetailsStartup(nino)),
+     callService("user")(citizenDetailsStartup(nino, npsShuttered)),
      featureFlags.pure[F],
      urls.pure[F]).mapN((a, b, c, d, e, f) => a ++ b ++ c ++ d ++ e ++ f)
 
@@ -243,27 +246,35 @@ case class StartupServiceImpl[F[_]] @Inject() (
                             |""".stripMargin))
       }
 
-  private def citizenDetailsStartup(nino: String)(implicit hc: HeaderCarrier): F[Option[JsValue]] =
-    connector
-      .doGet("citizen-details", s"/citizen-details/$nino/designatory-details", hc)
-      .map { p =>
-        val person = p.as[PersonDetails]
-        Option(
-          Json.toJson(
-            new JsObject(Map("name" -> Json.toJson(person.person.shortName), "address" -> Json.toJson(person.address)))
+  private def citizenDetailsStartup(
+    nino:        String,
+    shuttered:   Boolean
+  )(implicit hc: HeaderCarrier
+  ): F[Option[JsValue]] =
+    if (shuttered) F.pure[Option[JsValue]](None)
+    else
+      connector
+        .doGet("citizen-details", s"/citizen-details/$nino/designatory-details", hc)
+        .map { p =>
+          val person = p.as[PersonDetails]
+          Option(
+            Json.toJson(
+              new JsObject(
+                Map("name" -> Json.toJson(person.person.shortName), "address" -> Json.toJson(person.address))
+              )
+            )
           )
-        )
-      }
-      .recover {
-        case e: UpstreamErrorResponse if e.statusCode == LOCKED =>
-          logger.info("Person details are hidden")
-          None
-        case e: NotFoundException =>
-          logger.info(s"No details found for nino '$nino'")
-          None
-        case _ =>
-          logger.info(s"CID call failed for nino '$nino'")
-          None
-      }
+        }
+        .recover {
+          case e: UpstreamErrorResponse if e.statusCode == LOCKED =>
+            logger.info("Person details are hidden")
+            None
+          case e: NotFoundException =>
+            logger.info(s"No details found for nino '$nino'")
+            None
+          case _ =>
+            logger.info(s"CID call failed for nino '$nino'")
+            None
+        }
 
 }

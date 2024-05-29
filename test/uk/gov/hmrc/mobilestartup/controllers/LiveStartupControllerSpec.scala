@@ -16,16 +16,19 @@
 
 package uk.gov.hmrc.mobilestartup.controllers
 
+import org.scalamock.handlers.CallHandler
 import play.api.http.Status
 import play.api.libs.json.JsObject
 import play.api.libs.json.Json._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.auth.core.{AuthConnector, Nino}
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.BaseSpec
+import uk.gov.hmrc.mobilestartup.connectors.ShutteringConnector
+import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.StartupService
 
@@ -38,12 +41,15 @@ class LiveStartupControllerSpec extends BaseSpec {
   private val stubStartupService = new StartupService[Future] {
 
     override def startup(
-      nino:        String,
-      journeyId:   JourneyId
-    )(implicit hc: HeaderCarrier
+      nino:         String,
+      journeyId:    JourneyId,
+      npsShuttered: Boolean
+    )(implicit hc:  HeaderCarrier
     ): Future[JsObject] =
       Future.successful(obj())
   }
+
+  implicit val mockShutteringConnector: ShutteringConnector = mock[ShutteringConnector]
 
   private def authConnector(stubbedRetrievalResult: Future[_]): AuthConnector = new AuthConnector {
 
@@ -56,13 +62,25 @@ class LiveStartupControllerSpec extends BaseSpec {
       stubbedRetrievalResult.map(_.asInstanceOf[A])(ec)
   }
 
+  def mockShutteringResponse(
+    response:                     Shuttering
+  )(implicit shutteringConnector: ShutteringConnector
+  ): CallHandler[Future[Shuttering]] =
+    (shutteringConnector
+      .getShutteringStatus(_: JourneyId)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
+      .returning(Future successful response)
+
   "GET /" should {
     "return 200" in {
+      mockShutteringResponse(Shuttering.shutteringDisabled)
+
       val controller = new LiveStartupController(
         stubStartupService,
         stubControllerComponents(),
         authConnector(Future.successful(Some("nino"))),
-        200
+        200,
+        mockShutteringConnector
       )
       val result = controller.startup(journeyId)(fakeRequest)
       status(result) shouldBe Status.OK
