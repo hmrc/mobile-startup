@@ -27,7 +27,6 @@ import uk.gov.hmrc.mobilestartup.controllers.api.ApiAccess
 import uk.gov.hmrc.mobilestartup.services.{LivePreFlightService, LiveStartupService, PreFlightService, StartupService}
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-
 import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
 
@@ -98,6 +97,9 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("selfAssessmentGeneralEnquiriesUrlCy", "url.selfAssessmentGeneralEnquiriesUrlCy")
     bindConfigOptionalString("simpleAssessmentGeneralEnquiriesUrl", "url.simpleAssessmentGeneralEnquiriesUrl")
     bindConfigOptionalString("simpleAssessmentGeneralEnquiriesUrlCy", "url.simpleAssessmentGeneralEnquiriesUrlCy")
+    bind(classOf[String])
+      .annotatedWith(named("mobile-shuttering"))
+      .toInstance(servicesConfig.baseUrl("mobile-shuttering"))
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])

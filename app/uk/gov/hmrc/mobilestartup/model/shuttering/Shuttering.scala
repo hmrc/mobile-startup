@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.mobilestartup.services
-import play.api.libs.json.JsObject
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+package uk.gov.hmrc.mobilestartup.model.shuttering
 
-trait StartupService[F[_]] {
+import play.api.libs.json.{Json, OFormat}
 
-  def startup(
-    nino:        String,
-    journeyId:   JourneyId,
-    npsShuttered:   Boolean
-  )(implicit hc: HeaderCarrier
-  ): F[JsObject]
+case class Shuttering(
+  shuttered: Boolean,
+  title:     Option[String] = None,
+  message:   Option[String] = None)
+
+case object Shuttering {
+  implicit val format: OFormat[Shuttering] = Json.format[Shuttering]
+
+  def shutteringDisabled = this.apply(false)
 }

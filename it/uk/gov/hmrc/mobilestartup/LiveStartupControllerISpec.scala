@@ -23,6 +23,7 @@ import play.api.libs.ws.WSResponse
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 import uk.gov.hmrc.mobilestartup.stubs.AuthStub._
 import uk.gov.hmrc.mobilestartup.stubs.AuditStub._
+import uk.gov.hmrc.mobilestartup.stubs.ShutteringStub._
 
 import scala.concurrent.Future
 
@@ -103,6 +104,7 @@ class LiveStartupControllerISpec extends BaseISpec {
 
     "return startup details" in {
       userLoggedIn()
+      stubForShutteringDisabled
       respondToAuditMergedWithNoBody
       stubRenewalsResponse()
       stubCitizenDetailsResponse()
@@ -215,8 +217,20 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "urls" \ 34 \ "url").as[String]                      shouldBe "/helpToSaveDigitalAssistantUrl"
     }
 
+    "do not return user when NPS shuttered" in {
+      userLoggedIn()
+      stubForShutteringEnabled
+      respondToAuditMergedWithNoBody
+      stubRenewalsResponse()
+
+      val response = await(getRequestWithAuthHeaders(url))
+      response.status                  shouldBe 200
+      (response.json \ "user").isEmpty shouldBe true
+    }
+
     "return 401 when user is not logged in" in {
       userIsNotLoggedIn()
+      stubForShutteringDisabled
 
       val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader).get())
       response.status shouldBe 401
@@ -224,6 +238,7 @@ class LiveStartupControllerISpec extends BaseISpec {
 
     "return 401 when no nino is found for user" in {
       userLoggedInNoNino()
+      stubForShutteringDisabled
 
       val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader).get())
       response.status shouldBe 401
@@ -231,6 +246,7 @@ class LiveStartupControllerISpec extends BaseISpec {
 
     "return 403 when user has insufficient confidence level" in {
       userIsLoggedInWithInsufficientConfidenceLevel()
+      stubForShutteringDisabled
 
       val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader).get())
       response.status shouldBe 403
