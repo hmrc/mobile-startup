@@ -18,17 +18,15 @@ package uk.gov.hmrc.mobilestartup.config
 
 import com.google.inject.name.Names.named
 import com.google.inject.{AbstractModule, TypeLiteral}
-
 import javax.inject.Inject
 import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.http.CorePost
-import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorImpl, ShutteringConnector}
+import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorImpl}
 import uk.gov.hmrc.mobilestartup.controllers.api.ApiAccess
 import uk.gov.hmrc.mobilestartup.services.{LivePreFlightService, LiveStartupService, PreFlightService, StartupService}
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-
 import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
 
