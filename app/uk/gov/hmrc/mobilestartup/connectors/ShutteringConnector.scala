@@ -21,7 +21,7 @@ import com.google.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{CoreGet, HeaderCarrier, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{CoreGet, HeaderCarrier}
 import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 

@@ -110,9 +110,11 @@ class BaseISpec
       "url.learnAboutCallChargesUrlCy"                        -> "/learnAboutCallChargesUrlCy",
       "url.statePensionAgeUrl"                                -> "/statePensionAgeUrl",
       "url.tcNationalInsuranceRatesLettersUrl"                -> "/tcNationalInsuranceRatesLettersUrl",
+      "url.tcNationalInsuranceRatesLettersUrlCy"              -> "/tcNationalInsuranceRatesLettersUrlCy",
       "url.tcPersonalAllowanceUrl"                            -> "/tcPersonalAllowanceUrl",
       "url.tcPersonalAllowanceUrlCy"                          -> "/tcPersonalAllowanceUrlCy",
       "url.scottishIncomeTaxUrl"                              -> "/scottishIncomeTaxUrl",
+      "url.scottishIncomeTaxUrlCy"                            -> "/scottishIncomeTaxUrlCy",
       "url.cbTaxChargeUrl"                                    -> "/cbTaxChargeUrl",
       "url.cbTaxChargeUrlCy"                                  -> "/cbTaxChargeUrlCy",
       "url.selfAssessmentHelpAppealingPenaltiesUrl"           -> "/selfAssessmentHelpAppealingPenaltiesUrl",
@@ -120,7 +122,13 @@ class BaseISpec
       "url.addMissingTaxableIncomeUrl"                        -> "/addMissingTaxableIncomeUrl",
       "url.helpToSaveGeneralEnquiriesUrl"                     -> "/helpToSaveGeneralEnquiriesUrl",
       "url.helpToSaveGeneralEnquiriesUrlCy"                   -> "/helpToSaveGeneralEnquiriesUrlCy",
-      "url.helpToSaveDigitalAssistantUrl"                     -> "/helpToSaveDigitalAssistantUrl"
+      "url.helpToSaveDigitalAssistantUrl"                     -> "/helpToSaveDigitalAssistantUrl",
+      "url.selfAssessmentGeneralEnquiriesUrl"                 -> "/selfAssessmentGeneralEnquiriesUrl",
+      "url.selfAssessmentGeneralEnquiriesUrlCy"               -> "/selfAssessmentGeneralEnquiriesUrlCy",
+      "url.simpleAssessmentGeneralEnquiriesUrl"               -> "/simpleAssessmentGeneralEnquiriesUrl",
+      "url.simpleAssessmentGeneralEnquiriesUrlCy"             -> "/simpleAssessmentGeneralEnquiriesUrlCy",
+      "url.findRepaymentPlanUrl"                              -> "/findRepaymentPlanUrl",
+      "url.findRepaymentPlanUrlCy"                            -> "/findRepaymentPlanUrlCy"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)

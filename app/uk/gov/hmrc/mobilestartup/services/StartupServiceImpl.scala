@@ -28,9 +28,6 @@ import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.PersonDetails
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import play.api.http.Status.LOCKED
-import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
-
-import scala.concurrent.Future
 import scala.util.control.NonFatal
 
 case class FeatureFlag(
@@ -88,9 +85,11 @@ case class StartupServiceImpl[F[_]] @Inject() (
   learnAboutCallChargesUrlCy:                Option[String],
   statePensionAgeUrl:                        Option[String],
   tcNationalInsuranceRatesLettersUrl:        Option[String],
+  tcNationalInsuranceRatesLettersUrlCy:      Option[String],
   tcPersonalAllowanceUrl:                    Option[String],
   tcPersonalAllowanceUrlCy:                  Option[String],
   scottishIncomeTaxUrl:                      Option[String],
+  scottishIncomeTaxUrlCy:                    Option[String],
   cbTaxChargeUrl:                            Option[String],
   cbTaxChargeUrlCy:                          Option[String],
   selfAssessmentHelpAppealingPenaltiesUrl:   Option[String],
@@ -103,6 +102,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
   selfAssessmentGeneralEnquiriesUrlCy:       Option[String],
   simpleAssessmentGeneralEnquiriesUrl:       Option[String],
   simpleAssessmentGeneralEnquiriesUrlCy:     Option[String],
+  findRepaymentPlanUrl:                      Option[String],
+  findRepaymentPlanUrlCy:                    Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
   findMyNinoAddToWallet:                     Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
@@ -175,9 +176,11 @@ case class StartupServiceImpl[F[_]] @Inject() (
         learnAboutCallChargesUrlCy.map(URL("learnAboutCallChargesUrlCy", _)),
         statePensionAgeUrl.map(URL("statePensionAgeUrl", _)),
         tcNationalInsuranceRatesLettersUrl.map(URL("tcNationalInsuranceRatesLettersUrl", _)),
+        tcNationalInsuranceRatesLettersUrlCy.map(URL("tcNationalInsuranceRatesLettersUrlCy", _)),
         tcPersonalAllowanceUrl.map(URL("tcPersonalAllowanceUrl", _)),
         tcPersonalAllowanceUrlCy.map(URL("tcPersonalAllowanceUrlCy", _)),
         scottishIncomeTaxUrl.map(URL("scottishIncomeTaxUrl", _)),
+        scottishIncomeTaxUrlCy.map(URL("scottishIncomeTaxUrlCy", _)),
         cbTaxChargeUrl.map(URL("cbTaxChargeUrl", _)),
         cbTaxChargeUrlCy.map(URL("cbTaxChargeUrlCy", _)),
         selfAssessmentHelpAppealingPenaltiesUrl.map(URL("selfAssessmentHelpAppealingPenaltiesUrl", _)),
@@ -189,7 +192,9 @@ case class StartupServiceImpl[F[_]] @Inject() (
         selfAssessmentGeneralEnquiriesUrl.map(URL("selfAssessmentGeneralEnquiriesUrl", _)),
         selfAssessmentGeneralEnquiriesUrlCy.map(URL("selfAssessmentGeneralEnquiriesUrlCy", _)),
         simpleAssessmentGeneralEnquiriesUrl.map(URL("simpleAssessmentGeneralEnquiriesUrl", _)),
-        simpleAssessmentGeneralEnquiriesUrlCy.map(URL("simpleAssessmentGeneralEnquiriesUrlCy", _))
+        simpleAssessmentGeneralEnquiriesUrlCy.map(URL("simpleAssessmentGeneralEnquiriesUrlCy", _)),
+        findRepaymentPlanUrl.map(URL("findRepaymentPlanUrl", _)),
+        findRepaymentPlanUrlCy.map(URL("findRepaymentPlanUrlCy", _))
       ).filter(_.isDefined)
     )
 
