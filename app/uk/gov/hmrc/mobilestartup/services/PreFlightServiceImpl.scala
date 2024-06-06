@@ -67,8 +67,7 @@ abstract class PreFlightServiceImpl[F[_]](
 
   private def getPreFlightCheckResponse(
     journeyId:   JourneyId
-  )(implicit hc: HeaderCarrier,
-    ec:          ExecutionContext
+  )(implicit hc: HeaderCarrier
   ): F[PreFlightCheckResponse] = {
 
     val accountsRetrieved: F[PreFlightCheckResponse] = retrieveAccounts.map {

@@ -139,9 +139,11 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       URL("learnAboutCallChargesUrlCy", "/learnAboutCallChargesUrlCy"),
       URL("statePensionAgeUrl", "/statePensionAgeUrl"),
       URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl"),
+      URL("tcNationalInsuranceRatesLettersUrlCy", "/tcNationalInsuranceRatesLettersUrlCy"),
       URL("tcPersonalAllowanceUrl", "/tcPersonalAllowanceUrl"),
       URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
       URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
+      URL("scottishIncomeTaxUrlCy", "/scottishIncomeTaxUrlCy"),
       URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
       URL("selfAssessmentHelpAppealingPenaltiesUrl", "/selfAssessmentHelpAppealingPenaltiesUrl"),
       URL("selfAssessmentHelpAppealingPenaltiesUrlCy", "/selfAssessmentHelpAppealingPenaltiesUrlCy"),
@@ -152,7 +154,9 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       URL("selfAssessmentGeneralEnquiriesUrl", "/selfAssessmentGeneralEnquiriesUrl"),
       URL("selfAssessmentGeneralEnquiriesUrlCy", "/selfAssessmentGeneralEnquiriesUrlCy"),
       URL("simpleAssessmentGeneralEnquiriesUrl", "/simpleAssessmentGeneralEnquiriesUrl"),
-      URL("simpleAssessmentGeneralEnquiriesUrlCy", "/simpleAssessmentGeneralEnquiriesUrlCy")
+      URL("simpleAssessmentGeneralEnquiriesUrlCy", "/simpleAssessmentGeneralEnquiriesUrlCy"),
+      URL("findRepaymentPlanUrl", "/findRepaymentPlanUrl"),
+      URL("findRepaymentPlanUrlCy", "/findRepaymentPlanUrlCy")
     )
   }
 

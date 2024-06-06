@@ -183,9 +183,11 @@ trait StartupTestData extends TestF {
       learnAboutCallChargesUrlCy                = Some("/learnAboutCallChargesUrlCy"),
       statePensionAgeUrl                        = Some("/statePensionAgeUrl"),
       tcNationalInsuranceRatesLettersUrl        = Some("/tcNationalInsuranceRatesLettersUrl"),
+      tcNationalInsuranceRatesLettersUrlCy      = Some("/tcNationalInsuranceRatesLettersUrlCy"),
       tcPersonalAllowanceUrl                    = Some("/tcPersonalAllowanceUrl"),
       tcPersonalAllowanceUrlCy                  = Some("/tcPersonalAllowanceUrlCy"),
       scottishIncomeTaxUrl                      = Some("/scottishIncomeTaxUrl"),
+      scottishIncomeTaxUrlCy                    = Some("/scottishIncomeTaxUrlCy"),
       cbTaxChargeUrl                            = Some("/cbTaxChargeUrl"),
       cbTaxChargeUrlCy                          = Some("/cbTaxChargeUrlCy"),
       selfAssessmentHelpAppealingPenaltiesUrl   = Some("/selfAssessmentHelpAppealingPenaltiesUrl"),
@@ -198,6 +200,8 @@ trait StartupTestData extends TestF {
       selfAssessmentGeneralEnquiriesUrlCy       = Some("/selfAssessmentGeneralEnquiriesUrlCy"),
       simpleAssessmentGeneralEnquiriesUrl       = Some("/simpleAssessmentGeneralEnquiriesUrl"),
       simpleAssessmentGeneralEnquiriesUrlCy     = Some("/simpleAssessmentGeneralEnquiriesUrlCy"),
+      findRepaymentPlanUrl                      = Some("/findRepaymentPlanUrl"),
+      findRepaymentPlanUrlCy                    = Some("/findRepaymentPlanUrlCy"),
       enableCustomerSatisfactionSurveys         = false,
       findMyNinoAddToWallet                     = false,
       disableYourEmploymentIncomeChart          = true,
@@ -249,9 +253,11 @@ trait StartupTestData extends TestF {
     URL("learnAboutCallChargesUrlCy", "/learnAboutCallChargesUrlCy"),
     URL("statePensionAgeUrl", "/statePensionAgeUrl"),
     URL("tcNationalInsuranceRatesLettersUrl", "/tcNationalInsuranceRatesLettersUrl"),
+    URL("tcNationalInsuranceRatesLettersUrlCy", "/tcNationalInsuranceRatesLettersUrlCy"),
     URL("tcPersonalAllowanceUrl", "/tcPersonalAllowanceUrl"),
     URL("tcPersonalAllowanceUrlCy", "/tcPersonalAllowanceUrlCy"),
     URL("scottishIncomeTaxUrl", "/scottishIncomeTaxUrl"),
+    URL("scottishIncomeTaxUrlCy", "/scottishIncomeTaxUrlCy"),
     URL("cbTaxChargeUrl", "/cbTaxChargeUrl"),
     URL("cbTaxChargeUrlCy", "/cbTaxChargeUrlCy"),
     URL("selfAssessmentHelpAppealingPenaltiesUrl", "/selfAssessmentHelpAppealingPenaltiesUrl"),
@@ -263,7 +269,9 @@ trait StartupTestData extends TestF {
     URL("selfAssessmentGeneralEnquiriesUrl", "/selfAssessmentGeneralEnquiriesUrl"),
     URL("selfAssessmentGeneralEnquiriesUrlCy", "/selfAssessmentGeneralEnquiriesUrlCy"),
     URL("simpleAssessmentGeneralEnquiriesUrl", "/simpleAssessmentGeneralEnquiriesUrl"),
-    URL("simpleAssessmentGeneralEnquiriesUrlCy", "/simpleAssessmentGeneralEnquiriesUrlCy")
+    URL("simpleAssessmentGeneralEnquiriesUrlCy", "/simpleAssessmentGeneralEnquiriesUrlCy"),
+    URL("findRepaymentPlanUrl", "/findRepaymentPlanUrl"),
+    URL("findRepaymentPlanUrlCy", "/findRepaymentPlanUrlCy")
   )
 
   def dummyConnector(
