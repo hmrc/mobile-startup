@@ -293,11 +293,11 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "url": "/"
     },
     {
-      "name": "digitalAssistantUrl",
+      "name": "otherTaxesDigitalAssistantUrl",
       "url": "/"
     },
     {
-      "name": "digitalAssistantUrlCy",
+      "name": "otherTaxesDigitalAssistantUrlCy",
       "url": "/"
     },
     {
@@ -306,14 +306,6 @@ about the user's help-to-save-account (if they have one) and any global feature 
     },
     {
       "name": "payeDigitalAssistantUrlCy",
-      "url": "/"
-    },
-    {
-      "name": "cbWhatChangesUrl",
-      "url": "/"
-    },
-    {
-      "name": "cbWhatChangesUrlCy",
       "url": "/"
     },
     {
@@ -333,6 +325,10 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "url": "/"
     },
     {
+      "name": "tcNationalInsuranceRatesLettersUrlCy",
+      "url": "/"
+    },
+    {
       "name": "tcPersonalAllowanceUrl",
       "url": "/"
     },
@@ -342,6 +338,10 @@ about the user's help-to-save-account (if they have one) and any global feature 
     },
     {
       "name": "scottishIncomeTaxUrl",
+      "url": "/"
+    },
+    {
+      "name": "scottishIncomeTaxUrlCy",
       "url": "/"
     },
     {
@@ -374,6 +374,38 @@ about the user's help-to-save-account (if they have one) and any global feature 
     },
     {
       "name": "helpToSaveDigitalAssistantUrl",
+      "url": "/"
+    },
+    {
+      "name": "selfAssessmentGeneralEnquiriesUrl",
+      "url": "/"
+    },
+    {
+      "name": "selfAssessmentGeneralEnquiriesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "simpleAssessmentGeneralEnquiriesUrl",
+      "url": "/"
+    },
+    {
+      "name": "simpleAssessmentGeneralEnquiriesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "findRepaymentPlanUrl",
+      "url": "/"
+    },
+    {
+      "name": "findRepaymentPlanUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "pensionAnnualAllowanceUrl",
+      "url": "/"
+    },
+    {
+      "name": "pensionAnnualAllowanceUrlCy",
       "url": "/"
     }
   ]
