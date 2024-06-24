@@ -101,6 +101,8 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("simpleAssessmentGeneralEnquiriesUrlCy", "url.simpleAssessmentGeneralEnquiriesUrlCy")
     bindConfigOptionalString("findRepaymentPlanUrl", "url.findRepaymentPlanUrl")
     bindConfigOptionalString("findRepaymentPlanUrlCy", "url.findRepaymentPlanUrlCy")
+    bindConfigOptionalString("pensionAnnualAllowanceUrl", "url.pensionAnnualAllowanceUrl")
+    bindConfigOptionalString("pensionAnnualAllowanceUrlCy", "url.pensionAnnualAllowanceUrlCy")
     bind(classOf[String])
       .annotatedWith(named("mobile-shuttering"))
       .toInstance(servicesConfig.baseUrl("mobile-shuttering"))

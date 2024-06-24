@@ -202,6 +202,8 @@ trait StartupTestData extends TestF {
       simpleAssessmentGeneralEnquiriesUrlCy     = Some("/simpleAssessmentGeneralEnquiriesUrlCy"),
       findRepaymentPlanUrl                      = Some("/findRepaymentPlanUrl"),
       findRepaymentPlanUrlCy                    = Some("/findRepaymentPlanUrlCy"),
+      pensionAnnualAllowanceUrl                 = Some("/pensionAnnualAllowanceUrl"),
+      pensionAnnualAllowanceUrlCy               = Some("/pensionAnnualAllowanceUrlCy"),
       enableCustomerSatisfactionSurveys         = false,
       findMyNinoAddToWallet                     = false,
       disableYourEmploymentIncomeChart          = true,
@@ -271,7 +273,9 @@ trait StartupTestData extends TestF {
     URL("simpleAssessmentGeneralEnquiriesUrl", "/simpleAssessmentGeneralEnquiriesUrl"),
     URL("simpleAssessmentGeneralEnquiriesUrlCy", "/simpleAssessmentGeneralEnquiriesUrlCy"),
     URL("findRepaymentPlanUrl", "/findRepaymentPlanUrl"),
-    URL("findRepaymentPlanUrlCy", "/findRepaymentPlanUrlCy")
+    URL("findRepaymentPlanUrlCy", "/findRepaymentPlanUrlCy"),
+    URL("pensionAnnualAllowanceUrl", "/pensionAnnualAllowanceUrl"),
+    URL("pensionAnnualAllowanceUrlCy", "/pensionAnnualAllowanceUrlCy")
   )
 
   def dummyConnector(

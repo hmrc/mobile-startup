@@ -128,7 +128,9 @@ class BaseISpec
       "url.simpleAssessmentGeneralEnquiriesUrl"               -> "/simpleAssessmentGeneralEnquiriesUrl",
       "url.simpleAssessmentGeneralEnquiriesUrlCy"             -> "/simpleAssessmentGeneralEnquiriesUrlCy",
       "url.findRepaymentPlanUrl"                              -> "/findRepaymentPlanUrl",
-      "url.findRepaymentPlanUrlCy"                            -> "/findRepaymentPlanUrlCy"
+      "url.findRepaymentPlanUrlCy"                            -> "/findRepaymentPlanUrlCy",
+      "url.pensionAnnualAllowanceUrl"                         -> "/pensionAnnualAllowanceUrl",
+      "url.pensionAnnualAllowanceUrlCy"                       -> "/pensionAnnualAllowanceUrlCy"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)

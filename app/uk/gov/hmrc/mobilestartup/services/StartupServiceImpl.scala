@@ -104,6 +104,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
   simpleAssessmentGeneralEnquiriesUrlCy:     Option[String],
   findRepaymentPlanUrl:                      Option[String],
   findRepaymentPlanUrlCy:                    Option[String],
+  pensionAnnualAllowanceUrl:                 Option[String],
+  pensionAnnualAllowanceUrlCy:               Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
   findMyNinoAddToWallet:                     Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
@@ -194,7 +196,9 @@ case class StartupServiceImpl[F[_]] @Inject() (
         simpleAssessmentGeneralEnquiriesUrl.map(URL("simpleAssessmentGeneralEnquiriesUrl", _)),
         simpleAssessmentGeneralEnquiriesUrlCy.map(URL("simpleAssessmentGeneralEnquiriesUrlCy", _)),
         findRepaymentPlanUrl.map(URL("findRepaymentPlanUrl", _)),
-        findRepaymentPlanUrlCy.map(URL("findRepaymentPlanUrlCy", _))
+        findRepaymentPlanUrlCy.map(URL("findRepaymentPlanUrlCy", _)),
+        pensionAnnualAllowanceUrl.map(URL("pensionAnnualAllowanceUrl", _)),
+        pensionAnnualAllowanceUrlCy.map(URL("pensionAnnualAllowanceUrlCy", _))
       ).filter(_.isDefined)
     )
 

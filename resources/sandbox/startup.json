@@ -128,6 +128,18 @@
       "url": "/"
     },
     {
+      "name": "statePensionUrl",
+      "url": "/"
+    },
+    {
+      "name": "niSummaryUrl",
+      "url": "/"
+    },
+    {
+      "name": "niContributionsUrl",
+      "url": "/"
+    },
+    {
       "name": "cbHomeUrl",
       "url": "/"
     },
@@ -160,18 +172,6 @@
       "url": "/"
     },
     {
-      "name": "statePensionUrl",
-      "url": "/"
-    },
-    {
-      "name": "niSummaryUrl",
-      "url": "/"
-    },
-    {
-      "name": "niContributionsUrl",
-      "url": "/"
-    },
-    {
       "name": "otherTaxesDigitalAssistantUrl",
       "url": "/"
     },
@@ -193,6 +193,98 @@
     },
     {
       "name": "learnAboutCallChargesUrl",
+      "url": "/"
+    },
+    {
+      "name": "learnAboutCallChargesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "tcNationalInsuranceRatesLettersUrl",
+      "url": "/"
+    },
+    {
+      "name": "tcNationalInsuranceRatesLettersUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "tcPersonalAllowanceUrl",
+      "url": "/"
+    },
+    {
+      "name": "tcPersonalAllowanceUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "scottishIncomeTaxUrl",
+      "url": "/"
+    },
+    {
+      "name": "scottishIncomeTaxUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "cbTaxChargeUrl",
+      "url": "/"
+    },
+    {
+      "name": "cbTaxChargeUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "selfAssessmentHelpAppealingPenaltiesUrl",
+      "url": "/"
+    },
+    {
+      "name": "selfAssessmentHelpAppealingPenaltiesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "addMissingTaxableIncomeUrl",
+      "url": "/"
+    },
+    {
+      "name": "helpToSaveGeneralEnquiriesUrl",
+      "url": "/"
+    },
+    {
+      "name": "helpToSaveGeneralEnquiriesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "helpToSaveDigitalAssistantUrl",
+      "url": "/"
+    },
+    {
+      "name": "selfAssessmentGeneralEnquiriesUrl",
+      "url": "/"
+    },
+    {
+      "name": "selfAssessmentGeneralEnquiriesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "simpleAssessmentGeneralEnquiriesUrl",
+      "url": "/"
+    },
+    {
+      "name": "simpleAssessmentGeneralEnquiriesUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "findRepaymentPlanUrl",
+      "url": "/"
+    },
+    {
+      "name": "findRepaymentPlanUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "pensionAnnualAllowanceUrl",
+      "url": "/"
+    },
+    {
+      "name": "pensionAnnualAllowanceUrlCy",
       "url": "/"
     }
   ]
