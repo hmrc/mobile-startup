@@ -24,6 +24,7 @@ import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import eu.timepit.refined.auto._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 
 trait BaseSpec
     extends AnyWordSpecLike
@@ -34,5 +35,8 @@ trait BaseSpec
     with OptionValues {
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
   val journeyId:        JourneyId     = "7f1b5289-5f4d-4150-93a3-ff02dda28375"
+
+  val allShutteringDisabled: StartupShuttering =
+    StartupShuttering(Shuttering.shutteringDisabled, Shuttering.shutteringDisabled)
 
 }

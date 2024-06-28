@@ -44,8 +44,8 @@ class LiveStartupController @Inject() (
   def startup(journeyId: JourneyId): Action[AnyContent] =
     Action.async { implicit request =>
       withNinoFromAuth { verifiedNino =>
-        shutteringConnector.getShutteringStatus(journeyId).flatMap { shuttered =>
-          service.startup(verifiedNino, journeyId, shuttered.shuttered).map(Ok(_))
+        shutteringConnector.getStartupShuttering(journeyId).flatMap { shutteredStatuses =>
+          service.startup(verifiedNino, journeyId, shutteredStatuses).map(Ok(_))
         }
       }
     }

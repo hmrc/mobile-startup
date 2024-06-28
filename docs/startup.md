@@ -30,9 +30,6 @@ about the user's help-to-save-account (if they have one) and any global feature 
   
 ```json
 {
-  "taxCreditRenewals": {
-    "submissionsState": "open"
-  },
   "helpToSave": {
     "shuttering": {
       "shuttered": false,
@@ -50,16 +47,9 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "state": "Enrolled"
     }
   },
-  "feature": [
-    {
-      "name": "userPanelSignUp",
-      "enabled": false
-    },
-    {
-      "name": "ssoEnabled",
-      "enabled": false
-    }
-  ],
+  "taxCreditRenewals": {
+    "submissionsState": "open"
+  },
   "messages": {
     "paye": [
       {
@@ -223,6 +213,21 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "postcode": "BN99 8IG"
     }
   },
+  "childBenefit": {
+    "shuttering": {
+      "shuttered": false
+    }
+  },
+  "feature": [
+    {
+      "name": "userPanelSignUp",
+      "enabled": false
+    },
+    {
+      "name": "ssoEnabled",
+      "enabled": false
+    }
+  ],
   "urls": [
     {
       "name": "cbProofOfEntitlementUrl",

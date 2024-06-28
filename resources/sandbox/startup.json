@@ -1,6 +1,67 @@
 {
+  "helpToSave": {
+    "shuttering": {
+      "shuttered": false,
+      "title": "/",
+      "message": "/"
+    },
+    "supportFormEnabled": true,
+    "enabled": true,
+    "balanceEnabled": true,
+    "paidInThisMonthEnabled": true,
+    "firstBonusEnabled": true,
+    "savingRemindersEnabled": true,
+    "transactionsEnabled": true,
+    "savingsGoalsEnabled": true,
+    "infoUrl": "https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme",
+    "accessAccountUrl": "/",
+    "user": {
+      "state": "<HTS_STATUS>"
+    }
+  },
   "taxCreditRenewals": {
     "submissionsState": "<RENEWALS_STATUS>"
+  },
+  "messages": {
+    "paye": [],
+    "tc": [],
+    "hts": [],
+    "tcp": [],
+    "money": [
+      {
+        "type": "Info",
+        "id": "your-details-signpost",
+        "headlineContent": {
+          "title": "Looking for your Unique Taxpayer Reference (UTR)?",
+          "links": [
+            {
+              "url": "your-details",
+              "urlType": "InApp",
+              "type": "Secondary",
+              "message": "Go to your details"
+            }
+          ]
+        }
+      }
+    ],
+    "communication": [],
+    "details": []
+  },
+  "user": {
+    "name": "Nia Jackson",
+    "address": {
+      "line1": "999 Big Street",
+      "line2": "Worthing",
+      "line3": "West Sussex",
+      "postcode": "BN99 8IG"
+    }
+  },
+  "childBenefit": {
+    "shuttering": {
+      "shuttered": false,
+      "title": "",
+      "message": ""
+    }
   },
   "feature": [
     {
@@ -48,60 +109,6 @@
       "enabled": false
     }
   ],
-  "helpToSave": {
-    "shuttering": {
-      "shuttered": false,
-      "title": "/",
-      "message": "/"
-    },
-    "supportFormEnabled": true,
-    "enabled": true,
-    "balanceEnabled": true,
-    "paidInThisMonthEnabled": true,
-    "firstBonusEnabled": true,
-    "savingRemindersEnabled": true,
-    "transactionsEnabled": true,
-    "savingsGoalsEnabled": true,
-    "infoUrl": "https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme",
-    "accessAccountUrl": "/",
-    "user": {
-      "state": "<HTS_STATUS>"
-    }
-  },
-  "messages": {
-    "paye": [],
-    "tc": [],
-    "hts": [],
-    "tcp": [],
-    "money": [
-      {
-        "type": "Info",
-        "id": "your-details-signpost",
-        "headlineContent": {
-          "title": "Looking for your Unique Taxpayer Reference (UTR)?",
-          "links": [
-            {
-              "url": "your-details",
-              "urlType": "InApp",
-              "type": "Secondary",
-              "message": "Go to your details"
-            }
-          ]
-        }
-      }
-    ],
-    "communication": [],
-    "details": []
-  },
-  "user": {
-    "name": "Nia Jackson",
-    "address": {
-      "line1": "999 Big Street",
-      "line2": "Worthing",
-      "line3": "West Sussex",
-      "postcode": "BN99 8IG"
-    }
-  },
   "urls": [
     {
       "name": "cbProofOfEntitlementUrl",
