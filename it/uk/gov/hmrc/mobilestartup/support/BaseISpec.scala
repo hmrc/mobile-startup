@@ -54,7 +54,7 @@ class BaseISpec
 
   val nino:      Nino      = Nino("AA000006C")
   val saUtr:     SaUtr     = SaUtr("123456789")
-  val journeyId: JourneyId = "b6ef25bc-8f5e-49c8-98c5-f039f39e4557"
+  val journeyId: JourneyId = "27085215-69a4-4027-8f72-b04b10ec16b0"
   val url:       String    = s"/preflight-check?journeyId=$journeyId"
 
   def getRequestWithAcceptHeader(url: String): Future[WSResponse] =

@@ -18,6 +18,7 @@ package uk.gov.hmrc.mobilestartup.services
 import play.api.libs.json.Json._
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData}
 
 class StartupServiceImplSpec extends BaseSpec with StartupTestData {
@@ -25,41 +26,43 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
   "a fully successful response" should {
     "contain success entries for each service" in {
 
-      val result: JsObject = startupService.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
-
-      (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
-      (result \ "feature").get.as[List[FeatureFlag]] shouldBe expectedFeatureFlags
-      (result \ messages).toOption.value             shouldBe messagesSuccessResponse
-      (result \ user).toOption.value                 shouldBe userExpectedResponse
-      (result \ "urls").get.as[List[URL]]            shouldBe expectedURLs
+      val result: JsObject = startupService.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
+      (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
+      (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
+      (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
+      (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
+      (result \ user).toOption.value                              shouldBe userExpectedResponse
+      (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
+      (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
     }
   }
 
   "a response" should {
     "not contain an entry for help-to-save when the hts call fails" in {
       val sut = startupService.copy(connector = dummyConnector(htsResponse = new Exception("hts failed").error))
-      val result: JsObject = sut.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
-      (result \ helpToSave).toOption                 shouldBe None
-      (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
-      (result \ "feature").get.as[List[FeatureFlag]] shouldBe expectedFeatureFlags
-      (result \ messages).toOption.value             shouldBe messagesSuccessResponse
-      (result \ user).toOption.value                 shouldBe userExpectedResponse
-      (result \ "urls").get.as[List[URL]]            shouldBe expectedURLs
+      (result \ helpToSave).toOption                              shouldBe None
+      (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
+      (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
+      (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
+      (result \ user).toOption.value                              shouldBe userExpectedResponse
+      (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
+      (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
     }
 
     "contain an error entry for tcr when the tcr call fails" in {
       val sut = startupService.copy(connector = dummyConnector(tcrResponse = new Exception("tcr failed").error))
 
-      val result: JsObject = sut.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
-      (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value   shouldBe obj("submissionsState" -> "error")
-      (result \ "feature").get.as[List[FeatureFlag]] shouldBe expectedFeatureFlags
-      (result \ messages).toOption.value             shouldBe messagesSuccessResponse
-      (result \ user).toOption.value                 shouldBe userExpectedResponse
-      (result \ "urls").get.as[List[URL]]            shouldBe expectedURLs
+      (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
+      (result \ taxCreditsRenewals).toOption.value                shouldBe obj("submissionsState" -> "error")
+      (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
+      (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
+      (result \ user).toOption.value                              shouldBe userExpectedResponse
+      (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
+      (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
     }
 
     "contain an empty lists entry for messages when the messages call fails" in {
@@ -67,34 +70,36 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
         dummyConnector(inAppMessagesResponse = new Exception("message call failed").error)
       )
 
-      val result: JsObject = sut.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
-      (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value   shouldBe obj("submissionsState" -> "open")
-      (result \ "feature").get.as[List[FeatureFlag]] shouldBe expectedFeatureFlags
-      (result \ messages).toOption.value             shouldBe Json.parse("""{
+      (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
+      (result \ taxCreditsRenewals).toOption.value                shouldBe obj("submissionsState" -> "open")
+      (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
+      (result \ messages).toOption.value                          shouldBe Json.parse("""{
                                                                |  "paye": [],
                                                                |  "tc": [],
                                                                |  "hts": [],
                                                                |  "tcp": []
                                                                |}
                                                                |""".stripMargin)
-      (result \ user).toOption.value                 shouldBe userExpectedResponse
-      (result \ "urls").get.as[List[URL]]            shouldBe expectedURLs
+      (result \ user).toOption.value                              shouldBe userExpectedResponse
+      (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
+      (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
     }
 
     "not contain an entry for user when the citizen details call fails" in {
       val sut =
         startupService.copy(connector = dummyConnector(citizenDetailsResponse = new Exception("cid failed").error))
 
-      val result: JsObject = sut.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
+      val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
-      (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
-      (result \ "feature").get.as[List[FeatureFlag]] shouldBe expectedFeatureFlags
-      (result \ messages).toOption.value             shouldBe messagesSuccessResponse
-      (result \ user).toOption                       shouldBe None
-      (result \ "urls").get.as[List[URL]]            shouldBe expectedURLs
+      (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
+      (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
+      (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
+      (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
+      (result \ user).toOption                                    shouldBe None
+      (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
+      (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
     }
   }
 
@@ -111,7 +116,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       cbTaxChargeUrlCy          = None
     )
 
-    val result: JsObject = sut.startup("nino", journeyId, npsShuttered = false)(HeaderCarrier()).unsafeGet
+    val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
     (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
     (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
@@ -160,16 +165,47 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       URL("pensionAnnualAllowanceUrl", "/pensionAnnualAllowanceUrl"),
       URL("pensionAnnualAllowanceUrlCy", "/pensionAnnualAllowanceUrlCy")
     )
+    (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
   }
 
   "not contain an entry for user when NPS is shuttered" in {
-    val result: JsObject = startupService.startup("nino", journeyId, npsShuttered = true)(HeaderCarrier()).unsafeGet
+    val result: JsObject = startupService
+      .startup("nino", journeyId, StartupShuttering(Shuttering(shuttered = true), Shuttering(shuttered = false)))(
+        HeaderCarrier()
+      )
+      .unsafeGet
 
-    (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
-    (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
-    (result \ "feature").get.as[List[FeatureFlag]] shouldBe expectedFeatureFlags
-    (result \ messages).toOption.value             shouldBe messagesSuccessResponse
-    (result \ user).toOption                       shouldBe None
-    (result \ "urls").get.as[List[URL]]            shouldBe expectedURLs
+    (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
+    (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
+    (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
+    (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
+    (result \ user).toOption                                    shouldBe None
+    (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
+    (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
+  }
+
+  "Return shuttered details when Child Benefit is shuttered" in {
+    val result: JsObject = startupService
+      .startup(
+        "nino",
+        journeyId,
+        StartupShuttering(Shuttering(shuttered = false),
+                          Shuttering(shuttered = true,
+                                     title     = Some("Shuttered"),
+                                     message   = Some("Sorry, this is not available")))
+      )(
+        HeaderCarrier()
+      )
+      .unsafeGet
+
+    (result \ helpToSave).toOption.value                                   shouldBe htsSuccessResponse
+    (result \ taxCreditsRenewals).toOption.value                           shouldBe tcrSuccessResponse
+    (result \ "feature").get.as[List[FeatureFlag]]                         shouldBe expectedFeatureFlags
+    (result \ messages).toOption.value                                     shouldBe messagesSuccessResponse
+    (result \ user).toOption.value                                         shouldBe userExpectedResponse
+    (result \ "urls").get.as[List[URL]]                                    shouldBe expectedURLs
+    (result \ "childBenefit" \ "shuttering" \ "shuttered").get.as[Boolean] shouldBe true
+    (result \ "childBenefit" \ "shuttering" \ "title").get.as[String]      shouldBe "Shuttered"
+    (result \ "childBenefit" \ "shuttering" \ "message").get.as[String]    shouldBe "Sorry, this is not available"
   }
 }

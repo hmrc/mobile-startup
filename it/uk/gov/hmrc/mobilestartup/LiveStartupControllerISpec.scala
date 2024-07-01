@@ -44,7 +44,7 @@ class LiveStartupControllerISpec extends BaseISpec {
 
   def stubRenewalsResponse(): StubMapping =
     stubFor(
-      get(urlEqualTo("/income/tax-credits/submission/state/enabled?journeyId=b6ef25bc-8f5e-49c8-98c5-f039f39e4557"))
+      get(urlEqualTo(s"/income/tax-credits/submission/state/enabled?journeyId=$journeyId"))
         .willReturn(
           aResponse()
             .withStatus(200)
@@ -104,7 +104,8 @@ class LiveStartupControllerISpec extends BaseISpec {
 
     "return startup details" in {
       userLoggedIn()
-      stubForShutteringDisabled
+      stubForShutteringDisabled("mobile-startup-citizen-details")
+      stubForShutteringDisabled("mobile-startup-child-benefit")
       respondToAuditMergedWithNoBody
       stubRenewalsResponse()
       stubCitizenDetailsResponse()
@@ -239,7 +240,8 @@ class LiveStartupControllerISpec extends BaseISpec {
 
     "do not return user when NPS shuttered" in {
       userLoggedIn()
-      stubForShutteringEnabled
+      stubForShutteringDisabled("mobile-startup-citizen-details")
+      stubForShutteringDisabled("mobile-startup-child-benefit")
       respondToAuditMergedWithNoBody
       stubRenewalsResponse()
 
@@ -250,7 +252,8 @@ class LiveStartupControllerISpec extends BaseISpec {
 
     "return 401 when user is not logged in" in {
       userIsNotLoggedIn()
-      stubForShutteringDisabled
+      stubForShutteringDisabled("mobile-startup-citizen-details")
+      stubForShutteringDisabled("mobile-startup-child-benefit")
 
       val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader).get())
       response.status shouldBe 401
@@ -258,7 +261,8 @@ class LiveStartupControllerISpec extends BaseISpec {
 
     "return 401 when no nino is found for user" in {
       userLoggedInNoNino()
-      stubForShutteringDisabled
+      stubForShutteringDisabled("mobile-startup-citizen-details")
+      stubForShutteringDisabled("mobile-startup-child-benefit")
 
       val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader).get())
       response.status shouldBe 401
@@ -266,7 +270,8 @@ class LiveStartupControllerISpec extends BaseISpec {
 
     "return 403 when user has insufficient confidence level" in {
       userIsLoggedInWithInsufficientConfidenceLevel()
-      stubForShutteringDisabled
+      stubForShutteringDisabled("mobile-startup-citizen-details")
+      stubForShutteringDisabled("mobile-startup-child-benefit")
 
       val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader).get())
       response.status shouldBe 403

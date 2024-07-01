@@ -28,6 +28,8 @@ import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.PersonDetails
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import play.api.http.Status.LOCKED
+import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
+
 import scala.util.control.NonFatal
 
 case class FeatureFlag(
@@ -118,17 +120,18 @@ case class StartupServiceImpl[F[_]] @Inject() (
   val logger: Logger = Logger(this.getClass)
 
   override def startup(
-    nino:         String,
-    journeyId:    JourneyId,
-    npsShuttered: Boolean
-  )(implicit hc:  HeaderCarrier
+    nino:               String,
+    journeyId:          JourneyId,
+    shutteringStatuses: StartupShuttering
+  )(implicit hc:        HeaderCarrier
   ): F[JsObject] =
     (callService("helpToSave")(mhtsStartup),
      callService("taxCreditRenewals")(tcrStartup(journeyId)),
      callService("messages")(inAppMsgsStartup),
-     callService("user")(citizenDetailsStartup(nino, npsShuttered)),
+     callService("user")(citizenDetailsStartup(nino, shutteringStatuses.npsShuttering.shuttered)),
+     childBenefitStartup(shutteringStatuses.childBenefitShuttering).pure[F],
      featureFlags.pure[F],
-     urls.pure[F]).mapN((a, b, c, d, e, f) => a ++ b ++ c ++ d ++ e ++ f)
+     urls.pure[F]).mapN((a, b, c, d, e, f, g) => a ++ b ++ c ++ d ++ e ++ f ++ g)
 
   private val featureFlags: JsObject =
     obj(
@@ -285,5 +288,10 @@ case class StartupServiceImpl[F[_]] @Inject() (
             logger.info(s"CID call failed for nino '$nino'")
             None
         }
+
+  private def childBenefitStartup(childBenefitShutteredStatus: Shuttering): JsObject =
+    obj(
+      "childBenefit" -> obj("shuttering" -> childBenefitShutteredStatus)
+    )
 
 }

@@ -21,11 +21,11 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 
 object ShutteringStub {
 
-  def stubForShutteringDisabled: StubMapping =
+  def stubForShutteringDisabled(service: String): StubMapping =
     stubFor(
       get(
         urlEqualTo(
-          s"/mobile-shuttering/service/mobile-startup-citizen-details/shuttered-status?journeyId=27085215-69a4-4027-8f72-b04b10ec16b0"
+          s"/mobile-shuttering/service/$service/shuttered-status?journeyId=27085215-69a4-4027-8f72-b04b10ec16b0"
         )
       ).willReturn(
         aResponse()
@@ -40,11 +40,11 @@ object ShutteringStub {
       )
     )
 
-  def stubForShutteringEnabled: StubMapping =
+  def stubForShutteringEnabled(service: String): StubMapping =
     stubFor(
       get(
         urlEqualTo(
-          s"/mobile-shuttering/service/mobile-startup-citizen-details/shuttered-status?journeyId=27085215-69a4-4027-8f72-b04b10ec16b0"
+          s"/mobile-shuttering/service/$service/shuttered-status?journeyId=27085215-69a4-4027-8f72-b04b10ec16b0"
         )
       ).willReturn(
         aResponse()
@@ -53,7 +53,7 @@ object ShutteringStub {
                        |{
                        |  "shuttered": true,
                        |  "title":     "Shuttered",
-                       |  "message":   "NPS is currently not available"
+                       |  "message":   "The service is currently not available"
                        |}
           """.stripMargin)
       )

@@ -22,7 +22,7 @@ import play.api.Logger
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{CoreGet, HeaderCarrier}
-import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
+import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,14 +34,25 @@ class ShutteringConnector @Inject() (
 
   val logger: Logger = Logger(this.getClass)
 
-  def getShutteringStatus(
+  def getStartupShuttering(
+    journeyId:              JourneyId
+  )(implicit headerCarrier: HeaderCarrier,
+    ex:                     ExecutionContext
+  ): Future[StartupShuttering] =
+    for {
+      npsShuttered          <- getShutteringStatus("mobile-startup-citizen-details", journeyId)
+      childBenefitShuttered <- getShutteringStatus("mobile-startup-child-benefit", journeyId)
+    } yield (StartupShuttering(npsShuttered, childBenefitShuttered))
+
+  private def getShutteringStatus(
+    service:                String,
     journeyId:              JourneyId
   )(implicit headerCarrier: HeaderCarrier,
     ex:                     ExecutionContext
   ): Future[Shuttering] =
     http
       .GET[JsValue](
-        s"$serviceUrl/mobile-shuttering/service/mobile-startup-citizen-details/shuttered-status?journeyId=$journeyId"
+        s"$serviceUrl/mobile-shuttering/service/$service/shuttered-status?journeyId=$journeyId"
       )
       .map { json =>
         json.as[Shuttering]

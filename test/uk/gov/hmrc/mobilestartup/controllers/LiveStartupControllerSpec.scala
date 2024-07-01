@@ -28,7 +28,7 @@ import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.BaseSpec
 import uk.gov.hmrc.mobilestartup.connectors.ShutteringConnector
-import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
+import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import uk.gov.hmrc.mobilestartup.services.StartupService
 
@@ -41,10 +41,10 @@ class LiveStartupControllerSpec extends BaseSpec {
   private val stubStartupService = new StartupService[Future] {
 
     override def startup(
-      nino:         String,
-      journeyId:    JourneyId,
-      npsShuttered: Boolean
-    )(implicit hc:  HeaderCarrier
+      nino:               String,
+      journeyId:          JourneyId,
+      shutteringStatuses: StartupShuttering
+    )(implicit hc:        HeaderCarrier
     ): Future[JsObject] =
       Future.successful(obj())
   }
@@ -63,17 +63,17 @@ class LiveStartupControllerSpec extends BaseSpec {
   }
 
   def mockShutteringResponse(
-    response:                     Shuttering
+    response:                     StartupShuttering
   )(implicit shutteringConnector: ShutteringConnector
-  ): CallHandler[Future[Shuttering]] =
+  ): CallHandler[Future[StartupShuttering]] =
     (shutteringConnector
-      .getShutteringStatus(_: JourneyId)(_: HeaderCarrier, _: ExecutionContext))
+      .getStartupShuttering(_: JourneyId)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *)
       .returning(Future successful response)
 
   "GET /" should {
     "return 200" in {
-      mockShutteringResponse(Shuttering.shutteringDisabled)
+      mockShutteringResponse(StartupShuttering(Shuttering.shutteringDisabled, Shuttering.shutteringDisabled))
 
       val controller = new LiveStartupController(
         stubStartupService,

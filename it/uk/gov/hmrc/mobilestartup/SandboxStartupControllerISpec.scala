@@ -17,6 +17,7 @@
 package uk.gov.hmrc.mobilestartup
 
 import play.api.http.HeaderNames
+import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 
@@ -28,8 +29,8 @@ class SandboxStartupControllerISpec extends BaseISpec {
 
   override implicit lazy val wsClient: WSClient = app.injector.instanceOf[WSClient]
 
-  "This integration test" should {
-    "start services via smserver" in {
+  "GET /startup" should {
+    "return 200 and default startup response" in {
       val response =
         await(wsUrl("/startup?journeyId=7f1b5289-5f4d-4150-93a3-ff02dda28375").addHttpHeaders(mobileHeader: _*).get())
       response.status shouldBe 200
@@ -71,7 +72,7 @@ class SandboxStartupControllerISpec extends BaseISpec {
           .addHttpHeaders(mobileHeader ++ withSandboxControl("HTS-ENROLLED"): _*)
           .get()
       )
-      response.status                                                       shouldBe 200
+      response.status                                              shouldBe 200
       (response.json \ "helpToSave" \ "user" \ "state").as[String] shouldBe "Enrolled"
     }
 
@@ -81,7 +82,7 @@ class SandboxStartupControllerISpec extends BaseISpec {
           .addHttpHeaders(mobileHeader ++ withSandboxControl("HTS-ELIGIBLE"): _*)
           .get()
       )
-      response.status                                                       shouldBe 200
+      response.status                                              shouldBe 200
       (response.json \ "helpToSave" \ "user" \ "state").as[String] shouldBe "NotEnrolledButEligible"
     }
 
@@ -91,7 +92,7 @@ class SandboxStartupControllerISpec extends BaseISpec {
           .addHttpHeaders(mobileHeader ++ withSandboxControl("HTS-NOT-ENROLLED"): _*)
           .get()
       )
-      response.status                                                       shouldBe 200
+      response.status                                              shouldBe 200
       (response.json \ "helpToSave" \ "user" \ "state").as[String] shouldBe "NotEnrolled"
     }
 

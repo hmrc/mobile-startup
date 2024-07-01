@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.mobilestartup.services
-import play.api.libs.json.JsObject
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mobilestartup.model.shuttering.StartupShuttering
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+package uk.gov.hmrc.mobilestartup.model.shuttering
 
-trait StartupService[F[_]] {
+import play.api.libs.json.{Json, OFormat}
 
-  def startup(
-    nino:         String,
-    journeyId:    JourneyId,
-    shutteringStatuses: StartupShuttering
-  )(implicit hc:  HeaderCarrier
-  ): F[JsObject]
+case class StartupShuttering(
+  npsShuttering:          Shuttering,
+  childBenefitShuttering: Shuttering)
+
+case object StartupShuttering {
+  implicit val format: OFormat[StartupShuttering] = Json.format[StartupShuttering]
 }
