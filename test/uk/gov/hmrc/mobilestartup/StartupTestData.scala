@@ -205,6 +205,14 @@ trait StartupTestData extends TestF {
       findRepaymentPlanUrlCy                    = Some("/findRepaymentPlanUrlCy"),
       pensionAnnualAllowanceUrl                 = Some("/pensionAnnualAllowanceUrl"),
       pensionAnnualAllowanceUrlCy               = Some("/pensionAnnualAllowanceUrlCy"),
+      childBenefitDigitalAssistantUrl           = Some("/childBenefitDigitalAssistantUrl"),
+      childBenefitDigitalAssistantUrlCy         = Some("/childBenefitDigitalAssistantUrlCy"),
+      incomeTaxDigitalAssistantUrl              = Some("/incomeTaxDigitalAssistantUrl"),
+      incomeTaxDigitalAssistantUrlCy            = Some("/incomeTaxDigitalAssistantUrlCy"),
+      selfAssessmentDigitalAssistantUrl         = Some("/selfAssessmentDigitalAssistantUrl"),
+      selfAssessmentDigitalAssistantUrlCy       = Some("/selfAssessmentDigitalAssistantUrlCy"),
+      taxCreditsDigitalAssistantUrl             = Some("/taxCreditsDigitalAssistantUrl"),
+      taxCreditsDigitalAssistantUrlCy           = Some("/taxCreditsDigitalAssistantUrlCy"),
       enableCustomerSatisfactionSurveys         = false,
       findMyNinoAddToWallet                     = false,
       disableYourEmploymentIncomeChart          = true,
@@ -276,7 +284,15 @@ trait StartupTestData extends TestF {
     URL("findRepaymentPlanUrl", "/findRepaymentPlanUrl"),
     URL("findRepaymentPlanUrlCy", "/findRepaymentPlanUrlCy"),
     URL("pensionAnnualAllowanceUrl", "/pensionAnnualAllowanceUrl"),
-    URL("pensionAnnualAllowanceUrlCy", "/pensionAnnualAllowanceUrlCy")
+    URL("pensionAnnualAllowanceUrlCy", "/pensionAnnualAllowanceUrlCy"),
+    URL("childBenefitDigitalAssistantUrl", "/childBenefitDigitalAssistantUrl"),
+    URL("childBenefitDigitalAssistantUrlCy", "/childBenefitDigitalAssistantUrlCy"),
+    URL("incomeTaxDigitalAssistantUrl", "/incomeTaxDigitalAssistantUrl"),
+    URL("incomeTaxDigitalAssistantUrlCy", "/incomeTaxDigitalAssistantUrlCy"),
+    URL("selfAssessmentDigitalAssistantUrl", "/selfAssessmentDigitalAssistantUrl"),
+    URL("selfAssessmentDigitalAssistantUrlCy", "/selfAssessmentDigitalAssistantUrlCy"),
+    URL("taxCreditsDigitalAssistantUrl", "/taxCreditsDigitalAssistantUrl"),
+    URL("taxCreditsDigitalAssistantUrlCy", "/taxCreditsDigitalAssistantUrlCy")
   )
 
   val childBenefitShutteringDisabled: Shuttering = Shuttering(shuttered = false)

@@ -108,6 +108,14 @@ case class StartupServiceImpl[F[_]] @Inject() (
   findRepaymentPlanUrlCy:                    Option[String],
   pensionAnnualAllowanceUrl:                 Option[String],
   pensionAnnualAllowanceUrlCy:               Option[String],
+  childBenefitDigitalAssistantUrl:           Option[String],
+  childBenefitDigitalAssistantUrlCy:         Option[String],
+  incomeTaxDigitalAssistantUrl:              Option[String],
+  incomeTaxDigitalAssistantUrlCy:            Option[String],
+  selfAssessmentDigitalAssistantUrl:         Option[String],
+  selfAssessmentDigitalAssistantUrlCy:       Option[String],
+  taxCreditsDigitalAssistantUrl:             Option[String],
+  taxCreditsDigitalAssistantUrlCy:           Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
   findMyNinoAddToWallet:                     Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
@@ -201,7 +209,15 @@ case class StartupServiceImpl[F[_]] @Inject() (
         findRepaymentPlanUrl.map(URL("findRepaymentPlanUrl", _)),
         findRepaymentPlanUrlCy.map(URL("findRepaymentPlanUrlCy", _)),
         pensionAnnualAllowanceUrl.map(URL("pensionAnnualAllowanceUrl", _)),
-        pensionAnnualAllowanceUrlCy.map(URL("pensionAnnualAllowanceUrlCy", _))
+        pensionAnnualAllowanceUrlCy.map(URL("pensionAnnualAllowanceUrlCy", _)),
+        childBenefitDigitalAssistantUrl.map(URL("childBenefitDigitalAssistantUrl", _)),
+        childBenefitDigitalAssistantUrlCy.map(URL("childBenefitDigitalAssistantUrlCy", _)),
+        incomeTaxDigitalAssistantUrl.map(URL("incomeTaxDigitalAssistantUrl", _)),
+        incomeTaxDigitalAssistantUrlCy.map(URL("incomeTaxDigitalAssistantUrlCy", _)),
+        selfAssessmentDigitalAssistantUrl.map(URL("selfAssessmentDigitalAssistantUrl", _)),
+        selfAssessmentDigitalAssistantUrlCy.map(URL("selfAssessmentDigitalAssistantUrlCy", _)),
+        taxCreditsDigitalAssistantUrl.map(URL("taxCreditsDigitalAssistantUrl", _)),
+        taxCreditsDigitalAssistantUrlCy.map(URL("taxCreditsDigitalAssistantUrlCy", _))
       ).filter(_.isDefined)
     )
 

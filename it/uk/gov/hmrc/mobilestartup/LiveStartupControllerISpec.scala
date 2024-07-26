@@ -236,6 +236,22 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "urls" \ 43 \ "url").as[String]                      shouldBe "/pensionAnnualAllowanceUrl"
       (response.json \ "urls" \ 44 \ "name").as[String]                     shouldBe "pensionAnnualAllowanceUrlCy"
       (response.json \ "urls" \ 44 \ "url").as[String]                      shouldBe "/pensionAnnualAllowanceUrlCy"
+      (response.json \ "urls" \ 45 \ "name").as[String]                     shouldBe "childBenefitDigitalAssistantUrl"
+      (response.json \ "urls" \ 45 \ "url").as[String]                      shouldBe "/childBenefitDigitalAssistantUrl"
+      (response.json \ "urls" \ 46 \ "name").as[String]                     shouldBe "childBenefitDigitalAssistantUrlCy"
+      (response.json \ "urls" \ 46 \ "url").as[String]                      shouldBe "/childBenefitDigitalAssistantUrlCy"
+      (response.json \ "urls" \ 47 \ "name").as[String]                     shouldBe "incomeTaxDigitalAssistantUrl"
+      (response.json \ "urls" \ 47 \ "url").as[String]                      shouldBe "/incomeTaxDigitalAssistantUrl"
+      (response.json \ "urls" \ 48 \ "name").as[String]                     shouldBe "incomeTaxDigitalAssistantUrlCy"
+      (response.json \ "urls" \ 48 \ "url").as[String]                      shouldBe "/incomeTaxDigitalAssistantUrlCy"
+      (response.json \ "urls" \ 49 \ "name").as[String]                     shouldBe "selfAssessmentDigitalAssistantUrl"
+      (response.json \ "urls" \ 49 \ "url").as[String]                      shouldBe "/selfAssessmentDigitalAssistantUrl"
+      (response.json \ "urls" \ 50 \ "name").as[String]                     shouldBe "selfAssessmentDigitalAssistantUrlCy"
+      (response.json \ "urls" \ 50 \ "url").as[String]                      shouldBe "/selfAssessmentDigitalAssistantUrlCy"
+      (response.json \ "urls" \ 51 \ "name").as[String]                     shouldBe "taxCreditsDigitalAssistantUrl"
+      (response.json \ "urls" \ 51 \ "url").as[String]                      shouldBe "/taxCreditsDigitalAssistantUrl"
+      (response.json \ "urls" \ 52 \ "name").as[String]                     shouldBe "taxCreditsDigitalAssistantUrlCy"
+      (response.json \ "urls" \ 52 \ "url").as[String]                      shouldBe "/taxCreditsDigitalAssistantUrlCy"
     }
 
     "do not return user when NPS shuttered" in {

@@ -85,6 +85,16 @@ paths:
                                   message: Go to your details
                         communication: [ ]
                         details: [ ]
+                      childBenefit:
+                        shuttering:
+                          shuttered: false
+                          title: ''
+                          message: ''
+                      urls:
+                        - name: cbHomeUrl
+                          url: /cb-home
+                        - name: cbHomeUrlCy
+                          url: /cb-home-cy
               examples:
                 example-1:
                   value:
@@ -134,6 +144,16 @@ paths:
                                 message: Go to your details
                       communication: [ ]
                       details: [ ]
+                    childBenefit:
+                      shuttering:
+                        shuttered: false
+                        title: ''
+                        message: ''
+                    urls:
+                      - name: cbHomeUrl
+                        url: /cb-home
+                      - name: cbHomeUrlCy
+                        url: /cb-home-cy
       deprecated: false
       security:
         - userRestricted:
@@ -205,6 +225,120 @@ components:
           scopes:
             read:native-apps-api-orchestration: Expose API to provide data the apps need at the time that they start up
   schemas:
+    MobileStartupPreflightCheckresponse:
+      title: MobileStartupPreflightCheckresponse
+      required:
+        - routeToIV
+        - routeToTEN
+      type: object
+      properties:
+        nino:
+          type: string
+        routeToIV:
+          type: boolean
+        annualTaxSummaryLink:
+          $ref: '#/components/schemas/AnnualTaxSummaryLink'
+        utr:
+          $ref: '#/components/schemas/Utr'
+        routeToTEN:
+          type: boolean
+      example:
+        nino: CS700100A
+        routeToIV: false
+        routeToTEN: false
+    MobileStartupStartupresponse:
+      title: MobileStartupStartupresponse
+      required:
+        - user
+        - taxCreditRenewals
+        - helpToSave
+        - feature
+        - messages
+        - childBenefit
+        - urls
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        taxCreditRenewals:
+          $ref: '#/components/schemas/TaxCreditRenewals'
+        helpToSave:
+          $ref: '#/components/schemas/HelpToSave'
+        feature:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
+        messages:
+          $ref: '#/components/schemas/Messages'
+        childBenefit:
+          $ref: '#/components/schemas/ChildBenefit'
+        urls:
+          type: array
+          items:
+            $ref: '#/components/schemas/Url'
+      example:
+        user:
+          name: John Smith
+          address:
+            line1: 999 Big Street
+            line2: Worthing
+            line3: West Sussex
+            postcode: BN99 8IG
+            country: United Kingdom
+        taxCreditRenewals:
+          submissionsState: open
+        helpToSave:
+          shuttering:
+            shuttered: false
+            title: ''
+            message: ''
+          enabled: true
+          balanceEnabled: true
+          paidInThisMonthEnabled: true
+          firstBonusEnabled: true
+          savingRemindersEnabled: true
+          infoUrl: https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme
+          accessAccountUrl: /
+          user:
+            state: Enrolled
+        feature:
+          - name: userPanelSignUp
+            enabled: false
+          - name: enablePushNotificationTokenRegistration
+            enabled: false
+          - name: paperlessAlertDialogs
+            enabled: false
+          - name: paperlessAdverts
+            enabled: false
+          - name: htsAdverts
+            enabled: true
+        messages:
+          paye: [ ]
+          tc: [ ]
+          hts: [ ]
+          tcp: [ ]
+          money:
+            - type: Info
+              id: your-details-signpost
+              headlineContent:
+                title: Looking for your Unique Taxpayer Reference (UTR)?
+                links:
+                  - url: your-details
+                    urlType: InApp
+                    type: Secondary
+                    message: Go to your details
+          communication: [ ]
+          details: [ ]
+        childBenefit:
+          shuttering:
+            shuttered: false
+            title: ''
+            message: ''
+        urls:
+          - name: cbHomeUrl
+            url: /cb-home
+          - name: cbHomeUrlCy
+            url: /cb-home-cy
     errorResponse:
       title: errorResponse
       required:
@@ -394,103 +528,6 @@ components:
                   message: Go to your details
         communication: [ ]
         details: [ ]
-    MobileStartupPreflightCheckresponse:
-      title: MobileStartupPreflightCheckresponse
-      required:
-        - routeToIV
-        - routeToTEN
-      type: object
-      properties:
-        nino:
-          type: string
-        routeToIV:
-          type: boolean
-        annualTaxSummaryLink:
-          $ref: '#/components/schemas/AnnualTaxSummaryLink'
-        utr:
-          $ref: '#/components/schemas/Utr'
-        routeToTEN:
-          type: boolean
-      example:
-        nino: CS700100A
-        routeToIV: false
-        routeToTEN: false
-    MobileStartupStartupresponse:
-      title: MobileStartupStartupresponse
-      required:
-        - user
-        - taxCreditRenewals
-        - helpToSave
-        - feature
-        - messages
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/User'
-        taxCreditRenewals:
-          $ref: '#/components/schemas/TaxCreditRenewals'
-        helpToSave:
-          $ref: '#/components/schemas/HelpToSave'
-        feature:
-          type: array
-          items:
-            $ref: '#/components/schemas/Feature'
-          description: ''
-        messages:
-          $ref: '#/components/schemas/Messages'
-      example:
-        user:
-          name: John Smith
-          address:
-            line1: 999 Big Street
-            line2: Worthing
-            line3: West Sussex
-            postcode: BN99 8IG
-            country: United Kingdom
-        taxCreditRenewals:
-          submissionsState: open
-        helpToSave:
-          shuttering:
-            shuttered: false
-            title: ''
-            message: ''
-          enabled: true
-          balanceEnabled: true
-          paidInThisMonthEnabled: true
-          firstBonusEnabled: true
-          savingRemindersEnabled: true
-          infoUrl: https://www.gov.uk/government/publications/help-to-save-what-it-is-and-who-its-for/the-help-to-save-scheme
-          accessAccountUrl: /
-          user:
-            state: Enrolled
-        feature:
-          - name: userPanelSignUp
-            enabled: false
-          - name: enablePushNotificationTokenRegistration
-            enabled: false
-          - name: paperlessAlertDialogs
-            enabled: false
-          - name: paperlessAdverts
-            enabled: false
-          - name: htsAdverts
-            enabled: true
-        messages:
-          paye: [ ]
-          tc: [ ]
-          hts: [ ]
-          tcp: [ ]
-          money:
-            - type: Info
-              id: your-details-signpost
-              headlineContent:
-                title: Looking for your Unique Taxpayer Reference (UTR)?
-                links:
-                  - url: your-details
-                    urlType: InApp
-                    type: Secondary
-                    message: Go to your details
-          communication: [ ]
-          details: [ ]
     Money:
       title: Money
       required:
@@ -611,6 +648,33 @@ components:
         line3: West Sussex
         postcode: BN99 8IG
         country: United Kingdom
+    Url:
+      title: Url
+      required:
+        - name
+        - url
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+      example:
+        name: cbHomeUrl
+        url: /cb-home
+    ChildBenefit:
+      title: ChildBenefit
+      required:
+        - shuttering
+      type: object
+      properties:
+        shuttering:
+          $ref: '#/components/schemas/Shuttering'
+      example:
+        shuttering:
+          shuttered: false
+          title: ''
+          message: ''
 tags:
   - name: mobile-startup
     description: ''
