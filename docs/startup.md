@@ -412,6 +412,38 @@ about the user's help-to-save-account (if they have one) and any global feature 
     {
       "name": "pensionAnnualAllowanceUrlCy",
       "url": "/"
+    },
+    {
+      "name": "childBenefitDigitalAssistantUrl",
+      "url": "/"
+    },
+    {
+      "name": "childBenefitDigitalAssistantUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "incomeTaxDigitalAssistantUrl",
+      "url": "/"
+    },
+    {
+      "name": "incomeTaxDigitalAssistantUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "selfAssessmentDigitalAssistantUrl",
+      "url": "/"
+    },
+    {
+      "name": "selfAssessmentDigitalAssistantUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "taxCreditsDigitalAssistantUrl",
+      "url": "/"
+    },
+    {
+      "name": "taxCreditsDigitalAssistantUrlCy",
+      "url": "/"
     }
   ]
 }

@@ -130,7 +130,15 @@ class BaseISpec
       "url.findRepaymentPlanUrl"                              -> "/findRepaymentPlanUrl",
       "url.findRepaymentPlanUrlCy"                            -> "/findRepaymentPlanUrlCy",
       "url.pensionAnnualAllowanceUrl"                         -> "/pensionAnnualAllowanceUrl",
-      "url.pensionAnnualAllowanceUrlCy"                       -> "/pensionAnnualAllowanceUrlCy"
+      "url.pensionAnnualAllowanceUrlCy"                       -> "/pensionAnnualAllowanceUrlCy",
+      "url.childBenefitDigitalAssistantUrl"                   -> "/childBenefitDigitalAssistantUrl",
+      "url.childBenefitDigitalAssistantUrlCy"                 -> "/childBenefitDigitalAssistantUrlCy",
+      "url.incomeTaxDigitalAssistantUrl"                      -> "/incomeTaxDigitalAssistantUrl",
+      "url.incomeTaxDigitalAssistantUrlCy"                    -> "/incomeTaxDigitalAssistantUrlCy",
+      "url.selfAssessmentDigitalAssistantUrl"                 -> "/selfAssessmentDigitalAssistantUrl",
+      "url.selfAssessmentDigitalAssistantUrlCy"               -> "/selfAssessmentDigitalAssistantUrlCy",
+      "url.taxCreditsDigitalAssistantUrl"                     -> "/taxCreditsDigitalAssistantUrl",
+      "url.taxCreditsDigitalAssistantUrlCy"                   -> "/taxCreditsDigitalAssistantUrlCy"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)
