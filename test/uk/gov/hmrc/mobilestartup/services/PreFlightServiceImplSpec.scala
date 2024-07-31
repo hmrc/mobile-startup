@@ -41,13 +41,20 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
     confidenceLevel:      ConfidenceLevel,
     annualTaxSummaryLink: Option[AnnualTaxSummaryLink],
     enrolments:           Enrolments,
-    connector:            GenericConnector[TestF]
+    connector:            GenericConnector[TestF],
+    credId:               Option[String]
   ): PreFlightService[TestF] = new PreFlightServiceImpl[TestF](connector, 200) {
 
     override def retrieveAccounts(implicit hc: HeaderCarrier): TestF[
-      (Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[AnnualTaxSummaryLink], Enrolments)
+      (Option[Nino],
+       Option[SaUtr],
+       Option[Credentials],
+       ConfidenceLevel,
+       Option[AnnualTaxSummaryLink],
+       Enrolments,
+       Option[String])
     ] =
-      (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments).pure[TestF]
+      (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, credId).pure[TestF]
 
     override def auditing[T](
       service:     String,
@@ -80,7 +87,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           ConfidenceLevel.L200,
           Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA")),
           Enrolments(Set.empty),
-          dummyConnector()
+          dummyConnector(),
+          Some("11223344")
         )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
@@ -97,12 +105,28 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           ConfidenceLevel.L200,
           Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE")),
           Enrolments(Set.empty),
-          dummyConnector()
+          dummyConnector(),
+          Some("11223344")
         )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.saUtr shouldBe Some(utr)
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
         AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE")
       )
+    }
+
+    "return a response with the expected credId" in {
+      val sut =
+        service(
+          None,
+          Some(utr),
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L200,
+          Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE")),
+          Enrolments(Set.empty),
+          dummyConnector(),
+          Some("11223344")
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.credId shouldBe Some("11223344")
     }
 
     "routeToIV should be false if the confidence level is 200 or above" in {
@@ -113,7 +137,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
                 ConfidenceLevel.L250,
                 None,
                 Enrolments(Set.empty),
-                dummyConnector())
+                dummyConnector(),
+                Some("11223344"))
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
     }
 
@@ -125,7 +150,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
                 ConfidenceLevel.L50,
                 None,
                 Enrolments(Set.empty),
-                dummyConnector())
+                dummyConnector(),
+                Some("11223344"))
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe true
     }
 
@@ -137,7 +163,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
                 ConfidenceLevel.L200,
                 None,
                 Enrolments(Set.empty),
-                dummyConnector())
+                dummyConnector(),
+                Some("11223344"))
       intercept[UnsupportedAuthProvider](sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet)
     }
   }

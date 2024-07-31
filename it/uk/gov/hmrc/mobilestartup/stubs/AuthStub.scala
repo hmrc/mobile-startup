@@ -35,7 +35,7 @@ object AuthStub {
   }
 
   private val accountsRequestJson: String = {
-    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","allEnrolments"] }""".stripMargin
+    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","allEnrolments","internalId"] }""".stripMargin
   }
 
   private def loggedInResponse(
@@ -47,6 +47,7 @@ object AuthStub {
        |{
        |  "nino": "$nino",
        |  "saUtr": "$saUtr",
+       |  "internalId": "11223344",
        |  "optionalCredentials": {
        |    "providerId": "test-cred-id",
        |    "providerType": "GovernmentGateway"
@@ -71,6 +72,7 @@ object AuthStub {
     s"""
        |{
        |  "saUtr": "$saUtr",
+       |  "internalId": "11223344",
        |  "optionalCredentials": {
        |    "providerId": "test-cred-id",
        |    "providerType": "GovernmentGateway"
@@ -99,6 +101,7 @@ object AuthStub {
     s"""
        |{
        |  "nino": "$nino",
+       |  "internalId": "11223344",
        |  "optionalCredentials": {
        |    "providerId": "test-cred-id",
        |    "providerType": "GovernmentGateway"
@@ -118,6 +121,7 @@ object AuthStub {
        |{
        |  "nino": "$nino",
        |  "saUtr": "$saUtr",
+       |  "internalId": "11223344",
        |  "optionalCredentials": {
        |    "providerId": "test-cred-id",
        |    "providerType": "GovernmentGateway"
@@ -144,6 +148,7 @@ object AuthStub {
        |{
        |  "nino": "$nino",
        |  "saUtr": "$saUtr",
+       |  "internalId": "11223344",
        |  "optionalCredentials": {
        |    "providerId": "test-cred-id",
        |    "providerType": "GovernmentGateway"
@@ -169,6 +174,7 @@ object AuthStub {
        |{
        |  "nino": "$nino",
        |  "saUtr": "$saUtr",
+       |  "internalId": "11223344",
        |  "optionalCredentials": {
        |    "providerId": "test-cred-id",
        |    "providerType": "GovernmentGateway"
@@ -191,12 +197,11 @@ object AuthStub {
        |}
            """.stripMargin
 
-  private def loggedInResponseMultipleGGIDsDuplicateNino(
-                                             nino: String
-                                           ): String =
+  private def loggedInResponseMultipleGGIDsDuplicateNino(nino: String): String =
     s"""
        |{
        |  "nino": "$nino",
+       |  "internalId": "11223344",
        |  "optionalCredentials": {
        |    "providerId": "test-cred-id",
        |    "providerType": "GovernmentGateway"
@@ -214,12 +219,11 @@ object AuthStub {
        |}
            """.stripMargin
 
-  private def loggedInResponseMultipleGGIDsDifferentNinos(
-                                             nino: String
-                                           ): String =
+  private def loggedInResponseMultipleGGIDsDifferentNinos(nino: String): String =
     s"""
        |{
        |  "nino": "$nino",
+       |  "internalId": "11223344",
        |  "optionalCredentials": {
        |    "providerId": "test-cred-id",
        |    "providerType": "GovernmentGateway"
@@ -238,12 +242,11 @@ object AuthStub {
        |}
            """.stripMargin
 
-  private def loggedInResponseMultipleGGIDsNoNino(
-                                             saUtr: String
-                                           ): String =
+  private def loggedInResponseMultipleGGIDsNoNino(saUtr: String): String =
     s"""
        |{
        |  "saUtr": "$saUtr",
+       |  "internalId": "11223344",
        |  "optionalCredentials": {
        |    "providerId": "test-cred-id",
        |    "providerType": "GovernmentGateway"
@@ -326,9 +329,7 @@ object AuthStub {
         )
     )
 
-  def accountsFoundMultipleGGIDsDuplicateNino(
-                                  nino: String = "AA000006C"
-                                ): StubMapping =
+  def accountsFoundMultipleGGIDsDuplicateNino(nino: String = "AA000006C"): StubMapping =
     stubFor(
       post(urlEqualTo(authUrl))
         .withRequestBody(equalToJson(accountsRequestJson, true, false))
@@ -339,9 +340,7 @@ object AuthStub {
         )
     )
 
-  def accountsFoundMultipleGGIDsDifferentNino(
-                                               nino: String
-                                             ): StubMapping =
+  def accountsFoundMultipleGGIDsDifferentNino(nino: String): StubMapping =
     stubFor(
       post(urlEqualTo(authUrl))
         .withRequestBody(equalToJson(accountsRequestJson, true, false))
@@ -352,9 +351,7 @@ object AuthStub {
         )
     )
 
-  def accountsFoundMultipleGGIDNoNino(
-                                  saUtr: String = "123456789"
-                                ): StubMapping =
+  def accountsFoundMultipleGGIDNoNino(saUtr: String = "123456789"): StubMapping =
     stubFor(
       post(urlEqualTo(authUrl))
         .withRequestBody(equalToJson(accountsRequestJson, true, false))
