@@ -2,4 +2,4 @@
 
 GET        /startup                uk.gov.hmrc.mobilestartup.controllers.SandboxStartupController.startup(journeyId: JourneyId)
 
-GET        /preflight-check        uk.gov.hmrc.mobilestartup.controllers.SandboxPreFlightController.preFlightCheck(journeyId: JourneyId)
+GET        /preflight-check        uk.gov.hmrc.mobilestartup.controllers.LivePreFlightController.preFlightCheck(journeyId: JourneyId)

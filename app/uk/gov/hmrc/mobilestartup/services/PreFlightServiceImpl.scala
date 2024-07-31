@@ -35,7 +35,13 @@ abstract class PreFlightServiceImpl[F[_]](
   // The authentication and auditing calls from the platform are based on Future so declare a couple of
   // methods that adapt away from Future to F that the live implementation can define.
   def retrieveAccounts(implicit hc: HeaderCarrier): F[
-    (Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[AnnualTaxSummaryLink], Enrolments)
+    (Option[Nino],
+     Option[SaUtr],
+     Option[Credentials],
+     ConfidenceLevel,
+     Option[AnnualTaxSummaryLink],
+     Enrolments,
+     Option[String])
   ]
 
   def getUtr(
@@ -63,19 +69,21 @@ abstract class PreFlightServiceImpl[F[_]](
       getPreFlightCheckResponse(journeyId)
     }
 
-  def doesUserHaveMultipleGGIDs(enrolments: Enrolments, nino: Option[Nino])(implicit hc: HeaderCarrier): Boolean
-
-  private def getPreFlightCheckResponse(
-    journeyId:   JourneyId
+  def doesUserHaveMultipleGGIDs(
+    enrolments:  Enrolments,
+    nino:        Option[Nino]
   )(implicit hc: HeaderCarrier
-  ): F[PreFlightCheckResponse] = {
+  ): Boolean
+
+  private def getPreFlightCheckResponse(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] = {
 
     val accountsRetrieved: F[PreFlightCheckResponse] = retrieveAccounts.map {
-      case (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments) =>
+      case (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, internalId) =>
         if (credentials.getOrElse(Credentials("Unsupported", "Unsupported")).providerType != "GovernmentGateway")
           throw new UnsupportedAuthProvider
         PreFlightCheckResponse(nino,
                                saUtr,
+                               internalId,
                                minimumConfidenceLevel > confidenceLevel.level,
                                annualTaxSummaryLink,
                                None,
@@ -85,13 +93,16 @@ abstract class PreFlightServiceImpl[F[_]](
       account    <- accountsRetrieved
       utrDetails <- getUtr(account.saUtr, account.nino, account.enrolments)
     } yield {
-      PreFlightCheckResponse(account.nino,
-                             account.saUtr,
-                             account.routeToIV,
-                             account.annualTaxSummaryLink,
-                             utrDetails,
-                             account.enrolments,
-                             doesUserHaveMultipleGGIDs(account.enrolments, account.nino))
+      PreFlightCheckResponse(
+        account.nino,
+        account.saUtr,
+        account.credId,
+        account.routeToIV,
+        account.annualTaxSummaryLink,
+        utrDetails,
+        account.enrolments,
+        doesUserHaveMultipleGGIDs(account.enrolments, account.nino)
+      )
     }
   }
 

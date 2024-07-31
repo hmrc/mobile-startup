@@ -62,13 +62,13 @@ class LivePreFlightService @Inject() (
   // help, but isolating it here and adapting to the concrete tuple of results we are expecting makes testing of the logic in
   // `PreFlightServiceImpl` much easier.
   override def retrieveAccounts(implicit hc: HeaderCarrier): Future[
-    (Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[AnnualTaxSummaryLink], Enrolments)
+    (Option[Nino], Option[SaUtr], Option[Credentials], ConfidenceLevel, Option[AnnualTaxSummaryLink], Enrolments, Option[String])
   ] =
     authConnector
-      .authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and allEnrolments)
+      .authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and allEnrolments and internalId)
       .map {
-        case foundNino ~ foundSaUtr ~ creds ~ conf ~ foundEnrolments =>
-          (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf, getATSLink(foundEnrolments), foundEnrolments)
+        case foundNino ~ foundSaUtr ~ creds ~ conf ~ foundEnrolments ~ foundInternalId =>
+          (foundNino.map(Nino(_)), foundSaUtr.map(SaUtr(_)), creds, conf, getATSLink(foundEnrolments), foundEnrolments, foundInternalId)
       }
 
   override def getUtr(
