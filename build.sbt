@@ -35,7 +35,7 @@ lazy val microservice = Project(appName, file("."))
       "-Ywarn-numeric-widen",
       "-Xlint"
     ),
-    coverageMinimumStmtTotal := 87,
+    coverageMinimumStmtTotal := 90,
     coverageFailOnMinimum := true,
     coverageHighlighting := true,
     coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;.*BuildInfo.*;.*Routes.*;.*javascript.*;.*Reverse.*;.*WSHttpImpl.*"

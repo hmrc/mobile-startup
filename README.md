@@ -29,7 +29,6 @@ See each linked file for details:
 
 | *Task* | *Supported Methods* | *Description* |
 |--------|----|----|
-| ```/preflight-check``` | GET | Acts as a stub for the related live endpoint. [More...](docs/sandbox/preflight-check.md)  |
 | ```/startup``` | GET | Acts as a stub for the related live endpoint. [More...](docs/sandbox/startup.md)  |
 
 

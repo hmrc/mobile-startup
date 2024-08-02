@@ -139,7 +139,9 @@ class BaseISpec
       "url.selfAssessmentDigitalAssistantUrl"                 -> "/selfAssessmentDigitalAssistantUrl",
       "url.selfAssessmentDigitalAssistantUrlCy"               -> "/selfAssessmentDigitalAssistantUrlCy",
       "url.taxCreditsDigitalAssistantUrl"                     -> "/taxCreditsDigitalAssistantUrl",
-      "url.taxCreditsDigitalAssistantUrlCy"                   -> "/taxCreditsDigitalAssistantUrlCy"
+      "url.taxCreditsDigitalAssistantUrlCy"                   -> "/taxCreditsDigitalAssistantUrlCy",
+      "demoAccounts.storeReviewId"                            -> "storeReviewAccountId",
+      "demoAccounts.appTeamId"                                -> "appTeamAccountId"
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)
