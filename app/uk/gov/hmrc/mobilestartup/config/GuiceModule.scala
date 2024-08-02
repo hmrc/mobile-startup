@@ -115,6 +115,8 @@ class GuiceModule @Inject() (
       .annotatedWith(named("mobile-shuttering"))
       .toInstance(servicesConfig.baseUrl("mobile-shuttering"))
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
+    bindConfigString("storeReviewAccountInternalId", "demoAccounts.storeReviewId")
+    bindConfigString("appTeamAccountInternalId", "demoAccounts.appTeamId")
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
     bind(classOf[CorePost]).to(classOf[WSHttpImpl])

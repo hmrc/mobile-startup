@@ -17,20 +17,27 @@
 package uk.gov.hmrc.mobilestartup.services
 import cats.MonadError
 import cats.implicits._
-import uk.gov.hmrc.auth.core.retrieve.{Credentials}
+import play.api.Logger
+import uk.gov.hmrc.auth.core.retrieve.Credentials
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import eu.timepit.refined.auto._
+import uk.gov.hmrc.mobilestartup.model.Activated
 
 import scala.concurrent.ExecutionContext
 
 abstract class PreFlightServiceImpl[F[_]](
-  genericConnector:       GenericConnector[F],
-  minimumConfidenceLevel: Int
-)(implicit F:             MonadError[F, Throwable])
+  genericConnector:             GenericConnector[F],
+  minimumConfidenceLevel:       Int,
+  storeReviewAccountInternalId: String,
+  appTeamAccountInternalId:     String
+)(implicit F:                   MonadError[F, Throwable])
     extends PreFlightService[F] {
+
+  val logger: Logger = Logger(this.getClass)
 
   // The authentication and auditing calls from the platform are based on Future so declare a couple of
   // methods that adapt away from Future to F that the live implementation can define.
@@ -93,16 +100,29 @@ abstract class PreFlightServiceImpl[F[_]](
       account    <- accountsRetrieved
       utrDetails <- getUtr(account.saUtr, account.nino, account.enrolments)
     } yield {
-      PreFlightCheckResponse(
-        account.nino,
-        account.saUtr,
-        account.credId,
-        account.routeToIV,
-        account.annualTaxSummaryLink,
-        utrDetails,
-        account.enrolments,
-        doesUserHaveMultipleGGIDs(account.enrolments, account.nino)
-      )
+      val internalId = account.credId.getOrElse("")
+      if (internalId == storeReviewAccountInternalId || internalId == appTeamAccountInternalId) {
+        logger.info("Demo account Internal ID found, returning Sandbox data")
+        PreFlightCheckResponse(
+          Some(Nino("CS700100A")),
+          None,
+          account.credId,
+          routeToIV = false,
+          Some(AnnualTaxSummaryLink("/", "PAYE")),
+          Some(Utr(saUtr = Some(SaUtr("1234567890")), status = Activated)),
+          Enrolments(Set.empty)
+        )
+      } else
+        PreFlightCheckResponse(
+          account.nino,
+          account.saUtr,
+          account.credId,
+          account.routeToIV,
+          account.annualTaxSummaryLink,
+          utrDetails,
+          account.enrolments,
+          doesUserHaveMultipleGGIDs(account.enrolments, account.nino)
+        )
     }
   }
 

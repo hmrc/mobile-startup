@@ -280,6 +280,46 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     }
 
+    "return sandbox account details if appStoreReviewAccountId found" in {
+      demoAccountFound("storeReviewAccountId")
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                                                     shouldBe 200
+      (response.json \ "nino").as[String]                                 shouldBe "CS700100A"
+      (response.json \ "credId").as[String]                               shouldBe "storeReviewAccountId"
+      (response.json \ "routeToIV").as[Boolean]                           shouldBe false
+      (response.json \ "routeToTEN").as[Boolean]                          shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String]                        shouldBe "1234567890"
+      (response.json \ "utr" \ "status").as[String]                       shouldBe "activated"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty            shouldBe true
+      (response.json \ "annualTaxSummaryLink" \ "link").as[String]        shouldBe "/"
+      (response.json \ "annualTaxSummaryLink" \ "destination").as[String] shouldBe "PAYE"
+
+    }
+
+    "return sandbox account details if appTeamAccountId found" in {
+      demoAccountFound("appTeamAccountId")
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                                                     shouldBe 200
+      (response.json \ "nino").as[String]                                 shouldBe "CS700100A"
+      (response.json \ "credId").as[String]                               shouldBe "appTeamAccountId"
+      (response.json \ "routeToIV").as[Boolean]                           shouldBe false
+      (response.json \ "routeToTEN").as[Boolean]                          shouldBe false
+      (response.json \ "utr" \ "saUtr").as[String]                        shouldBe "1234567890"
+      (response.json \ "utr" \ "status").as[String]                       shouldBe "activated"
+      (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty            shouldBe true
+      (response.json \ "annualTaxSummaryLink" \ "link").as[String]        shouldBe "/"
+      (response.json \ "annualTaxSummaryLink" \ "destination").as[String] shouldBe "PAYE"
+
+    }
+
     "return 401 when auth fails" in {
       accountsFound()
 

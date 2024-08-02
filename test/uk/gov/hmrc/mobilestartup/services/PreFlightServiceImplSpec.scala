@@ -43,7 +43,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
     enrolments:           Enrolments,
     connector:            GenericConnector[TestF],
     credId:               Option[String]
-  ): PreFlightService[TestF] = new PreFlightServiceImpl[TestF](connector, 200) {
+  ): PreFlightService[TestF] = new PreFlightServiceImpl[TestF](connector, 200, "appStoreId", "appDemoId") {
 
     override def retrieveAccounts(implicit hc: HeaderCarrier): TestF[
       (Option[Nino],
@@ -153,6 +153,42 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
                 dummyConnector(),
                 Some("11223344"))
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe true
+    }
+
+    "return the sandbox data if the appStoreAccount internal ID is returned" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L200,
+          Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA")),
+          Enrolments(Set.empty),
+          dummyConnector(),
+          Some("appStoreId")
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
+        AnnualTaxSummaryLink("/", "PAYE")
+      )
+    }
+
+    "return the sandbox data if the appDemoAccount internal ID is returned" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L200,
+          Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA")),
+          Enrolments(Set.empty),
+          dummyConnector(),
+          Some("appDemoId")
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
+        AnnualTaxSummaryLink("/", "PAYE")
+      )
     }
 
     "if the auth provided is not 'GovernmentGateway' it should throw an UnsupportedAuthProvider exception" in {
