@@ -86,7 +86,6 @@ abstract class PreFlightServiceImpl[F[_]](
 
     val accountsRetrieved: F[PreFlightCheckResponse] = retrieveAccounts.map {
       case (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, internalId) =>
-        println("INTERNAL ID = " + internalId.getOrElse("NO ID FOUND"))
         if (credentials.getOrElse(Credentials("Unsupported", "Unsupported")).providerType != "GovernmentGateway")
           throw new UnsupportedAuthProvider
         PreFlightCheckResponse(nino,
