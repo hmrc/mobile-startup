@@ -191,14 +191,13 @@ paths:
                 example-1:
                   value:
                     nino: CS700100A
-                    credId: 14453461234
                     routeToIV: false
                     routeToTEN: false
+                    demoAccount: false
                 example-2:
                   value:
                     nino: CS700100A
                     routeToIV: true
-                    credId: 14453461234
                     annualTaxSummaryLink:
                       link: /
                       destination: PAYE
@@ -207,6 +206,7 @@ paths:
                       status: activated,
                       inactiveEnrolmentLink: /
                     routeToTEN: false
+                    demoAccount: false
       deprecated: false
       security:
         - userRestricted:
@@ -232,6 +232,7 @@ components:
       required:
         - routeToIV
         - routeToTEN
+        - demoAccount
       type: object
       properties:
         nino:
@@ -244,12 +245,13 @@ components:
           $ref: '#/components/schemas/Utr'
         routeToTEN:
           type: boolean
-        credId:
-          type: string
+        demoAccount:
+          type: boolean
       example:
         nino: CS700100A
         routeToIV: false
         routeToTEN: false
+        demoAccount: false
     MobileStartupStartupresponse:
       title: MobileStartupStartupresponse
       required:

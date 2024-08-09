@@ -36,12 +36,12 @@ The response to this service includes a set of account identifiers for the user.
     "saUtr": "618567",
     "status": "activated"
   },
-  "credId": "11526211241424",
+  "demoAccount": false,
   "routeToIV": false,
   "routeToTEN": false,
-  "annualTaxSummaryLink" : {
-    "link" : "/",
-    "destination" : "PAYE"
+  "annualTaxSummaryLink": {
+    "link": "/",
+    "destination": "PAYE"
   }
 }
 ```

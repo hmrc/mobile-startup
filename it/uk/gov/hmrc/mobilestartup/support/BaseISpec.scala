@@ -54,7 +54,6 @@ class BaseISpec
 
   val nino:      Nino      = Nino("AA000006C")
   val saUtr:     SaUtr     = SaUtr("123456789")
-  val credId:    String    = "11223344"
   val journeyId: JourneyId = "27085215-69a4-4027-8f72-b04b10ec16b0"
   val url:       String    = s"/preflight-check?journeyId=$journeyId"
 

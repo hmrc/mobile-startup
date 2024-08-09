@@ -29,12 +29,12 @@ import scala.concurrent.ExecutionContext
 case class PreFlightCheckResponse(
   nino:                 Option[Nino],
   saUtr:                Option[SaUtr],
-  credId:               Option[String],
   routeToIV:            Boolean,
   annualTaxSummaryLink: Option[AnnualTaxSummaryLink] = None,
   utr:                  Option[Utr],
   enrolments:           Enrolments,
-  routeToTEN:           Boolean = false)
+  routeToTEN:           Boolean = false,
+  demoAccount:          Boolean = false)
 
 object PreFlightCheckResponse {
 
@@ -50,15 +50,12 @@ object PreFlightCheckResponse {
 
     def withUtr(utr: Option[Utr]): JsObject = utr.fold(Json.obj())(found => Json.obj("utr" -> found))
 
-    def withCredId(credId: Option[String]): JsObject = credId.fold(Json.obj()) { found =>
-      Json.obj("credId" -> found)
-    }
-
     def writes(preFlightCheckResponse: PreFlightCheckResponse): JsObject =
       withNino(preFlightCheckResponse.nino) ++ Json
         .obj("routeToIV" -> preFlightCheckResponse.routeToIV) ++
       withATSLink(preFlightCheckResponse.annualTaxSummaryLink) ++ withUtr(preFlightCheckResponse.utr) ++ Json
-        .obj("routeToTEN" -> preFlightCheckResponse.routeToTEN) ++ withCredId(preFlightCheckResponse.credId)
+        .obj("routeToTEN"  -> preFlightCheckResponse.routeToTEN) ++ Json
+        .obj("demoAccount" -> preFlightCheckResponse.demoAccount)
   }
 
 }
