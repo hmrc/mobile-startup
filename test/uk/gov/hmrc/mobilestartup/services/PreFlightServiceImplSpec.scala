@@ -114,7 +114,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
       )
     }
 
-    "return a response with the expected credId" in {
+    "return a response with demoAccount = false if the internalId does not match a demo account Id" in {
       val sut =
         service(
           None,
@@ -126,7 +126,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           dummyConnector(),
           Some("11223344")
         )
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.credId shouldBe Some("11223344")
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.demoAccount shouldBe false
     }
 
     "routeToIV should be false if the confidence level is 200 or above" in {
@@ -171,6 +171,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
         AnnualTaxSummaryLink("/", "PAYE")
       )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.demoAccount shouldBe true
     }
 
     "return the sandbox data if the appDemoAccount internal ID is returned" in {
@@ -189,6 +190,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
         AnnualTaxSummaryLink("/", "PAYE")
       )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.demoAccount shouldBe true
     }
 
     "if the auth provided is not 'GovernmentGateway' it should throw an UnsupportedAuthProvider exception" in {

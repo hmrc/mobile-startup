@@ -21,8 +21,8 @@ All the above endpoints are accessible on sandbox with `/sandbox` prefix on each
     GET /sandbox/startup
 ```
 
-To trigger the sandbox endpoints locally, use the "X-MOBILE-USER-ID" header with one of the following values:
-208606423740 or 167927702220
+To trigger the sandbox endpoints locally, use the "X-MOBILE-USER-ID" header with the following value:
+"DEMO-ACCOUNT"
 
 To test different scenarios, add a header "SANDBOX-CONTROL" to specify the appropriate status code and return payload. 
 See each linked file for details:
