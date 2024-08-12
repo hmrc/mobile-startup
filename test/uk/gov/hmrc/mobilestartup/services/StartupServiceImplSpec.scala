@@ -171,7 +171,11 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       URL("selfAssessmentDigitalAssistantUrl", "/selfAssessmentDigitalAssistantUrl"),
       URL("selfAssessmentDigitalAssistantUrlCy", "/selfAssessmentDigitalAssistantUrlCy"),
       URL("taxCreditsDigitalAssistantUrl", "/taxCreditsDigitalAssistantUrl"),
-      URL("taxCreditsDigitalAssistantUrlCy", "/taxCreditsDigitalAssistantUrlCy")
+      URL("taxCreditsDigitalAssistantUrlCy", "/taxCreditsDigitalAssistantUrlCy"),
+      URL("tcStateBenefitsUrl","/tcStateBenefitsUrl"),
+      URL("tcStateBenefitsUrlCy","/tcStateBenefitsUrlCy"),
+      URL("tcCompanyBenefitsUrl","/tcCompanyBenefitsUrl"),
+      URL("tcCompanyBenefitsUrlCy", "/tcCompanyBenefitsUrlCy"),
     )
     (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
   }
