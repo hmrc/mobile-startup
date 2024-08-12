@@ -90,33 +90,31 @@ abstract class PreFlightServiceImpl[F[_]](
           throw new UnsupportedAuthProvider
         PreFlightCheckResponse(nino,
                                saUtr,
-                               internalId,
                                minimumConfidenceLevel > confidenceLevel.level,
                                annualTaxSummaryLink,
                                None,
-                               enrolments)
+                               enrolments,
+                               demoAccount = checkForDemoAccountId(internalId))
     }
     for {
       account    <- accountsRetrieved
       utrDetails <- getUtr(account.saUtr, account.nino, account.enrolments)
     } yield {
-      val internalId = account.credId.getOrElse("")
-      if (internalId == storeReviewAccountInternalId || internalId == appTeamAccountInternalId) {
+      if (account.demoAccount) {
         logger.info("Demo account Internal ID found, returning Sandbox data")
         PreFlightCheckResponse(
           Some(Nino("CS700100A")),
           None,
-          account.credId,
           routeToIV = false,
           Some(AnnualTaxSummaryLink("/", "PAYE")),
           Some(Utr(saUtr = Some(SaUtr("1234567890")), status = Activated)),
-          Enrolments(Set.empty)
+          Enrolments(Set.empty),
+          demoAccount = true
         )
       } else
         PreFlightCheckResponse(
           account.nino,
           account.saUtr,
-          account.credId,
           account.routeToIV,
           account.annualTaxSummaryLink,
           utrDetails,
@@ -124,6 +122,11 @@ abstract class PreFlightServiceImpl[F[_]](
           doesUserHaveMultipleGGIDs(account.enrolments, account.nino)
         )
     }
+  }
+
+  private def checkForDemoAccountId(internalId: Option[String]): Boolean = {
+    val accountId = internalId.getOrElse("")
+    (accountId == storeReviewAccountInternalId || accountId == appTeamAccountInternalId)
   }
 
 }

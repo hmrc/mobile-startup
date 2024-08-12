@@ -17,7 +17,6 @@
 package uk.gov.hmrc.mobilestartup
 
 import play.api.http.HeaderNames
-import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 
