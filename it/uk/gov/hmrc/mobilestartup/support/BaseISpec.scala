@@ -139,6 +139,10 @@ class BaseISpec
       "url.selfAssessmentDigitalAssistantUrlCy"               -> "/selfAssessmentDigitalAssistantUrlCy",
       "url.taxCreditsDigitalAssistantUrl"                     -> "/taxCreditsDigitalAssistantUrl",
       "url.taxCreditsDigitalAssistantUrlCy"                   -> "/taxCreditsDigitalAssistantUrlCy",
+      "url.tcStateBenefitsUrl"                                -> "/tcStateBenefitsUrl",
+      "url.tcStateBenefitsUrlCy"                              -> "/tcStateBenefitsUrlCy",
+      "url.tcCompanyBenefitsUrl"                              -> "/tcCompanyBenefitsUrl",
+      "url.tcCompanyBenefitsUrlCy"                            -> "/tcCompanyBenefitsUrlCy",
       "demoAccounts.storeReviewId"                            -> "storeReviewAccountId",
       "demoAccounts.appTeamId"                                -> "appTeamAccountId"
     )

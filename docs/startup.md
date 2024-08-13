@@ -444,6 +444,22 @@ about the user's help-to-save-account (if they have one) and any global feature 
     {
       "name": "taxCreditsDigitalAssistantUrlCy",
       "url": "/"
+    },
+    {
+      "name": "tcStateBenefitsUrl",
+      "url": "/"
+    },
+    {
+      "name": "tcStateBenefitsUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "tcCompanyBenefitsUrl",
+      "url": "/"
+    },
+    {
+      "name": "tcCompanyBenefitsUrlCy",
+      "url": "/"
     }
   ]
 }

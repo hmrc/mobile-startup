@@ -116,6 +116,10 @@ case class StartupServiceImpl[F[_]] @Inject() (
   selfAssessmentDigitalAssistantUrlCy:       Option[String],
   taxCreditsDigitalAssistantUrl:             Option[String],
   taxCreditsDigitalAssistantUrlCy:           Option[String],
+  tcStateBenefitsUrl:                        Option[String],
+  tcStateBenefitsUrlCy:                      Option[String],
+  tcCompanyBenefitsUrl:                      Option[String],
+  tcCompanyBenefitsUrlCy:                    Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
   findMyNinoAddToWallet:                     Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
@@ -217,7 +221,11 @@ case class StartupServiceImpl[F[_]] @Inject() (
         selfAssessmentDigitalAssistantUrl.map(URL("selfAssessmentDigitalAssistantUrl", _)),
         selfAssessmentDigitalAssistantUrlCy.map(URL("selfAssessmentDigitalAssistantUrlCy", _)),
         taxCreditsDigitalAssistantUrl.map(URL("taxCreditsDigitalAssistantUrl", _)),
-        taxCreditsDigitalAssistantUrlCy.map(URL("taxCreditsDigitalAssistantUrlCy", _))
+        taxCreditsDigitalAssistantUrlCy.map(URL("taxCreditsDigitalAssistantUrlCy", _)),
+        tcStateBenefitsUrl.map(URL("tcStateBenefitsUrl", _)),
+        tcStateBenefitsUrlCy.map(URL("tcStateBenefitsUrlCy", _)),
+        tcCompanyBenefitsUrl.map(URL("tcCompanyBenefitsUrl", _)),
+        tcCompanyBenefitsUrlCy.map(URL("tcCompanyBenefitsUrlCy", _))
       ).filter(_.isDefined)
     )
 

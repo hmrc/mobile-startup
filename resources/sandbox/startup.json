@@ -325,6 +325,22 @@
     {
       "name": "taxCreditsDigitalAssistantUrlCy",
       "url": "/"
+    },
+    {
+      "name": "tcStateBenefitsUrl",
+      "url": "/"
+    },
+    {
+      "name": "tcStateBenefitsUrlCy",
+      "url": "/"
+    },
+    {
+      "name": "tcCompanyBenefitsUrl",
+      "url": "/"
+    },
+    {
+      "name": "tcCompanyBenefitsUrlCy",
+      "url": "/"
     }
   ]
 }

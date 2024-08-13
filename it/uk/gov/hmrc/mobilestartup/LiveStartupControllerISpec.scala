@@ -252,6 +252,14 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "urls" \ 51 \ "url").as[String]                      shouldBe "/taxCreditsDigitalAssistantUrl"
       (response.json \ "urls" \ 52 \ "name").as[String]                     shouldBe "taxCreditsDigitalAssistantUrlCy"
       (response.json \ "urls" \ 52 \ "url").as[String]                      shouldBe "/taxCreditsDigitalAssistantUrlCy"
+      (response.json \ "urls" \ 53 \ "name").as[String]                     shouldBe "tcStateBenefitsUrl"
+      (response.json \ "urls" \ 53 \ "url").as[String]                      shouldBe "/tcStateBenefitsUrl"
+      (response.json \ "urls" \ 54 \ "name").as[String]                     shouldBe "tcStateBenefitsUrlCy"
+      (response.json \ "urls" \ 54 \ "url").as[String]                      shouldBe "/tcStateBenefitsUrlCy"
+      (response.json \ "urls" \ 55 \ "name").as[String]                     shouldBe "tcCompanyBenefitsUrl"
+      (response.json \ "urls" \ 55 \ "url").as[String]                      shouldBe "/tcCompanyBenefitsUrl"
+      (response.json \ "urls" \ 56 \ "name").as[String]                     shouldBe "tcCompanyBenefitsUrlCy"
+      (response.json \ "urls" \ 56 \ "url").as[String]                      shouldBe "/tcCompanyBenefitsUrlCy"
     }
 
     "do not return user when NPS shuttered" in {

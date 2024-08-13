@@ -213,6 +213,10 @@ trait StartupTestData extends TestF {
       selfAssessmentDigitalAssistantUrlCy       = Some("/selfAssessmentDigitalAssistantUrlCy"),
       taxCreditsDigitalAssistantUrl             = Some("/taxCreditsDigitalAssistantUrl"),
       taxCreditsDigitalAssistantUrlCy           = Some("/taxCreditsDigitalAssistantUrlCy"),
+      tcStateBenefitsUrl                        = Some("/tcStateBenefitsUrl"),
+      tcStateBenefitsUrlCy                      = Some("/tcStateBenefitsUrlCy"),
+      tcCompanyBenefitsUrl                      = Some("/tcCompanyBenefitsUrl"),
+      tcCompanyBenefitsUrlCy                    = Some("/tcCompanyBenefitsUrlCy"),
       enableCustomerSatisfactionSurveys         = false,
       findMyNinoAddToWallet                     = false,
       disableYourEmploymentIncomeChart          = true,
@@ -292,7 +296,11 @@ trait StartupTestData extends TestF {
     URL("selfAssessmentDigitalAssistantUrl", "/selfAssessmentDigitalAssistantUrl"),
     URL("selfAssessmentDigitalAssistantUrlCy", "/selfAssessmentDigitalAssistantUrlCy"),
     URL("taxCreditsDigitalAssistantUrl", "/taxCreditsDigitalAssistantUrl"),
-    URL("taxCreditsDigitalAssistantUrlCy", "/taxCreditsDigitalAssistantUrlCy")
+    URL("taxCreditsDigitalAssistantUrlCy", "/taxCreditsDigitalAssistantUrlCy"),
+    URL("tcStateBenefitsUrl", "/tcStateBenefitsUrl"),
+    URL("tcStateBenefitsUrlCy", "/tcStateBenefitsUrlCy"),
+    URL("tcCompanyBenefitsUrl", "/tcCompanyBenefitsUrl"),
+    URL("tcCompanyBenefitsUrlCy", "/tcCompanyBenefitsUrlCy")
   )
 
   val childBenefitShutteringDisabled: Shuttering = Shuttering(shuttered = false)
