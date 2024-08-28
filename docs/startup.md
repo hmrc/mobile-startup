@@ -51,6 +51,7 @@ about the user's help-to-save-account (if they have one) and any global feature 
     "submissionsState": "open"
   },
   "messages": {
+    "home": [],
     "paye": [
       {
         "id": "paye-message-1",
