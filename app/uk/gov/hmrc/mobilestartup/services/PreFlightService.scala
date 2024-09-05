@@ -28,7 +28,6 @@ import scala.concurrent.ExecutionContext
 
 case class PreFlightCheckResponse(
   nino:                 Option[Nino],
-  saUtr:                Option[SaUtr],
   routeToIV:            Boolean,
   annualTaxSummaryLink: Option[AnnualTaxSummaryLink] = None,
   utr:                  Option[Utr],

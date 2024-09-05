@@ -24,6 +24,7 @@ import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import eu.timepit.refined.auto._
+import uk.gov.hmrc.mobilestartup.model.Activated
 
 import scala.concurrent.ExecutionContext
 
@@ -74,7 +75,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
       foundNino:   Option[Nino],
       enrolments:  Enrolments
     )(implicit hc: HeaderCarrier
-    ): TestF[Option[Utr]] = None.pure[TestF]
+    ): TestF[Option[Utr]] = Some(Utr(foundUtr, Activated)).pure[TestF]
   }
 
   "preFlight" should {
@@ -108,7 +109,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           dummyConnector(),
           Some("11223344")
         )
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.saUtr shouldBe Some(utr)
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.utr.get.saUtr shouldBe Some(utr)
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
         AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE")
       )
