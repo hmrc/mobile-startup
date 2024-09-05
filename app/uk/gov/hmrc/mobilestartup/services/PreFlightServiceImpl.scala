@@ -25,7 +25,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import eu.timepit.refined.auto._
-import uk.gov.hmrc.mobilestartup.model.Activated
+import uk.gov.hmrc.mobilestartup.model.{Activated, RetrieveAccountsResponse}
 
 import scala.concurrent.ExecutionContext
 
@@ -84,27 +84,26 @@ abstract class PreFlightServiceImpl[F[_]](
 
   private def getPreFlightCheckResponse(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] = {
 
-    val accountsRetrieved: F[PreFlightCheckResponse] = retrieveAccounts.map {
+    val accountsRetrieved: F[RetrieveAccountsResponse] = retrieveAccounts.map {
       case (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, internalId) =>
         if (credentials.getOrElse(Credentials("Unsupported", "Unsupported")).providerType != "GovernmentGateway")
           throw new UnsupportedAuthProvider
-        PreFlightCheckResponse(nino,
-                               saUtr,
-                               minimumConfidenceLevel > confidenceLevel.level,
-                               annualTaxSummaryLink,
-                               None,
-                               enrolments,
-                               demoAccount = checkForDemoAccountId(internalId))
+        RetrieveAccountsResponse(nino,
+                                 saUtr,
+                                 credentials,
+                                 confidenceLevel,
+                                 annualTaxSummaryLink,
+                                 enrolments,
+                                 internalId)
     }
     for {
-      account    <- accountsRetrieved
-      utrDetails <- getUtr(account.saUtr, account.nino, account.enrolments)
+      accountDetails <- accountsRetrieved
+      utrDetails     <- getUtr(accountDetails.saUtr, accountDetails.nino, accountDetails.enrolments)
     } yield {
-      if (account.demoAccount) {
+      if (checkForDemoAccountId(accountDetails.internalId)) {
         logger.info("Demo account Internal ID found, returning Sandbox data")
         PreFlightCheckResponse(
           Some(Nino("CS700100A")),
-          None,
           routeToIV = false,
           Some(AnnualTaxSummaryLink("/", "PAYE")),
           Some(Utr(saUtr = Some(SaUtr("1234567890")), status = Activated)),
@@ -113,13 +112,12 @@ abstract class PreFlightServiceImpl[F[_]](
         )
       } else
         PreFlightCheckResponse(
-          account.nino,
-          account.saUtr,
-          account.routeToIV,
-          account.annualTaxSummaryLink,
+          accountDetails.nino,
+          minimumConfidenceLevel > accountDetails.confLevel.level,
+          accountDetails.annualTaxSummaryLink,
           utrDetails,
-          account.enrolments,
-          doesUserHaveMultipleGGIDs(account.enrolments, account.nino)
+          accountDetails.enrolments,
+          doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino)
         )
     }
   }
