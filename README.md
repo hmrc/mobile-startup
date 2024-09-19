@@ -4,6 +4,25 @@ Provide the mobile apps with information they need at the time that they are lau
 
 (This service replaced functionality that used to be provided by `native-apps-api-orchestration`)
 
+## Development Setup
+- Run locally: `sbt run` which runs on port `8251` by default
+- Run with test endpoints: `sbt 'run -Dplay.http.router=testOnlyDoNotUseInAppConf.Routes'`
+
+##  Service Manager Profiles
+The service can be run locally from Service Manager, using the following profiles:
+
+| Profile Details               | Command                                                                                                           |
+|-------------------------------|:------------------------------------------------------------------------------------------------------------------|
+| MOBILE_STARTUP_ALL            | sm2 --start MOBILE_STARTUP_ALL --appendArgs '{"MOBILE_STARTUP": ["-Dfeature.annualTaxSummaryLink='true'"]}'                                                                    |
+
+
+## Run Tests
+- Run Unit Tests:  `sbt test`
+- Run Integration Tests: `sbt it:test`
+- Run Unit and Integration Tests: `sbt test it:test`
+- Run Unit and Integration Tests with coverage report: `sbt clean compile coverage test it:test coverageReport dependencyUpdates`
+
+
 The following services are exposed:
 
 API
