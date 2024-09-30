@@ -16,17 +16,9 @@
 
 package uk.gov.hmrc.mobilestartup.api
 
-import play.api.Application
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 
 class ApiDefinitionISpec extends BaseISpec {
-
-  override def config: Map[String, Any] = super.config ++ Map(
-    "api.access.white-list.applicationIds" -> Seq("00010002-0003-0004-0005-000600070008",
-                                                  "00090002-0003-0004-0005-000600070008")
-  )
-
-  override implicit lazy val app: Application = appBuilder.build()
 
   "GET /api/definition" should {
 
@@ -42,9 +34,7 @@ class ApiDefinitionISpec extends BaseISpec {
       val accessConfigs = definition \ "api" \ "versions" \\ "access"
       accessConfigs.length should be > 0
       accessConfigs.foreach { accessConfig =>
-        (accessConfig \ "type").as[String]                           shouldBe "PRIVATE"
-        (accessConfig \ "whitelistedApplicationIds").head.as[String] shouldBe "00010002-0003-0004-0005-000600070008"
-        (accessConfig \ "whitelistedApplicationIds")(1).as[String]   shouldBe "00090002-0003-0004-0005-000600070008"
+        (accessConfig \ "type").as[String] shouldBe "PRIVATE"
       }
     }
   }
