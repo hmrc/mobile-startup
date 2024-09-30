@@ -27,7 +27,6 @@ import uk.gov.hmrc.mobilestartup.controllers.api.ApiAccess
 import uk.gov.hmrc.mobilestartup.services.{LivePreFlightService, LiveStartupService, PreFlightService, StartupService}
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
 
 class GuiceModule @Inject() (
@@ -138,9 +137,7 @@ class GuiceModule @Inject() (
     bind(new TypeLiteral[StartupService[Future]] {}).to(classOf[LiveStartupService])
     bind(new TypeLiteral[PreFlightService[Future]] {}).to(classOf[LivePreFlightService])
 
-    bind(classOf[ApiAccess]).toInstance(
-      ApiAccess("PRIVATE", configuration.underlying.getStringList("api.access.white-list.applicationIds").asScala)
-    )
+    bind(classOf[ApiAccess]).toInstance(ApiAccess("PRIVATE"))
   }
 
   /**
