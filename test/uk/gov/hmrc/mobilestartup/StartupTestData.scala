@@ -224,6 +224,8 @@ trait StartupTestData extends TestF {
       tcStateBenefitsUrlCy                      = Some("/tcStateBenefitsUrlCy"),
       tcCompanyBenefitsUrl                      = Some("/tcCompanyBenefitsUrl"),
       tcCompanyBenefitsUrlCy                    = Some("/tcCompanyBenefitsUrlCy"),
+      niAppleWalletUrl                          = Some("/niAppleWalletUrl"),
+      niGoogleWalletUrl                         = Some("/niGoogleWalletUrl"),
       enableCustomerSatisfactionSurveys         = false,
       findMyNinoAddToWallet                     = false,
       disableYourEmploymentIncomeChart          = true,
@@ -314,7 +316,9 @@ trait StartupTestData extends TestF {
     URL("tcStateBenefitsUrl", "/tcStateBenefitsUrl"),
     URL("tcStateBenefitsUrlCy", "/tcStateBenefitsUrlCy"),
     URL("tcCompanyBenefitsUrl", "/tcCompanyBenefitsUrl"),
-    URL("tcCompanyBenefitsUrlCy", "/tcCompanyBenefitsUrlCy")
+    URL("tcCompanyBenefitsUrlCy", "/tcCompanyBenefitsUrlCy"),
+    URL("niAppleWalletUrl", "/niAppleWalletUrl"),
+    URL("niGoogleWalletUrl", "/niGoogleWalletUrl")
   )
 
   val childBenefitShutteringDisabled: Shuttering = Shuttering(shuttered = false)

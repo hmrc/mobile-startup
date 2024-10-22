@@ -489,6 +489,14 @@ about the user's help-to-save-account (if they have one) and any global feature 
     {
       "name": "tcCompanyBenefitsUrlCy",
       "url": "/"
+    },
+    {
+      "name": "niAppleWalletUrl",
+      "url": "/save-your-national-insurance-number/apple-wallet"
+    },
+    {
+      "name": "niGoogleWalletUrl",
+      "url": "/save-your-national-insurance-number/google-wallet"
     }
   ]
 }
