@@ -53,10 +53,8 @@ class ShutteringConnector @Inject() (
   ): Future[Shuttering] =
     http
       .get(url"$serviceUrl/mobile-shuttering/service/$service/shuttered-status?journeyId=$journeyId")
-      .execute[JsValue]
-      .map { json =>
-        json.as[Shuttering]
-      } recover {
+      .execute[Shuttering]
+      .recover {
       case e =>
         logger.warn(s"Call to mobile-shuttering failed:\n $e \nAssuming unshuttered.")
         Shuttering.shutteringDisabled
