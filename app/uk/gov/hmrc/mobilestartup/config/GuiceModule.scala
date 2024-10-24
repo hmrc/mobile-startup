@@ -21,7 +21,6 @@ import com.google.inject.{AbstractModule, TypeLiteral}
 import javax.inject.Inject
 import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.http.CorePost
 import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorImpl}
 import uk.gov.hmrc.mobilestartup.controllers.api.ApiAccess
 import uk.gov.hmrc.mobilestartup.services.{LivePreFlightService, LiveStartupService, PreFlightService, StartupService}
@@ -133,7 +132,6 @@ class GuiceModule @Inject() (
     bindConfigString("appTeamAccountInternalId", "demoAccounts.appTeamId")
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
-    bind(classOf[CorePost]).to(classOf[WSHttpImpl])
 
     bind(new TypeLiteral[GenericConnector[Future]] {}).to(classOf[GenericConnectorImpl])
     bind(new TypeLiteral[StartupService[Future]] {}).to(classOf[LiveStartupService])

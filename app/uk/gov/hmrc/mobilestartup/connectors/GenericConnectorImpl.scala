@@ -17,15 +17,16 @@
 package uk.gov.hmrc.mobilestartup.connectors
 
 import com.google.inject.Singleton
+import eu.timepit.refined.util.string.url
 
 import javax.inject.Inject
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.mobilestartup.config.WSHttpImpl
+import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
-import play.api.http.Status.{NO_CONTENT, NOT_FOUND}
+import play.api.http.Status.{NOT_FOUND, NO_CONTENT}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -61,7 +62,7 @@ trait GenericConnector[F[_]] {
 @Singleton
 class GenericConnectorImpl @Inject() (
   configuration: Configuration,
-  wSHttp:        WSHttpImpl
+  wSHttp:        HttpClientV2
 )(implicit ec:   ExecutionContext)
     extends GenericConnector[Future] {
 
@@ -72,7 +73,7 @@ class GenericConnectorImpl @Inject() (
 
   def port(serviceName: String): Int = getConfigProperty(serviceName, "port").toInt
 
-  def http: CorePost with CoreGet = wSHttp
+  def http: HttpClientV2 with HttpClientV2 = wSHttp
 
   def doGet(
     serviceName: String,
@@ -80,7 +81,8 @@ class GenericConnectorImpl @Inject() (
     hc:          HeaderCarrier
   ): Future[JsValue] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
-    http.GET[JsValue](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path))
+    val url = buildUrl(protocol(serviceName),host(serviceName),port(serviceName),path)
+    http.get(url"$url").execute[JsValue]
   }
 
   def cidGet(
@@ -89,7 +91,8 @@ class GenericConnectorImpl @Inject() (
     hc:          HeaderCarrier
   ): Future[CidPerson] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
-    http.GET[HttpResponse](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)).map {
+    val url = buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)
+    http.get(url"$url").execute[HttpResponse].map {
       response =>
         if (response.status == NOT_FOUND || response.status == NO_CONTENT) throw new NotFoundException("No UTR found for user")
         else response.json.as[CidPerson]
@@ -102,12 +105,12 @@ class GenericConnectorImpl @Inject() (
     hc:          HeaderCarrier
   ): Future[EnrolmentStoreResponse] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
-    http.GET[HttpResponse](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)).map {
+    val url = buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)
+    http.get(url"$url").execute[HttpResponse].map {
       response =>
         if (response.status == 204) EnrolmentStoreResponse(Seq.empty)
         else response.json.as[EnrolmentStoreResponse]
     }
-
   }
 
   def doPost[T](
@@ -118,7 +121,8 @@ class GenericConnectorImpl @Inject() (
   )(implicit rds: HttpReads[T]
   ): Future[T] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
-    http.POST[JsValue, T](buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path), json)
+    val url = buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)
+    http.post(url"$url").withBody(json).execute[T]
   }
 
   private def addAPIHeaders(hc: HeaderCarrier): HeaderCarrier =
