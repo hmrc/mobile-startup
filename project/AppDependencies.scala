@@ -6,8 +6,8 @@ object AppDependencies {
   private val domainVersion        = "10.0.0"
   private val playHmrcApiVersion   = "8.0.0"
   private val taxYearVersion       = "5.0.0"
-  private val refinedVersion        = "0.11.1"
-  private val catsCoreVersion      = "2.9.0"
+  private val refinedVersion        = "0.11.2"
+  private val catsCoreVersion      = "2.12.0"
   private val scalaMockVersion     = "5.2.0"
   private val scalaCheckVersion    = "3.2.18.0"
 
