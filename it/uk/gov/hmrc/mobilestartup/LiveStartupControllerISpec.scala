@@ -137,6 +137,8 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 10 \ "enabled").as[Boolean]              shouldBe false
       (response.json \ "feature" \ 11 \ "name").as[String]                  shouldBe "findMyNinoAddToGoogleWallet"
       (response.json \ "feature" \ 11 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 12 \ "name").as[String]                  shouldBe "disableOldTaxCalculator"
+      (response.json \ "feature" \ 12 \ "enabled").as[Boolean]              shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
       (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"

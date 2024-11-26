@@ -19,7 +19,6 @@ package uk.gov.hmrc.mobilestartup.connectors
 import com.google.inject.name.Named
 import com.google.inject.{Inject, Singleton}
 import play.api.Logger
-import play.api.libs.json.JsValue
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -55,8 +54,8 @@ class ShutteringConnector @Inject() (
       .get(url"$serviceUrl/mobile-shuttering/service/$service/shuttered-status?journeyId=$journeyId")
       .execute[Shuttering]
       .recover {
-      case e =>
-        logger.warn(s"Call to mobile-shuttering failed:\n $e \nAssuming unshuttered.")
-        Shuttering.shutteringDisabled
-    }
+        case e =>
+          logger.warn(s"Call to mobile-shuttering failed:\n $e \nAssuming unshuttered.")
+          Shuttering.shutteringDisabled
+      }
 }
