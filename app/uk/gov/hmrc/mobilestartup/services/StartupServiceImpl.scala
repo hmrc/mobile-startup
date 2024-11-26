@@ -134,7 +134,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
   disableYourEmploymentIncomeChart:          Boolean,
   disableYourEmploymentIncomeChartAndroid:   Boolean,
   disableYourEmploymentIncomeChartIos:       Boolean,
-  findMyNinoAddToGoogleWallet:               Boolean
+  findMyNinoAddToGoogleWallet:               Boolean,
+  disableOldTaxCalculator:                   Boolean
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -169,6 +170,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("disableYourEmploymentIncomeChartAndroid", disableYourEmploymentIncomeChartAndroid),
         FeatureFlag("disableYourEmploymentIncomeChartIos", disableYourEmploymentIncomeChartIos),
         FeatureFlag("findMyNinoAddToGoogleWallet", findMyNinoAddToGoogleWallet),
+        FeatureFlag("disableOldTaxCalculator", disableOldTaxCalculator),
         FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink)
       )
     )
