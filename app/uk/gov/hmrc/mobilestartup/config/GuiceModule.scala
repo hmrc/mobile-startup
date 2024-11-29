@@ -48,7 +48,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.findMyNinoAddToWallet")
     bindConfigBoolean("feature.findMyNinoAddToGoogleWallet")
     bindConfigBoolean("feature.disableOldTaxCalculator")
-    bindConfigBoolean("feature.devUseNudgeComm")
+    bindConfigBoolean("feature.useNudgeComm")
     bindConfigBoolean("feature.disableYourEmploymentIncomeChart")
     bindConfigBoolean("feature.disableYourEmploymentIncomeChartAndroid")
     bindConfigBoolean("feature.disableYourEmploymentIncomeChartIos")
