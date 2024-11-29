@@ -104,7 +104,8 @@ class LiveStartupService @Inject() (
   @Named("feature.disableYourEmploymentIncomeChartAndroid") disableYourEmploymentIncomeChartAndroid: Boolean,
   @Named("feature.disableYourEmploymentIncomeChartIos") disableYourEmploymentIncomeChartIos:         Boolean,
   @Named("feature.findMyNinoAddToGoogleWallet") findMyNinoAddToGoogleWallet:                         Boolean,
-  @Named("feature.disableOldTaxCalculator") disableOldTaxCalculator:                                 Boolean
+  @Named("feature.disableOldTaxCalculator") disableOldTaxCalculator:                                 Boolean,
+  @Named("feature.devUseNudgeComm") devUseNudgeComm:                                                 Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -187,4 +188,5 @@ class LiveStartupService @Inject() (
                                        disableYourEmploymentIncomeChartAndroid,
                                        disableYourEmploymentIncomeChartIos,
                                        findMyNinoAddToGoogleWallet,
-                                       disableOldTaxCalculator)
+                                       disableOldTaxCalculator,
+                                       devUseNudgeComm)
