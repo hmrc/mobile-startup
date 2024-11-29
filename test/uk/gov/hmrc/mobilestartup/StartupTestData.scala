@@ -232,7 +232,8 @@ trait StartupTestData extends TestF {
       disableYourEmploymentIncomeChartAndroid   = true,
       disableYourEmploymentIncomeChartIos       = true,
       findMyNinoAddToGoogleWallet               = false,
-      disableOldTaxCalculator                   = true
+      disableOldTaxCalculator                   = true,
+      useNudgeComm                           = true
     )
 
   val expectedFeatureFlags = List(
@@ -249,6 +250,7 @@ trait StartupTestData extends TestF {
     FeatureFlag("disableYourEmploymentIncomeChartIos", enabled     = true),
     FeatureFlag("findMyNinoAddToGoogleWallet", enabled             = false),
     FeatureFlag("disableOldTaxCalculator", enabled                 = true),
+    FeatureFlag("useNudgeComm", enabled                         = true),
     FeatureFlag("annualTaxSummaryLink", enabled                    = false)
   )
 
