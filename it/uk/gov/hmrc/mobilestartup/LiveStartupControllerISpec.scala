@@ -141,6 +141,8 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 12 \ "enabled").as[Boolean]              shouldBe true
       (response.json \ "feature" \ 13 \ "name").as[String]                  shouldBe "useNudgeComm"
       (response.json \ "feature" \ 13 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "cbChangeOfBankUrl"
+      (response.json \ "feature" \ 14 \ "enabled").as[Boolean]              shouldBe false
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
       (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"
