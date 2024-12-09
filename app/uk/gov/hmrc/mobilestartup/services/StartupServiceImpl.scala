@@ -65,8 +65,6 @@ case class StartupServiceImpl[F[_]] @Inject() (
   cbProofOfEntitlementUrlCy:                 Option[String],
   cbPaymentHistoryUrl:                       Option[String],
   cbPaymentHistoryUrlCy:                     Option[String],
-  cbChangeBankAccountUrl:                    Option[String],
-  cbChangeBankAccountUrlCy:                  Option[String],
   cbHomeUrl:                                 Option[String],
   cbHomeUrlCy:                               Option[String],
   cbHowToClaimUrl:                           Option[String],
@@ -136,7 +134,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
   disableYourEmploymentIncomeChartIos:       Boolean,
   findMyNinoAddToGoogleWallet:               Boolean,
   disableOldTaxCalculator:                   Boolean,
-  useNudgeComm:                           Boolean
+  useNudgeComm:                              Boolean,
+  cbChangeBankAccountUrl:                    Boolean
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -173,6 +172,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("findMyNinoAddToGoogleWallet", findMyNinoAddToGoogleWallet),
         FeatureFlag("disableOldTaxCalculator", disableOldTaxCalculator),
         FeatureFlag("useNudgeComm", useNudgeComm),
+        FeatureFlag("cbChangeBankAccountUrl", cbChangeBankAccountUrl),
         FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink)
       )
     )
@@ -184,8 +184,6 @@ case class StartupServiceImpl[F[_]] @Inject() (
         cbProofOfEntitlementUrlCy.map(URL("cbProofOfEntitlementUrlCy", _)),
         cbPaymentHistoryUrl.map(URL("cbPaymentHistoryUrl", _)),
         cbPaymentHistoryUrlCy.map(URL("cbPaymentHistoryUrlCy", _)),
-        cbChangeBankAccountUrl.map(URL("cbChangeBankAccountUrl", _)),
-        cbChangeBankAccountUrlCy.map(URL("cbChangeBankAccountUrlCy", _)),
         cbHomeUrl.map(URL("cbHomeUrl", _)),
         cbHomeUrlCy.map(URL("cbHomeUrlCy", _)),
         cbHowToClaimUrl.map(URL("cbHowToClaimUrl", _)),

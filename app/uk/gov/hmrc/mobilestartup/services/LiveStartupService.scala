@@ -34,8 +34,6 @@ class LiveStartupService @Inject() (
   @Named("cbProofOfEntitlementUrlCy") cbProofOfEntitlementUrlCy:                                     Option[String],
   @Named("cbPaymentHistoryUrl") cbPaymentHistoryUrl:                                                 Option[String],
   @Named("cbPaymentHistoryUrlCy") cbPaymentHistoryUrlCy:                                             Option[String],
-  @Named("cbChangeBankAccountUrl") cbChangeBankAccountUrl:                                           Option[String],
-  @Named("cbChangeBankAccountUrlCy") cbChangeBankAccountUrlCy:                                       Option[String],
   @Named("cbHomeUrl") cbHomeUrl:                                                                     Option[String],
   @Named("cbHomeUrlCy") cbHomeUrlCy:                                                                 Option[String],
   @Named("cbHowToClaimUrl") cbHowToClaimUrl:                                                         Option[String],
@@ -105,7 +103,8 @@ class LiveStartupService @Inject() (
   @Named("feature.disableYourEmploymentIncomeChartIos") disableYourEmploymentIncomeChartIos:         Boolean,
   @Named("feature.findMyNinoAddToGoogleWallet") findMyNinoAddToGoogleWallet:                         Boolean,
   @Named("feature.disableOldTaxCalculator") disableOldTaxCalculator:                                 Boolean,
-  @Named("feature.useNudgeComm") useNudgeComm:                                                 Boolean
+  @Named("feature.useNudgeComm") useNudgeComm:                                                       Boolean,
+  @Named("feature.cbChangeBankAccountUrl") cbChangeBankAccountUrl:                                             Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -118,8 +117,6 @@ class LiveStartupService @Inject() (
                                        cbProofOfEntitlementUrlCy,
                                        cbPaymentHistoryUrl,
                                        cbPaymentHistoryUrlCy,
-                                       cbChangeBankAccountUrl,
-                                       cbChangeBankAccountUrlCy,
                                        cbHomeUrl,
                                        cbHomeUrlCy,
                                        cbHowToClaimUrl,
@@ -189,4 +186,5 @@ class LiveStartupService @Inject() (
                                        disableYourEmploymentIncomeChartIos,
                                        findMyNinoAddToGoogleWallet,
                                        disableOldTaxCalculator,
-                                       useNudgeComm)
+                                       useNudgeComm,
+                                       cbChangeBankAccountUrl)

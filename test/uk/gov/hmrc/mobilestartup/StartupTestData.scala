@@ -162,8 +162,6 @@ trait StartupTestData extends TestF {
       cbProofOfEntitlementUrlCy                 = Some("/cb/cbProofOfEntitlementUrlCy"),
       cbPaymentHistoryUrl                       = Some("/cb/cbPaymentHistoryUrl"),
       cbPaymentHistoryUrlCy                     = Some("/cb/cbPaymentHistoryUrlCy"),
-      cbChangeBankAccountUrl                    = Some("/cb/cbChangeBankAccountUrl"),
-      cbChangeBankAccountUrlCy                  = Some("/cb/cbChangeBankAccountUrlCy"),
       cbHomeUrl                                 = Some("/cb/cbHomeUrl"),
       cbHomeUrlCy                               = Some("/cb/cbHomeUrlCy"),
       cbHowToClaimUrl                           = Some("/cb/cbHowToClaimUrl"),
@@ -233,7 +231,8 @@ trait StartupTestData extends TestF {
       disableYourEmploymentIncomeChartIos       = true,
       findMyNinoAddToGoogleWallet               = false,
       disableOldTaxCalculator                   = true,
-      useNudgeComm                           = true
+      useNudgeComm                              = true,
+      cbChangeBankAccountUrl                    = false
     )
 
   val expectedFeatureFlags = List(
@@ -250,7 +249,8 @@ trait StartupTestData extends TestF {
     FeatureFlag("disableYourEmploymentIncomeChartIos", enabled     = true),
     FeatureFlag("findMyNinoAddToGoogleWallet", enabled             = false),
     FeatureFlag("disableOldTaxCalculator", enabled                 = true),
-    FeatureFlag("useNudgeComm", enabled                         = true),
+    FeatureFlag("useNudgeComm", enabled                            = true),
+    FeatureFlag("cbChangeBankAccountUrl", enabled                  = false),
     FeatureFlag("annualTaxSummaryLink", enabled                    = false)
   )
 
@@ -259,8 +259,6 @@ trait StartupTestData extends TestF {
     URL("cbProofOfEntitlementUrlCy", "/cb/cbProofOfEntitlementUrlCy"),
     URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
     URL("cbPaymentHistoryUrlCy", "/cb/cbPaymentHistoryUrlCy"),
-    URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
-    URL("cbChangeBankAccountUrlCy", "/cb/cbChangeBankAccountUrlCy"),
     URL("cbHomeUrl", "/cb/cbHomeUrl"),
     URL("cbHomeUrlCy", "/cb/cbHomeUrlCy"),
     URL("cbHowToClaimUrl", "/cb/cbHowToClaimUrl"),
