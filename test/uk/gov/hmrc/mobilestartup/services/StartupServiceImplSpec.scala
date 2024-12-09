@@ -108,6 +108,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       connector                 = dummyConnector(citizenDetailsResponse = new Exception("cid failed").error),
       cbProofOfEntitlementUrlCy = None,
       cbPaymentHistoryUrlCy     = None,
+      cbChangeBankAccountUrlCy  = None,
       cbHomeUrlCy               = None,
       cbHowToClaimUrlCy         = None,
       cbFullTimeEducationUrlCy  = None,
@@ -126,6 +127,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       .as[List[URL]] shouldBe List(
       URL("cbProofOfEntitlementUrl", "/cb/cbProofOfEntitlementUrl"),
       URL("cbPaymentHistoryUrl", "/cb/cbPaymentHistoryUrl"),
+      URL("cbChangeBankAccountUrl", "/cb/cbChangeBankAccountUrl"),
       URL("cbHomeUrl", "/cb/cbHomeUrl"),
       URL("cbHowToClaimUrl", "/cb/cbHowToClaimUrl"),
       URL("cbFullTimeEducationUrl", "/cb/cbFullTimeEducationUrl"),
