@@ -22,7 +22,7 @@ import eu.timepit.refined._
 
 object ModelTypes {
 
-  type JourneyId = String Refined ValidJourneyId
+  type JourneyId       = String Refined ValidJourneyId
   type LinkDestination = String Refined ValidLinkDestination
 
   private type ValidJourneyId =

@@ -192,5 +192,5 @@ class LiveStartupService @Inject() (
                                        findMyNinoAddToGoogleWallet,
                                        disableOldTaxCalculator,
                                        useNudgeComm,
-                                        cbChangeOfBankUrl,
-                                        enableTaxCreditEndBanner)
+                                       cbChangeOfBankUrl,
+                                       enableTaxCreditEndBanner)

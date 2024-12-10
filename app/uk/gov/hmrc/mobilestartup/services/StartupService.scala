@@ -23,9 +23,9 @@ import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 trait StartupService[F[_]] {
 
   def startup(
-    nino:         String,
-    journeyId:    JourneyId,
+    nino:               String,
+    journeyId:          JourneyId,
     shutteringStatuses: StartupShuttering
-  )(implicit hc:  HeaderCarrier
+  )(implicit hc:        HeaderCarrier
   ): F[JsObject]
 }
