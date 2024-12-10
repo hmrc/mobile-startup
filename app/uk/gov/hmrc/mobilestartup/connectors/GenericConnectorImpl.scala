@@ -81,7 +81,7 @@ class GenericConnectorImpl @Inject() (
     hc:          HeaderCarrier
   ): Future[JsValue] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
-    val url = buildUrl(protocol(serviceName),host(serviceName),port(serviceName),path)
+    val url = buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)
     http.get(url"$url").execute[JsValue]
   }
 
@@ -92,10 +92,10 @@ class GenericConnectorImpl @Inject() (
   ): Future[CidPerson] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
     val url = buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)
-    http.get(url"$url").execute[HttpResponse].map {
-      response =>
-        if (response.status == NOT_FOUND || response.status == NO_CONTENT) throw new NotFoundException("No UTR found for user")
-        else response.json.as[CidPerson]
+    http.get(url"$url").execute[HttpResponse].map { response =>
+      if (response.status == NOT_FOUND || response.status == NO_CONTENT)
+        throw new NotFoundException("No UTR found for user")
+      else response.json.as[CidPerson]
     }
   }
 
@@ -106,10 +106,9 @@ class GenericConnectorImpl @Inject() (
   ): Future[EnrolmentStoreResponse] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
     val url = buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)
-    http.get(url"$url").execute[HttpResponse].map {
-      response =>
-        if (response.status == 204) EnrolmentStoreResponse(Seq.empty)
-        else response.json.as[EnrolmentStoreResponse]
+    http.get(url"$url").execute[HttpResponse].map { response =>
+      if (response.status == 204) EnrolmentStoreResponse(Seq.empty)
+      else response.json.as[EnrolmentStoreResponse]
     }
   }
 

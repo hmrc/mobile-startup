@@ -42,7 +42,7 @@ class LivePreFlightController @Inject() (
       preflightService.preFlight(journeyId).map { response =>
         hc.authorization match {
           case Some(_) => Ok(Json.toJson(response))
-          case _          => Unauthorized("Failed to resolve authentication from HC!")
+          case _       => Unauthorized("Failed to resolve authentication from HC!")
         }
       }
     }
