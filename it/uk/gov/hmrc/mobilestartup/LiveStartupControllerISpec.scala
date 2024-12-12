@@ -141,7 +141,7 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 12 \ "enabled").as[Boolean]              shouldBe true
       (response.json \ "feature" \ 13 \ "name").as[String]                  shouldBe "useNudgeComm"
       (response.json \ "feature" \ 13 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "cbChangeOfBankUrl"
+      (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "enableChangeOfBankPegaURL"
       (response.json \ "feature" \ 14 \ "enabled").as[Boolean]              shouldBe false
       (response.json \ "feature" \ 15 \ "name").as[String]                  shouldBe "enableTaxCreditEndBanner"
       (response.json \ "feature" \ 15 \ "enabled").as[Boolean]              shouldBe true

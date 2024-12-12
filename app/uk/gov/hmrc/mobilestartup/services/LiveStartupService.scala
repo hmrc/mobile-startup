@@ -106,7 +106,7 @@ class LiveStartupService @Inject() (
   @Named("feature.findMyNinoAddToGoogleWallet") findMyNinoAddToGoogleWallet:                         Boolean,
   @Named("feature.disableOldTaxCalculator") disableOldTaxCalculator:                                 Boolean,
   @Named("feature.useNudgeComm") useNudgeComm:                                                       Boolean,
-  @Named("feature.cbChangeOfBankUrl") cbChangeOfBankUrl:                                             Boolean,
+  @Named("feature.enableChangeOfBankPegaURL") enableChangeOfBankPegaURL:                             Boolean,
   @Named("feature.enableTaxCreditEndBanner") enableTaxCreditEndBanner:                               Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
@@ -192,5 +192,5 @@ class LiveStartupService @Inject() (
                                        findMyNinoAddToGoogleWallet,
                                        disableOldTaxCalculator,
                                        useNudgeComm,
-                                       cbChangeOfBankUrl,
+                                       enableChangeOfBankPegaURL,
                                        enableTaxCreditEndBanner)
