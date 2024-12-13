@@ -50,6 +50,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.disableOldTaxCalculator")
     bindConfigBoolean("feature.useNudgeComm")
     bindConfigBoolean("feature.enableChangeOfBankPegaURL")
+    bindConfigBoolean("feature.enableProofOfEntitlementPegaURL")
     bindConfigBoolean("feature.enableTaxCreditEndBanner")
     bindConfigBoolean("feature.disableYourEmploymentIncomeChart")
     bindConfigBoolean("feature.disableYourEmploymentIncomeChartAndroid")

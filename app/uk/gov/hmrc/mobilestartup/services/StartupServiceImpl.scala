@@ -138,6 +138,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
   disableOldTaxCalculator:                   Boolean,
   useNudgeComm:                              Boolean,
   enableChangeOfBankPegaURL:                 Boolean,
+  enableProofOfEntitlementPegaURL:           Boolean,
   enableTaxCreditEndBanner:                  Boolean
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
@@ -176,6 +177,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("disableOldTaxCalculator", disableOldTaxCalculator),
         FeatureFlag("useNudgeComm", useNudgeComm),
         FeatureFlag("enableChangeOfBankPegaURL", enableChangeOfBankPegaURL),
+        FeatureFlag("enableProofOfEntitlementPegaURL", enableProofOfEntitlementPegaURL),
         FeatureFlag("enableTaxCreditEndBanner", enableTaxCreditEndBanner),
         FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink)
       )

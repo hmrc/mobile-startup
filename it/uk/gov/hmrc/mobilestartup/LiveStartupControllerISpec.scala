@@ -143,8 +143,10 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 13 \ "enabled").as[Boolean]              shouldBe true
       (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "enableChangeOfBankPegaURL"
       (response.json \ "feature" \ 14 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 15 \ "name").as[String]                  shouldBe "enableTaxCreditEndBanner"
-      (response.json \ "feature" \ 15 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 15 \ "name").as[String]                  shouldBe "enableProofOfEntitlementPegaURL"
+      (response.json \ "feature" \ 15 \ "enabled").as[Boolean]              shouldBe false
+      (response.json \ "feature" \ 16 \ "name").as[String]                  shouldBe "enableTaxCreditEndBanner"
+      (response.json \ "feature" \ 16 \ "enabled").as[Boolean]              shouldBe true
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
       (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"
