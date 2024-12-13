@@ -234,7 +234,8 @@ trait StartupTestData extends TestF {
       findMyNinoAddToGoogleWallet               = false,
       disableOldTaxCalculator                   = true,
       useNudgeComm                              = true,
-      enableChangeOfBankPegaURL                         = false,
+      enableChangeOfBankPegaURL                 = false,
+      enableProofOfEntitlementPegaURL           = false,
       enableTaxCreditEndBanner                  = true
     )
 
@@ -253,7 +254,8 @@ trait StartupTestData extends TestF {
     FeatureFlag("findMyNinoAddToGoogleWallet", enabled             = false),
     FeatureFlag("disableOldTaxCalculator", enabled                 = true),
     FeatureFlag("useNudgeComm", enabled                            = true),
-    FeatureFlag("enableChangeOfBankPegaURL", enabled                       = false),
+    FeatureFlag("enableChangeOfBankPegaURL", enabled               = false),
+    FeatureFlag("enableProofOfEntitlementPegaURL", enabled         = false),
     FeatureFlag("enableTaxCreditEndBanner", enabled                = true),
     FeatureFlag("annualTaxSummaryLink", enabled                    = false)
   )
