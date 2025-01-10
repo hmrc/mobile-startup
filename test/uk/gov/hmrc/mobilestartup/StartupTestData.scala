@@ -236,6 +236,7 @@ trait StartupTestData extends TestF {
       useNudgeComm                              = true,
       enableChangeOfBankPegaURL                 = false,
       enableProofOfEntitlementPegaURL           = false,
+      devEnablePegaDigitalService               = false,
       enableTaxCreditEndBanner                  = true
     )
 
@@ -256,6 +257,7 @@ trait StartupTestData extends TestF {
     FeatureFlag("useNudgeComm", enabled                            = true),
     FeatureFlag("enableChangeOfBankPegaURL", enabled               = false),
     FeatureFlag("enableProofOfEntitlementPegaURL", enabled         = false),
+    FeatureFlag("devEnablePegaDigitalService", enabled             = false),
     FeatureFlag("enableTaxCreditEndBanner", enabled                = true),
     FeatureFlag("annualTaxSummaryLink", enabled                    = false)
   )
