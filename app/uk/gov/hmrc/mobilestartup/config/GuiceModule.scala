@@ -53,6 +53,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.enableProofOfEntitlementPegaURL")
     bindConfigBoolean("feature.devEnablePegaDigitalService")
     bindConfigBoolean("feature.enableTaxCreditEndBanner")
+    bindConfigBoolean("feature.enableBPPCardViews")
     bindConfigBoolean("feature.disableYourEmploymentIncomeChart")
     bindConfigBoolean("feature.disableYourEmploymentIncomeChartAndroid")
     bindConfigBoolean("feature.disableYourEmploymentIncomeChartIos")
