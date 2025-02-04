@@ -110,7 +110,6 @@ class LiveStartupService @Inject() (
   @Named("feature.enableProofOfEntitlementPegaURL") enableProofOfEntitlementPegaURL:                 Boolean,
   @Named("feature.devEnablePegaDigitalService") devEnablePegaDigitalService:                         Boolean,
   @Named("feature.enableTaxCreditEndBanner") enableTaxCreditEndBanner:                               Boolean,
-  @Named("feature.devEnableChildBenefitPegaService") devEnableChildBenefitPegaService:               Boolean,
   @Named("feature.enableBPPCardViews") enableBPPCardViews:                                           Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
@@ -200,5 +199,4 @@ class LiveStartupService @Inject() (
                                        enableProofOfEntitlementPegaURL,
                                        devEnablePegaDigitalService,
                                        enableTaxCreditEndBanner,
-                                       devEnableChildBenefitPegaService,
                                        enableBPPCardViews)

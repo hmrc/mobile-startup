@@ -238,7 +238,6 @@ trait StartupTestData extends TestF {
       enableProofOfEntitlementPegaURL           = false,
       devEnablePegaDigitalService               = false,
       enableTaxCreditEndBanner                  = true,
-      devEnableChildBenefitPegaService          = false,
       enableBPPCardViews                        = false
     )
 
@@ -261,7 +260,6 @@ trait StartupTestData extends TestF {
     FeatureFlag("enableProofOfEntitlementPegaURL", enabled         = false),
     FeatureFlag("devEnablePegaDigitalService", enabled             = false),
     FeatureFlag("enableTaxCreditEndBanner", enabled                = true),
-    FeatureFlag("devEnableChildBenefitPegaService", enabled        = false),
     FeatureFlag("enableBPPCardViews", enabled                      = false),
     FeatureFlag("annualTaxSummaryLink", enabled                    = false)
   )
