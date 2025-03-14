@@ -236,11 +236,8 @@ trait StartupTestData extends TestF {
       useNudgeComm                              = true,
       enableChangeOfBankPegaURL                 = false,
       enableProofOfEntitlementPegaURL           = false,
-      devEnablePegaDigitalService               = false,
       enableTaxCreditEndBanner                  = true,
-      devEnableChildBenefitPegaService          = false,
-      enableBPPCardViews                        = false,
-      devEnableChildBenefitMVP                  = false
+      enableBPPCardViews                        = false
     )
 
   val expectedFeatureFlags = List(
@@ -260,11 +257,8 @@ trait StartupTestData extends TestF {
     FeatureFlag("useNudgeComm", enabled                            = true),
     FeatureFlag("enableChangeOfBankPegaURL", enabled               = false),
     FeatureFlag("enableProofOfEntitlementPegaURL", enabled         = false),
-    FeatureFlag("devEnablePegaDigitalService", enabled             = false),
     FeatureFlag("enableTaxCreditEndBanner", enabled                = true),
-    FeatureFlag("devEnableChildBenefitPegaService", enabled        = false),
     FeatureFlag("enableBPPCardViews", enabled                      = false),
-    FeatureFlag("devEnableChildBenefitMVP", enabled                = false),
     FeatureFlag("annualTaxSummaryLink", enabled                    = false)
   )
 

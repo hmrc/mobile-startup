@@ -108,11 +108,8 @@ class LiveStartupService @Inject() (
   @Named("feature.useNudgeComm") useNudgeComm:                                                       Boolean,
   @Named("feature.enableChangeOfBankPegaURL") enableChangeOfBankPegaURL:                             Boolean,
   @Named("feature.enableProofOfEntitlementPegaURL") enableProofOfEntitlementPegaURL:                 Boolean,
-  @Named("feature.devEnablePegaDigitalService") devEnablePegaDigitalService:                         Boolean,
   @Named("feature.enableTaxCreditEndBanner") enableTaxCreditEndBanner:                               Boolean,
-  @Named("feature.devEnableChildBenefitPegaService") devEnableChildBenefitPegaService:               Boolean,
-  @Named("feature.enableBPPCardViews") enableBPPCardViews:                                           Boolean,
-  @Named("feature.devEnableChildBenefitMVP") devEnableChildBenefitMVP:                               Boolean
+  @Named("feature.enableBPPCardViews") enableBPPCardViews:                                           Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -199,8 +196,5 @@ class LiveStartupService @Inject() (
                                        useNudgeComm,
                                        enableChangeOfBankPegaURL,
                                        enableProofOfEntitlementPegaURL,
-                                       devEnablePegaDigitalService,
                                        enableTaxCreditEndBanner,
-                                       devEnableChildBenefitPegaService,
-                                       enableBPPCardViews,
-                                       devEnableChildBenefitMVP)
+                                       enableBPPCardViews)
