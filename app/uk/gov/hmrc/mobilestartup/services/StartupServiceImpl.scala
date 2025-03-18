@@ -30,6 +30,7 @@ import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import play.api.http.Status.LOCKED
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 
+import java.time.LocalDateTime
 import scala.util.control.NonFatal
 
 case class FeatureFlag(
@@ -140,7 +141,11 @@ case class StartupServiceImpl[F[_]] @Inject() (
   enableChangeOfBankPegaURL:                 Boolean,
   enableProofOfEntitlementPegaURL:           Boolean,
   enableTaxCreditEndBanner:                  Boolean,
-  enableBPPCardViews:                        Boolean
+  enableBPPCardViews:                        Boolean,
+  enableTaxCreditShuttering:                 Boolean,
+  startTime:                                 String,
+  endTime:                                   String,
+  enableUniversalPensionTaxCredit:           Boolean
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -181,7 +186,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("enableProofOfEntitlementPegaURL", enableProofOfEntitlementPegaURL),
         FeatureFlag("enableTaxCreditEndBanner", enableTaxCreditEndBanner),
         FeatureFlag("enableBPPCardViews", enableBPPCardViews),
-        FeatureFlag("annualTaxSummaryLink", enableAnnualTaxSummaryLink)
+        FeatureFlag("enableTaxCreditShuttering", isTaxCreditFlagEnabled),
+        FeatureFlag("enableUniversalPensionTaxCredit", isUniversalPensionScreenEnabled)
       )
     )
 
@@ -348,4 +354,13 @@ case class StartupServiceImpl[F[_]] @Inject() (
       "childBenefit" -> obj("shuttering" -> childBenefitShutteredStatus)
     )
 
+  private def isTaxCreditFlagEnabled: Boolean = {
+    val currentTime = LocalDateTime.now()
+    currentTime.isAfter(LocalDateTime.parse(startTime)) && currentTime.isBefore(LocalDateTime.parse(endTime))
+  }
+
+  private def isUniversalPensionScreenEnabled: Boolean = {
+    val currentTime = LocalDateTime.now()
+    currentTime.isAfter(LocalDateTime.parse(endTime))
+  }
 }

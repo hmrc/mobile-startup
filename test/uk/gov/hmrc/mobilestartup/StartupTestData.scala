@@ -237,7 +237,11 @@ trait StartupTestData extends TestF {
       enableChangeOfBankPegaURL                 = false,
       enableProofOfEntitlementPegaURL           = false,
       enableTaxCreditEndBanner                  = true,
-      enableBPPCardViews                        = false
+      enableBPPCardViews                        = false,
+      enableTaxCreditShuttering                 = false,
+      startTime                                 = "2025-04-05T23:59",
+      endTime                                   = "2025-04-07T10:00",
+      enableUniversalPensionTaxCredit           = false
     )
 
   val expectedFeatureFlags = List(
@@ -259,7 +263,8 @@ trait StartupTestData extends TestF {
     FeatureFlag("enableProofOfEntitlementPegaURL", enabled         = false),
     FeatureFlag("enableTaxCreditEndBanner", enabled                = true),
     FeatureFlag("enableBPPCardViews", enabled                      = false),
-    FeatureFlag("annualTaxSummaryLink", enabled                    = false)
+    FeatureFlag("enableTaxCreditShuttering", enabled               = false),
+    FeatureFlag("enableUniversalPensionTaxCredit", enabled         = false)
   )
 
   val expectedURLs = List(
