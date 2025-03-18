@@ -109,7 +109,11 @@ class LiveStartupService @Inject() (
   @Named("feature.enableChangeOfBankPegaURL") enableChangeOfBankPegaURL:                             Boolean,
   @Named("feature.enableProofOfEntitlementPegaURL") enableProofOfEntitlementPegaURL:                 Boolean,
   @Named("feature.enableTaxCreditEndBanner") enableTaxCreditEndBanner:                               Boolean,
-  @Named("feature.enableBPPCardViews") enableBPPCardViews:                                           Boolean
+  @Named("feature.enableBPPCardViews") enableBPPCardViews:                                           Boolean,
+  @Named("feature.enableTaxCreditShuttering") enableTaxCreditShuttering:                             Boolean,
+  @Named("startTime") startTime:                                                                     String,
+  @Named("endTime") endTime:                                                                         String,
+  @Named("feature.enableUniversalPensionTaxCredit") enableUniversalPensionTaxCredit:                 Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -197,4 +201,8 @@ class LiveStartupService @Inject() (
                                        enableChangeOfBankPegaURL,
                                        enableProofOfEntitlementPegaURL,
                                        enableTaxCreditEndBanner,
-                                       enableBPPCardViews)
+                                       enableBPPCardViews,
+                                       enableTaxCreditShuttering,
+                                       startTime,
+                                       endTime,
+                                       enableUniversalPensionTaxCredit)
