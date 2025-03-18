@@ -212,14 +212,6 @@
       "url": "/"
     },
     {
-      "name": "incomeTaxGeneralEnquiriesUrl",
-      "url": "/"
-    },
-    {
-      "name": "incomeTaxGeneralEnquiriesUrlCy",
-      "url": "/"
-    },
-    {
       "name": "learnAboutCallChargesUrl",
       "url": "/"
     },
@@ -292,27 +284,7 @@
       "url": "/"
     },
     {
-      "name": "simpleAssessmentGeneralEnquiriesUrl",
-      "url": "/"
-    },
-    {
       "name": "simpleAssessmentGeneralEnquiriesUrlCy",
-      "url": "/"
-    },
-    {
-      "name": "cbGeneralEnquiriesUrl",
-      "url": "/"
-    },
-    {
-      "name": "cbGeneralEnquiriesUrlCy",
-      "url": "/"
-    },
-    {
-      "name": "taxCreditsGeneralEnquiriesUrl",
-      "url": "/"
-    },
-    {
-      "name": "taxCreditsGeneralEnquiriesUrlCy",
       "url": "/"
     },
     {
