@@ -111,8 +111,8 @@ class LiveStartupService @Inject() (
   @Named("feature.enableTaxCreditEndBanner") enableTaxCreditEndBanner:                               Boolean,
   @Named("feature.enableBPPCardViews") enableBPPCardViews:                                           Boolean,
   @Named("feature.enableTaxCreditShuttering") enableTaxCreditShuttering:                             Boolean,
-  @Named("serviceFlagStartTime") startTime:                                                          String,
-  @Named("serviceFlagEndTime") endTime:                                                              String,
+  @Named("startTime") startTime:                                                                     String,
+  @Named("endTime") endTime:                                                                         String,
   @Named("feature.enableUniversalPensionTaxCredit") enableUniversalPensionTaxCredit:                 Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
