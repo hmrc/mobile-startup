@@ -145,7 +145,10 @@ case class StartupServiceImpl[F[_]] @Inject() (
   enableTaxCreditShuttering:                 Boolean,
   startTime:                                 String,
   endTime:                                   String,
-  enableUniversalPensionTaxCredit:           Boolean
+  enableUniversalPensionTaxCredit:           Boolean,
+  bannerStartTime:                           String,
+  bannerEndTime:                             String,
+  enableHtsBanner:                           Boolean
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -187,7 +190,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("enableTaxCreditEndBanner", enableTaxCreditEndBanner),
         FeatureFlag("enableBPPCardViews", enableBPPCardViews),
         FeatureFlag("enableTaxCreditShuttering", isTaxCreditFlagEnabled),
-        FeatureFlag("enableUniversalPensionTaxCredit", isUniversalPensionScreenEnabled)
+        FeatureFlag("enableUniversalPensionTaxCredit", isUniversalPensionScreenEnabled),
+        FeatureFlag("enableHtsBanner", isHTSBannerEnabled)
       )
     )
 
@@ -362,5 +366,12 @@ case class StartupServiceImpl[F[_]] @Inject() (
   private def isUniversalPensionScreenEnabled: Boolean = {
     val currentTime = LocalDateTime.now()
     currentTime.isAfter(LocalDateTime.parse(endTime))
+  }
+
+  private def isHTSBannerEnabled: Boolean = {
+    val currentTime = LocalDateTime.of(2025, 5, 4, 0, 0)
+    currentTime.isAfter(LocalDateTime.parse(bannerStartTime)) && currentTime.isBefore(
+      LocalDateTime.parse(bannerEndTime)
+    )
   }
 }
