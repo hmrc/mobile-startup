@@ -6,8 +6,8 @@ object AppDependencies {
   private val domainVersion        = "10.0.0"
   private val playHmrcApiVersion   = "8.0.0"
   private val taxYearVersion       = "5.0.0"
-  private val refinedVersion        = "0.11.2"
-  private val catsCoreVersion      = "2.12.0"
+  private val refinedVersion       = "0.11.3"
+  private val catsCoreVersion      = "2.13.0"
   private val scalaMockVersion     = "5.2.0"
   private val scalaCheckVersion    = "3.2.18.0"
 
@@ -17,7 +17,7 @@ object AppDependencies {
     "uk.gov.hmrc"   %% "tax-year"                  % taxYearVersion,
     "uk.gov.hmrc"   %% "domain-play-30"            % domainVersion,
     "org.typelevel" %% "cats-core"                 % catsCoreVersion,
-    "eu.timepit"    %% "refined"                    % refinedVersion
+    "eu.timepit"    %% "refined"                   % refinedVersion
   )
 
   trait TestDependencies {

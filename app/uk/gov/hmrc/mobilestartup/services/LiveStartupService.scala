@@ -113,7 +113,10 @@ class LiveStartupService @Inject() (
   @Named("feature.enableTaxCreditShuttering") enableTaxCreditShuttering:                             Boolean,
   @Named("startTime") startTime:                                                                     String,
   @Named("endTime") endTime:                                                                         String,
-  @Named("feature.enableUniversalPensionTaxCredit") enableUniversalPensionTaxCredit:                 Boolean
+  @Named("feature.enableUniversalPensionTaxCredit") enableUniversalPensionTaxCredit:                 Boolean,
+  @Named("bannerStartTime") bannerStartTime:                                                         String,
+  @Named("bannerEndTime") bannerEndTime:                                                             String,
+  @Named("feature.enableHtsBanner") enableHtsBanner:                                                 Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -205,4 +208,7 @@ class LiveStartupService @Inject() (
                                        enableTaxCreditShuttering,
                                        startTime,
                                        endTime,
-                                       enableUniversalPensionTaxCredit)
+                                       enableUniversalPensionTaxCredit,
+                                       bannerStartTime,
+                                       bannerEndTime,
+                                       enableHtsBanner)
