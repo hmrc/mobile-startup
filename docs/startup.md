@@ -315,14 +315,6 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "url": "/"
     },
     {
-      "name": "incomeTaxGeneralEnquiriesUrl",
-      "url": "/"
-    },
-    {
-      "name": "incomeTaxGeneralEnquiriesUrlCy",
-      "url": "/"
-    },
-    {
       "name": "learnAboutCallChargesUrl",
       "url": "/"
     },
@@ -395,27 +387,7 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "url": "/"
     },
     {
-      "name": "simpleAssessmentGeneralEnquiriesUrl",
-      "url": "/"
-    },
-    {
       "name": "simpleAssessmentGeneralEnquiriesUrlCy",
-      "url": "/"
-    },
-    {
-      "name": "cbGeneralEnquiriesUrl",
-      "url": "/"
-    },
-    {
-      "name": "cbGeneralEnquiriesUrlCy",
-      "url": "/"
-    },
-    {
-      "name": "taxCreditsGeneralEnquiriesUrl",
-      "url": "/"
-    },
-    {
-      "name": "taxCreditsGeneralEnquiriesUrlCy",
       "url": "/"
     },
     {
