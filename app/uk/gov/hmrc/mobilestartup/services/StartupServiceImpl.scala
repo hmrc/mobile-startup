@@ -187,7 +187,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("useNudgeComm", useNudgeComm),
         FeatureFlag("enableChangeOfBankPegaURL", enableChangeOfBankPegaURL),
         FeatureFlag("enableProofOfEntitlementPegaURL", enableProofOfEntitlementPegaURL),
-        FeatureFlag("enableTaxCreditEndBanner", enableTaxCreditEndBanner),
+        FeatureFlag("enableTaxCreditEndBanner", isEnableTaxCreditEndBannerEnabled),
         FeatureFlag("enableBPPCardViews", enableBPPCardViews),
         FeatureFlag("enableTaxCreditShuttering", isTaxCreditFlagEnabled),
         FeatureFlag("enableUniversalPensionTaxCredit", isUniversalPensionScreenEnabled),
@@ -373,5 +373,10 @@ case class StartupServiceImpl[F[_]] @Inject() (
     currentTime.isAfter(LocalDateTime.parse(bannerStartTime)) && currentTime.isBefore(
       LocalDateTime.parse(bannerEndTime)
     )
+  }
+
+  private def isEnableTaxCreditEndBannerEnabled: Boolean = {
+    val currentTime = LocalDateTime.now()
+    currentTime.isBefore(LocalDateTime.parse(endTime))
   }
 }
