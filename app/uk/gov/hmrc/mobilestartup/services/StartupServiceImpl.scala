@@ -355,7 +355,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
   }
 
   private def isHTSBannerEnabled: Boolean = {
-    val currentTime = LocalDateTime.of(2025, 5, 4, 0, 0)
+    val currentTime = LocalDateTime.now()
     currentTime.isAfter(LocalDateTime.parse(bannerStartTime)) && currentTime.isBefore(
       LocalDateTime.parse(bannerEndTime)
     )
