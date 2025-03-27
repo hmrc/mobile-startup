@@ -122,7 +122,7 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("niAppleWalletUrl", "url.niAppleWalletUrl")
     bindConfigOptionalString("niGoogleWalletUrl", "url.niGoogleWalletUrl")
     bindConfigBoolean("feature.enableTaxCreditShuttering")
-    bindConfigBoolean("feature.enableUniversalPensionTaxCredit")
+    bindConfigBoolean("feature.enableUniversalPensionTaxCreditBanner")
     bindConfigBoolean("feature.enableHtsBanner")
     bindConfigString("startTime", "taxCreditShutterTimings.startTime")
     bindConfigString("endTime", "taxCreditShutterTimings.endTime")
