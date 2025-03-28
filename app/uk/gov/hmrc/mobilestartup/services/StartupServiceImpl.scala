@@ -138,7 +138,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
   enableTaxCreditShuttering:                 Boolean,
   startTime:                                 String,
   endTime:                                   String,
-  enableUniversalPensionTaxCredit:           Boolean,
+  enableUniversalPensionTaxCreditBanner:     Boolean,
   bannerStartTime:                           String,
   bannerEndTime:                             String,
   enableHtsBanner:                           Boolean
@@ -183,7 +183,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("enableTaxCreditEndBanner", isEnableTaxCreditEndBannerEnabled),
         FeatureFlag("enableBPPCardViews", enableBPPCardViews),
         FeatureFlag("enableTaxCreditShuttering", isTaxCreditFlagEnabled),
-        FeatureFlag("enableUniversalPensionTaxCredit", isUniversalPensionScreenEnabled),
+        FeatureFlag("enableUniversalPensionTaxCreditBanner", isUniversalPensionScreenEnabled),
         FeatureFlag("enableHtsBanner", isHTSBannerEnabled)
       )
     )

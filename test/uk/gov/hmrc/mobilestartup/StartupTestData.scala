@@ -234,7 +234,7 @@ trait StartupTestData extends TestF {
       enableTaxCreditShuttering                 = false,
       startTime                                 = "2025-04-05T23:59",
       endTime                                   = "2025-04-07T10:00",
-      enableUniversalPensionTaxCredit           = false,
+      enableUniversalPensionTaxCreditBanner     = false,
       bannerStartTime                           = "2025-04-05T23:59",
       bannerEndTime                             = "2025-05-04T00:00",
       enableHtsBanner                           = false
@@ -260,7 +260,7 @@ trait StartupTestData extends TestF {
     FeatureFlag("enableTaxCreditEndBanner", enabled                = true),
     FeatureFlag("enableBPPCardViews", enabled                      = false),
     FeatureFlag("enableTaxCreditShuttering", enabled               = false),
-    FeatureFlag("enableUniversalPensionTaxCredit", enabled         = false),
+    FeatureFlag("enableUniversalPensionTaxCreditBanner", enabled   = false),
     FeatureFlag("enableHtsBanner", enabled                         = false)
   )
 
