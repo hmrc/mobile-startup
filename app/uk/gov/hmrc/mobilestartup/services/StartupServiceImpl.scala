@@ -180,11 +180,11 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("useNudgeComm", useNudgeComm),
         FeatureFlag("enableChangeOfBankPegaURL", enableChangeOfBankPegaURL),
         FeatureFlag("enableProofOfEntitlementPegaURL", enableProofOfEntitlementPegaURL),
-        FeatureFlag("enableTaxCreditEndBanner", isEnableTaxCreditEndBannerEnabled),
+        FeatureFlag("enableTaxCreditEndBanner", enableTaxCreditEndBanner),
         FeatureFlag("enableBPPCardViews", enableBPPCardViews),
-        FeatureFlag("enableTaxCreditShuttering", isTaxCreditFlagEnabled),
-        FeatureFlag("enableUniversalPensionTaxCreditBanner", isUniversalPensionScreenEnabled),
-        FeatureFlag("enableHtsBanner", isHTSBannerEnabled)
+        FeatureFlag("enableTaxCreditShuttering", enableTaxCreditShuttering),
+        FeatureFlag("enableUniversalPensionTaxCreditBanner", enableUniversalPensionTaxCreditBanner),
+        FeatureFlag("enableHtsBanner", enableHtsBanner)
       )
     )
 
