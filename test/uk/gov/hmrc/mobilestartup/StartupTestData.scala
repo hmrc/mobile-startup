@@ -232,11 +232,9 @@ trait StartupTestData extends TestF {
       enableTaxCreditEndBanner                  = true,
       enableBPPCardViews                        = false,
       enableTaxCreditShuttering                 = false,
-      startTime                                 = "2025-04-05T23:59",
-      endTime                                   = "2025-04-07T10:00",
       enableUniversalPensionTaxCreditBanner     = false,
       bannerStartTime                           = "2025-04-05T23:59",
-      bannerEndTime                             = "2025-05-04T00:00",
+      bannerEndTime                             = "2025-04-07T00:00",
       enableHtsBanner                           = false
     )
 
