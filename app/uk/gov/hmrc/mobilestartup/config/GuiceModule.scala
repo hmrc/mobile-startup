@@ -124,8 +124,6 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.enableTaxCreditShuttering")
     bindConfigBoolean("feature.enableUniversalPensionTaxCreditBanner")
     bindConfigBoolean("feature.enableHtsBanner")
-    bindConfigString("startTime", "taxCreditShutterTimings.startTime")
-    bindConfigString("endTime", "taxCreditShutterTimings.endTime")
     bindConfigString("bannerStartTime", "htsBannerDisplayTimings.startTime")
     bindConfigString("bannerEndTime", "htsBannerDisplayTimings.endTime")
     bind(classOf[String])

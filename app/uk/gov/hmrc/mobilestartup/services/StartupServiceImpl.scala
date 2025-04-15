@@ -30,7 +30,7 @@ import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
 import play.api.http.Status.LOCKED
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, ZoneId}
 import scala.util.control.NonFatal
 
 case class FeatureFlag(
@@ -136,8 +136,6 @@ case class StartupServiceImpl[F[_]] @Inject() (
   enableTaxCreditEndBanner:                  Boolean,
   enableBPPCardViews:                        Boolean,
   enableTaxCreditShuttering:                 Boolean,
-  startTime:                                 String,
-  endTime:                                   String,
   enableUniversalPensionTaxCreditBanner:     Boolean,
   bannerStartTime:                           String,
   bannerEndTime:                             String,
@@ -184,7 +182,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("enableBPPCardViews", enableBPPCardViews),
         FeatureFlag("enableTaxCreditShuttering", enableTaxCreditShuttering),
         FeatureFlag("enableUniversalPensionTaxCreditBanner", enableUniversalPensionTaxCreditBanner),
-        FeatureFlag("enableHtsBanner", enableHtsBanner)
+        FeatureFlag("enableHtsBanner", isHTSBannerEnabled)
       )
     )
 
@@ -344,25 +342,11 @@ case class StartupServiceImpl[F[_]] @Inject() (
       "childBenefit" -> obj("shuttering" -> childBenefitShutteredStatus)
     )
 
-  private def isTaxCreditFlagEnabled: Boolean = {
-    val currentTime = LocalDateTime.now()
-    currentTime.isAfter(LocalDateTime.parse(startTime)) && currentTime.isBefore(LocalDateTime.parse(endTime))
-  }
-
-  private def isUniversalPensionScreenEnabled: Boolean = {
-    val currentTime = LocalDateTime.now()
-    currentTime.isAfter(LocalDateTime.parse(endTime))
-  }
-
   private def isHTSBannerEnabled: Boolean = {
-    val currentTime = LocalDateTime.now()
+    val currentTime = LocalDateTime.now(ZoneId.of("Europe/London"))
     currentTime.isAfter(LocalDateTime.parse(bannerStartTime)) && currentTime.isBefore(
       LocalDateTime.parse(bannerEndTime)
     )
   }
 
-  private def isEnableTaxCreditEndBannerEnabled: Boolean = {
-    val currentTime = LocalDateTime.now()
-    currentTime.isBefore(LocalDateTime.parse(endTime))
-  }
 }
