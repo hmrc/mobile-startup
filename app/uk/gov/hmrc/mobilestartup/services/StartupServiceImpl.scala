@@ -182,7 +182,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("enableBPPCardViews", enableBPPCardViews),
         FeatureFlag("enableTaxCreditShuttering", enableTaxCreditShuttering),
         FeatureFlag("enableUniversalPensionTaxCreditBanner", enableUniversalPensionTaxCreditBanner),
-        FeatureFlag("enableHtsBanner", isHTSBannerEnabled)
+        FeatureFlag("enableHtsBanner", enableHtsBanner)
       )
     )
 
@@ -341,12 +341,5 @@ case class StartupServiceImpl[F[_]] @Inject() (
     obj(
       "childBenefit" -> obj("shuttering" -> childBenefitShutteredStatus)
     )
-
-  private def isHTSBannerEnabled: Boolean = {
-    val currentTime = LocalDateTime.now(ZoneId.of("Europe/London"))
-    currentTime.isAfter(LocalDateTime.parse(bannerStartTime)) && currentTime.isBefore(
-      LocalDateTime.parse(bannerEndTime)
-    )
-  }
 
 }
