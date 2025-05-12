@@ -139,7 +139,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
   enableUniversalPensionTaxCreditBanner:     Boolean,
   bannerStartTime:                           String,
   bannerEndTime:                             String,
-  enableHtsBanner:                           Boolean
+  enableHtsBanner:                           Boolean,
+  devEnableChildBenefitMVP:                  Boolean
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -182,7 +183,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("enableBPPCardViews", enableBPPCardViews),
         FeatureFlag("enableTaxCreditShuttering", enableTaxCreditShuttering),
         FeatureFlag("enableUniversalPensionTaxCreditBanner", enableUniversalPensionTaxCreditBanner),
-        FeatureFlag("enableHtsBanner", enableHtsBanner)
+        FeatureFlag("enableHtsBanner", enableHtsBanner),
+        FeatureFlag("devEnableChildBenefitMVP", devEnableChildBenefitMVP)
       )
     )
 

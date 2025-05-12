@@ -107,7 +107,8 @@ class LiveStartupService @Inject() (
   @Named("feature.enableUniversalPensionTaxCreditBanner") enableUniversalPensionTaxCreditBanner:     Boolean,
   @Named("bannerStartTime") bannerStartTime:                                                         String,
   @Named("bannerEndTime") bannerEndTime:                                                             String,
-  @Named("feature.enableHtsBanner") enableHtsBanner:                                                 Boolean
+  @Named("feature.enableHtsBanner") enableHtsBanner:                                                 Boolean,
+  @Named("feature.devEnableChildBenefitMVP") devEnableChildBenefitMVP:                                Boolean
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -193,4 +194,5 @@ class LiveStartupService @Inject() (
                                        enableUniversalPensionTaxCreditBanner,
                                        bannerStartTime,
                                        bannerEndTime,
-                                       enableHtsBanner)
+                                       enableHtsBanner,
+                                       devEnableChildBenefitMVP)
