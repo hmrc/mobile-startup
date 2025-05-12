@@ -235,7 +235,8 @@ trait StartupTestData extends TestF {
       enableUniversalPensionTaxCreditBanner     = false,
       bannerStartTime                           = "2025-04-05T23:59",
       bannerEndTime                             = "2025-04-07T00:00",
-      enableHtsBanner                           = false
+      enableHtsBanner                           = false,
+      devEnableChildBenefitMVP                  = false
     )
 
   val expectedFeatureFlags = List(
@@ -259,7 +260,8 @@ trait StartupTestData extends TestF {
     FeatureFlag("enableBPPCardViews", enabled                      = false),
     FeatureFlag("enableTaxCreditShuttering", enabled               = false),
     FeatureFlag("enableUniversalPensionTaxCreditBanner", enabled   = false),
-    FeatureFlag("enableHtsBanner", enabled                         = false)
+    FeatureFlag("enableHtsBanner", enabled                         = false),
+    FeatureFlag("devEnableChildBenefitMVP", enabled                = false)
   )
 
   val expectedURLs = List(
