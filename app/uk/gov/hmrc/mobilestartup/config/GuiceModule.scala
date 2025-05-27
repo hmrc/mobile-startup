@@ -126,7 +126,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.enableHtsBanner")
     bindConfigString("bannerStartTime", "htsBannerDisplayTimings.startTime")
     bindConfigString("bannerEndTime", "htsBannerDisplayTimings.endTime")
-    bindConfigBoolean("feature.devEnableChildBenefitMVP")
+    bindConfigBoolean("feature.enableChildBenefitMVP")
     bind(classOf[String])
       .annotatedWith(named("mobile-shuttering"))
       .toInstance(servicesConfig.baseUrl("mobile-shuttering"))
