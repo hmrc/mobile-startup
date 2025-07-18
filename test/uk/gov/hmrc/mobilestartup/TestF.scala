@@ -26,19 +26,37 @@ import scala.util.{Failure, Try}
   * parameter. All tests can just use `TestF` to construct the services, and `F` to generate values (e.g.
   * `F.pure(a)` or `F.raiseError(t)`
   */
-import cats.MonadError
-import scala.util.{Try, Failure}
+import cats._
+import scala.util.{Failure, Success, Try}
 
-trait TestF {
+object TestFInstances {
   type TestF[A] = Try[A]
 
-  implicit val F: MonadError[TestF, Throwable] = MonadError[TestF, Throwable]
+  implicit val F: MonadError[TestF, Throwable] =
+    new MonadError[TestF, Throwable] {
+      def pure[A](x: A): Try[A] = Success(x)
 
-  implicit class ErrorSyntax(t: Throwable) {
+      def flatMap[A, B](fa: Try[A])(f: A => Try[B]): Try[B] =
+        fa.flatMap(f)
+
+      def tailRecM[A, B](a: A)(f: A => Try[Either[A, B]]): Try[B] =
+        f(a) match {
+          case Success(Right(b))    => Success(b)
+          case Success(Left(nextA)) => tailRecM(nextA)(f)
+          case Failure(e)           => util.Failure(e)
+        }
+
+      def raiseError[A](e: Throwable): Try[A] = Failure(e)
+
+      def handleErrorWith[A](fa: Try[A])(f: Throwable => Try[A]): Try[A] =
+        fa.recoverWith { case t => f(t) }
+    }
+
+  implicit class ThrowableOps(t: Throwable) {
     def error[A]: Try[A] = Failure(t)
   }
 
-  implicit class ValueSyntax[A](v: Try[A]) {
+  implicit class TryOps[A](v: Try[A]) {
     def unsafeGet: A = v.get
   }
 }

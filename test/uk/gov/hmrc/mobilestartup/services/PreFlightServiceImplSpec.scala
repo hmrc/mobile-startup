@@ -15,15 +15,16 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import cats.implicits.*
+import cats.implicits
 import uk.gov.hmrc.auth.core.retrieve.Credentials
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData}
+import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData, TestFInstances}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
-import eu.timepit.refined.auto.*
+import eu.timepit.refined.auto
+import uk.gov.hmrc.mobilestartup.TestFInstances._
 import uk.gov.hmrc.mobilestartup.model.Activated
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.fromStringtoLinkDestination
 
@@ -56,7 +57,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
        Enrolments,
        Option[String])
     ] =
-      (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, credId).pure[TestF]
+      F.pure(nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, credId)
 
     override def auditing[T](
       service:     String,
@@ -76,7 +77,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
       foundNino:   Option[Nino],
       enrolments:  Enrolments
     )(implicit hc: HeaderCarrier
-    ): TestF[Option[Utr]] = Some(Utr(foundUtr, Activated)).pure[TestF]
+    ): TestF[Option[Utr]] = F.pure(Some(Utr(foundUtr, Activated)))
   }
 
   "preFlight" should {
