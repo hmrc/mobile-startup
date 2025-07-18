@@ -26,6 +26,9 @@ import scala.util.{Failure, Try}
   * parameter. All tests can just use `TestF` to construct the services, and `F` to generate values (e.g.
   * `F.pure(a)` or `F.raiseError(t)`
   */
+import cats.MonadError
+import scala.util.{Try, Failure}
+
 trait TestF {
   type TestF[A] = Try[A]
 

@@ -21,7 +21,7 @@ import uk.gov.hmrc.auth.core.Enrolments
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.model.{EnrolmentStatus, NoUtr}
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.{JourneyId, LinkDestination}
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.LinkDestination
 import uk.gov.hmrc.mobilestartup.model.types._
 
 import scala.concurrent.ExecutionContext

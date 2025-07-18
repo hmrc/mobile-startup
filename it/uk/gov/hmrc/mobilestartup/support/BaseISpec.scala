@@ -26,7 +26,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import eu.timepit.refined.auto._
 
 import scala.concurrent.Future
@@ -54,7 +54,7 @@ class BaseISpec
 
   val nino:      Nino      = Nino("AA000006C")
   val saUtr:     SaUtr     = SaUtr("123456789")
-  val journeyId: JourneyId = "27085215-69a4-4027-8f72-b04b10ec16b0"
+  val journeyId: JourneyId = JourneyId.from("27085215-69a4-4027-8f72-b04b10ec16b0").toOption.get
   val url:       String    = s"/preflight-check?journeyId=$journeyId"
 
   def getRequestWithAcceptHeader(url: String): Future[WSResponse] =

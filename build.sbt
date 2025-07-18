@@ -8,14 +8,15 @@ lazy val microservice = Project(appName, file("."))
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.13.12",
+    scalaVersion := "3.6.4",
     playDefaultPort := 8251,
     libraryDependencies ++= AppDependencies()
   )
   .settings(
     routesImport ++= Seq(
       "uk.gov.hmrc.mobilestartup.model.types._",
-      "uk.gov.hmrc.mobilestartup.model.types.ModelTypes._"
+      "uk.gov.hmrc.mobilestartup.model.types.ModelTypes._",
+      "uk.gov.hmrc.mobilestartup.model.types.JourneyId._"
     )
   )
   .configs(IntegrationTest)

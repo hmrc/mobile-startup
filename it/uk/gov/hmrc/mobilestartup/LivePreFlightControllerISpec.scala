@@ -24,6 +24,8 @@ import uk.gov.hmrc.mobilestartup.stubs.AuditStub._
 import uk.gov.hmrc.mobilestartup.stubs.CitizenDetailsStub._
 import uk.gov.hmrc.mobilestartup.stubs.EnrolmentStoreStub._
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.ws.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 
 import scala.concurrent.Future
 

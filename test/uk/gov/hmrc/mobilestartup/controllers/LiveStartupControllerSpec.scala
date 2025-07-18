@@ -29,7 +29,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.BaseSpec
 import uk.gov.hmrc.mobilestartup.connectors.ShutteringConnector
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.mobilestartup.services.StartupService
 
 import scala.concurrent.ExecutionContext.Implicits.global

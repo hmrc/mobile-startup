@@ -24,8 +24,9 @@ import uk.gov.hmrc.mobilestartup.support.BaseISpec
 import uk.gov.hmrc.mobilestartup.stubs.AuthStub._
 import uk.gov.hmrc.mobilestartup.stubs.AuditStub._
 import uk.gov.hmrc.mobilestartup.stubs.ShutteringStub._
-
+import play.api.libs.ws.writeableOf_String
 import scala.concurrent.Future
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 class LiveStartupControllerISpec extends BaseISpec {
   override val url: String = s"/startup?journeyId=$journeyId"

@@ -21,14 +21,12 @@ import eu.timepit.refined.string.MatchesRegex
 import eu.timepit.refined._
 
 object ModelTypes {
-
-  type JourneyId       = String Refined ValidJourneyId
+  
   type LinkDestination = String Refined ValidLinkDestination
 
-  private type ValidJourneyId =
-    MatchesRegex[W.`"""[A-Fa-f0-9]{8}\\-[A-Fa-f0-9]{4}\\-[A-Fa-f0-9]{4}\\-[A-Fa-f0-9]{4}\\-[A-Fa-f0-9]{12}"""`.T]
-
   private type ValidLinkDestination =
-    MatchesRegex[W.`"(PAYE)|(SA)"`.T]
+    MatchesRegex["(PAYE)|(SA)"]
+  
+  def fromStringtoLinkDestination(s: String): LinkDestination = refineV[ValidLinkDestination](s).toOption.get  
 
 }

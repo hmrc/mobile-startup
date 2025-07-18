@@ -27,6 +27,7 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
 import play.api.http.Status.{NOT_FOUND, NO_CONTENT}
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import scala.concurrent.{ExecutionContext, Future}
 

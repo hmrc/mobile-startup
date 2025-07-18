@@ -20,7 +20,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, BodyParser, ControllerComponents}
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.mobilestartup.services.PreFlightService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendBaseController
 

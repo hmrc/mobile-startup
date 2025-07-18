@@ -20,7 +20,7 @@ import javax.inject.Inject
 import play.api.mvc.{Action, AnyContent, BodyParser, ControllerComponents}
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.api.sandbox.FileResource
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}

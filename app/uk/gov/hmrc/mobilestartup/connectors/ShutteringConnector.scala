@@ -19,11 +19,11 @@ package uk.gov.hmrc.mobilestartup.connectors
 import com.google.inject.name.Named
 import com.google.inject.{Inject, Singleton}
 import play.api.Logger
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 
 import scala.concurrent.{ExecutionContext, Future}
 

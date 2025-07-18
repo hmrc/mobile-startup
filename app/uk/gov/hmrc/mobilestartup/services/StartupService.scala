@@ -18,7 +18,7 @@ package uk.gov.hmrc.mobilestartup.services
 import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.model.shuttering.StartupShuttering
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 
 trait StartupService[F[_]] {
 

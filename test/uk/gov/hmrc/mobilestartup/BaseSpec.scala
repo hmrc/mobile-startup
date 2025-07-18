@@ -20,7 +20,7 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.OptionValues
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import eu.timepit.refined.auto._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -34,7 +34,7 @@ trait BaseSpec
     with DefaultAwaitTimeout
     with OptionValues {
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
-  val journeyId:        JourneyId     = "7f1b5289-5f4d-4150-93a3-ff02dda28375"
+  val journeyId:        JourneyId     = JourneyId.from("7f1b5289-5f4d-4150-93a3-ff02dda28375").toOption.get
 
   val allShutteringDisabled: StartupShuttering =
     StartupShuttering(Shuttering.shutteringDisabled, Shuttering.shutteringDisabled)

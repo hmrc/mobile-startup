@@ -16,15 +16,16 @@
 
 package uk.gov.hmrc.mobilestartup.services
 import cats.MonadError
-import cats.implicits._
+import cats.implicits.*
 import play.api.Logger
 import uk.gov.hmrc.auth.core.retrieve.Credentials
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
-import eu.timepit.refined.auto._
+import uk.gov.hmrc.mobilestartup.model.types.JourneyId
+import eu.timepit.refined.auto.*
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.fromStringtoLinkDestination
 import uk.gov.hmrc.mobilestartup.model.{Activated, RetrieveAccountsResponse}
 
 import scala.concurrent.ExecutionContext
@@ -105,7 +106,7 @@ abstract class PreFlightServiceImpl[F[_]](
         PreFlightCheckResponse(
           Some(Nino("CS700100A")),
           routeToIV = false,
-          Some(AnnualTaxSummaryLink("/", "PAYE")),
+          Some(AnnualTaxSummaryLink("/", fromStringtoLinkDestination("PAYE"))),
           Some(Utr(saUtr = Some(SaUtr("1234567890")), status = Activated)),
           Enrolments(Set.empty),
           demoAccount = true

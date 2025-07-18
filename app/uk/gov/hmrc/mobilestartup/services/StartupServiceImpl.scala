@@ -26,7 +26,7 @@ import play.api.libs.json._
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, UpstreamErrorResponse}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.PersonDetails
-import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.JourneyId
+import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import play.api.http.Status.LOCKED
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 
