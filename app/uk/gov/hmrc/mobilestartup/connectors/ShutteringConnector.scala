@@ -51,7 +51,7 @@ class ShutteringConnector @Inject() (
     ex:                     ExecutionContext
   ): Future[Shuttering] =
     http
-      .get(url"$serviceUrl/mobile-shuttering/service/$service/shuttered-status?journeyId=$journeyId")
+      .get(url"$serviceUrl/mobile-shuttering/service/$service/shuttered-status?journeyId=${journeyId.value}")
       .execute[Shuttering]
       .recover {
         case e =>
