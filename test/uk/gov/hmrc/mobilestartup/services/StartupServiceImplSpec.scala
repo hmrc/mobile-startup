@@ -15,9 +15,10 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import play.api.libs.json.Json._
+import play.api.libs.json.Json.*
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.mobilestartup.TestFInstances._
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData}
 
@@ -26,7 +27,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
   "a fully successful response" should {
     "contain success entries for each service" in {
 
-      val result: JsObject = startupService.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
+      val result: JsObject = startupService.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).get
       (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
       (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
       (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
@@ -39,7 +40,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
 
   "a response" should {
     "not contain an entry for help-to-save when the hts call fails" in {
-      val sut = startupService.copy(connector = dummyConnector(htsResponse = new Exception("hts failed").error))
+      val sut = startupService.copy(connector = dummyConnector(htsResponse = F.raiseError(new Exception("hts failed"))))
       val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption                              shouldBe None

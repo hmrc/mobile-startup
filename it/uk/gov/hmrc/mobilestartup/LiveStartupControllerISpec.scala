@@ -24,11 +24,12 @@ import uk.gov.hmrc.mobilestartup.support.BaseISpec
 import uk.gov.hmrc.mobilestartup.stubs.AuthStub._
 import uk.gov.hmrc.mobilestartup.stubs.AuditStub._
 import uk.gov.hmrc.mobilestartup.stubs.ShutteringStub._
-
+import play.api.libs.ws.writeableOf_String
 import scala.concurrent.Future
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 class LiveStartupControllerISpec extends BaseISpec {
-  override val url: String = s"/startup?journeyId=$journeyId"
+  override val url: String = s"/startup?journeyId=${journeyId.value}"
 
   def getRequestWithAuthHeaders(url: String): Future[WSResponse] =
     wsUrl(url).addHttpHeaders(acceptJsonHeader, authorizationJsonHeader).get()
@@ -44,7 +45,7 @@ class LiveStartupControllerISpec extends BaseISpec {
 
   def stubRenewalsResponse(): StubMapping =
     stubFor(
-      get(urlEqualTo(s"/income/tax-credits/submission/state/enabled?journeyId=$journeyId"))
+      get(urlEqualTo(s"/income/tax-credits/submission/state/enabled?journeyId=${journeyId.value}"))
         .willReturn(
           aResponse()
             .withStatus(200)

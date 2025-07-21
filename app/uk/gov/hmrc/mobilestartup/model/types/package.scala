@@ -30,7 +30,7 @@ package object types {
     Reads[T Refined P] { json =>
       reads
         .reads(json)
-        .flatMap { t: T =>
+        .flatMap { (t: T) =>
           refineV[P](t) match {
             case Left(error)  => JsError(error)
             case Right(value) => JsSuccess(value)

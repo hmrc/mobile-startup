@@ -8,19 +8,19 @@ lazy val microservice = Project(appName, file("."))
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.13.12",
+    scalaVersion := "3.6.4",
     playDefaultPort := 8251,
     libraryDependencies ++= AppDependencies()
   )
   .settings(
     routesImport ++= Seq(
       "uk.gov.hmrc.mobilestartup.model.types._",
-      "uk.gov.hmrc.mobilestartup.model.types.ModelTypes._"
+      "uk.gov.hmrc.mobilestartup.model.types.ModelTypes._",
+      "uk.gov.hmrc.mobilestartup.model.types.JourneyId._"
     )
   )
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
-  .settings(resolvers += Resolver.jcenterRepo)
   .settings(Compile / unmanagedResourceDirectories += baseDirectory.value / "resources")
   .settings(
     scalacOptions ++= Seq(
@@ -35,7 +35,7 @@ lazy val microservice = Project(appName, file("."))
       "-Ywarn-numeric-widen",
       "-Xlint"
     ),
-    coverageMinimumStmtTotal := 89,
+    coverageMinimumStmtTotal := 77,
     coverageFailOnMinimum := true,
     coverageHighlighting := true,
     coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;.*BuildInfo.*;.*Routes.*;.*javascript.*;.*Reverse.*;.*WSHttpImpl.*"

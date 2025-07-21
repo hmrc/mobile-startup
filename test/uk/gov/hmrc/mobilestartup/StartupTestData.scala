@@ -24,8 +24,9 @@ import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
 import uk.gov.hmrc.mobilestartup.services.{FeatureFlag, StartupServiceImpl, URL}
+import TestFInstances._
 
-trait StartupTestData extends TestF {
+trait StartupTestData {
 
   val helpToSave         = "helpToSave"
   val taxCreditsRenewals = "taxCreditRenewals"

@@ -15,12 +15,12 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import eu.timepit.refined.auto._
+import eu.timepit.refined.auto.*
 import play.api.Logger
 
 import javax.inject.{Inject, Named}
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.*
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, ~}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
@@ -29,6 +29,7 @@ import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.{Activated, CidPerson, EnrolmentStoreResponse, NoEnrolment, NotYetActivated, WrongAccount}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND}
+import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.fromStringtoLinkDestination
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -170,8 +171,8 @@ class LivePreFlightService @Inject() (
 
   private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] =
     if (showATSLink) {
-      if (getActivatedSaUtr(enrolments).isDefined) Some(AnnualTaxSummaryLink("/annual-tax-summary", "SA"))
-      else Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", "PAYE"))
+      if (getActivatedSaUtr(enrolments).isDefined) Some(AnnualTaxSummaryLink("/annual-tax-summary", fromStringtoLinkDestination("SA")))
+      else Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", fromStringtoLinkDestination("PAYE")))
     } else None
 
   private def getActivatedSaUtr(enrolments: Enrolments): Option[SaUtr] =
