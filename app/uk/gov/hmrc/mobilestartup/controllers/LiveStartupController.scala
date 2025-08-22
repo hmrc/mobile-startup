@@ -17,9 +17,9 @@
 package uk.gov.hmrc.mobilestartup.controllers
 
 import javax.inject.{Inject, Named, Singleton}
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.auth.core.ConfidenceLevel.L200
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
 import uk.gov.hmrc.mobilestartup.connectors.ShutteringConnector

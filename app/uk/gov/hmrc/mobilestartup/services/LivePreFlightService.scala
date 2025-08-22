@@ -171,7 +171,8 @@ class LivePreFlightService @Inject() (
 
   private def getATSLink(enrolments: Enrolments): Option[AnnualTaxSummaryLink] =
     if (showATSLink) {
-      if (getActivatedSaUtr(enrolments).isDefined) Some(AnnualTaxSummaryLink("/annual-tax-summary", fromStringtoLinkDestination("SA")))
+      if (getActivatedSaUtr(enrolments).isDefined)
+        Some(AnnualTaxSummaryLink("/annual-tax-summary", fromStringtoLinkDestination("SA")))
       else Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", fromStringtoLinkDestination("PAYE")))
     } else None
 
