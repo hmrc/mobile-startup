@@ -138,26 +138,24 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 10 \ "enabled").as[Boolean]              shouldBe false
       (response.json \ "feature" \ 11 \ "name").as[String]                  shouldBe "findMyNinoAddToGoogleWallet"
       (response.json \ "feature" \ 11 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 12 \ "name").as[String]                  shouldBe "disableOldTaxCalculator"
+      (response.json \ "feature" \ 12 \ "name").as[String]                  shouldBe "useNudgeComm"
       (response.json \ "feature" \ 12 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 13 \ "name").as[String]                  shouldBe "useNudgeComm"
-      (response.json \ "feature" \ 13 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "enableChangeOfBankPegaURL"
+      (response.json \ "feature" \ 13 \ "name").as[String]                  shouldBe "enableChangeOfBankPegaURL"
+      (response.json \ "feature" \ 13 \ "enabled").as[Boolean]              shouldBe false
+      (response.json \ "feature" \ 14 \ "name").as[String]                  shouldBe "enableProofOfEntitlementPegaURL"
       (response.json \ "feature" \ 14 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 15 \ "name").as[String]                  shouldBe "enableProofOfEntitlementPegaURL"
-      (response.json \ "feature" \ 15 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 16 \ "name").as[String]                  shouldBe "enableTaxCreditEndBanner"
-      (response.json \ "feature" \ 16 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 17 \ "name").as[String]                  shouldBe "enableBPPCardViews"
-      (response.json \ "feature" \ 17 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 18 \ "name").as[String]                  shouldBe "enableTaxCreditShuttering"
-      (response.json \ "feature" \ 18 \ "enabled").as[Boolean]              shouldBe true
-      (response.json \ "feature" \ 19 \ "name").as[String]                  shouldBe "enableUniversalPensionTaxCreditBanner"
+      (response.json \ "feature" \ 15 \ "name").as[String]                  shouldBe "enableTaxCreditEndBanner"
+      (response.json \ "feature" \ 15 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 16 \ "name").as[String]                  shouldBe "enableBPPCardViews"
+      (response.json \ "feature" \ 16 \ "enabled").as[Boolean]              shouldBe false
+      (response.json \ "feature" \ 17 \ "name").as[String]                  shouldBe "enableTaxCreditShuttering"
+      (response.json \ "feature" \ 17 \ "enabled").as[Boolean]              shouldBe true
+      (response.json \ "feature" \ 18 \ "name").as[String]                  shouldBe "enableUniversalPensionTaxCreditBanner"
+      (response.json \ "feature" \ 18 \ "enabled").as[Boolean]              shouldBe false
+      (response.json \ "feature" \ 19 \ "name").as[String]                  shouldBe "enableHtsBanner"
       (response.json \ "feature" \ 19 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 20 \ "name").as[String]                  shouldBe "enableHtsBanner"
+      (response.json \ "feature" \ 20 \ "name").as[String]                  shouldBe "enableChildBenefitMVP"
       (response.json \ "feature" \ 20 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 21 \ "name").as[String]                  shouldBe "enableChildBenefitMVP"
-      (response.json \ "feature" \ 21 \ "enabled").as[Boolean]              shouldBe false
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
       (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"

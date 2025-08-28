@@ -47,7 +47,6 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.customerSatisfactionSurveys")
     bindConfigBoolean("feature.findMyNinoAddToWallet")
     bindConfigBoolean("feature.findMyNinoAddToGoogleWallet")
-    bindConfigBoolean("feature.disableOldTaxCalculator")
     bindConfigBoolean("feature.useNudgeComm")
     bindConfigBoolean("feature.enableChangeOfBankPegaURL")
     bindConfigBoolean("feature.enableProofOfEntitlementPegaURL")
