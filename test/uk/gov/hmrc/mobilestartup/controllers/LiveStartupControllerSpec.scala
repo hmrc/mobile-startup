@@ -51,7 +51,7 @@ class LiveStartupControllerSpec extends BaseSpec {
 
   implicit val mockShutteringConnector: ShutteringConnector = mock[ShutteringConnector]
 
-  private def authConnector(stubbedRetrievalResult: Future[_]): AuthConnector = new AuthConnector {
+  private def authConnector(stubbedRetrievalResult: Future[?]): AuthConnector = new AuthConnector {
 
     def authorise[A](
       predicate:   Predicate,

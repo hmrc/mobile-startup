@@ -24,7 +24,6 @@ import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
-import eu.timepit.refined.auto.*
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.fromStringtoLinkDestination
 import uk.gov.hmrc.mobilestartup.model.{Activated, RetrieveAccountsResponse}
 

@@ -17,8 +17,6 @@
 package uk.gov.hmrc.mobilestartup.connectors
 
 import com.google.inject.Singleton
-import eu.timepit.refined.util.string.url
-
 import javax.inject.Inject
 import play.api.Configuration
 import play.api.libs.json.JsValue
@@ -74,7 +72,7 @@ class GenericConnectorImpl @Inject() (
 
   def port(serviceName: String): Int = getConfigProperty(serviceName, "port").toInt
 
-  def http: HttpClientV2 with HttpClientV2 = wSHttp
+  def http: HttpClientV2 & HttpClientV2 = wSHttp
 
   def doGet(
     serviceName: String,
