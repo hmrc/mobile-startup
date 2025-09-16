@@ -30,7 +30,6 @@ import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import play.api.http.Status.LOCKED
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 
-import java.time.{LocalDateTime, ZoneId}
 import scala.util.control.NonFatal
 
 case class FeatureFlag(

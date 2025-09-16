@@ -17,7 +17,6 @@
 package uk.gov.hmrc.mobilestartup
 
 import cats.MonadError
-import cats.instances.try_._
 
 import scala.util.{Failure, Try}
 
@@ -27,7 +26,7 @@ import scala.util.{Failure, Try}
   * `F.pure(a)` or `F.raiseError(t)`
   */
 import cats._
-import scala.util.{Failure, Success, Try}
+import scala.util.*
 
 object TestFInstances {
   type TestF[A] = Try[A]

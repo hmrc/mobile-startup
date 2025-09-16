@@ -15,7 +15,7 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import cats.implicits
+
 import uk.gov.hmrc.auth.core.retrieve.Credentials
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
@@ -23,7 +23,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData, TestFInstances}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
-import eu.timepit.refined.auto
 import uk.gov.hmrc.mobilestartup.TestFInstances._
 import uk.gov.hmrc.mobilestartup.model.Activated
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.fromStringtoLinkDestination

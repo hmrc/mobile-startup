@@ -36,8 +36,8 @@ object TaxIdsFormat {
   private val ninoSerialiser         = SerialisableTaxId("nino", ninoBuilder)
   private val saUtrSerialiser        = defaultSerialisableIds.filter(id => Set("sautr").contains(id.taxIdName))
   private val saUtrAndNinoSerialiser = saUtrSerialiser :+ ninoSerialiser
-  val formattableTaxIds:           Format[TaxIds] = format(saUtrAndNinoSerialiser: _*)
-  val formattableTaxIdsWithNoNino: Format[TaxIds] = format(saUtrSerialiser:        _*)
+  val formattableTaxIds:           Format[TaxIds] = format(saUtrAndNinoSerialiser *)
+  val formattableTaxIdsWithNoNino: Format[TaxIds] = format(saUtrSerialiser *)
 }
 
 case class InvalidNinoException(value: String) extends Exception(s"Invalid NINO value: $value")

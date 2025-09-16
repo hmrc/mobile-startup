@@ -27,7 +27,6 @@ import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
-import eu.timepit.refined.auto._
 
 import scala.concurrent.Future
 
