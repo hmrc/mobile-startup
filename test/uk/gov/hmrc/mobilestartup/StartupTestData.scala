@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.mobilestartup
 
-import cats.implicits._
+import cats.implicits.*
 import play.api.libs.json.{JsString, JsValue, Json}
 import play.api.libs.json.Json.obj
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
@@ -24,7 +24,7 @@ import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
 import uk.gov.hmrc.mobilestartup.services.{FeatureFlag, StartupServiceImpl, URL}
-import TestFInstances._
+import TestFInstances.*
 
 trait StartupTestData {
 
@@ -236,7 +236,8 @@ trait StartupTestData {
       bannerStartTime                           = "2025-04-05T23:59",
       bannerEndTime                             = "2025-04-07T00:00",
       enableHtsBanner                           = false,
-      enableChildBenefitMVP                     = false
+      enableChildBenefitMVP                     = false,
+      enableStudentLoanPlanTypeFive             = false
     )
 
   val expectedFeatureFlags = List(
@@ -260,7 +261,8 @@ trait StartupTestData {
     FeatureFlag("enableTaxCreditShuttering", enabled               = false),
     FeatureFlag("enableUniversalPensionTaxCreditBanner", enabled   = false),
     FeatureFlag("enableHtsBanner", enabled                         = false),
-    FeatureFlag("enableChildBenefitMVP", enabled                   = false)
+    FeatureFlag("enableChildBenefitMVP", enabled                   = false),
+    FeatureFlag("enableStudentLoanPlanTypeFive", enabled           = false)
   )
 
   val expectedURLs = List(
