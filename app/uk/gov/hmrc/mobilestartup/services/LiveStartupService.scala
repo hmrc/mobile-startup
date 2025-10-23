@@ -109,7 +109,8 @@ class LiveStartupService @Inject() (
   @Named("feature.enableHtsBanner") enableHtsBanner:                                                 Boolean,
   @Named("feature.enableChildBenefitMVP") enableChildBenefitMVP:                                     Boolean,
   @Named("feature.enableStudentLoanPlanTypeFive") enableStudentLoanPlanTypeFive:                     Boolean,
-  @Named("feature.enablePinSecurity") enablePinSecurity:                     Boolean
+  @Named("feature.enablePinSecurity") enablePinSecurity:                     Boolean,
+  @Named("feature.enableNewCreatePINScreenFlow") enableNewCreatePINScreenFlow:                     Boolean,
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -197,4 +198,5 @@ class LiveStartupService @Inject() (
                                        enableHtsBanner,
                                        enableChildBenefitMVP,
                                        enableStudentLoanPlanTypeFive,
-      enablePinSecurity)
+      enablePinSecurity,
+      enableNewCreatePINScreenFlow)

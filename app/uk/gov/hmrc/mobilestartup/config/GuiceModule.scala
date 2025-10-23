@@ -127,6 +127,7 @@ class GuiceModule @Inject() (
     bindConfigString("bannerEndTime", "htsBannerDisplayTimings.endTime")
     bindConfigBoolean("feature.enableChildBenefitMVP")
     bindConfigBoolean("feature.enableStudentLoanPlanTypeFive")
+    bindConfigBoolean("feature.enableNewCreatePINScreenFlow")
     bindConfigBoolean("feature.enablePinSecurity")
     bind(classOf[String])
       .annotatedWith(named("mobile-shuttering"))

@@ -238,7 +238,8 @@ trait StartupTestData {
       enableHtsBanner                           = false,
       enableChildBenefitMVP                     = false,
       enableStudentLoanPlanTypeFive             = false,
-      enablePinSecurity = false
+      enablePinSecurity                         = false,
+      enableNewCreatePINScreenFlow              = false
     )
 
   val expectedFeatureFlags = List(
@@ -264,7 +265,8 @@ trait StartupTestData {
     FeatureFlag("enableHtsBanner", enabled                         = false),
     FeatureFlag("enableChildBenefitMVP", enabled                   = false),
     FeatureFlag("enableStudentLoanPlanTypeFive", enabled           = false),
-    FeatureFlag("enablePinSecurity", enabled           = false)
+    FeatureFlag("enablePinSecurity", enabled                       = false),
+    FeatureFlag("enableNewCreatePINScreenFlow", enabled            = false)
   )
 
   val expectedURLs = List(
