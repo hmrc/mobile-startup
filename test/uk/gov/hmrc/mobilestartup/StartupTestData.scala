@@ -237,8 +237,7 @@ trait StartupTestData {
       bannerEndTime                             = "2025-04-07T00:00",
       enableHtsBanner                           = false,
       enableChildBenefitMVP                     = false,
-      enableStudentLoanPlanTypeFive             = false,
-      enablePinSecurity = false
+      enableStudentLoanPlanTypeFive             = false
     )
 
   val expectedFeatureFlags = List(
@@ -263,8 +262,7 @@ trait StartupTestData {
     FeatureFlag("enableUniversalPensionTaxCreditBanner", enabled   = false),
     FeatureFlag("enableHtsBanner", enabled                         = false),
     FeatureFlag("enableChildBenefitMVP", enabled                   = false),
-    FeatureFlag("enableStudentLoanPlanTypeFive", enabled           = false),
-    FeatureFlag("enablePinSecurity", enabled           = false)
+    FeatureFlag("enableStudentLoanPlanTypeFive", enabled           = false)
   )
 
   val expectedURLs = List(
