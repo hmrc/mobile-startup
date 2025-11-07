@@ -8,7 +8,7 @@ object AppDependencies {
   private val taxYearVersion       = "6.0.0"
   private val refinedVersion       = "0.11.3"
   private val catsCoreVersion      = "2.13.0"
-  private val scalaMockVersion     = "7.5.1"
+  private val scalaMockVersion     = "7.5.2"
   private val scalaCheckVersion    = "3.2.18.0"
 
   val compile = Seq(

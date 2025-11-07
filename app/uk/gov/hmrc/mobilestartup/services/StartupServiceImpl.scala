@@ -122,6 +122,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
   tcCompanyBenefitsUrlCy:                    Option[String],
   niAppleWalletUrl:                          Option[String],
   niGoogleWalletUrl:                         Option[String],
+  selfAssessmentCessationUrl:                Option[String],
   enableCustomerSatisfactionSurveys:         Boolean,
   findMyNinoAddToWallet:                     Boolean,
   disableYourEmploymentIncomeChart:          Boolean,
@@ -252,7 +253,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
         tcCompanyBenefitsUrl.map(URL("tcCompanyBenefitsUrl", _)),
         tcCompanyBenefitsUrlCy.map(URL("tcCompanyBenefitsUrlCy", _)),
         niAppleWalletUrl.map(URL("niAppleWalletUrl", _)),
-        niGoogleWalletUrl.map(URL("niGoogleWalletUrl", _))
+        niGoogleWalletUrl.map(URL("niGoogleWalletUrl", _)),
+        selfAssessmentCessationUrl.map(URL("selfAssessmentCessationUrl", _))
       ).filter(_.isDefined)
     )
 
