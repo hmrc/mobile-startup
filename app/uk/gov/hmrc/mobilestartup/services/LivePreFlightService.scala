@@ -22,7 +22,7 @@ import javax.inject.{Inject, Named}
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.*
 import uk.gov.hmrc.auth.core.retrieve.{Credentials, ~}
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
+import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, UpstreamErrorResponse}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
@@ -73,19 +73,21 @@ class LivePreFlightService @Inject() (
      ConfidenceLevel,
      Option[AnnualTaxSummaryLink],
      Enrolments,
-     Option[String])
+     Option[String],
+     Option[AffinityGroup])
   ] =
     authConnector
-      .authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and allEnrolments and internalId)
+      .authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and allEnrolments and internalId and affinityGroup)
       .map {
-        case foundNino ~ foundSaUtr ~ creds ~ conf ~ foundEnrolments ~ foundInternalId =>
+        case foundNino ~ foundSaUtr ~ creds ~ conf ~ foundEnrolments ~ foundInternalId ~ foundAffinityGroup =>
           (foundNino.map(Nino(_)),
            foundSaUtr.map(SaUtr(_)),
            creds,
            conf,
            getATSLink(foundEnrolments),
            foundEnrolments,
-           foundInternalId)
+           foundInternalId,
+           foundAffinityGroup)
       }
 
   override def getUtr(

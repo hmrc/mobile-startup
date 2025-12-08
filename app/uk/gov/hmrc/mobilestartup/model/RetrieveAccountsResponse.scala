@@ -18,6 +18,7 @@ package uk.gov.hmrc.mobilestartup.model
 
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.auth.core.retrieve.Credentials
+import uk.gov.hmrc.auth.core.AffinityGroup
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.mobilestartup.services.AnnualTaxSummaryLink
 
@@ -28,4 +29,5 @@ case class RetrieveAccountsResponse(
   confLevel:            ConfidenceLevel,
   annualTaxSummaryLink: Option[AnnualTaxSummaryLink],
   enrolments:           Enrolments,
-  internalId:           Option[String])
+  internalId:           Option[String],
+  affinityGroup:        Option[AffinityGroup])
