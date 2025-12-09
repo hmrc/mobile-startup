@@ -17,13 +17,13 @@
 package uk.gov.hmrc.mobilestartup.services
 
 import uk.gov.hmrc.auth.core.retrieve.Credentials
-import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
+import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, Enrolment, EnrolmentIdentifier, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData, TestFInstances}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
-import uk.gov.hmrc.mobilestartup.TestFInstances._
+import uk.gov.hmrc.mobilestartup.TestFInstances.*
 import uk.gov.hmrc.mobilestartup.model.Activated
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.fromStringtoLinkDestination
 
@@ -44,7 +44,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
     annualTaxSummaryLink: Option[AnnualTaxSummaryLink],
     enrolments:           Enrolments,
     connector:            GenericConnector[TestF],
-    credId:               Option[String]
+    credId:               Option[String],
+    affinityGroup:        Option[AffinityGroup]
   ): PreFlightService[TestF] = new PreFlightServiceImpl[TestF](connector, 200, "appStoreId", "appDemoId") {
 
     override def retrieveAccounts(implicit hc: HeaderCarrier): TestF[
@@ -54,9 +55,10 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
        ConfidenceLevel,
        Option[AnnualTaxSummaryLink],
        Enrolments,
-       Option[String])
+       Option[String],
+       Option[AffinityGroup])
     ] =
-      F.pure(nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, credId)
+      F.pure(nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, credId, affinityGroup)
 
     override def auditing[T](
       service:     String,
@@ -90,7 +92,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Some(AnnualTaxSummaryLink("/annual-tax-summary", fromStringtoLinkDestination("SA"))),
           Enrolments(Set.empty),
           dummyConnector(),
-          Some("11223344")
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
         )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
@@ -108,7 +111,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", fromStringtoLinkDestination("PAYE"))),
           Enrolments(Set.empty),
           dummyConnector(),
-          Some("11223344")
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
         )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.utr.get.saUtr shouldBe Some(utr)
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
@@ -126,7 +130,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Some(AnnualTaxSummaryLink("/annual-tax-summary/paye/main", fromStringtoLinkDestination("PAYE"))),
           Enrolments(Set.empty),
           dummyConnector(),
-          Some("11223344")
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
         )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.demoAccount shouldBe false
     }
@@ -140,7 +145,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
                 None,
                 Enrolments(Set.empty),
                 dummyConnector(),
-                Some("11223344"))
+                Some("11223344"),
+                Some(AffinityGroup.Individual))
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
     }
 
@@ -153,8 +159,77 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
                 None,
                 Enrolments(Set.empty),
                 dummyConnector(),
-                Some("11223344"))
+                Some("11223344"),
+                Some(AffinityGroup.Individual))
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe true
+    }
+
+    "routeToIV should be false when affinityGroup is Organisation and don't have HMRC-PT enrolment" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L50,
+          None,
+          Enrolments(Set.empty),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Organisation))
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible shouldBe false
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.blockReason shouldBe Some("Org not authorised")
+    }
+
+    "routeToIV should be false when affinityGroup is Organisation and have HMRC-PT enrolment with CL > 200" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L250,
+          None,
+          Enrolments(Set(Enrolment(key="HMRC-PT", identifiers = Seq(EnrolmentIdentifier("NINO", "CS700100A")), state = "Activated"))),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Organisation))
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible shouldBe true
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.blockReason shouldBe None
+    }
+
+    "routeToIV should be true when affinityGroup is Organisation and have HMRC-PT enrolment with low confidence level" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L50,
+          None,
+          Enrolments(Set(Enrolment(key = "HMRC-PT", identifiers = Seq(EnrolmentIdentifier("NINO", "CS700100A")), state = "Activated"))),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Organisation))
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe true
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible shouldBe true
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.blockReason shouldBe None
+    }
+
+    "routeToIV should be false when affinityGroup is Agent" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L50,
+          None,
+          Enrolments(Set.empty),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Agent))
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible shouldBe false
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.blockReason shouldBe Some("Agents not allowed")
     }
 
     "return the sandbox data if the appStoreAccount internal ID is returned" in {
@@ -167,7 +242,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Some(AnnualTaxSummaryLink("/annual-tax-summary", fromStringtoLinkDestination("SA"))),
           Enrolments(Set.empty),
           dummyConnector(),
-          Some("appStoreId")
+          Some("appStoreId"),
+          Some(AffinityGroup.Individual)
         )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
@@ -186,8 +262,10 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Some(AnnualTaxSummaryLink("/annual-tax-summary", fromStringtoLinkDestination("SA"))),
           Enrolments(Set.empty),
           dummyConnector(),
-          Some("appDemoId")
+          Some("appDemoId"),
+          Some(AffinityGroup.Individual)
         )
+      println("print json response:: "+ sut.preFlight(journeyId)(HeaderCarrier(), ec))
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
         AnnualTaxSummaryLink("/", fromStringtoLinkDestination("PAYE"))
@@ -204,7 +282,8 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
                 None,
                 Enrolments(Set.empty),
                 dummyConnector(),
-                Some("11223344"))
+                Some("11223344"),
+                Some(AffinityGroup.Individual))
       intercept[UnsupportedAuthProvider](sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet)
     }
   }

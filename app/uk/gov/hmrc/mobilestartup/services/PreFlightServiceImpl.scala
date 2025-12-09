@@ -18,14 +18,16 @@ package uk.gov.hmrc.mobilestartup.services
 import cats.MonadError
 import cats.implicits.*
 import play.api.Logger
+import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
 import uk.gov.hmrc.auth.core.retrieve.Credentials
-import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
+import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.fromStringtoLinkDestination
 import uk.gov.hmrc.mobilestartup.model.{Activated, RetrieveAccountsResponse}
+import uk.gov.hmrc.auth.core.EnrolmentIdentifier
 
 import scala.concurrent.ExecutionContext
 
@@ -48,7 +50,8 @@ abstract class PreFlightServiceImpl[F[_]](
      ConfidenceLevel,
      Option[AnnualTaxSummaryLink],
      Enrolments,
-     Option[String])
+     Option[String],
+     Option[AffinityGroup])
   ]
 
   def getUtr(
@@ -85,7 +88,7 @@ abstract class PreFlightServiceImpl[F[_]](
   private def getPreFlightCheckResponse(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] = {
 
     val accountsRetrieved: F[RetrieveAccountsResponse] = retrieveAccounts.map {
-      case (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, internalId) =>
+      case (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, internalId, affinityGroup) =>
         if (credentials.getOrElse(Credentials("Unsupported", "Unsupported")).providerType != "GovernmentGateway")
           throw new UnsupportedAuthProvider
         RetrieveAccountsResponse(nino,
@@ -94,31 +97,68 @@ abstract class PreFlightServiceImpl[F[_]](
                                  confidenceLevel,
                                  annualTaxSummaryLink,
                                  enrolments,
-                                 internalId)
+                                 internalId,
+                                 affinityGroup)
     }
     for {
       accountDetails <- accountsRetrieved
       utrDetails     <- getUtr(accountDetails.saUtr, accountDetails.nino, accountDetails.enrolments)
     } yield {
-      if (checkForDemoAccountId(accountDetails.internalId)) {
-        logger.info("Demo account Internal ID found, returning Sandbox data")
-        PreFlightCheckResponse(
-          Some(Nino("CS700100A")),
-          routeToIV = false,
-          Some(AnnualTaxSummaryLink("/", fromStringtoLinkDestination("PAYE"))),
-          Some(Utr(saUtr = Some(SaUtr("1234567890")), status = Activated)),
-          Enrolments(Set.empty),
-          demoAccount = true
-        )
-      } else
-        PreFlightCheckResponse(
-          accountDetails.nino,
-          minimumConfidenceLevel > accountDetails.confLevel.level,
-          accountDetails.annualTaxSummaryLink,
-          utrDetails,
-          accountDetails.enrolments,
-          doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino)
-        )
+      accountDetails.affinityGroup match
+        case Some(Agent) =>
+          logger.info("Agent account is being used to login")
+          PreFlightCheckResponse(
+            accountDetails.nino,
+            false,
+            accountDetails.annualTaxSummaryLink,
+            utrDetails,
+            accountDetails.enrolments,
+            doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
+            isEligible = false,
+            blockReason = Some("Agents not allowed")
+          )
+        case Some(Organisation)  =>
+          logger.info("Organisation account is being used to login")
+          PreFlightCheckResponse(
+            accountDetails.nino,
+            if (hasPTEnrolement(accountDetails.enrolments)) {
+              minimumConfidenceLevel > accountDetails.confLevel.level
+            }
+            else false,
+            accountDetails.annualTaxSummaryLink,
+            utrDetails,
+            accountDetails.enrolments,
+            doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
+            isEligible = hasPTEnrolement(accountDetails.enrolments),
+            blockReason = if (!hasPTEnrolement(accountDetails.enrolments)) {
+              Some("Org not authorised")
+            }
+            else None
+          )
+        case _ =>
+          if (checkForDemoAccountId(accountDetails.internalId)) {
+            logger.info("Demo account Internal ID found, returning Sandbox data")
+            PreFlightCheckResponse(
+              Some(Nino("CS700100A")),
+              routeToIV = false,
+              Some(AnnualTaxSummaryLink("/", fromStringtoLinkDestination("PAYE"))),
+              Some(Utr(saUtr = Some(SaUtr("1234567890")), status = Activated)),
+              Enrolments(Set.empty),
+              demoAccount = true
+            )
+          }
+          else {
+            logger.info("Personal account is being used for login")
+            PreFlightCheckResponse(
+              accountDetails.nino,
+              minimumConfidenceLevel > accountDetails.confLevel.level,
+              accountDetails.annualTaxSummaryLink,
+              utrDetails,
+              accountDetails.enrolments,
+              doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
+              isEligible = true
+            )
+          }
     }
   }
 
@@ -126,5 +166,17 @@ abstract class PreFlightServiceImpl[F[_]](
     val accountId = internalId.getOrElse("")
     (accountId == storeReviewAccountInternalId || accountId == appTeamAccountInternalId)
   }
+
+  private def hasPTEnrolement(enrolments: Enrolments): Boolean = {
+    val presentPTEnrolment = getKeyIdentifierAndState(enrolments, "HMRC-PT")
+    presentPTEnrolment match
+      case Some("HMRC-PT", "Activated") => true
+      case _ => false
+  }
+
+  private def getKeyIdentifierAndState(enrolments: Enrolments, key: String): Option[(String, String)] =
+    enrolments.getEnrolment(key).map { enr =>
+      (enr.key, enr.state)
+    }
 
 }

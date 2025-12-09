@@ -35,7 +35,7 @@ object AuthStub {
   }
 
   private val accountsRequestJson: String = {
-    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","allEnrolments","internalId"] }""".stripMargin
+    """{ "authorise": [], "retrieve": ["nino","saUtr","optionalCredentials","confidenceLevel","allEnrolments","internalId", "affinityGroup"] }""".stripMargin
   }
 
   private def loggedInResponse(
