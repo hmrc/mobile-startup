@@ -100,7 +100,7 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
       await(result) shouldBe (Some(Utr(Some(saUtr), Activated, None)))
     }
 
-    "return some utr if only MTD enrollment is  there and utyr is also there" in {
+    "return some utr if only MTD enrollment is  there and utr is also there" in {
       val livePreFlightService = service(250)
       val result: Future[Option[Utr]] = livePreFlightService.getUtr(
         Some(saUtr),
