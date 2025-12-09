@@ -121,7 +121,7 @@ abstract class PreFlightServiceImpl[F[_]](
           logger.info("Organisation account is being used to login")
           PreFlightCheckResponse(
             accountDetails.nino,
-            if (checkForEnrolment(accountDetails.enrolments)) {
+            if (hasPTEnrolement(accountDetails.enrolments)) {
               minimumConfidenceLevel > accountDetails.confLevel.level
             }
             else false,
@@ -129,8 +129,8 @@ abstract class PreFlightServiceImpl[F[_]](
             utrDetails,
             accountDetails.enrolments,
             doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
-            isEligible = checkForEnrolment(accountDetails.enrolments),
-            blockReason = if (!checkForEnrolment(accountDetails.enrolments)) {
+            isEligible = hasPTEnrolement(accountDetails.enrolments),
+            blockReason = if (!hasPTEnrolement(accountDetails.enrolments)) {
               Some("Org not authorised")
             }
             else None
@@ -167,7 +167,7 @@ abstract class PreFlightServiceImpl[F[_]](
     (accountId == storeReviewAccountInternalId || accountId == appTeamAccountInternalId)
   }
 
-  private def checkForEnrolment(enrolments: Enrolments): Boolean = {
+  private def hasPTEnrolement(enrolments: Enrolments): Boolean = {
     val presentPTEnrolment = getKeyIdentifierAndState(enrolments, "HMRC-PT")
     presentPTEnrolment match
       case Some("HMRC-PT", "Activated") => true
