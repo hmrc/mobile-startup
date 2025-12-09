@@ -96,9 +96,17 @@ class LivePreFlightService @Inject() (
     enrolments:  Enrolments
   )(implicit hc: HeaderCarrier
   ): Future[Option[Utr]] = {
-    val activatedSaUtr = getActivatedSaUtr(enrolments)
-    if (activatedSaUtr.isDefined) Future successful activatedSaUtr.map(utr => Utr(Some(utr), Activated))
-    else if (foundUtr.isDefined) {
+
+    val activatedSaUtr: Option[SaUtr] = (getActivatedSaUtr(enrolments), getActivatedMtdId(enrolments, foundUtr)) match {
+      case (None, None)            => None
+      case (None, someMtdUtr)      => someMtdUtr
+      case (someSaUtr, None)       => someSaUtr
+      case (someSaUtr, someMtdUtr) => someSaUtr
+
+    }
+    if (activatedSaUtr.isDefined) {
+      Future successful activatedSaUtr.map(utr => Utr(Some(utr), Activated))
+    } else if (foundUtr.isDefined) {
       Future successful foundUtr.flatMap(utr => Some(Utr(Some(SaUtr(utr.utr)), NotYetActivated)))
     } else {
       foundNino
@@ -185,6 +193,18 @@ class LivePreFlightService @Inject() (
         enrolment.identifiers
           .find(id => id.key.toUpperCase == "UTR" && enrolment.state == "Activated")
           .map(key => SaUtr(key.value))
+      }
+
+  private def getActivatedMtdId(
+    enrolments: Enrolments,
+    saUtr:      Option[SaUtr]
+  ): Option[SaUtr] =
+    enrolments.enrolments
+      .find(_.key == "HMRC-MTD-ID")
+      .flatMap { enrolment =>
+        enrolment.identifiers
+          .find(id => id.key.toUpperCase == "MTDITID" && enrolment.state == "Activated")
+          .flatMap(key => saUtr)
       }
 
   private def getUtrFromCID(nino: String)(implicit hc: HeaderCarrier): Future[Option[SaUtr]] = {
