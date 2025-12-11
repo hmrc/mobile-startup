@@ -469,10 +469,6 @@ about the user's help-to-save-account (if they have one) and any global feature 
     {
       "name": "niGoogleWalletUrl",
       "url": "/save-your-national-insurance-number/google-wallet"
-    },
-    {
-      "name": "selfAssessmentCessationUrl",
-      "url": "https://account-np.hmrc.gov.uk/self-assessment/dev/cessation"
     }
   ]
 }

@@ -120,7 +120,6 @@ class GuiceModule @Inject() (
     bindConfigOptionalString("otherTaxesGeneralEnquiriesUrlCy", "url.otherTaxesGeneralEnquiriesUrlCy")
     bindConfigOptionalString("niAppleWalletUrl", "url.niAppleWalletUrl")
     bindConfigOptionalString("niGoogleWalletUrl", "url.niGoogleWalletUrl")
-    bindConfigOptionalString("selfAssessmentCessationUrl", "url.selfAssessmentCessationUrl")
     bindConfigBoolean("feature.enableTaxCreditShuttering")
     bindConfigBoolean("feature.enableUniversalPensionTaxCreditBanner")
     bindConfigBoolean("feature.enableHtsBanner")
