@@ -238,7 +238,8 @@ trait StartupTestData {
       enableHtsBanner                           = false,
       enableChildBenefitMVP                     = false,
       enableStudentLoanPlanTypeFive             = false,
-      enableSACessation                         = false
+      enableSACessation                         = false,
+      enableAdditionalIncome                    = false
     )
 
   val expectedFeatureFlags = List(
@@ -264,7 +265,8 @@ trait StartupTestData {
     FeatureFlag("enableHtsBanner", enabled                         = false),
     FeatureFlag("enableChildBenefitMVP", enabled                   = false),
     FeatureFlag("enableStudentLoanPlanTypeFive", enabled           = false),
-    FeatureFlag("enableSACessation", enabled                       = false)
+    FeatureFlag("enableSACessation", enabled                       = false),
+    FeatureFlag("enableAdditionalIncome", enabled                  = false)              
   )
 
   val expectedURLs = List(
