@@ -48,6 +48,14 @@ object URL {
   implicit val formats: Format[URL] = Json.format[URL]
 }
 
+case class ThrottleValue(
+  name: String,
+  value: Int)
+
+object ThrottleValue {
+  implicit val formats: Format[ThrottleValue] = Json.format[ThrottleValue]
+}
+
 /**
   * Decided to implement this generically using Tagless as an example of how it can be introduced
   * into a codebase without necessarily converting everything. It did require introducing a type parameter
@@ -141,7 +149,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
   enableChildBenefitMVP:                     Boolean,
   enableStudentLoanPlanTypeFive:             Boolean,
   enableSACessation:                         Boolean,
-  enableAdditionalIncome:                    Boolean
+  enableAdditionalIncome:                    Boolean,
+  SACessationthrottle:                       Int
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -159,8 +168,15 @@ case class StartupServiceImpl[F[_]] @Inject() (
      callService("user")(citizenDetailsStartup(nino, shutteringStatuses.npsShuttering.shuttered)),
      childBenefitStartup(shutteringStatuses.childBenefitShuttering).pure[F],
      featureFlags.pure[F],
-     urls.pure[F]).mapN((a, b, c, d, e, f, g) => a ++ b ++ c ++ d ++ e ++ f ++ g)
+     throttleValue.pure[F],
+     urls.pure[F]).mapN((a, b, c, d, e, f, g, h) => a ++ b ++ c ++ d ++ e ++ f ++ g ++ h)
 
+  private val throttleValue: JsObject =
+    obj(
+      "throttleValue" -> List(
+        ThrottleValue("SACessationthrottle", SACessationthrottle)
+      )
+    )
   private val featureFlags: JsObject =
     obj(
       "feature" -> List(

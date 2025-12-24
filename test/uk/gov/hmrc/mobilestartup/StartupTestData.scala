@@ -23,7 +23,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
-import uk.gov.hmrc.mobilestartup.services.{FeatureFlag, StartupServiceImpl, URL}
+import uk.gov.hmrc.mobilestartup.services.{FeatureFlag, StartupServiceImpl, ThrottleValue, URL}
 import TestFInstances.*
 
 trait StartupTestData {
@@ -239,8 +239,13 @@ trait StartupTestData {
       enableChildBenefitMVP                     = false,
       enableStudentLoanPlanTypeFive             = false,
       enableSACessation                         = false,
-      enableAdditionalIncome                    = false
+      enableAdditionalIncome                    = false,
+      SACessationthrottle                       = 0
     )
+    
+  val expectedThrottleValue = List(
+    ThrottleValue("SACessationthrottle", value  = 0)
+  )
 
   val expectedFeatureFlags = List(
     FeatureFlag("userPanelSignUp", enabled                         = false),
