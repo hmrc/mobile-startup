@@ -57,7 +57,7 @@ object PreFlightCheckResponse {
       withATSLink(preFlightCheckResponse.annualTaxSummaryLink) ++ withUtr(preFlightCheckResponse.utr) ++ Json
         .obj("routeToTEN"  -> preFlightCheckResponse.routeToTEN) ++ Json
         .obj("demoAccount" -> preFlightCheckResponse.demoAccount) ++ Json
-        .obj("isEligible" -> preFlightCheckResponse.isEligible) ++ Json
+        .obj("isEligible"  -> preFlightCheckResponse.isEligible) ++ Json
         .obj("blockReason" -> preFlightCheckResponse.blockReason)
   }
 
