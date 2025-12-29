@@ -135,7 +135,7 @@ class GuiceModule @Inject() (
     bind(classOf[Logger]).toInstance(Logger(this.getClass))
     bindConfigString("storeReviewAccountInternalId", "demoAccounts.storeReviewId")
     bindConfigString("appTeamAccountInternalId", "demoAccounts.appTeamId")
-    bindConfigInt("throttleValue.SACessationthrottle")
+    bindConfigInt("throttleValue.SACessationThrottle")
 
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
 

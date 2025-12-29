@@ -240,11 +240,11 @@ trait StartupTestData {
       enableStudentLoanPlanTypeFive             = false,
       enableSACessation                         = false,
       enableAdditionalIncome                    = false,
-      SACessationthrottle                       = 0
+      SACessationThrottle                       = 0
     )
     
   val expectedThrottleValue = List(
-    ThrottleValue("SACessationthrottle", value  = 0)
+    ThrottleValue("SACessationThrottle", value  = 0)
   )
 
   val expectedFeatureFlags = List(

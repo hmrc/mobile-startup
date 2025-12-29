@@ -285,7 +285,7 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "urls" \ 55 \ "url").as[String]                      shouldBe "/tcCompanyBenefitsUrl"
       (response.json \ "urls" \ 56 \ "name").as[String]                     shouldBe "tcCompanyBenefitsUrlCy"
       (response.json \ "urls" \ 56 \ "url").as[String]                      shouldBe "/tcCompanyBenefitsUrlCy"
-      (response.json \ "throttleValue" \ 0 \ "name").as[String]             shouldBe "SACessationthrottle"
+      (response.json \ "throttleValue" \ 0 \ "name").as[String]             shouldBe "SACessationThrottle"
       (response.json \ "throttleValue" \ 0 \ "value").as[Int]               shouldBe 0
     }
 

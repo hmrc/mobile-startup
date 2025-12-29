@@ -144,7 +144,7 @@ class BaseISpec
       "url.tcCompanyBenefitsUrlCy"                            -> "/tcCompanyBenefitsUrlCy",
       "demoAccounts.storeReviewId"                            -> "storeReviewAccountId",
       "demoAccounts.appTeamId"                                -> "appTeamAccountId",
-      "throttleValue.SACessationthrottle"                     -> 0
+      "throttleValue.SACessationThrottle"                     -> 0
     )
 
   protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(config)
