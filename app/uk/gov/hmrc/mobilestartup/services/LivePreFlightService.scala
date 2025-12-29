@@ -77,7 +77,8 @@ class LivePreFlightService @Inject() (
      Option[AffinityGroup])
   ] =
     authConnector
-      .authorise(EmptyPredicate, nino and saUtr and credentials and confidenceLevel and allEnrolments and internalId and affinityGroup)
+      .authorise(EmptyPredicate,
+                 nino and saUtr and credentials and confidenceLevel and allEnrolments and internalId and affinityGroup)
       .map {
         case foundNino ~ foundSaUtr ~ creds ~ conf ~ foundEnrolments ~ foundInternalId ~ foundAffinityGroup =>
           (foundNino.map(Nino(_)),

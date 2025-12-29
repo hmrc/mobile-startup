@@ -35,6 +35,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       (result \ user).toOption.value                              shouldBe userExpectedResponse
       (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
       (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
+      (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
     }
   }
 
@@ -50,6 +51,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       (result \ user).toOption.value                              shouldBe userExpectedResponse
       (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
       (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
+      (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
     }
 
     "contain an error entry for tcr when the tcr call fails" in {
@@ -64,6 +66,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       (result \ user).toOption.value                              shouldBe userExpectedResponse
       (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
       (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
+      (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
     }
 
     "contain an empty lists entry for messages when the messages call fails" in {
@@ -86,6 +89,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       (result \ user).toOption.value                              shouldBe userExpectedResponse
       (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
       (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
+      (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
     }
 
     "not contain an entry for user when the citizen details call fails" in {
@@ -101,6 +105,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       (result \ user).toOption                                    shouldBe None
       (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
       (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
+      (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
     }
   }
 
@@ -181,6 +186,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       URL("niGoogleWalletUrl", "/niGoogleWalletUrl")
     )
     (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
+    (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
   }
 
   "not contain an entry for user when NPS is shuttered" in {
@@ -197,6 +203,7 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
     (result \ user).toOption                                    shouldBe None
     (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
     (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
+    (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
   }
 
   "Return shuttered details when Child Benefit is shuttered" in {
@@ -222,5 +229,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
     (result \ "childBenefit" \ "shuttering" \ "shuttered").get.as[Boolean] shouldBe true
     (result \ "childBenefit" \ "shuttering" \ "title").get.as[String]      shouldBe "Shuttered"
     (result \ "childBenefit" \ "shuttering" \ "message").get.as[String]    shouldBe "Sorry, this is not available"
+    (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
   }
 }
