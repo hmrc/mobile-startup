@@ -150,7 +150,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
   enableStudentLoanPlanTypeFive:             Boolean,
   enableSACessation:                         Boolean,
   enableAdditionalIncome:                    Boolean,
-  SACessationThrottle:                       Int
+  saCessationThrottle:                       Int
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
 
@@ -174,7 +174,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
   private val throttleValue: JsObject =
     obj(
       "throttleValue" -> List(
-        ThrottleValue("SACessationThrottle", SACessationThrottle)
+        ThrottleValue("SACessationThrottle", saCessationThrottle)
       )
     )
   private val featureFlags: JsObject =

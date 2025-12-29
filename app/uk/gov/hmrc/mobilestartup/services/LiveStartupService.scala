@@ -111,7 +111,7 @@ class LiveStartupService @Inject() (
   @Named("feature.enableStudentLoanPlanTypeFive") enableStudentLoanPlanTypeFive:                     Boolean,
   @Named("feature.enableSACessation") enableSACessation:                                             Boolean,
   @Named("feature.enableAdditionalIncome") enableAdditionalIncome:                                   Boolean,
-  @Named("throttleValue.SACessationThrottle") SACessationThrottle:                                   Int
+  @Named("throttleValue.SACessationThrottle") saCessationThrottle:                                   Int
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
                                        userPanelSignUp,
@@ -201,4 +201,4 @@ class LiveStartupService @Inject() (
                                        enableStudentLoanPlanTypeFive,
                                        enableSACessation,
                                        enableAdditionalIncome,
-                                       SACessationThrottle)
+                                       saCessationThrottle)
