@@ -240,11 +240,12 @@ trait StartupTestData {
       enableStudentLoanPlanTypeFive             = false,
       enableSACessation                         = false,
       enableAdditionalIncome                    = false,
+      enableBTAUserEnrollMessage                = false,
       saCessationThrottle                       = 0
     )
-    
+
   val expectedThrottleValue = List(
-    ThrottleValue("SACessationThrottle", value  = 0)
+    ThrottleValue("SACessationThrottle", value = 0)
   )
 
   val expectedFeatureFlags = List(
@@ -271,7 +272,8 @@ trait StartupTestData {
     FeatureFlag("enableChildBenefitMVP", enabled                   = false),
     FeatureFlag("enableStudentLoanPlanTypeFive", enabled           = false),
     FeatureFlag("enableSACessation", enabled                       = false),
-    FeatureFlag("enableAdditionalIncome", enabled                  = false)              
+    FeatureFlag("enableAdditionalIncome", enabled                  = false),
+    FeatureFlag("enableBTAUserEnrollMessage", enabled              = false)
   )
 
   val expectedURLs = List(
