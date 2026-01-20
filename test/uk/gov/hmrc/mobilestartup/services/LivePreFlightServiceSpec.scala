@@ -255,7 +255,6 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
           )
         )
       )
-      println("test result= "+ await(result) )
       await(result) shouldBe (Some(Utr(Some(saUtr), Activated, None)))
     }
 
