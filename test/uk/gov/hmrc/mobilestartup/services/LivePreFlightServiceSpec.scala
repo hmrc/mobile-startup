@@ -69,7 +69,7 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
       .returning(response)
 
   "getUTR" should {
-    "return some utr if only IR-SA enroll,ment is there" in {
+    "return some utr if only IR-SA enrollment is there" in {
       val livePreFlightService = service(250)
       val result: Future[Option[Utr]] = livePreFlightService.getUtr(
         Some(saUtr),
@@ -228,6 +228,35 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
         )
       )
       await(result) shouldBe Some(Utr(Some(saUtr), WrongAccount, WrongAccount.link))
+    }
+
+    "return Activated UTR when coming from MTD enrolment and skip principalId check" in {
+      val livePreFlightService = service(250)
+
+      val cidPerson = CidPerson(
+        TaxIds(
+          Set(
+            nino,
+            saUtr
+          )
+        )
+      )
+
+      mockGetUtrFromCID(Future.successful(cidPerson))
+
+      val result: Future[Option[Utr]] = livePreFlightService.getUtr(
+        None,
+        Some(nino),
+        Enrolments(
+          Set(
+            Enrolment(key         = "HMRC-MTD-ID",
+            identifiers = Seq(EnrolmentIdentifier("MTDITID", "1222")),
+            state       = "Activated")
+          )
+        )
+      )
+      println("test result= "+ await(result) )
+      await(result) shouldBe (Some(Utr(Some(saUtr), Activated, None)))
     }
 
   }

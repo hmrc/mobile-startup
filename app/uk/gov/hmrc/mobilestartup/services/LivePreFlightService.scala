@@ -105,6 +105,12 @@ class LivePreFlightService @Inject() (
       case (someSaUtr, someMtdUtr) => someSaUtr
 
     }
+
+    val isFromMtd = getActivatedSaUtr(enrolments).isEmpty &&
+      enrolments.enrolments.exists { enrolment =>
+        enrolment.key == "HMRC-MTD-ID"
+      }
+
     if (activatedSaUtr.isDefined) {
       Future successful activatedSaUtr.map(utr => Utr(Some(utr), Activated))
     } else if (foundUtr.isDefined) {
@@ -116,11 +122,16 @@ class LivePreFlightService @Inject() (
             saUtrOnCid <- getUtrFromCID(nino.nino).recover {
                            case e: NotFoundException => Some(SaUtr("NOT_FOUND"))
                          }
-            hasPrincipalIds <- doesUtrHavePrincipalIds(saUtrOnCid)
+            hasPrincipalIds <- if (!isFromMtd)
+                                doesUtrHavePrincipalIds(saUtrOnCid)
+                              else
+                                Future.successful(None)
           } yield {
             saUtrOnCid match {
               case Some(utr) =>
                 if (utr.utr == "NOT_FOUND") Some(Utr.noUtr)
+                else if (isFromMtd)
+                  Some(Utr(Some(SaUtr(utr.value)), Activated))
                 else
                   hasPrincipalIds match {
                     case None       => None
