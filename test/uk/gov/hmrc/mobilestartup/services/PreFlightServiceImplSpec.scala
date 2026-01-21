@@ -265,7 +265,6 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Some("appDemoId"),
           Some(AffinityGroup.Individual)
         )
-      println("print json response:: "+ sut.preFlight(journeyId)(HeaderCarrier(), ec))
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
         AnnualTaxSummaryLink("/", fromStringtoLinkDestination("PAYE"))
