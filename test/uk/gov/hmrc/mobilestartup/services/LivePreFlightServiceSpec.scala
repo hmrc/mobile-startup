@@ -258,7 +258,7 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
       await(result) shouldBe (Some(Utr(Some(saUtr), Activated, None)))
     }
 
-    "return Activated UTR and skip CID call when both MTD and IR-SA enrolment is present" in {
+    "return Activated UTR and skip CID call when both MTD and IR-SA enrolment are present" in {
       val livePreFlightService = service(250)
 
       val cidPerson = CidPerson(
