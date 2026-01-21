@@ -258,5 +258,40 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
       await(result) shouldBe (Some(Utr(Some(saUtr), Activated, None)))
     }
 
+    "return Activated UTR and skip CID call when both MTD and IR-SA enrolment is present" in {
+      val livePreFlightService = service(250)
+
+      val cidPerson = CidPerson(
+        TaxIds(
+          Set(
+            nino,
+            saUtr
+          )
+        )
+      )
+
+      val enrolmentStoreResponse = EnrolmentStoreResponse(
+        Seq("id1")
+      )
+      mockGetUtrFromCID(Future.successful(cidPerson)).never()
+      mockDoesUtrHavePrincipalIds(Future.successful(enrolmentStoreResponse)).never()
+
+      val result: Future[Option[Utr]] = livePreFlightService.getUtr(
+        Some(saUtr),
+        Some(nino),
+        Enrolments(
+          Set(
+            Enrolment(key = "HMRC-MTD-ID",
+              identifiers = Seq(EnrolmentIdentifier("MTDITID", "1222")),
+              state = "Activated"),
+            Enrolment(key = "IR-SA",
+              identifiers = Seq(EnrolmentIdentifier("UTR", saUtr.value)),
+              state = "Activated")
+          )
+        )
+      )
+      await(result) shouldBe (Some(Utr(Some(saUtr), Activated, None)))
+    }
+
   }
 }
