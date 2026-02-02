@@ -270,6 +270,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
         AnnualTaxSummaryLink("/", fromStringtoLinkDestination("PAYE"))
       )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.demoAccount shouldBe true
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible shouldBe true
     }
 
     "if the auth provided is not 'GovernmentGateway' it should throw an UnsupportedAuthProvider exception" in {

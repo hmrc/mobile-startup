@@ -144,7 +144,8 @@ abstract class PreFlightServiceImpl[F[_]](
               Some(AnnualTaxSummaryLink("/", fromStringtoLinkDestination("PAYE"))),
               Some(Utr(saUtr = Some(SaUtr("1234567890")), status = Activated)),
               Enrolments(Set.empty),
-              demoAccount = true
+              demoAccount = true,
+              isEligible = true
             )
           }
           else {
