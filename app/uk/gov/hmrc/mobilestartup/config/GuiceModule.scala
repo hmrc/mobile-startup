@@ -129,7 +129,6 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.enableStudentLoanPlanTypeFive")
     bindConfigBoolean("feature.enableSACessation")
     bindConfigBoolean("feature.enableAdditionalIncome")
-    bindConfigBoolean("feature.enableBTAUserEnrollMessage")
     bind(classOf[String])
       .annotatedWith(named("mobile-shuttering"))
       .toInstance(servicesConfig.baseUrl("mobile-shuttering"))
