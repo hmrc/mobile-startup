@@ -240,6 +240,7 @@ trait StartupTestData {
       enableStudentLoanPlanTypeFive             = false,
       enableSACessation                         = false,
       enableAdditionalIncome                    = false,
+      enableWinterFuelPayment                   = false,
       saCessationThrottle                       = 0
     )
 
@@ -271,7 +272,8 @@ trait StartupTestData {
     FeatureFlag("enableChildBenefitMVP", enabled                   = false),
     FeatureFlag("enableStudentLoanPlanTypeFive", enabled           = false),
     FeatureFlag("enableSACessation", enabled                       = false),
-    FeatureFlag("enableAdditionalIncome", enabled                  = false)
+    FeatureFlag("enableAdditionalIncome", enabled                  = false),
+    FeatureFlag("enableWinterFuelPayment", enabled                 = false)
   )
 
   val expectedURLs = List(
