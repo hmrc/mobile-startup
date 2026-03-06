@@ -206,7 +206,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("enableStudentLoanPlanTypeFive", enableStudentLoanPlanTypeFive),
         FeatureFlag("enableSACessation", enableSACessation),
         FeatureFlag("enableAdditionalIncome", enableAdditionalIncome),
-        FeatureFlag("enableWinterFuelPayment", enableSACessation),
+        FeatureFlag("enableWinterFuelPayment", enableWinterFuelPayment),
       )
     )
 
