@@ -111,7 +111,8 @@ class LiveStartupService @Inject() (
   @Named("feature.enableStudentLoanPlanTypeFive") enableStudentLoanPlanTypeFive:                     Boolean,
   @Named("feature.enableSACessation") enableSACessation:                                             Boolean,
   @Named("feature.enableAdditionalIncome") enableAdditionalIncome:                                   Boolean,
-  @Named("feature.enableWinterFuelPayment") enableWinterFuelPayment:                                  Boolean,
+  @Named("feature.enableWinterFuelPayment") enableWinterFuelPayment:                                 Boolean,
+  @Named("feature.devEnableITSA") devEnableITSA:                                                     Boolean,
   @Named("throttleValue.SACessationThrottle") saCessationThrottle:                                   Int
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
@@ -203,4 +204,5 @@ class LiveStartupService @Inject() (
                                        enableSACessation,
                                        enableAdditionalIncome,
                                        enableWinterFuelPayment,
+                                       devEnableITSA,
                                        saCessationThrottle)
