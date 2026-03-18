@@ -130,6 +130,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.enableSACessation")
     bindConfigBoolean("feature.enableAdditionalIncome")
     bindConfigBoolean("feature.enableWinterFuelPayment")
+    bindConfigBoolean("feature.devEnableITSA")
     bind(classOf[String])
       .annotatedWith(named("mobile-shuttering"))
       .toInstance(servicesConfig.baseUrl("mobile-shuttering"))
