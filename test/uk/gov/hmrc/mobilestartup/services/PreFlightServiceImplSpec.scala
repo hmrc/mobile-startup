@@ -20,11 +20,12 @@ import uk.gov.hmrc.auth.core.retrieve.Credentials
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, Enrolment, EnrolmentIdentifier, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.HeaderCarrier
+import cats.implicits.*
 import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData, TestFInstances}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.mobilestartup.TestFInstances.*
-import uk.gov.hmrc.mobilestartup.model.Activated
+import uk.gov.hmrc.mobilestartup.model.{Activated, PertaxResponse}
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.fromStringtoLinkDestination
 
 import scala.concurrent.ExecutionContext
@@ -35,6 +36,10 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
   implicit val ec:        ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
   val nino:               Nino             = Nino("CS700100A")
   val utr:                SaUtr            = SaUtr("123123123")
+
+  val mciPertaxResponse      = PertaxResponse("MCI_RECORD", "user has MCI record")
+  val deceasedPertaxResponse = PertaxResponse("DECEASED_RECORD", "user has  deceased")
+  val juviPertaxResponse     = PertaxResponse("DESIGNATORY_DETAILS_NOT_FOUND", "juvenile recprd missed adull registration")
 
   private def service(
     nino:                 Option[Nino],
@@ -95,10 +100,13 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Some("11223344"),
           Some(AffinityGroup.Individual)
         )
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.nino shouldBe Some(nino)
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.annualTaxSummaryLink shouldBe Some(
+
+      val result = sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet
+      result.nino shouldBe Some(nino)
+      result.annualTaxSummaryLink shouldBe Some(
         AnnualTaxSummaryLink("/annual-tax-summary", fromStringtoLinkDestination("SA"))
       )
+      result.isEligible shouldBe (true)
     }
 
     "return a response with the expected utr" in {
@@ -138,30 +146,97 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
 
     "routeToIV should be false if the confidence level is 200 or above" in {
       val sut =
-        service(None,
-                None,
-                Some(Credentials("", "GovernmentGateway")),
-                ConfidenceLevel.L250,
-                None,
-                Enrolments(Set.empty),
-                dummyConnector(),
-                Some("11223344"),
-                Some(AffinityGroup.Individual))
+        service(
+          None,
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L250,
+          None,
+          Enrolments(Set.empty),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
+        )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
     }
 
     "routeToIV should be true if the confidence level is below 200" in {
       val sut =
-        service(None,
-                None,
-                Some(Credentials("", "GovernmentGateway")),
-                ConfidenceLevel.L50,
-                None,
-                Enrolments(Set.empty),
-                dummyConnector(),
-                Some("11223344"),
-                Some(AffinityGroup.Individual))
+        service(
+          None,
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L50,
+          None,
+          Enrolments(Set.empty),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
+        )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe true
+    }
+
+    "isEligible flag should be false" when {
+
+      "user has MCI_RECORD" in {
+        val sut: PreFlightService[TestF] =
+          service(
+            nino                 = Some(nino),
+            saUtr                = None,
+            credentials          = Some(Credentials("", "GovernmentGateway")),
+            confidenceLevel      = ConfidenceLevel.L200,
+            annualTaxSummaryLink = None,
+            enrolments           = Enrolments(Set.empty),
+            connector            = dummyConnector(pertaxResponse = mciPertaxResponse.pure[TestF]),
+            credId               = Some("11223344"),
+            affinityGroup        = Some(AffinityGroup.Individual)
+          )
+        val result = sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet
+
+        result.nino                 shouldBe Some(nino)
+        result.annualTaxSummaryLink shouldBe None
+        result.isEligible           shouldBe (false)
+      }
+
+      "user has DECEASED_RECORD" in {
+        val sut: PreFlightService[TestF] =
+          service(
+            nino                 = Some(nino),
+            saUtr                = None,
+            credentials          = Some(Credentials("", "GovernmentGateway")),
+            confidenceLevel      = ConfidenceLevel.L200,
+            annualTaxSummaryLink = None,
+            enrolments           = Enrolments(Set.empty),
+            connector            = dummyConnector(pertaxResponse = deceasedPertaxResponse.pure[TestF]),
+            credId               = Some("11223344"),
+            affinityGroup        = Some(AffinityGroup.Individual)
+          )
+        val result = sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet
+
+        result.nino                 shouldBe Some(nino)
+        result.annualTaxSummaryLink shouldBe None
+        result.isEligible           shouldBe (false)
+      }
+
+      "user has juvenile record" in {
+        val sut: PreFlightService[TestF] =
+          service(
+            nino                 = Some(nino),
+            saUtr                = None,
+            credentials          = Some(Credentials("", "GovernmentGateway")),
+            confidenceLevel      = ConfidenceLevel.L200,
+            annualTaxSummaryLink = None,
+            enrolments           = Enrolments(Set.empty),
+            connector            = dummyConnector(pertaxResponse = juviPertaxResponse.pure[TestF]),
+            credId               = Some("11223344"),
+            affinityGroup        = Some(AffinityGroup.Individual)
+          )
+        val result = sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet
+
+        result.nino                 shouldBe Some(nino)
+        result.annualTaxSummaryLink shouldBe None
+        result.isEligible           shouldBe (false)
+      }
     }
 
     "routeToIV should be false when affinityGroup is Organisation and don't have HMRC-PT enrolment" in {
@@ -175,9 +250,10 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Enrolments(Set.empty),
           dummyConnector(),
           Some("11223344"),
-          Some(AffinityGroup.Organisation))
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible shouldBe false
+          Some(AffinityGroup.Organisation)
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV   shouldBe false
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible  shouldBe false
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.blockReason shouldBe Some("Org not authorised")
     }
 
@@ -189,12 +265,19 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Some(Credentials("", "GovernmentGateway")),
           ConfidenceLevel.L250,
           None,
-          Enrolments(Set(Enrolment(key="HMRC-PT", identifiers = Seq(EnrolmentIdentifier("NINO", "CS700100A")), state = "Activated"))),
+          Enrolments(
+            Set(
+              Enrolment(key         = "HMRC-PT",
+                        identifiers = Seq(EnrolmentIdentifier("NINO", "CS700100A")),
+                        state       = "Activated")
+            )
+          ),
           dummyConnector(),
           Some("11223344"),
-          Some(AffinityGroup.Organisation))
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible shouldBe true
+          Some(AffinityGroup.Organisation)
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV   shouldBe false
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible  shouldBe true
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.blockReason shouldBe None
     }
 
@@ -206,12 +289,19 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Some(Credentials("", "GovernmentGateway")),
           ConfidenceLevel.L50,
           None,
-          Enrolments(Set(Enrolment(key = "HMRC-PT", identifiers = Seq(EnrolmentIdentifier("NINO", "CS700100A")), state = "Activated"))),
+          Enrolments(
+            Set(
+              Enrolment(key         = "HMRC-PT",
+                        identifiers = Seq(EnrolmentIdentifier("NINO", "CS700100A")),
+                        state       = "Activated")
+            )
+          ),
           dummyConnector(),
           Some("11223344"),
-          Some(AffinityGroup.Organisation))
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe true
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible shouldBe true
+          Some(AffinityGroup.Organisation)
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV   shouldBe true
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible  shouldBe true
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.blockReason shouldBe None
     }
 
@@ -226,9 +316,10 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Enrolments(Set.empty),
           dummyConnector(),
           Some("11223344"),
-          Some(AffinityGroup.Agent))
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV shouldBe false
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible shouldBe false
+          Some(AffinityGroup.Agent)
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.routeToIV   shouldBe false
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible  shouldBe false
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.blockReason shouldBe Some("Agents not allowed")
     }
 
@@ -270,21 +361,24 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
         AnnualTaxSummaryLink("/", fromStringtoLinkDestination("PAYE"))
       )
       sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.demoAccount shouldBe true
-      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible shouldBe true
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isEligible  shouldBe true
     }
 
     "if the auth provided is not 'GovernmentGateway' it should throw an UnsupportedAuthProvider exception" in {
       val sut =
-        service(None,
-                None,
-                Some(Credentials("", "NotGovernmentGateway!")),
-                ConfidenceLevel.L200,
-                None,
-                Enrolments(Set.empty),
-                dummyConnector(),
-                Some("11223344"),
-                Some(AffinityGroup.Individual))
+        service(
+          None,
+          None,
+          Some(Credentials("", "NotGovernmentGateway!")),
+          ConfidenceLevel.L200,
+          None,
+          Enrolments(Set.empty),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
+        )
       intercept[UnsupportedAuthProvider](sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet)
     }
+
   }
 }
