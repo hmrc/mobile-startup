@@ -131,6 +131,40 @@ abstract class PreFlightServiceImpl[F[_]](
               isEligible = false,
               blockReason = Some("Agents not allowed")
             )
+
+          case (_, PertaxResponse("MCI_RECORD", _)) =>
+            logger.info("Individual has an MCI Record")
+            PreFlightCheckResponse(
+            nino = accountDetails.nino,
+            routeToIV = false,
+            annualTaxSummaryLink = None,
+            utr = None,
+            enrolments = accountDetails.enrolments,
+            isEligible = false,
+            blockReason = Some("Manual correspondence indicator is set")
+          )
+          case (_, PertaxResponse("DECEASED_RECORD", _)) =>
+            logger.info("Individual is a deceased")
+            PreFlightCheckResponse(
+            nino = accountDetails.nino,
+            routeToIV = false,
+            annualTaxSummaryLink = None,
+            utr = None,
+            enrolments = accountDetails.enrolments,
+            isEligible = false,
+            blockReason = Some("User is deceased")
+          )
+          case (_, PertaxResponse("DESIGNATORY_DETAILS_NOT_FOUND", _)) =>
+            logger.info("Individual account missed adult registration")
+            PreFlightCheckResponse(
+            nino = accountDetails.nino,
+            routeToIV = false,
+            annualTaxSummaryLink = None,
+            utr = None,
+            enrolments = accountDetails.enrolments,
+            isEligible = false,
+            blockReason = Some("Juvenile record missed adult registration")
+          )
           case (Some(Organisation), _) =>
             logger.info("Organisation account is being used to login")
             PreFlightCheckResponse(
@@ -149,34 +183,6 @@ abstract class PreFlightServiceImpl[F[_]](
               }
               else None
             )
-
-          case (_, PertaxResponse("MCI_RECORD", _)) => PreFlightCheckResponse(
-            nino = accountDetails.nino,
-            routeToIV = false,
-            annualTaxSummaryLink = None,
-            utr = None,
-            enrolments = accountDetails.enrolments,
-            isEligible = false,
-            blockReason = Some("Manual correspondence indicator is set")
-          )
-          case (_, PertaxResponse("DECEASED_RECORD", _)) => PreFlightCheckResponse(
-            nino = accountDetails.nino,
-            routeToIV = false,
-            annualTaxSummaryLink = None,
-            utr = None,
-            enrolments = accountDetails.enrolments,
-            isEligible = false,
-            blockReason = Some("User is deceased")
-          )
-          case (_, PertaxResponse("DESIGNATORY_DETAILS_NOT_FOUND", _)) => PreFlightCheckResponse(
-            nino = accountDetails.nino,
-            routeToIV = false,
-            annualTaxSummaryLink = None,
-            utr = None,
-            enrolments = accountDetails.enrolments,
-            isEligible = false,
-            blockReason = Some("Juvenile record missed adult registration")
-          )
           case (_, PertaxResponse("ACCESS_GRANTED", _)) =>
               logger.info("Individual account is being used to login")
               PreFlightCheckResponse(
