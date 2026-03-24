@@ -183,19 +183,18 @@ abstract class PreFlightServiceImpl[F[_]](
               }
               else None
             )
-          case (_, PertaxResponse("ACCESS_GRANTED", _)) =>
+          case _ =>
               logger.info("Individual account is being used to login")
               PreFlightCheckResponse(
-                accountDetails.nino,
-                minimumConfidenceLevel > accountDetails.confLevel.level,
-                accountDetails.annualTaxSummaryLink,
-                utrDetails,
-                accountDetails.enrolments,
-                doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
+                nino = accountDetails.nino,
+                routeToIV = minimumConfidenceLevel > accountDetails.confLevel.level,
+                annualTaxSummaryLink = accountDetails.annualTaxSummaryLink,
+                utr = utrDetails,
+                enrolments = accountDetails.enrolments,
+                routeToTEN = doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
                 isEligible = true
               )
-          case _ => logger.info("Error in Pre-flight check")
-            throw InternalServerException(s"Pre-flight call failed with exception")
+          
 
       }
 
