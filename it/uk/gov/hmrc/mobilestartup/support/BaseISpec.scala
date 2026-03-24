@@ -68,6 +68,7 @@ class BaseISpec
       "microservice.services.citizen-details.port"            -> wireMockPort,
       "microservice.services.enrolment-store-proxy.port"      -> wireMockPort,
       "microservice.services.mobile-shuttering.port"          -> wireMockPort,
+      "microservice.services.pertax.port"                     -> wireMockPort,
       "auditing.consumer.baseUri.port"                        -> wireMockPort,
       "feature.userPanelSignUp"                               -> true,
       "feature.enablePushNotificationTokenRegistration"       -> true,

@@ -17,13 +17,15 @@
 package uk.gov.hmrc.mobilestartup.connectors
 
 import com.google.inject.Singleton
+
 import javax.inject.Inject
-import play.api.Configuration
+import play.api.{Configuration, Logging}
+import play.api.http.HeaderNames
 import play.api.libs.json.JsValue
-import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse, PertaxResponse}
 import play.api.http.Status.{NOT_FOUND, NO_CONTENT}
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
@@ -50,12 +52,12 @@ trait GenericConnector[F[_]] {
   ): F[EnrolmentStoreResponse]
 
   def doPost[T](
-    json:         JsValue,
+    json:         Option[JsValue] = None,
     serviceName:  String,
     path:         String,
     hc:           HeaderCarrier
   )(implicit rds: HttpReads[T]
-  ): F[T]
+  ): F[PertaxResponse]
 }
 
 @Singleton
@@ -63,7 +65,8 @@ class GenericConnectorImpl @Inject() (
   configuration: Configuration,
   wSHttp:        HttpClientV2
 )(implicit ec:   ExecutionContext)
-    extends GenericConnector[Future] {
+    extends GenericConnector[Future]
+    with Logging {
 
   def protocol(serviceName: String): String =
     getServiceConfig(serviceName).getOptional[String]("protocol").getOrElse("https")
@@ -112,15 +115,34 @@ class GenericConnectorImpl @Inject() (
   }
 
   def doPost[T](
-    json:         JsValue,
+    json:         Option[JsValue] = None,
     serviceName:  String,
     path:         String,
     hc:           HeaderCarrier
   )(implicit rds: HttpReads[T]
-  ): Future[T] = {
+  ): Future[PertaxResponse] = {
     implicit val hcHeaders: HeaderCarrier = addAPIHeaders(hc)
     val url = buildUrl(protocol(serviceName), host(serviceName), port(serviceName), path)
-    http.post(url"$url").withBody(json).execute[T]
+    val postResponse: Future[PertaxResponse] = json match {
+      case Some(jsBody) => http.post(url"$url").withBody(jsBody).execute[PertaxResponse]
+      case None =>
+        http
+          .post(url"$url")
+          .setHeader(HeaderNames.ACCEPT -> "application/vnd.hmrc.2.0+json")
+          .execute[PertaxResponse]
+    }
+    postResponse.recover {
+      case UpstreamErrorResponse(_, status, _, _) if status == 401 =>
+        logger.info(s"pertax authorise call failed with unauthorised exception")
+        throw UnauthorizedException(s" User is unauthorised")
+      case UpstreamErrorResponse(_, status, _, _) if status == 499 =>
+        logger.info(s"pertax authorise call failed with BadGatewayException")
+        throw BadGatewayException(s"Dependant services failing")
+      case ex: Exception =>
+        logger.info(s"pertax authorise call failed with exception ")
+        throw InternalServerException(s"Unexpected response from pertax api")
+    }
+
   }
 
   private def addAPIHeaders(hc: HeaderCarrier): HeaderCarrier =

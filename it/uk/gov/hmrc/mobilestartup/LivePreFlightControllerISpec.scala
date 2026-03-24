@@ -21,6 +21,7 @@ import play.api.libs.ws.WSResponse
 import uk.gov.hmrc.mobilestartup.support.BaseISpec
 import uk.gov.hmrc.mobilestartup.stubs.AuthStub._
 import uk.gov.hmrc.mobilestartup.stubs.AuditStub._
+import uk.gov.hmrc.mobilestartup.stubs.PertaxStub._
 import uk.gov.hmrc.mobilestartup.stubs.CitizenDetailsStub._
 import uk.gov.hmrc.mobilestartup.stubs.EnrolmentStoreStub._
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -66,10 +67,23 @@ trait LivePreFlightControllerTests extends BaseISpec {
   def postRequestWithAcceptHeader(url: String): Future[WSResponse] =
     wsUrl(url).addHttpHeaders(acceptJsonHeader).post("")
 
+  val acccessGrantedCode    = "ACCESS_GRANTED"
+  val acccessGrantedMessage = "user is authorised"
+
+  val mciRecordCode    = "MCI_RECORD"
+  val mciRecordMessage = "Manual correspondence indicator is set"
+
+  val deceasedRecordCode    = "DECEASED_RECORD"
+  val deceasedRecordMessage = "User is deceased"
+
+  val juviRecordCode    = "DESIGNATORY_DETAILS_NOT_FOUND"
+  val juviRecordMessage = "Juvenile record missed adult registration"
+
   "GET /preflight-check" should {
 
     "return account details" in {
       accountsFound(nino.nino, saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -82,11 +96,13 @@ trait LivePreFlightControllerTests extends BaseISpec {
       (response.json \ "utr" \ "status").as[String]            shouldBe "activated"
       (response.json \ "utr" \ "inactiveEnrolmentUrl").isEmpty shouldBe true
       (response.json \ "demoAccount").as[Boolean]              shouldBe false
+      (response.json \ "isEligible").as[Boolean]               shouldBe true
 
     }
 
     "Look for SaUtr on citizen-details if none returned from auth" in {
       accountsFoundMissingSaUtr(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
       cidPersonForNinoAre(cidPersonJson)
@@ -106,6 +122,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "return noUtr status if call to CID returns no UTR" in {
       accountsFoundMissingSaUtr(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
       cidPersonForNinoAre(cidPersonJsonNoUtr)
@@ -124,6 +141,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "return noUtr status if call to CID returns 204" in {
       accountsFoundMissingSaUtr(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
       cidWillReturnErrorResponse(204)
@@ -142,6 +160,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "do not call Enrolment Store if no UTR found on CID" in {
       accountsFoundMissingSaUtr(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
       cidWillReturnErrorResponse(404)
@@ -162,6 +181,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "Return correct url if no principalIds found for CID utr on Enrolment store proxy" in {
       accountsFoundMissingSaUtr(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
       cidPersonForNinoAre(cidPersonJson)
@@ -181,6 +201,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "return correct utr object if call to Enrolment Store returns 204" in {
       accountsFoundMissingSaUtr(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
       cidPersonForNinoAre(cidPersonJson)
@@ -201,6 +222,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "return no utr object if call to CID fails with 400" in {
       accountsFoundMissingSaUtr(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
       cidWillReturnErrorResponse(400)
@@ -217,6 +239,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "return noUtr status if call to CID fails with 404" in {
       accountsFoundMissingSaUtr(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
       cidWillReturnErrorResponse(404)
@@ -235,6 +258,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "return no utr object if call to CID fails with 500" in {
       accountsFoundMissingSaUtr(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
       cidWillReturnErrorResponse(500)
@@ -251,6 +275,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "return no utr object if call to Enrolment Store fails" in {
       accountsFoundMissingSaUtr(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
       cidPersonForNinoAre(cidPersonJson)
@@ -268,6 +293,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "return routeToTEN = false if HMRC-PT enrolment found" in {
       accountsFoundMultipleGGIDNoNino(saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -285,6 +311,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "return sandbox account details if appStoreReviewAccountId found" in {
       demoAccountFound("storeReviewAccountId")
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -305,6 +332,7 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     "return sandbox account details if appTeamAccountId found" in {
       demoAccountFound("appTeamAccountId")
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -357,6 +385,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
     "return paye link and inactive saUtr link if no active saUtr found" in {
       accountsFound(nino.nino, saUtr.utr, activateUtr = false)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -372,6 +401,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
     "return sa link if active saUtr found" in {
       accountsFound(nino.nino, saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -385,6 +415,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
     "return routeToTEN = false on ios if check enabled and HMRC-PT enrolment found" in {
       accountsFoundMultipleGGIDNoNino(saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -397,6 +428,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
     "return routeToTEN = false on android if check enabled and HMRC-PT enrolment found" in {
       accountsFoundMultipleGGIDNoNino(saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -410,6 +442,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
     "return routeToTEN = true on ios if check enabled and HMRC-PT enrolment not found" in {
       accountsFound(nino.nino, saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -422,6 +455,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
     "return routeToTEN = true on android if check enabled and HMRC-PT enrolment not found" in {
       accountsFound(nino.nino, saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -437,6 +471,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
       val unrecognisedUserAgentJsonHeader = "user-agent" -> "Chrome 48.9"
 
       accountsFound(nino.nino, saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -452,6 +487,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
     "return routeToTEN = false on ios if HMRC-PT and auth found with duplicate NINO's" in {
       accountsFoundMultipleGGIDsDuplicateNino(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -464,6 +500,7 @@ class LivePreflightControllerAllEnabledISpec extends LivePreFlightControllerTest
 
     "return routeToTEN = true on ios if HMRC-PT and Auth nino found but are different" in {
       accountsFoundMultipleGGIDsDifferentNino(nino.nino)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -486,8 +523,60 @@ class LivePreflightControllerATSLinkDisabledISpec extends LivePreFlightControlle
 
   "GET /preflight-check" should {
 
+    "return is Eligible as false" when {
+
+      def checkUserStatus(
+        messageCode:   String,
+        messageString: String
+      ) = {
+        accountsFound(nino.nino, saUtr.utr)
+        pertaxAuthorise(messageCode, messageString)
+        respondToAuditMergedWithNoBody
+        respondToAuditWithNoBody
+
+        val response = await(getRequestWithAcceptHeader(url))
+
+        response.status                            shouldBe 200
+        (response.json \ "nino").as[String]        shouldBe nino.nino
+        (response.json \ "isEligible").as[Boolean] shouldBe false
+        (response.json \ "blockReason").as[String] shouldBe messageString
+      }
+
+      "user has a MCI record" in {
+        checkUserStatus(mciRecordCode, mciRecordMessage)
+      }
+
+      "user has a deceased record" in {
+        checkUserStatus(deceasedRecordCode, deceasedRecordMessage)
+      }
+
+      "user has a juvenile record which missed adult registration" in {
+        checkUserStatus(juviRecordCode, juviRecordMessage)
+      }
+
+    }
+
+    "return 401 if unauthorised error from pertax" in {
+      accountsFound(nino.nino, saUtr.utr)
+      pertaxUnAuthorise(401)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      val response = await(wsUrl(url).addHttpHeaders(acceptJsonHeader).get())
+      response.status shouldBe 401
+    }
+
+    "return 500 if internal server  error from pertax" in {
+      accountsFound(nino.nino, saUtr.utr)
+      pertaxUnAuthorise(500)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+      val response = await(getRequestWithAcceptHeader(url))
+      response.status shouldBe 500
+    }
+
     "return no ATS link if feature flag is off" in {
       accountsFound(nino.nino, saUtr.utr, activateUtr = false)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -508,10 +597,14 @@ class LivePreflightControllerMultipleGGIDCheckDisabledISpec extends BaseISpec {
     )
   )
 
+  val acccessGrantedCode    = "ACCESS_GRANTED"
+  val acccessGrantedMessage = "user ia suthorised"
+
   "GET /preflight-check" should {
 
     "return routeToTEN false if check disabled on ios" in {
       accountsFound(nino.nino, saUtr.utr, activateUtr = false)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 
@@ -523,6 +616,7 @@ class LivePreflightControllerMultipleGGIDCheckDisabledISpec extends BaseISpec {
 
     "return routeToTEN false if check disabled on android" in {
       accountsFound(nino.nino, saUtr.utr, activateUtr = false)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
       respondToAuditMergedWithNoBody
       respondToAuditWithNoBody
 

@@ -22,12 +22,11 @@ import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
 import uk.gov.hmrc.auth.core.retrieve.Credentials
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, Enrolments, UnsupportedAuthProvider}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.fromStringtoLinkDestination
-import uk.gov.hmrc.mobilestartup.model.{Activated, RetrieveAccountsResponse}
-import uk.gov.hmrc.auth.core.EnrolmentIdentifier
+import uk.gov.hmrc.mobilestartup.model.{Activated, PertaxResponse, RetrieveAccountsResponse}
 
 import scala.concurrent.ExecutionContext
 
@@ -60,7 +59,7 @@ abstract class PreFlightServiceImpl[F[_]](
     enrolments:  Enrolments
   )(implicit hc: HeaderCarrier
   ): F[
-    (Option[Utr])
+    Option[Utr]
   ]
 
   def auditing[T](
@@ -103,69 +102,109 @@ abstract class PreFlightServiceImpl[F[_]](
     for {
       accountDetails <- accountsRetrieved
       utrDetails     <- getUtr(accountDetails.saUtr, accountDetails.nino, accountDetails.enrolments)
+      pertaxResponse <- if (!checkForDemoAccountId(accountDetails.internalId)) {
+        genericConnector.doPost[PertaxResponse](serviceName = "pertax", path = "/pertax/authorise", hc = hc)
+      } else PertaxResponse("ACCESS_GRANTED","access for demo account").pure[F]
     } yield {
-      accountDetails.affinityGroup match
-        case Some(Agent) =>
-          logger.info("Agent account is being used to login")
-          PreFlightCheckResponse(
-            accountDetails.nino,
-            false,
-            accountDetails.annualTaxSummaryLink,
-            utrDetails,
-            accountDetails.enrolments,
-            doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
-            isEligible = false,
-            blockReason = Some("Agents not allowed")
-          )
-        case Some(Organisation)  =>
-          logger.info("Organisation account is being used to login")
-          PreFlightCheckResponse(
-            accountDetails.nino,
-            if (hasPTEnrolement(accountDetails.enrolments)) {
-              minimumConfidenceLevel > accountDetails.confLevel.level
-            }
-            else false,
-            accountDetails.annualTaxSummaryLink,
-            utrDetails,
-            accountDetails.enrolments,
-            doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
-            isEligible = hasPTEnrolement(accountDetails.enrolments),
-            blockReason = if (!hasPTEnrolement(accountDetails.enrolments)) {
-              Some("Org not authorised")
-            }
-            else None
-          )
-        case _ =>
-          if (checkForDemoAccountId(accountDetails.internalId)) {
-            logger.info("Demo account Internal ID found, returning Sandbox data")
-            PreFlightCheckResponse(
-              Some(Nino("CS700100A")),
-              routeToIV = false,
-              Some(AnnualTaxSummaryLink("/", fromStringtoLinkDestination("PAYE"))),
-              Some(Utr(saUtr = Some(SaUtr("1234567890")), status = Activated)),
-              Enrolments(Set.empty),
-              demoAccount = true,
-              isEligible = true
-            )
-          }
-          else {
-            logger.info("Personal account is being used for login")
+      if (checkForDemoAccountId(accountDetails.internalId)) {
+        logger.info("Demo account Internal ID found, returning Sandbox data")
+        PreFlightCheckResponse(
+          Some(Nino("CS700100A")),
+          routeToIV = false,
+          Some(AnnualTaxSummaryLink("/", fromStringtoLinkDestination("PAYE"))),
+          Some(Utr(saUtr = Some(SaUtr("1234567890")), status = Activated)),
+          Enrolments(Set.empty),
+          demoAccount = true,
+          isEligible = true
+        )
+      } else {
+         (accountDetails.affinityGroup, pertaxResponse) match
+          case (Some(Agent), _) =>
+            logger.info("Agent account is being used to login")
             PreFlightCheckResponse(
               accountDetails.nino,
-              minimumConfidenceLevel > accountDetails.confLevel.level,
+              false,
               accountDetails.annualTaxSummaryLink,
               utrDetails,
               accountDetails.enrolments,
               doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
-              isEligible = true
+              isEligible = false,
+              blockReason = Some("Agents not allowed")
             )
-          }
+
+          case (_, PertaxResponse("MCI_RECORD", _)) =>
+            logger.info("Individual has an MCI Record")
+            PreFlightCheckResponse(
+            nino = accountDetails.nino,
+            routeToIV = false,
+            annualTaxSummaryLink = None,
+            utr = None,
+            enrolments = accountDetails.enrolments,
+            isEligible = false,
+            blockReason = Some("Manual correspondence indicator is set")
+          )
+          case (_, PertaxResponse("DECEASED_RECORD", _)) =>
+            logger.info("Individual is a deceased")
+            PreFlightCheckResponse(
+            nino = accountDetails.nino,
+            routeToIV = false,
+            annualTaxSummaryLink = None,
+            utr = None,
+            enrolments = accountDetails.enrolments,
+            isEligible = false,
+            blockReason = Some("User is deceased")
+          )
+          case (_, PertaxResponse("DESIGNATORY_DETAILS_NOT_FOUND", _)) =>
+            logger.info("Individual account missed adult registration")
+            PreFlightCheckResponse(
+            nino = accountDetails.nino,
+            routeToIV = false,
+            annualTaxSummaryLink = None,
+            utr = None,
+            enrolments = accountDetails.enrolments,
+            isEligible = false,
+            blockReason = Some("Juvenile record missed adult registration")
+          )
+          case (Some(Organisation), _) =>
+            logger.info("Organisation account is being used to login")
+            PreFlightCheckResponse(
+              accountDetails.nino,
+              if (hasPTEnrolement(accountDetails.enrolments)) {
+                minimumConfidenceLevel > accountDetails.confLevel.level
+              }
+              else false,
+              accountDetails.annualTaxSummaryLink,
+              utrDetails,
+              accountDetails.enrolments,
+              doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
+              isEligible = hasPTEnrolement(accountDetails.enrolments),
+              blockReason = if (!hasPTEnrolement(accountDetails.enrolments)) {
+                Some("Org not authorised")
+              }
+              else None
+            )
+          case (_, PertaxResponse("ACCESS_GRANTED", _)) =>
+              logger.info("Individual account is being used to login")
+              PreFlightCheckResponse(
+                accountDetails.nino,
+                minimumConfidenceLevel > accountDetails.confLevel.level,
+                accountDetails.annualTaxSummaryLink,
+                utrDetails,
+                accountDetails.enrolments,
+                doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
+                isEligible = true
+              )
+          case _ => logger.info("Error in Pre-flight check")
+            throw InternalServerException(s"Pre-flight call failed with exception")
+
+      }
+
     }
   }
 
   private def checkForDemoAccountId(internalId: Option[String]): Boolean = {
     val accountId = internalId.getOrElse("")
-    (accountId == storeReviewAccountInternalId || accountId == appTeamAccountInternalId)
+    accountId == storeReviewAccountInternalId || accountId == appTeamAccountInternalId
   }
 
   private def hasPTEnrolement(enrolments: Enrolments): Boolean = {

@@ -22,9 +22,9 @@ import play.api.libs.json.Json.obj
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
 import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
-import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse}
+import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse, PertaxResponse}
 import uk.gov.hmrc.mobilestartup.services.{FeatureFlag, StartupServiceImpl, ThrottleValue, URL}
-import TestFInstances.*
+import TestFInstances.TestF
 
 trait StartupTestData {
 
@@ -149,6 +149,8 @@ trait StartupTestData {
                                                    |    }
                                                    |  }
                                                    |""".stripMargin)
+
+  val pertaxResponseAccessGranted = PertaxResponse("ACCESS_GRANTED", "access granted")
 
   val startupService =
     new StartupServiceImpl[TestF](
@@ -345,10 +347,11 @@ trait StartupTestData {
   val childBenefitShutteringDisabled: Shuttering = Shuttering(shuttered = false)
 
   def dummyConnector(
-    htsResponse:            TestF[JsValue] = htsSuccessResponse.pure[TestF],
-    tcrResponse:            TestF[JsValue] = tcrSuccessResponse.pure[TestF],
-    inAppMessagesResponse:  TestF[JsValue] = messagesSuccessResponse.pure[TestF],
-    citizenDetailsResponse: TestF[JsValue] = citizenDetailsSuccessResponse.pure[TestF]
+    htsResponse:            TestF[JsValue]        = htsSuccessResponse.pure[TestF],
+    tcrResponse:            TestF[JsValue]        = tcrSuccessResponse.pure[TestF],
+    inAppMessagesResponse:  TestF[JsValue]        = messagesSuccessResponse.pure[TestF],
+    citizenDetailsResponse: TestF[JsValue]        = citizenDetailsSuccessResponse.pure[TestF],
+    pertaxResponse:         TestF[PertaxResponse] = pertaxResponseAccessGranted.pure[TestF]
   ): GenericConnector[TestF] =
     new GenericConnector[TestF] {
 
@@ -378,12 +381,15 @@ trait StartupTestData {
       ): TestF[EnrolmentStoreResponse] = ???
 
       override def doPost[T](
-        json:         JsValue,
+        json:         Option[JsValue],
         serviceName:  String,
         path:         String,
         hc:           HeaderCarrier
       )(implicit rds: HttpReads[T]
-      ): TestF[T] = ???
+      ): TestF[PertaxResponse] = serviceName match {
+        case "pertax" => pertaxResponse
+        case _        => PertaxResponse("no code", "no message").pure[TestF]
+      }
     }
 
 }

@@ -52,6 +52,7 @@ object AuthStub {
        |    "providerId": "test-cred-id",
        |    "providerType": "GovernmentGateway"
        |  },
+       |  "affinityGroup":"Individual",
        |  "allEnrolments": [{
        |      "key": "IR-SA",
        |      "identifiers": [{
