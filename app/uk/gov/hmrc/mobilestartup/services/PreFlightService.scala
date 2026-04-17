@@ -91,8 +91,9 @@ object Utr {
 trait PreFlightService[F[_]] {
 
   def preFlight(
-    journeyId:   JourneyId
-  )(implicit hc: HeaderCarrier,
-    ec:          ExecutionContext
+    journeyId:    JourneyId,
+    enablePertax: Boolean = false
+  )(implicit hc:  HeaderCarrier,
+    ec:           ExecutionContext
   ): F[PreFlightCheckResponse]
 }

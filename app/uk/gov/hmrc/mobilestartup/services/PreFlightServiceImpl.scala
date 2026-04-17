@@ -70,12 +70,12 @@ abstract class PreFlightServiceImpl[F[_]](
   ): F[T]
 
   def preFlight(
-    journeyId:   JourneyId
+    journeyId:   JourneyId, enablePertax: Boolean = false
   )(implicit hc: HeaderCarrier,
     ec:          ExecutionContext
   ): F[PreFlightCheckResponse] =
     auditing("preFlightCheck", Map.empty) {
-      getPreFlightCheckResponse(journeyId)
+      getPreFlightCheckResponse(journeyId, enablePertax)
     }
 
   def doesUserHaveMultipleGGIDs(
@@ -84,7 +84,7 @@ abstract class PreFlightServiceImpl[F[_]](
   )(implicit hc: HeaderCarrier
   ): Boolean
 
-  private def getPreFlightCheckResponse(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] = {
+  private def getPreFlightCheckResponse(journeyId: JourneyId, enablePertax: Boolean = false)(implicit hc: HeaderCarrier): F[PreFlightCheckResponse] = {
 
     val accountsRetrieved: F[RetrieveAccountsResponse] = retrieveAccounts.map {
       case (nino, saUtr, credentials, confidenceLevel, annualTaxSummaryLink, enrolments, internalId, affinityGroup) =>
@@ -102,7 +102,7 @@ abstract class PreFlightServiceImpl[F[_]](
     for {
       accountDetails <- accountsRetrieved
       utrDetails     <- getUtr(accountDetails.saUtr, accountDetails.nino, accountDetails.enrolments)
-      pertaxResponse <- if (!checkForDemoAccountId(accountDetails.internalId)) {
+      pertaxResponse <- if (!checkForDemoAccountId(accountDetails.internalId) && enablePertax) {
         genericConnector.doPost[PertaxResponse](serviceName = "pertax", path = "/pertax/authorise", hc = hc)
       } else PertaxResponse("ACCESS_GRANTED","access for demo account").pure[F]
     } yield {

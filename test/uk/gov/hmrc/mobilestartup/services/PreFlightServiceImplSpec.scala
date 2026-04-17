@@ -191,7 +191,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
             credId               = Some("11223344"),
             affinityGroup        = Some(AffinityGroup.Individual)
           )
-        val result = sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet
+        val result = sut.preFlight(journeyId, true)(HeaderCarrier(), ec).unsafeGet
 
         result.nino                 shouldBe Some(nino)
         result.annualTaxSummaryLink shouldBe None
@@ -211,7 +211,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
             credId               = Some("11223344"),
             affinityGroup        = Some(AffinityGroup.Individual)
           )
-        val result = sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet
+        val result = sut.preFlight(journeyId, true)(HeaderCarrier(), ec).unsafeGet
 
         result.nino                 shouldBe Some(nino)
         result.annualTaxSummaryLink shouldBe None
@@ -231,7 +231,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
             credId               = Some("11223344"),
             affinityGroup        = Some(AffinityGroup.Individual)
           )
-        val result = sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet
+        val result = sut.preFlight(journeyId, true)(HeaderCarrier(), ec).unsafeGet
 
         result.nino                 shouldBe Some(nino)
         result.annualTaxSummaryLink shouldBe None

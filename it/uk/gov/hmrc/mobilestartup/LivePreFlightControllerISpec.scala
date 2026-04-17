@@ -517,7 +517,8 @@ class LivePreflightControllerATSLinkDisabledISpec extends LivePreFlightControlle
   override protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(
     config ++
     Map(
-      "feature.annualTaxSummaryLink" -> false
+      "feature.annualTaxSummaryLink" -> false,
+      "feature.enablePertax"         -> true
     )
   )
 
