@@ -71,6 +71,7 @@ class BaseISpec
       "microservice.services.pertax.port"                     -> wireMockPort,
       "auditing.consumer.baseUri.port"                        -> wireMockPort,
       "feature.userPanelSignUp"                               -> true,
+      "feature.enablePertax"                                  -> true,
       "feature.enablePushNotificationTokenRegistration"       -> true,
       "feature.helpToSave.enableBadge"                        -> true,
       "feature.paperlessAlertDialogs"                         -> true,
