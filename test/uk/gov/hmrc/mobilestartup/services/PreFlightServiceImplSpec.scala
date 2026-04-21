@@ -178,7 +178,27 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
 
     "isEligible flag should be false" when {
 
-      "user has MCI_RECORD" in {
+      "user has MCI_RECORD and pertax enable flag is true" in {
+        val sut: PreFlightService[TestF] =
+          service(
+            nino                 = Some(nino),
+            saUtr                = None,
+            credentials          = Some(Credentials("", "GovernmentGateway")),
+            confidenceLevel      = ConfidenceLevel.L200,
+            annualTaxSummaryLink = None,
+            enrolments           = Enrolments(Set.empty),
+            connector            = dummyConnector(pertaxResponse = mciPertaxResponse.pure[TestF]),
+            credId               = Some("11223344"),
+            affinityGroup        = Some(AffinityGroup.Individual)
+          )
+        val result = sut.preFlight(journeyId, true)(HeaderCarrier(), ec).unsafeGet
+
+        result.nino                 shouldBe Some(nino)
+        result.annualTaxSummaryLink shouldBe None
+        result.isEligible           shouldBe (false)
+      }
+
+      "user has MCI_RECORD and pertax enable flag is false" in {
         val sut: PreFlightService[TestF] =
           service(
             nino                 = Some(nino),
@@ -195,10 +215,30 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
 
         result.nino                 shouldBe Some(nino)
         result.annualTaxSummaryLink shouldBe None
+        result.isEligible           shouldBe (true)
+      }
+
+      "user has DECEASED_RECORD and enable pertax is true" in {
+        val sut: PreFlightService[TestF] =
+          service(
+            nino                 = Some(nino),
+            saUtr                = None,
+            credentials          = Some(Credentials("", "GovernmentGateway")),
+            confidenceLevel      = ConfidenceLevel.L200,
+            annualTaxSummaryLink = None,
+            enrolments           = Enrolments(Set.empty),
+            connector            = dummyConnector(pertaxResponse = deceasedPertaxResponse.pure[TestF]),
+            credId               = Some("11223344"),
+            affinityGroup        = Some(AffinityGroup.Individual)
+          )
+        val result = sut.preFlight(journeyId, true)(HeaderCarrier(), ec).unsafeGet
+
+        result.nino                 shouldBe Some(nino)
+        result.annualTaxSummaryLink shouldBe None
         result.isEligible           shouldBe (false)
       }
 
-      "user has DECEASED_RECORD" in {
+      "user has DECEASED_RECORD  and enable pertax is false" in {
         val sut: PreFlightService[TestF] =
           service(
             nino                 = Some(nino),
@@ -215,10 +255,30 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
 
         result.nino                 shouldBe Some(nino)
         result.annualTaxSummaryLink shouldBe None
+        result.isEligible           shouldBe (true)
+      }
+
+      "user has juvenile record and enable pertax is true" in {
+        val sut: PreFlightService[TestF] =
+          service(
+            nino                 = Some(nino),
+            saUtr                = None,
+            credentials          = Some(Credentials("", "GovernmentGateway")),
+            confidenceLevel      = ConfidenceLevel.L200,
+            annualTaxSummaryLink = None,
+            enrolments           = Enrolments(Set.empty),
+            connector            = dummyConnector(pertaxResponse = juviPertaxResponse.pure[TestF]),
+            credId               = Some("11223344"),
+            affinityGroup        = Some(AffinityGroup.Individual)
+          )
+        val result = sut.preFlight(journeyId, true)(HeaderCarrier(), ec).unsafeGet
+
+        result.nino                 shouldBe Some(nino)
+        result.annualTaxSummaryLink shouldBe None
         result.isEligible           shouldBe (false)
       }
 
-      "user has juvenile record" in {
+      "user has juvenile record and enable pertax is false" in {
         val sut: PreFlightService[TestF] =
           service(
             nino                 = Some(nino),
@@ -235,7 +295,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
 
         result.nino                 shouldBe Some(nino)
         result.annualTaxSummaryLink shouldBe None
-        result.isEligible           shouldBe (false)
+        result.isEligible           shouldBe (true)
       }
     }
 

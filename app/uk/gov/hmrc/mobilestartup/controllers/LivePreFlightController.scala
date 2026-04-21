@@ -15,32 +15,38 @@
  */
 
 package uk.gov.hmrc.mobilestartup.controllers
-import javax.inject.Inject
+import javax.inject.{Inject, Named}
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, BodyParser, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, BodyParser, ControllerComponents, Headers}
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.mobilestartup.services.PreFlightService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendBaseController
 
+import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
 class LivePreFlightController @Inject() (
-  val controllerComponents:               ControllerComponents,
-  preflightService:                       PreFlightService[Future],
-  override val authConnector:             AuthConnector
-)(implicit override val executionContext: ExecutionContext)
+  val controllerComponents:                        ControllerComponents,
+  preflightService:                                PreFlightService[Future],
+  override val authConnector:                      AuthConnector,
+  @Named("feature.enablePertax") val enablePertax: Boolean = false
+)(implicit override val executionContext:          ExecutionContext)
     extends BackendBaseController
     with AuthorisedFunctions
     with HeaderValidator {
 
   override def parser: BodyParser[AnyContent] = controllerComponents.parsers.anyContent
 
+  val sessionId = UUID.randomUUID().toString
+
   def preFlightCheck(journeyId: JourneyId): Action[AnyContent] =
     validateAccept(acceptHeaderValidationRules).async { implicit request =>
-      preflightService.preFlight(journeyId).map { response =>
-        hc.authorization match {
+      implicit val newHeaders: HeaderCarrier = hc.withExtraHeaders("X-Session-ID" -> sessionId)
+      preflightService.preFlight(journeyId, enablePertax)(newHeaders).map { response =>
+        newHeaders.authorization match {
           case Some(_) => Ok(Json.toJson(response))
           case _       => Unauthorized("Failed to resolve authentication from HC!")
         }

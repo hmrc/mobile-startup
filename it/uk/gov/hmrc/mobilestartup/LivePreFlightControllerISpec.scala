@@ -517,7 +517,8 @@ class LivePreflightControllerATSLinkDisabledISpec extends LivePreFlightControlle
   override protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(
     config ++
     Map(
-      "feature.annualTaxSummaryLink" -> false
+      "feature.annualTaxSummaryLink" -> false,
+      "feature.enablePertax"         -> true
     )
   )
 
@@ -584,6 +585,52 @@ class LivePreflightControllerATSLinkDisabledISpec extends LivePreFlightControlle
 
       (response.json \ "annualTaxSummaryLink").isEmpty shouldBe true
     }
+  }
+}
+
+class LivePreflightControllerPertaxDisabledISpec extends LivePreFlightControllerTests {
+
+  override protected def appBuilder: GuiceApplicationBuilder = new GuiceApplicationBuilder().configure(
+    config ++
+    Map(
+      "feature.annualTaxSummaryLink" -> false,
+      "feature.enablePertax"         -> false
+    )
+  )
+
+  "GET /preflight-check with pertax disabled" should {
+
+    "return is Eligible as true and no pertax check" when {
+
+      def checkUserStatus(
+        messageCode:   String,
+        messageString: String
+      ) = {
+        accountsFound(nino.nino, saUtr.utr)
+        respondToAuditMergedWithNoBody
+        respondToAuditWithNoBody
+
+        val response = await(getRequestWithAcceptHeader(url))
+
+        response.status                            shouldBe 200
+        (response.json \ "nino").as[String]        shouldBe nino.nino
+        (response.json \ "isEligible").as[Boolean] shouldBe true
+      }
+
+      "user has a MCI record" in {
+        checkUserStatus(mciRecordCode, mciRecordMessage)
+      }
+
+      "user has a deceased record" in {
+        checkUserStatus(deceasedRecordCode, deceasedRecordMessage)
+      }
+
+      "user has a juvenile record which missed adult registration" in {
+        checkUserStatus(juviRecordCode, juviRecordMessage)
+      }
+
+    }
+
   }
 }
 
