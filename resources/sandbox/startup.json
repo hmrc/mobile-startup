@@ -28,23 +28,7 @@
     "tc": [],
     "hts": [],
     "tcp": [],
-    "money": [
-      {
-        "type": "Info",
-        "id": "your-details-signpost",
-        "headlineContent": {
-          "title": "Looking for your Unique Taxpayer Reference (UTR)?",
-          "links": [
-            {
-              "url": "your-details",
-              "urlType": "InApp",
-              "type": "Secondary",
-              "message": "Go to your details"
-            }
-          ]
-        }
-      }
-    ],
+    "money": [],
     "communication": [],
     "details": []
   },
