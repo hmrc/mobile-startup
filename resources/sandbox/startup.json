@@ -114,6 +114,14 @@
       "enabled": true
     },
     {
+      "name": "enableChangeOfBankPegaURL",
+      "enabled": true
+    },
+    {
+      "name": "enableChildBenefitMVP",
+      "enabled": true
+    },
+    {
       "name": "enableTaxCreditShuttering",
       "enabled": false
     }
