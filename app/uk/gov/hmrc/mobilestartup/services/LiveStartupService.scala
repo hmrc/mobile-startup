@@ -113,6 +113,7 @@ class LiveStartupService @Inject() (
   @Named("feature.enableAdditionalIncome") enableAdditionalIncome:                                   Boolean,
   @Named("feature.enableWinterFuelPayment") enableWinterFuelPayment:                                 Boolean,
   @Named("feature.devEnableITSA") devEnableITSA:                                                     Boolean,
+  @Named("feature.enableHelpTabNavigationBar") enableHelpTabNavigationBar:                           Boolean,
   @Named("throttleValue.SACessationThrottle") saCessationThrottle:                                   Int
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
@@ -205,4 +206,5 @@ class LiveStartupService @Inject() (
                                        enableAdditionalIncome,
                                        enableWinterFuelPayment,
                                        devEnableITSA,
+                                       enableHelpTabNavigationBar,
                                        saCessationThrottle)
