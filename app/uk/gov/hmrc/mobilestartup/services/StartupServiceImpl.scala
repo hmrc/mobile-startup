@@ -152,7 +152,6 @@ case class StartupServiceImpl[F[_]] @Inject() (
   enableAdditionalIncome:                    Boolean,
   enableWinterFuelPayment:                   Boolean,
   devEnableITSA:                             Boolean,
-  enableHelpTabNavigationBar:                Boolean,
   saCessationThrottle:                       Int
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
@@ -210,7 +209,6 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("enableAdditionalIncome", enableAdditionalIncome),
         FeatureFlag("enableWinterFuelPayment", enableWinterFuelPayment),
         FeatureFlag("devEnableITSA", devEnableITSA),
-        FeatureFlag("enableHelpTabNavigationBar", enableHelpTabNavigationBar)
       )
     )
 
