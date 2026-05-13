@@ -40,13 +40,10 @@ class LivePreFlightController @Inject() (
 
   override def parser: BodyParser[AnyContent] = controllerComponents.parsers.anyContent
 
-  val sessionId = UUID.randomUUID().toString
-
   def preFlightCheck(journeyId: JourneyId): Action[AnyContent] =
     validateAccept(acceptHeaderValidationRules).async { implicit request =>
-      implicit val newHeaders: HeaderCarrier = hc.withExtraHeaders("X-Session-ID" -> sessionId)
-      preflightService.preFlight(journeyId, enablePertax)(newHeaders).map { response =>
-        newHeaders.authorization match {
+      preflightService.preFlight(journeyId, enablePertax).map { response =>
+        hc.authorization match {
           case Some(_) => Ok(Json.toJson(response))
           case _       => Unauthorized("Failed to resolve authentication from HC!")
         }
