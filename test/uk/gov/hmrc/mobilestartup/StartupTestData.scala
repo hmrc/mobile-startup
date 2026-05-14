@@ -244,7 +244,6 @@ trait StartupTestData {
       enableAdditionalIncome                    = false,
       enableWinterFuelPayment                   = false,
       devEnableITSA                             = false,
-      enableHelpTabNavigationBar                = false,
       saCessationThrottle                       = 0
     )
 
@@ -279,7 +278,6 @@ trait StartupTestData {
     FeatureFlag("enableAdditionalIncome", enabled                  = false),
     FeatureFlag("enableWinterFuelPayment", enabled                 = false),
     FeatureFlag("devEnableITSA", enabled                           = false),
-    FeatureFlag("enableHelpTabNavigationBar", enabled              = false)
   )
 
   val expectedURLs = List(
