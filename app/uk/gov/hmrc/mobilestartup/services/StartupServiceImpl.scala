@@ -350,7 +350,12 @@ case class StartupServiceImpl[F[_]] @Inject() (
           Option(
             Json.toJson(
               new JsObject(
-                Map("name" -> Json.toJson(person.person.shortName), "address" -> Json.toJson(person.address))
+                Map(
+                  "firstName" -> Json.toJson(person.person.firstName),
+                  "lastName" -> Json.toJson(person.person.lastName),                  
+                  "name" -> Json.toJson(person.person.shortName),
+                  "address" -> Json.toJson(person.address)
+                )
               )
             )
           )
