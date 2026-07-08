@@ -137,6 +137,8 @@ trait StartupTestData {
                                                             |""".stripMargin)
 
   val userExpectedResponse: JsValue = Json.parse("""{
+                                                   |    "firstName": "Angus",
+                                                   |    "lastName": "Smith",
                                                    |    "name": "Angus John Smith",
                                                    |    "address": {
                                                    |      "line1": "123456",
