@@ -15,10 +15,12 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
+import cats.Applicative.ops.toAllApplicativeOps
+import cats.implicits.catsSyntaxApplicativeId
 import play.api.libs.json.Json.*
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{JsNull, JsObject, JsString, Json}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mobilestartup.TestFInstances._
+import uk.gov.hmrc.mobilestartup.TestFInstances.*
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData}
 
@@ -53,6 +55,51 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
       (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
     }
+
+    "give successful response when there is no firstName" in {
+      val sut = startupService.copy(connector = dummyConnector(citizenDetailsResponse =
+        (citizenDetailsSuccessResponse.as[JsObject] +
+          ("person" -> (
+            (citizenDetailsSuccessResponse  \ "person").as[JsObject] +
+              ("firstName" -> JsNull)
+            ))).pure[TestF]
+      ))
+      val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
+
+      val userResponseWithNoFirstName = userExpectedResponse.as[JsObject] + ("firstName" -> JsNull) + ("name" -> JsString("John Smith"))
+
+      (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
+      (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
+      (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
+      (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
+      (result \ user).toOption.value                              shouldBe userResponseWithNoFirstName
+      (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
+      (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
+      (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
+    }
+
+    "give successful response when there is no lastName" in {
+      val sut = startupService.copy(connector = dummyConnector(citizenDetailsResponse =
+        (citizenDetailsSuccessResponse.as[JsObject] +
+          ("person" -> (
+            (citizenDetailsSuccessResponse  \ "person").as[JsObject] +
+              ("lastName" -> JsNull)
+            ))).pure[TestF]
+      ))
+      val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
+
+      val userResponseWithNoLastName = userExpectedResponse.as[JsObject] + ("lastName" -> JsNull) + ("name" -> JsString("Angus John"))
+
+      (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
+      (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
+      (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
+      (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
+      (result \ user).toOption.value                              shouldBe userResponseWithNoLastName
+      (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
+      (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
+      (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
+    }
+
 
     "contain an error entry for tcr when the tcr call fails" in {
       val sut = startupService.copy(connector = dummyConnector(tcrResponse = new Exception("tcr failed").error))
