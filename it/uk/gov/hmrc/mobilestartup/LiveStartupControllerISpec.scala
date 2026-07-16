@@ -160,16 +160,14 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 21 \ "enabled").as[Boolean]              shouldBe false
       (response.json \ "feature" \ 22 \ "name").as[String]                  shouldBe "enableSACessation"
       (response.json \ "feature" \ 22 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 23 \ "name").as[String]                  shouldBe "enableAdditionalIncome"
+      (response.json \ "feature" \ 23 \ "name").as[String]                  shouldBe "enableWinterFuelPayment"
       (response.json \ "feature" \ 23 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 24 \ "name").as[String]                  shouldBe "enableWinterFuelPayment"
+      (response.json \ "feature" \ 24 \ "name").as[String]                  shouldBe "devEnableITSA"
       (response.json \ "feature" \ 24 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 25 \ "name").as[String]                  shouldBe "devEnableITSA"
+      (response.json \ "feature" \ 25 \ "name").as[String]                  shouldBe "enableTaxAndBenefitView"
       (response.json \ "feature" \ 25 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 26 \ "name").as[String]                  shouldBe "enableTaxAndBenefitView"
+      (response.json \ "feature" \ 26 \ "name").as[String]                  shouldBe "enableNinoFirstNameDisplay"
       (response.json \ "feature" \ 26 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "feature" \ 27 \ "name").as[String]                  shouldBe "enableNinoFirstNameDisplay"
-      (response.json \ "feature" \ 27 \ "enabled").as[Boolean]              shouldBe false
       (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
       (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"
