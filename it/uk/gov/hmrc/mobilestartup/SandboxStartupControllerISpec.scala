@@ -35,36 +35,6 @@ class SandboxStartupControllerISpec extends BaseISpec {
       response.status shouldBe 200
     }
 
-    "return 200 and RENEWALS OPEN json where SANDBOX-CONTROL is RENEWALS-OPEN" in {
-      val response = await(
-        wsUrl("/startup?journeyId=7f1b5289-5f4d-4150-93a3-ff02dda28375")
-          .addHttpHeaders(mobileHeader ++ withSandboxControl("RENEWALS-OPEN") *)
-          .get()
-      )
-      response.status                                                       shouldBe 200
-      (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
-    }
-
-    "return 200 and RENEWALS VIEW ONLY json where SANDBOX-CONTROL is RENEWALS-VIEW-ONLY" in {
-      val response = await(
-        wsUrl("/startup?journeyId=7f1b5289-5f4d-4150-93a3-ff02dda28375")
-          .addHttpHeaders(mobileHeader ++ withSandboxControl("RENEWALS-VIEW-ONLY") *)
-          .get()
-      )
-      response.status                                                       shouldBe 200
-      (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "check_status_only"
-    }
-
-    "return 200 and RENEWALS CLOSE json where SANDBOX-CONTROL is RENEWALS-CLOSED" in {
-      val response = await(
-        wsUrl("/startup?journeyId=7f1b5289-5f4d-4150-93a3-ff02dda28375")
-          .addHttpHeaders(mobileHeader ++ withSandboxControl("RENEWALS-CLOSED") *)
-          .get()
-      )
-      response.status                                                       shouldBe 200
-      (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "closed"
-    }
-
     "return 200 and HTS ENROLLED json where SANDBOX-CONTROL is HTS-ENROLLED" in {
       val response = await(
         wsUrl("/startup?journeyId=7f1b5289-5f4d-4150-93a3-ff02dda28375")

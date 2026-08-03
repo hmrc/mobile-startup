@@ -41,8 +41,6 @@ paths:
                   - example:
                       user:
                         name: John Smith
-                      taxCreditRenewals:
-                        submissionsState: open
                       helpToSave:
                         shuttering:
                           shuttered: false
@@ -100,8 +98,6 @@ paths:
                   value:
                     user:
                       name: John Smith
-                    taxCreditRenewals:
-                      submissionsState: open
                     helpToSave:
                       shuttering:
                         shuttered: false
@@ -256,7 +252,6 @@ components:
       title: MobileStartupStartupresponse
       required:
         - user
-        - taxCreditRenewals
         - helpToSave
         - feature
         - messages
@@ -266,8 +261,6 @@ components:
       properties:
         user:
           $ref: '#/components/schemas/User'
-        taxCreditRenewals:
-          $ref: '#/components/schemas/TaxCreditRenewals'
         helpToSave:
           $ref: '#/components/schemas/HelpToSave'
         feature:
@@ -291,8 +284,6 @@ components:
             line3: West Sussex
             postcode: BN99 8IG
             country: United Kingdom
-        taxCreditRenewals:
-          submissionsState: open
         helpToSave:
           shuttering:
             shuttered: false
@@ -576,16 +567,6 @@ components:
         shuttered: false
         title: ''
         message: ''
-    TaxCreditRenewals:
-      title: TaxCreditRenewals
-      required:
-        - submissionsState
-      type: object
-      properties:
-        submissionsState:
-          type: string
-      example:
-        submissionsState: open
     User:
       title: User
       required:

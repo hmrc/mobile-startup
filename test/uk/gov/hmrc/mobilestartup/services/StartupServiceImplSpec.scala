@@ -31,7 +31,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
 
       val result: JsObject = startupService.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).get
       (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
       (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
       (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
       (result \ user).toOption.value                              shouldBe userExpectedResponse
@@ -47,7 +46,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption                              shouldBe None
-      (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
       (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
       (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
       (result \ user).toOption.value                              shouldBe userExpectedResponse
@@ -69,7 +67,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       val userResponseWithNoFirstName = userExpectedResponse.as[JsObject] + ("firstName" -> JsNull) + ("name" -> JsString("John Smith"))
 
       (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
       (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
       (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
       (result \ user).toOption.value                              shouldBe userResponseWithNoFirstName
@@ -91,7 +88,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       val userResponseWithNoLastName = userExpectedResponse.as[JsObject] + ("lastName" -> JsNull) + ("name" -> JsString("Angus John"))
 
       (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
       (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
       (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
       (result \ user).toOption.value                              shouldBe userResponseWithNoLastName
@@ -107,7 +103,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value                shouldBe obj("submissionsState" -> "error")
       (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
       (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
       (result \ user).toOption.value                              shouldBe userExpectedResponse
@@ -124,7 +119,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value                shouldBe obj("submissionsState" -> "open")
       (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
       (result \ messages).toOption.value                          shouldBe Json.parse("""{
                                                                |  "paye": [],
@@ -146,7 +140,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
       (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
-      (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
       (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
       (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
       (result \ user).toOption                                    shouldBe None
@@ -172,7 +165,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
     val result: JsObject = sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).unsafeGet
 
     (result \ helpToSave).toOption.value           shouldBe htsSuccessResponse
-    (result \ taxCreditsRenewals).toOption.value   shouldBe tcrSuccessResponse
     (result \ "feature").get.as[List[FeatureFlag]] shouldBe expectedFeatureFlags
     (result \ messages).toOption.value             shouldBe messagesSuccessResponse
     (result \ user).toOption                       shouldBe None
@@ -244,7 +236,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       .unsafeGet
 
     (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
-    (result \ taxCreditsRenewals).toOption.value                shouldBe tcrSuccessResponse
     (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
     (result \ messages).toOption.value                          shouldBe messagesSuccessResponse
     (result \ user).toOption                                    shouldBe None
@@ -268,7 +259,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       .unsafeGet
 
     (result \ helpToSave).toOption.value                                   shouldBe htsSuccessResponse
-    (result \ taxCreditsRenewals).toOption.value                           shouldBe tcrSuccessResponse
     (result \ "feature").get.as[List[FeatureFlag]]                         shouldBe expectedFeatureFlags
     (result \ messages).toOption.value                                     shouldBe messagesSuccessResponse
     (result \ user).toOption.value                                         shouldBe userExpectedResponse

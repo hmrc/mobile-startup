@@ -19,9 +19,6 @@
       "state": "<HTS_STATUS>"
     }
   },
-  "taxCreditRenewals": {
-    "submissionsState": "<RENEWALS_STATUS>"
-  },
   "messages": {
     "home": [],
     "paye": [],

@@ -29,7 +29,6 @@ import TestFInstances.TestF
 trait StartupTestData {
 
   val helpToSave         = "helpToSave"
-  val taxCreditsRenewals = "taxCreditRenewals"
   val messages           = "messages"
   val user               = "user"
   val successfulResponse = JsString("success")
@@ -366,7 +365,6 @@ trait StartupTestData {
       ): TestF[JsValue] =
         serviceName match {
           case "mobile-help-to-save"        => htsResponse
-          case "mobile-tax-credits-renewal" => tcrResponse
           case "mobile-in-app-messages"     => inAppMessagesResponse
           case "citizen-details"            => citizenDetailsResponse
           case _                            => obj().pure[TestF]
