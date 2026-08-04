@@ -47,9 +47,6 @@ about the user's help-to-save-account (if they have one) and any global feature 
       "state": "Enrolled"
     }
   },
-  "taxCreditRenewals": {
-    "submissionsState": "open"
-  },
   "messages": {
     "home": [],
     "paye": [

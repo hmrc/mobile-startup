@@ -43,20 +43,6 @@ class LiveStartupControllerISpec extends BaseISpec {
   def postRequestWithAcceptHeader(url: String): Future[WSResponse] =
     wsUrl(url).addHttpHeaders(acceptJsonHeader).post("")
 
-  def stubRenewalsResponse(): StubMapping =
-    stubFor(
-      get(urlEqualTo(s"/income/tax-credits/submission/state/enabled?journeyId=${journeyId.value}"))
-        .willReturn(
-          aResponse()
-            .withStatus(200)
-            .withBody("""
-                        |{
-                        |  "submissionsState": "open"
-                        |}
-           """.stripMargin)
-        )
-    )
-
   def stubCitizenDetailsResponse(): StubMapping =
     stubFor(
       get(urlEqualTo("/citizen-details/AA000006C/designatory-details"))
@@ -108,7 +94,6 @@ class LiveStartupControllerISpec extends BaseISpec {
       stubForShutteringDisabled("mobile-startup-citizen-details")
       stubForShutteringDisabled("mobile-startup-child-benefit")
       respondToAuditMergedWithNoBody
-      stubRenewalsResponse()
       stubCitizenDetailsResponse()
 
       val response = await(getRequestWithAuthHeaders(url))
@@ -168,7 +153,6 @@ class LiveStartupControllerISpec extends BaseISpec {
       (response.json \ "feature" \ 25 \ "enabled").as[Boolean]              shouldBe false
       (response.json \ "feature" \ 26 \ "name").as[String]                  shouldBe "enableNinoFirstNameDisplay"
       (response.json \ "feature" \ 26 \ "enabled").as[Boolean]              shouldBe false
-      (response.json \ "taxCreditRenewals" \ "submissionsState").as[String] shouldBe "open"
       (response.json \ "user" \ "name").as[String]                          shouldBe "Angus John Smith"
       (response.json \ "user" \ "address" \ "line1").as[String]             shouldBe "123456"
       (response.json \ "user" \ "address" \ "line2").as[String]             shouldBe "23456"
@@ -300,7 +284,6 @@ class LiveStartupControllerISpec extends BaseISpec {
       stubForShutteringDisabled("mobile-startup-citizen-details")
       stubForShutteringDisabled("mobile-startup-child-benefit")
       respondToAuditMergedWithNoBody
-      stubRenewalsResponse()
 
       val response = await(getRequestWithAuthHeaders(url))
       response.status                  shouldBe 200

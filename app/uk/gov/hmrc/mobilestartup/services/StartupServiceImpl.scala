@@ -166,13 +166,12 @@ case class StartupServiceImpl[F[_]] @Inject() (
   )(implicit hc:        HeaderCarrier
   ): F[JsObject] =
     (callService("helpToSave")(mhtsStartup),
-     callService("taxCreditRenewals")(tcrStartup(journeyId)),
      callService("messages")(inAppMsgsStartup),
      callService("user")(citizenDetailsStartup(nino, shutteringStatuses.npsShuttering.shuttered)),
      childBenefitStartup(shutteringStatuses.childBenefitShuttering).pure[F],
      featureFlags.pure[F],
      throttleValue.pure[F],
-     urls.pure[F]).mapN((a, b, c, d, e, f, g, h) => a ++ b ++ c ++ d ++ e ++ f ++ g ++ h)
+     urls.pure[F]).mapN((a, b, c, d, e, f, g) => a ++ b ++ c ++ d ++ e ++ f ++ g)
 
   private val throttleValue: JsObject =
     obj(
@@ -300,20 +299,6 @@ case class StartupServiceImpl[F[_]] @Inject() (
             s"""Exception thrown by "/mobile-help-to-save/startup", not returning any helpToSave result: ${e.getMessage}"""
           )
           None
-      }
-
-  private def tcrStartup(journeyId: JourneyId)(implicit hc: HeaderCarrier): F[Option[JsValue]] =
-    connector
-      .doGet("mobile-tax-credits-renewal",
-             s"/income/tax-credits/submission/state/enabled?journeyId=${journeyId.value}",
-             hc)
-      .map[Option[JsValue]](res => obj("submissionsState" -> JsString((res \ "submissionsState").as[String])).some)
-      .recover {
-        case NonFatal(e) =>
-          logger.warn(
-            s"${journeyId.value} - Failed to retrieve TaxCreditsRenewals and exception is ${e.getMessage}! Default of submissionsState is error!"
-          )
-          obj("submissionsState" -> JsString("error")).some
       }
 
   private def inAppMsgsStartup(implicit hc: HeaderCarrier): F[Option[JsValue]] =
