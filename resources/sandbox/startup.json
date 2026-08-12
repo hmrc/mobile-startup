@@ -105,6 +105,14 @@
     {
       "name": "enableTaxCreditShuttering",
       "enabled": false
+    },
+    {
+      "name": "enableNinoFirstNameDisplay",
+      "enabled": true
+    },
+    {
+      "name": "enableTaxAndBenefitView",
+      "enabled": true
     }
   ],
   "urls": [
