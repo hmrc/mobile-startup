@@ -129,6 +129,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.enableChildBenefitMVP")
     bindConfigBoolean("feature.enableStudentLoanPlanTypeFive")
     bindConfigBoolean("feature.enableSACessation")
+    bindConfigBoolean("feature.enableAdditionalIncome")
     bindConfigBoolean("feature.enableWinterFuelPayment")
     bindConfigBoolean("feature.devEnableITSA")
     bindConfigBoolean("feature.enableTaxAndBenefitView")
