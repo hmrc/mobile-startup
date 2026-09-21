@@ -35,7 +35,8 @@ case class PreFlightCheckResponse(
   routeToTEN:           Boolean = false,
   demoAccount:          Boolean = false,
   isEligible:           Boolean = false,
-  blockReason:          Option[String] = None)
+  blockReason:          Option[String] = None,
+  isMtdEnrolled:        Boolean = false)
 
 object PreFlightCheckResponse {
 
@@ -55,10 +56,11 @@ object PreFlightCheckResponse {
       withNino(preFlightCheckResponse.nino) ++ Json
         .obj("routeToIV" -> preFlightCheckResponse.routeToIV) ++
       withATSLink(preFlightCheckResponse.annualTaxSummaryLink) ++ withUtr(preFlightCheckResponse.utr) ++ Json
-        .obj("routeToTEN"  -> preFlightCheckResponse.routeToTEN) ++ Json
-        .obj("demoAccount" -> preFlightCheckResponse.demoAccount) ++ Json
-        .obj("isEligible"  -> preFlightCheckResponse.isEligible) ++ Json
-        .obj("blockReason" -> preFlightCheckResponse.blockReason)
+        .obj("routeToTEN"    -> preFlightCheckResponse.routeToTEN) ++ Json
+        .obj("demoAccount"   -> preFlightCheckResponse.demoAccount) ++ Json
+        .obj("isEligible"    -> preFlightCheckResponse.isEligible) ++ Json
+        .obj("blockReason"   -> preFlightCheckResponse.blockReason) ++ Json
+        .obj("isMtdEnrolled" -> preFlightCheckResponse.isMtdEnrolled)
   }
 
 }
