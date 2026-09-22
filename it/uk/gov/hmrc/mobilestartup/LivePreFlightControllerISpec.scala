@@ -100,6 +100,90 @@ trait LivePreFlightControllerTests extends BaseISpec {
 
     }
 
+    "return isMtdEnrolled as true if only MTD enrolment is present and is activated " in {
+      accountWithMTDOnlyEnrolment(nino.nino, saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "isMtdEnrolled").as[Boolean] shouldBe true
+
+    }
+
+    "return isMtdEnrolled as false if only MTD enrolment is present and is not activated " in {
+      accountWithMTDOnlyEnrolment(nino.nino, saUtr.utr, false)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "isMtdEnrolled").as[Boolean] shouldBe false
+
+    }
+
+    "return isMtdEnrolled as true if both MTD and IR-SA enrolments are present and is activated " in {
+      accountWithSAandMTDEnrolment(nino.nino, saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "isMtdEnrolled").as[Boolean] shouldBe true
+
+    }
+
+    "return isMtdEnrolled as false if both MTD and IR-SA enrolments are present and is not activated " in {
+      accountWithSAandMTDEnrolment(nino.nino, saUtr.utr, false)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "isMtdEnrolled").as[Boolean] shouldBe false
+
+    }
+
+    "return isMtdEnrolled as false if only IR-SA enrolments is present " in {
+      accountsFound(nino.nino, saUtr.utr)
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "isMtdEnrolled").as[Boolean] shouldBe false
+
+    }
+
+    "return isMtdEnrolled as false if no MTD and  IR-SA enrolments are present " in {
+      accountsFoundMultipleGGIDsDuplicateNino()
+      pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
+      respondToAuditMergedWithNoBody
+      respondToAuditWithNoBody
+
+      val response = await(getRequestWithAcceptHeader(url))
+
+      response.status                               shouldBe 200
+      (response.json \ "nino").as[String]           shouldBe nino.nino
+      (response.json \ "isMtdEnrolled").as[Boolean] shouldBe false
+
+    }
+
     "Look for SaUtr on citizen-details if none returned from auth" in {
       accountsFoundMissingSaUtr(nino.nino)
       pertaxAuthorise(acccessGrantedCode, acccessGrantedMessage)
