@@ -66,6 +66,95 @@ object AuthStub {
        |}
            """.stripMargin
 
+  def saEnrolmentResponse(
+    nino:        String,
+    saUtr:       String,
+    activateUtr: Boolean
+  ): String = s"""
+                 |{
+                 |  "nino": "$nino",
+                 |  "saUtr": "$saUtr",
+                 |  "internalId": "11223344",
+                 |  "optionalCredentials": {
+                 |    "providerId": "test-cred-id",
+                 |    "providerType": "GovernmentGateway"
+                 |  },
+                 |  "affinityGroup":"Individual",
+                 |  "allEnrolments": [{
+                 |      "key": "IR-SA",
+                 |      "identifiers": [{
+                 |        "key": "UTR",
+                 |        "value": "$saUtr"
+                 |      }],
+                 |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
+                 |}],
+                 |  "groupIdentifier": "groupId",
+                 |  "confidenceLevel": 200
+                 |}
+             """.stripMargin
+
+  def mtdEnrolmentResponse(
+    nino:        String,
+    saUtr:       String,
+    activateUtr: Boolean
+  ): String =
+    s"""
+       |{
+       |  "nino": "$nino",
+       |  "saUtr": "$saUtr",
+       |  "internalId": "11223344",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "affinityGroup":"Individual",
+       |  "allEnrolments": [{
+       |      "key": "HMRC-MTD-ID",
+       |      "identifiers": [{
+       |        "key": "MTDITID",
+       |        "value": "12345678"
+       |      }],
+       |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
+       |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200
+       |}
+               """.stripMargin
+
+  def mtdSAEnrolmentResponse(
+    nino:        String,
+    saUtr:       String,
+    activateUtr: Boolean
+  ): String =
+    s"""
+       |{
+       |  "nino": "$nino",
+       |  "saUtr": "$saUtr",
+       |  "internalId": "11223344",
+       |  "optionalCredentials": {
+       |    "providerId": "test-cred-id",
+       |    "providerType": "GovernmentGateway"
+       |  },
+       |  "affinityGroup":"Individual",
+       |  "allEnrolments": [{
+       |      "key": "IR-SA",
+       |      "identifiers": [{
+       |        "key": "UTR",
+       |        "value": "$saUtr"
+       |      }],
+       |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
+       |}, {
+       |      "key": "HMRC-MTD-ID",
+       |      "identifiers": [{
+       |        "key": "MTDITID",
+       |        "value": "12345678"
+       |      }],
+       |      "state": "${if (activateUtr) "Activated" else "Deactivated"}"
+       |}],
+       |  "groupIdentifier": "groupId",
+       |  "confidenceLevel": 200
+       |}""".stripMargin
+
   private def loggedInResponseNoNino(
     saUtr:       String,
     activateUtr: Boolean
@@ -309,6 +398,36 @@ object AuthStub {
           aResponse()
             .withStatus(200)
             .withBody(loggedInResponse(nino, saUtr, activateUtr))
+        )
+    )
+
+  def accountWithMTDOnlyEnrolment(
+                     nino: String = "AA000006C",
+                     saUtr: String = "123456789",
+                     activateUtr: Boolean = true
+                   ): StubMapping =
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(accountsRequestJson, true, false))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(mtdEnrolmentResponse(nino, saUtr, activateUtr))
+        )
+    )
+
+  def accountWithSAandMTDEnrolment(
+                                   nino: String = "AA000006C",
+                                   saUtr: String = "123456789",
+                                   activateUtr: Boolean = true
+                                 ): StubMapping =
+    stubFor(
+      post(urlEqualTo(authUrl))
+        .withRequestBody(equalToJson(accountsRequestJson, true, false))
+        .willReturn(
+          aResponse()
+            .withStatus(200)
+            .withBody(mtdSAEnrolmentResponse(nino, saUtr, activateUtr))
         )
     )
 

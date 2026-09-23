@@ -115,7 +115,8 @@ abstract class PreFlightServiceImpl[F[_]](
           Some(Utr(saUtr = Some(SaUtr("1234567890")), status = Activated)),
           Enrolments(Set.empty),
           demoAccount = true,
-          isEligible = true
+          isEligible = true,
+          isMtdEnrolled = hasMTDEnrolment(accountDetails.enrolments)
         )
       } else {
          (accountDetails.affinityGroup, pertaxResponse) match
@@ -129,7 +130,8 @@ abstract class PreFlightServiceImpl[F[_]](
               accountDetails.enrolments,
               doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
               isEligible = false,
-              blockReason = Some("Agents not allowed")
+              blockReason = Some("Agents not allowed"),
+              isMtdEnrolled = hasMTDEnrolment(accountDetails.enrolments)
             )
 
           case (_, PertaxResponse("MCI_RECORD", _)) =>
@@ -141,7 +143,8 @@ abstract class PreFlightServiceImpl[F[_]](
             utr = None,
             enrolments = accountDetails.enrolments,
             isEligible = false,
-            blockReason = Some("Manual correspondence indicator is set")
+            blockReason = Some("Manual correspondence indicator is set"),
+            isMtdEnrolled = hasMTDEnrolment(accountDetails.enrolments)
           )
           case (_, PertaxResponse("DECEASED_RECORD", _)) =>
             logger.info("Individual is a deceased")
@@ -152,7 +155,8 @@ abstract class PreFlightServiceImpl[F[_]](
             utr = None,
             enrolments = accountDetails.enrolments,
             isEligible = false,
-            blockReason = Some("User is deceased")
+            blockReason = Some("User is deceased"),
+            isMtdEnrolled = hasMTDEnrolment(accountDetails.enrolments)
           )
           case (_, PertaxResponse("DESIGNATORY_DETAILS_NOT_FOUND", _)) =>
             logger.info("Individual account missed adult registration")
@@ -163,7 +167,8 @@ abstract class PreFlightServiceImpl[F[_]](
             utr = None,
             enrolments = accountDetails.enrolments,
             isEligible = false,
-            blockReason = Some("Juvenile record missed adult registration")
+            blockReason = Some("Juvenile record missed adult registration"),
+            isMtdEnrolled = hasMTDEnrolment(accountDetails.enrolments)
           )
           case (Some(Organisation), _) =>
             logger.info("Organisation account is being used to login")
@@ -181,7 +186,8 @@ abstract class PreFlightServiceImpl[F[_]](
               blockReason = if (!hasPTEnrolement(accountDetails.enrolments)) {
                 Some("Org not authorised")
               }
-              else None
+              else None,
+              isMtdEnrolled = hasMTDEnrolment(accountDetails.enrolments)
             )
           case _ =>
               logger.info("Individual account is being used to login")
@@ -192,7 +198,8 @@ abstract class PreFlightServiceImpl[F[_]](
                 utr = utrDetails,
                 enrolments = accountDetails.enrolments,
                 routeToTEN = doesUserHaveMultipleGGIDs(accountDetails.enrolments, accountDetails.nino),
-                isEligible = true
+                isEligible = true,
+                isMtdEnrolled = hasMTDEnrolment(accountDetails.enrolments)
               )
           
 
@@ -204,6 +211,13 @@ abstract class PreFlightServiceImpl[F[_]](
   private def checkForDemoAccountId(internalId: Option[String]): Boolean = {
     val accountId = internalId.getOrElse("")
     accountId == storeReviewAccountInternalId || accountId == appTeamAccountInternalId
+  }
+
+  private def hasMTDEnrolment(enrolments: Enrolments): Boolean = {
+    val presentPTEnrolment = getKeyIdentifierAndState(enrolments, "HMRC-MTD-ID")
+    presentPTEnrolment match
+      case Some("HMRC-MTD-ID", "Activated") => true
+      case _ => false
   }
 
   private def hasPTEnrolement(enrolments: Enrolments): Boolean = {

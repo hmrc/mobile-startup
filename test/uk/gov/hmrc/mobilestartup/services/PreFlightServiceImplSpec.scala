@@ -106,7 +106,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
       result.annualTaxSummaryLink shouldBe Some(
         AnnualTaxSummaryLink("/annual-tax-summary", fromStringtoLinkDestination("SA"))
       )
-      result.isEligible shouldBe (true)
+      result.isEligible shouldBe true
     }
 
     "return a response with the expected utr" in {
@@ -195,7 +195,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
 
         result.nino                 shouldBe Some(nino)
         result.annualTaxSummaryLink shouldBe None
-        result.isEligible           shouldBe (false)
+        result.isEligible           shouldBe false
       }
 
       "user has MCI_RECORD and pertax enable flag is false" in {
@@ -215,7 +215,7 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
 
         result.nino                 shouldBe Some(nino)
         result.annualTaxSummaryLink shouldBe None
-        result.isEligible           shouldBe (true)
+        result.isEligible           shouldBe true
       }
 
       "user has DECEASED_RECORD and enable pertax is true" in {
@@ -438,6 +438,121 @@ class PreFlightServiceImplSpec extends BaseSpec with StartupTestData {
           Some(AffinityGroup.Individual)
         )
       intercept[UnsupportedAuthProvider](sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet)
+    }
+
+    "set isMtdEnrolled as false when user have only IR-SA enrolment" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L250,
+          None,
+          Enrolments(
+            Set(
+              Enrolment(key = "IR-SA", identifiers = Seq(EnrolmentIdentifier("UTR", "1234567")), state = "Activated")
+            )
+          ),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isMtdEnrolled shouldBe false
+
+    }
+
+    "set isMtdEnrolled as true when user have both IR-SA and MTD enrolments as activated" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L250,
+          None,
+          Enrolments(
+            Set(
+              Enrolment(key         = "IR-SA", identifiers = Seq(EnrolmentIdentifier("UTR", "1234567")), state = "Activated"),
+              Enrolment(key         = "HMRC-MTD-ID",
+                        identifiers = Seq(EnrolmentIdentifier("MTDITID", "1234567890")),
+                        state       = "Activated")
+            )
+          ),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isMtdEnrolled shouldBe true
+
+    }
+
+    "set isMtdEnrolled as false when user have both IR-SA and MTD enrolments as not activated" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L250,
+          None,
+          Enrolments(
+            Set(
+              Enrolment(key         = "IR-SA", identifiers = Seq(EnrolmentIdentifier("UTR", "1234567")), state = "Activated"),
+              Enrolment(key         = "HMRC-MTD-ID",
+                        identifiers = Seq(EnrolmentIdentifier("MTDITID", "1234567890")),
+                        state       = "Pending")
+            )
+          ),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isMtdEnrolled shouldBe false
+
+    }
+
+    "set isMtdEnrolled as true when user have only  MTD enrolments as activated" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L250,
+          None,
+          Enrolments(
+            Set(
+              Enrolment(key         = "HMRC-MTD-ID",
+                        identifiers = Seq(EnrolmentIdentifier("MTDITID", "1234567890")),
+                        state       = "Activated")
+            )
+          ),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isMtdEnrolled shouldBe true
+
+    }
+
+    "set isMtdEnrolled as false when user have only MTD enrolment as not activated" in {
+      val sut =
+        service(
+          Some(nino),
+          None,
+          Some(Credentials("", "GovernmentGateway")),
+          ConfidenceLevel.L250,
+          None,
+          Enrolments(
+            Set(
+              Enrolment(key = "HMRC-MTD-ID",
+                identifiers = Seq(EnrolmentIdentifier("MTDITID", "1234567890")),
+                state = "Pending")
+            )
+          ),
+          dummyConnector(),
+          Some("11223344"),
+          Some(AffinityGroup.Individual)
+        )
+      sut.preFlight(journeyId)(HeaderCarrier(), ec).unsafeGet.isMtdEnrolled shouldBe false
+
     }
 
   }
