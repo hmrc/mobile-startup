@@ -154,6 +154,7 @@ case class StartupServiceImpl[F[_]] @Inject() (
   devEnableITSA:                             Boolean,
   enableTaxAndBenefitView:                   Boolean,
   enableNinoFirstNameDisplay:                Boolean,
+  mtdMvpEnabled:                             Boolean,
   saCessationThrottle:                       Int
 )(implicit F:                                MonadError[F, Throwable])
     extends StartupService[F] {
@@ -211,7 +212,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
         FeatureFlag("enableWinterFuelPayment", enableWinterFuelPayment),
         FeatureFlag("devEnableITSA", devEnableITSA),
         FeatureFlag("enableTaxAndBenefitView", enableTaxAndBenefitView),
-        FeatureFlag("enableNinoFirstNameDisplay", enableNinoFirstNameDisplay)
+        FeatureFlag("enableNinoFirstNameDisplay", enableNinoFirstNameDisplay),
+        FeatureFlag("mtdMvpEnabled", mtdMvpEnabled)
       )
     )
 
@@ -337,9 +339,9 @@ case class StartupServiceImpl[F[_]] @Inject() (
               new JsObject(
                 Map(
                   "firstName" -> Json.toJson(person.person.firstName),
-                  "lastName" -> Json.toJson(person.person.lastName),                  
-                  "name" -> Json.toJson(person.person.shortName),
-                  "address" -> Json.toJson(person.address)
+                  "lastName"  -> Json.toJson(person.person.lastName),
+                  "name"      -> Json.toJson(person.person.shortName),
+                  "address"   -> Json.toJson(person.address)
                 )
               )
             )
