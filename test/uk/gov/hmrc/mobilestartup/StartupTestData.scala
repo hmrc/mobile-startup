@@ -247,6 +247,7 @@ trait StartupTestData {
       devEnableITSA                             = false,
       enableTaxAndBenefitView                   = false,
       enableNinoFirstNameDisplay                = false,
+      mtdMvpEnabled                             = false,
       saCessationThrottle                       = 0
     )
 
@@ -282,7 +283,8 @@ trait StartupTestData {
     FeatureFlag("enableWinterFuelPayment", enabled                 = false),
     FeatureFlag("devEnableITSA", enabled                           = false),
     FeatureFlag("enableTaxAndBenefitView", enabled                 = false),
-    FeatureFlag("enableNinoFirstNameDisplay", enabled              = false)
+    FeatureFlag("enableNinoFirstNameDisplay", enabled              = false),
+    FeatureFlag("mtdMvpEnabled", enabled                           = false)
   )
 
   val expectedURLs = List(
@@ -366,10 +368,10 @@ trait StartupTestData {
         hc:          HeaderCarrier
       ): TestF[JsValue] =
         serviceName match {
-          case "mobile-help-to-save"        => htsResponse
-          case "mobile-in-app-messages"     => inAppMessagesResponse
-          case "citizen-details"            => citizenDetailsResponse
-          case _                            => obj().pure[TestF]
+          case "mobile-help-to-save"    => htsResponse
+          case "mobile-in-app-messages" => inAppMessagesResponse
+          case "citizen-details"        => citizenDetailsResponse
+          case _                        => obj().pure[TestF]
         }
 
       override def cidGet(

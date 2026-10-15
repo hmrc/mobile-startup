@@ -115,6 +115,7 @@ class LiveStartupService @Inject() (
   @Named("feature.devEnableITSA") devEnableITSA:                                                     Boolean,
   @Named("feature.enableTaxAndBenefitView") enableTaxAndBenefitView:                                 Boolean,
   @Named("feature.enableNinoFirstNameDisplay") enableNinoFirstNameDisplay:                           Boolean,
+  @Named("feature.mtdMvpEnabled") mtdMvpEnabled:                                                     Boolean,
   @Named("throttleValue.SACessationThrottle") saCessationThrottle:                                   Int
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
@@ -209,4 +210,5 @@ class LiveStartupService @Inject() (
                                        devEnableITSA,
                                        enableTaxAndBenefitView,
                                        enableNinoFirstNameDisplay,
+                                       mtdMvpEnabled,
                                        saCessationThrottle)

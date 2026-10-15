@@ -133,6 +133,7 @@ class GuiceModule @Inject() (
     bindConfigBoolean("feature.devEnableITSA")
     bindConfigBoolean("feature.enableTaxAndBenefitView")
     bindConfigBoolean("feature.enableNinoFirstNameDisplay")
+    bindConfigBoolean("feature.mtdMvpEnabled")
     bind(classOf[String])
       .annotatedWith(named("mobile-shuttering"))
       .toInstance(servicesConfig.baseUrl("mobile-shuttering"))
