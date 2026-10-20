@@ -148,7 +148,7 @@ class GuiceModule @Inject() (
     bind(new TypeLiteral[StartupService[Future]] {}).to(classOf[LiveStartupService])
     bind(new TypeLiteral[PreFlightService[Future]] {}).to(classOf[LivePreFlightService])
 
-    bind(classOf[String]).toInstance("CONTROLLED")
+    bind(classOf[String]).toInstance("INTERNAL")
   }
 
   /**
