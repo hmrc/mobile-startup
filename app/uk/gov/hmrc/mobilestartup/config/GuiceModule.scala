@@ -21,7 +21,7 @@ import com.google.inject.{AbstractModule, TypeLiteral}
 import javax.inject.Inject
 import play.api.{Configuration, Environment, Logger}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorImpl}
+import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, GenericConnectorImpl, RateLimiter}
 import uk.gov.hmrc.mobilestartup.services.{LivePreFlightService, LiveStartupService, PreFlightService, StartupService}
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -149,6 +149,9 @@ class GuiceModule @Inject() (
     bind(new TypeLiteral[PreFlightService[Future]] {}).to(classOf[LivePreFlightService])
 
     bind(classOf[String]).toInstance("INTERNAL")
+    bind(classOf[RateLimiter])
+      .annotatedWith(named("cid-rate-limiter"))
+      .toInstance(RateLimiter(enabled = configuration.get[Boolean]("rate-limiting.cid.enabled"), maxTps = configuration.get[Double]("rate-limiting.cid.max-tps")))
   }
 
   /**

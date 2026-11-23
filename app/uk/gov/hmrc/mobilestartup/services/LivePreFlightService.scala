@@ -25,26 +25,28 @@ import uk.gov.hmrc.auth.core.retrieve.{Credentials, ~}
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, AuthorisedFunctions, ConfidenceLevel, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, UpstreamErrorResponse}
-import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, RateLimiter}
 import uk.gov.hmrc.mobilestartup.model.{Activated, CidPerson, EnrolmentStoreResponse, NoEnrolment, NotYetActivated, WrongAccount}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND}
+import uk.gov.hmrc.mobilestartup.connectors.Throttle.withThrottle
 import uk.gov.hmrc.mobilestartup.model.types.ModelTypes.fromStringtoLinkDestination
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class LivePreFlightService @Inject() (
-  genericConnector:                                                              GenericConnector[Future],
-  val auditConnector:                                                            AuditConnector,
-  val authConnector:                                                             AuthConnector,
-  @Named("appName") val appName:                                                 String,
-  @Named("controllers.confidenceLevel") val confLevel:                           Int,
-  @Named("feature.annualTaxSummaryLink") val showATSLink:                        Boolean,
-  @Named("enableMultipleGGIDCheck.ios") val multipleGGIDCheckEnabledIos:         Boolean,
-  @Named("enableMultipleGGIDCheck.android") val multipleGGIDCheckEnabledAndroid: Boolean,
-  @Named("storeReviewAccountInternalId") val storeReviewAccountInternalId:       String,
-  @Named("appTeamAccountInternalId") val appTeamAccountInternalId:               String,
-  auditService:                                                                  AuditService
+                                       genericConnector:                                                              GenericConnector[Future],
+                                       val auditConnector:                                                            AuditConnector,
+                                       val authConnector:                                                             AuthConnector,
+                                       @Named("appName") val appName:                                                 String,
+                                       @Named("controllers.confidenceLevel") val confLevel:                           Int,
+                                       @Named("feature.annualTaxSummaryLink") val showATSLink:                        Boolean,
+                                       @Named("enableMultipleGGIDCheck.ios") val multipleGGIDCheckEnabledIos:         Boolean,
+                                       @Named("enableMultipleGGIDCheck.android") val multipleGGIDCheckEnabledAndroid: Boolean,
+                                       @Named("storeReviewAccountInternalId") val storeReviewAccountInternalId:       String,
+                                       @Named("appTeamAccountInternalId") val appTeamAccountInternalId:               String,
+                                       @Named("cid-rate-limiter") val rateLimiter:                                    RateLimiter,
+                                       auditService:                                                                  AuditService
 )(implicit executionContext:                                                     ExecutionContext)
     extends PreFlightServiceImpl[Future](genericConnector,
                                          confLevel,
@@ -53,6 +55,8 @@ class LivePreFlightService @Inject() (
     with AuthorisedFunctions {
 
   override val logger: Logger = Logger(this.getClass)
+  
+  given cidRateLimiter: RateLimiter = rateLimiter
 
   // Just adapting from `F` to `Future` here
   override def auditing[T](
@@ -220,26 +224,30 @@ class LivePreFlightService @Inject() (
       }
 
   private def getUtrFromCID(nino: String)(implicit hc: HeaderCarrier): Future[Option[SaUtr]] = {
-    val cidPerson: Future[Option[CidPerson]] = genericConnector
-      .cidGet("citizen-details", s"/citizen-details/nino/$nino", hc)
-      .map(p => Some(p))
-      .recover {
-        case e: UpstreamErrorResponse if e.statusCode == BAD_REQUEST =>
-          logger.info(s"Call to CID failed - Nino is invalid: $nino.")
-          None
-        case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND =>
-          logger.info(s"Call to CID failed - No record for the Nino: $nino found on CID.")
-          throw new NotFoundException("No UTR found on CID")
-        case e: NotFoundException =>
-          logger.info(s"Call to CID failed - No record for the Nino: $nino found on CID.")
-          throw e
-        case e: UpstreamErrorResponse =>
-          logger.info(s"Call to CID failed $e")
-          None
-        case _ =>
-          logger.info(s"Call to CID failed")
-          None
+    val cidPerson: Future[Option[CidPerson]] = {
+      withThrottle {
+        genericConnector
+          .cidGet("citizen-details", s"/citizen-details/nino/$nino", hc)
+          .map(p => Some(p))
+          .recover {
+            case e: UpstreamErrorResponse if e.statusCode == BAD_REQUEST =>
+              logger.info(s"Call to CID failed - Nino is invalid: $nino.")
+              None
+            case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND =>
+              logger.info(s"Call to CID failed - No record for the Nino: $nino found on CID.")
+              throw new NotFoundException("No UTR found on CID")
+            case e: NotFoundException =>
+              logger.info(s"Call to CID failed - No record for the Nino: $nino found on CID.")
+              throw e
+            case e: UpstreamErrorResponse =>
+              logger.info(s"Call to CID failed $e")
+              None
+            case _ =>
+              logger.info(s"Call to CID failed")
+              None
+          }
       }
+    }
     cidPerson.map(_.map(_.ids.saUtr.isDefined)).flatMap {
       case Some(true)  => cidPerson.map(_.flatMap(_.ids.saUtr))
       case Some(false) => throw new NotFoundException("No UTR found on CID")

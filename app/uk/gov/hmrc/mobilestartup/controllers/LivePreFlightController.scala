@@ -15,17 +15,18 @@
  */
 
 package uk.gov.hmrc.mobilestartup.controllers
+import play.api.Logger
+
 import javax.inject.{Inject, Named}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, BodyParser, ControllerComponents, Headers}
 import uk.gov.hmrc.api.controllers.HeaderValidator
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.mobilestartup.connectors.RateLimitedException
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.mobilestartup.services.PreFlightService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendBaseController
 
-import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 
 class LivePreFlightController @Inject() (
@@ -38,6 +39,8 @@ class LivePreFlightController @Inject() (
     with AuthorisedFunctions
     with HeaderValidator {
 
+  val logger: Logger = Logger(this.getClass)
+
   override def parser: BodyParser[AnyContent] = controllerComponents.parsers.anyContent
 
   def preFlightCheck(journeyId: JourneyId): Action[AnyContent] =
@@ -47,6 +50,10 @@ class LivePreFlightController @Inject() (
           case Some(_) => Ok(Json.toJson(response))
           case _       => Unauthorized("Failed to resolve authentication from HC!")
         }
+      }.recover {
+        case _: RateLimitedException =>
+          logger.info("Rate limit exceeded")
+          TooManyRequests("Rate limit exceeded")
       }
     }
 }

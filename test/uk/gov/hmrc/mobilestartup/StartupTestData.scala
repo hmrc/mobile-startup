@@ -20,7 +20,7 @@ import cats.implicits.*
 import play.api.libs.json.{JsString, JsValue, Json}
 import play.api.libs.json.Json.obj
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
-import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, RateLimiter}
 import uk.gov.hmrc.mobilestartup.model.shuttering.Shuttering
 import uk.gov.hmrc.mobilestartup.model.{CidPerson, EnrolmentStoreResponse, PertaxResponse}
 import uk.gov.hmrc.mobilestartup.services.{FeatureFlag, StartupServiceImpl, ThrottleValue, URL}
@@ -153,9 +153,12 @@ trait StartupTestData {
 
   val pertaxResponseAccessGranted = PertaxResponse("ACCESS_GRANTED", "access granted")
 
+  val permittingLimiter: RateLimiter = RateLimiter(false, 100)
+
   val startupService =
     new StartupServiceImpl[TestF](
       dummyConnector(),
+      permittingLimiter,
       userPanelSignUp                           = false,
       enablePushNotificationTokenRegistration   = false,
       enablePaperlessAlertDialogs               = false,

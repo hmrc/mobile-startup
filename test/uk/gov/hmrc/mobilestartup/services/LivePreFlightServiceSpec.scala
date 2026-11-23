@@ -19,14 +19,13 @@ package uk.gov.hmrc.mobilestartup.services
 import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
 import uk.gov.hmrc.domain.{Nino, SaUtr, TaxIds}
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
-import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, RateLimitedException, RateLimiter}
 import uk.gov.hmrc.mobilestartup.model.{Activated, CidPerson, EnrolmentStoreResponse, NoEnrolment, NotYetActivated, WrongAccount}
 import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData}
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Success
 
 class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
 
@@ -36,8 +35,9 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
   val saUtr:                SaUtr                    = SaUtr("123123123")
   val mockGenericConnector: GenericConnector[Future] = mock[GenericConnector[Future]]
   val mockAuditConnector:   AuditConnector           = mock[AuditConnector]
-  val mockAuthConnnector = mock[AuthConnector]
-  val mockAuditservice   = mock[AuditService]
+  val mockAuthConnnector:   AuthConnector            = mock[AuthConnector]
+  val mockAuditService:     AuditService             = mock[AuditService]
+  val mockRateLimiter:      RateLimiter              = mock[RateLimiter]
 
   def service(
     confLevel:            Int,
@@ -53,7 +53,8 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
     multipleGGIDCheckEnabledAndroid = false,
     storeReviewAccountInternalId    = "INT1234",
     appTeamAccountInternalId        = "ATMInt1234",
-    auditService                    = mockAuditservice
+    rateLimiter                     = mockRateLimiter,
+    auditService                    = mockAuditService
   )
 
   def mockGetUtrFromCID(response: Future[CidPerson]) =
@@ -67,6 +68,16 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
       .enrolmentStoreGet(_: String, _: String, _: HeaderCarrier))
       .expects(*, *, *)
       .returning(response)
+
+  def mockNotRateLimited() =
+    (() => mockRateLimiter.mayProceed())
+      .expects()
+      .returns(true)
+
+  def mockRateLimited() =
+    (() => mockRateLimiter.mayProceed())
+      .expects()
+      .returns(false)
 
   "getUTR" should {
     "return some utr if only IR-SA enrollment is there" in {
@@ -139,6 +150,7 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
         )
       )
       mockGetUtrFromCID(Future.successful(cidPerson))
+      mockNotRateLimited()
       val result: Future[Option[Utr]] = livePreFlightService.getUtr(
         None,
         Some(nino),
@@ -166,6 +178,7 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
       )
       mockGetUtrFromCID(Future.successful(cidPerson))
       mockDoesUtrHavePrincipalIds(Future.failed(UpstreamErrorResponse("error", 500)))
+      mockNotRateLimited()
       val result: Future[Option[Utr]] = livePreFlightService.getUtr(
         None,
         Some(nino),
@@ -193,6 +206,7 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
       )
       mockGetUtrFromCID(Future.successful(cidPerson))
       mockDoesUtrHavePrincipalIds(Future.successful(enrolmentStoreResponse))
+      mockNotRateLimited()
       val result: Future[Option[Utr]] = livePreFlightService.getUtr(
         None,
         Some(nino),
@@ -220,6 +234,7 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
       )
       mockGetUtrFromCID(Future.successful(cidPerson))
       mockDoesUtrHavePrincipalIds(Future.successful(enrolmentStoreResponse))
+      mockNotRateLimited()
       val result: Future[Option[Utr]] = livePreFlightService.getUtr(
         None,
         Some(nino),
@@ -243,6 +258,7 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
       )
 
       mockGetUtrFromCID(Future.successful(cidPerson))
+      mockNotRateLimited()
 
       val result: Future[Option[Utr]] = livePreFlightService.getUtr(
         None,
@@ -293,5 +309,20 @@ class LivePreFlightServiceSpec extends BaseSpec with StartupTestData {
       await(result) shouldBe (Some(Utr(Some(saUtr), Activated, None)))
     }
 
+    "propagate RateLimitedException when cid request is rate limited" in {
+      val livePreFlightService = service(250)
+
+      mockRateLimited()
+
+      intercept[RateLimitedException] {
+        await(livePreFlightService.getUtr(
+          None,
+          Some(nino),
+          Enrolments(
+            Set.empty
+          )
+        ))
+      }
+    }
   }
 }

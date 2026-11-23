@@ -15,12 +15,11 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import cats.Applicative.ops.toAllApplicativeOps
 import cats.implicits.catsSyntaxApplicativeId
-import play.api.libs.json.Json.*
 import play.api.libs.json.{JsNull, JsObject, JsString, Json}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.TestFInstances.*
+import uk.gov.hmrc.mobilestartup.connectors.{RateLimitedException, RateLimiter}
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 import uk.gov.hmrc.mobilestartup.{BaseSpec, StartupTestData}
 
@@ -28,7 +27,6 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
 
   "a fully successful response" should {
     "contain success entries for each service" in {
-
       val result: JsObject = startupService.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).get
       (result \ helpToSave).toOption.value                        shouldBe htsSuccessResponse
       (result \ "feature").get.as[List[FeatureFlag]]              shouldBe expectedFeatureFlags
@@ -146,6 +144,15 @@ class StartupServiceImplSpec extends BaseSpec with StartupTestData {
       (result \ "urls").get.as[List[URL]]                         shouldBe expectedURLs
       (result \ "childBenefit" \ "shuttering").get.as[Shuttering] shouldBe childBenefitShutteringDisabled
       (result \ "throttleValue").get.as[List[ThrottleValue]]      shouldBe expectedThrottleValue
+    }
+
+    "fail when the citizen details request is rate limited" in {
+      val denyingLimiter = new RateLimiter {
+        def mayProceed(): Boolean = false
+      }
+      val sut = startupService.copy(rateLimiter = denyingLimiter)
+
+      sut.startup("nino", journeyId, allShutteringDisabled)(HeaderCarrier()).failed.get shouldBe RateLimitedException()
     }
   }
 
