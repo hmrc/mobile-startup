@@ -17,17 +17,17 @@
 package uk.gov.hmrc.mobilestartup.services
 
 import cats.MonadError
-import cats.implicits._
+import cats.implicits.*
 
-import javax.inject.Inject
 import play.api.Logger
-import play.api.libs.json.Json._
-import play.api.libs.json._
+import play.api.libs.json.Json.*
+import play.api.libs.json.*
 import uk.gov.hmrc.http.{HeaderCarrier, NotFoundException, UpstreamErrorResponse}
-import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, RateLimiter}
 import uk.gov.hmrc.mobilestartup.model.PersonDetails
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import play.api.http.Status.LOCKED
+import uk.gov.hmrc.mobilestartup.connectors.Throttle.withThrottle
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 
 import scala.util.control.NonFatal
@@ -61,8 +61,9 @@ object ThrottleValue {
   * into a codebase without necessarily converting everything. It did require introducing a type parameter
   * onto the `GenericConnector` trait but that had very little impact beyond the change to the guice wiring.
   */
-case class StartupServiceImpl[F[_]] @Inject() (
+case class StartupServiceImpl[F[_]] (
   connector:                                 GenericConnector[F],
+  rateLimiter:                               RateLimiter,
   userPanelSignUp:                           Boolean,
   enablePushNotificationTokenRegistration:   Boolean,
   enablePaperlessAlertDialogs:               Boolean,
@@ -160,6 +161,8 @@ case class StartupServiceImpl[F[_]] @Inject() (
     extends StartupService[F] {
 
   val logger: Logger = Logger(this.getClass)
+
+  given cidRateLimiter: RateLimiter = rateLimiter
 
   override def startup(
     nino:               String,
@@ -329,35 +332,38 @@ case class StartupServiceImpl[F[_]] @Inject() (
   )(implicit hc: HeaderCarrier
   ): F[Option[JsValue]] =
     if (shuttered) F.pure[Option[JsValue]](None)
-    else
-      connector
-        .doGet("citizen-details", s"/citizen-details/$nino/designatory-details", hc)
-        .map { p =>
-          val person = p.as[PersonDetails]
-          Option(
-            Json.toJson(
-              new JsObject(
-                Map(
-                  "firstName" -> Json.toJson(person.person.firstName),
-                  "lastName"  -> Json.toJson(person.person.lastName),
-                  "name"      -> Json.toJson(person.person.shortName),
-                  "address"   -> Json.toJson(person.address)
+    else {
+      withThrottle {
+        connector
+          .doGet("citizen-details", s"/citizen-details/$nino/designatory-details", hc)
+          .map { p =>
+            val person = p.as[PersonDetails]
+            Option(
+              Json.toJson(
+                new JsObject(
+                  Map(
+                    "firstName" -> Json.toJson(person.person.firstName),
+                    "lastName" -> Json.toJson(person.person.lastName),
+                    "name" -> Json.toJson(person.person.shortName),
+                    "address" -> Json.toJson(person.address)
+                  )
                 )
               )
             )
-          )
-        }
-        .recover {
-          case e: UpstreamErrorResponse if e.statusCode == LOCKED =>
-            logger.info("Person details are hidden")
-            None
-          case e: NotFoundException =>
-            logger.info(s"No details found for nino '$nino'")
-            None
-          case _ =>
-            logger.info(s"CID call failed for nino '$nino'")
-            None
-        }
+          }
+          .recover {
+            case e: UpstreamErrorResponse if e.statusCode == LOCKED =>
+              logger.info("Person details are hidden")
+              None
+            case e: NotFoundException =>
+              logger.info(s"No details found for nino '$nino'")
+              None
+            case _ =>
+              logger.info(s"CID call failed for nino '$nino'")
+              None
+          }
+      }
+    }
 
   private def childBenefitStartup(childBenefitShutteredStatus: Shuttering): JsObject =
     obj(

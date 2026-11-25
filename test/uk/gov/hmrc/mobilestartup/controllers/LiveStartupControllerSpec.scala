@@ -19,15 +19,15 @@ package uk.gov.hmrc.mobilestartup.controllers
 import org.scalamock.handlers.CallHandler
 import play.api.http.Status
 import play.api.libs.json.JsObject
-import play.api.libs.json.Json._
+import play.api.libs.json.Json.*
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mobilestartup.BaseSpec
-import uk.gov.hmrc.mobilestartup.connectors.ShutteringConnector
+import uk.gov.hmrc.mobilestartup.connectors.{RateLimitedException, ShutteringConnector}
 import uk.gov.hmrc.mobilestartup.model.shuttering.{Shuttering, StartupShuttering}
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.mobilestartup.services.StartupService
@@ -38,16 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LiveStartupControllerSpec extends BaseSpec {
   private val fakeRequest = FakeRequest("GET", "/")
 
-  private val stubStartupService = new StartupService[Future] {
-
-    override def startup(
-      nino:               String,
-      journeyId:          JourneyId,
-      shutteringStatuses: StartupShuttering
-    )(implicit hc:        HeaderCarrier
-    ): Future[JsObject] =
-      Future.successful(obj())
-  }
+  private val mockStartupService = mock[StartupService[Future]]
 
   implicit val mockShutteringConnector: ShutteringConnector = mock[ShutteringConnector]
 
@@ -72,11 +63,16 @@ class LiveStartupControllerSpec extends BaseSpec {
       .returning(Future successful response)
 
   "GET /" should {
-    "return 200" in {
+    "return Ok(200) for successful service call" in {
+
+      (mockStartupService.startup(_: String, _: JourneyId, _: StartupShuttering)(_: HeaderCarrier))
+        .expects(*, *, *, *)
+        .returns(Future.successful(obj()))
+
       mockShutteringResponse(StartupShuttering(Shuttering.shutteringDisabled, Shuttering.shutteringDisabled))
 
       val controller = new LiveStartupController(
-        stubStartupService,
+        mockStartupService,
         stubControllerComponents(),
         authConnector(Future.successful(Some("nino"))),
         200,
@@ -84,6 +80,25 @@ class LiveStartupControllerSpec extends BaseSpec {
       )
       val result = controller.startup(journeyId)(fakeRequest)
       status(result) shouldBe Status.OK
+    }
+
+    "return TooManyRequests(429) response when the citizen details request is rate limited" in {
+
+      (mockStartupService.startup(_: String, _: JourneyId, _: StartupShuttering)(_: HeaderCarrier))
+        .expects(*, *, *, *)
+        .returns(Future.failed(RateLimitedException()))
+
+      mockShutteringResponse(StartupShuttering(Shuttering.shutteringDisabled, Shuttering.shutteringDisabled))
+
+      val controller = new LiveStartupController(
+        mockStartupService,
+        stubControllerComponents(),
+        authConnector(Future.successful(Some("nino"))),
+        200,
+        mockShutteringConnector
+      )
+      val result = controller.startup(journeyId)(fakeRequest)
+      status(result) shouldBe 429
     }
   }
 }

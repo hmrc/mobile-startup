@@ -16,13 +16,15 @@
 
 package uk.gov.hmrc.mobilestartup.controllers
 
+import play.api.Logger
+
 import javax.inject.{Inject, Named, Singleton}
 import play.api.mvc.*
 import uk.gov.hmrc.auth.core.ConfidenceLevel.L200
 import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
-import uk.gov.hmrc.mobilestartup.connectors.ShutteringConnector
+import uk.gov.hmrc.mobilestartup.connectors.{RateLimitedException, ShutteringConnector}
 import uk.gov.hmrc.mobilestartup.model.types.JourneyId
 import uk.gov.hmrc.mobilestartup.services.StartupService
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendBaseController
@@ -41,11 +43,18 @@ class LiveStartupController @Inject() (
     with AuthorisedFunctions {
   class GrantAccessException(message: String) extends HttpException(message, 401)
 
+  val logger: Logger = Logger(this.getClass)
+  
   def startup(journeyId: JourneyId): Action[AnyContent] =
     Action.async { implicit request =>
       withNinoFromAuth { verifiedNino =>
         shutteringConnector.getStartupShuttering(journeyId).flatMap { shutteredStatuses =>
           service.startup(verifiedNino, journeyId, shutteredStatuses).map(Ok(_))
+            .recover {
+              case _: RateLimitedException =>
+                logger.info("Rate limit exceeded calling citizen-details")
+                TooManyRequests("Rate limit exceeded")
+            }
         }
       }
     }

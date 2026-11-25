@@ -15,15 +15,16 @@
  */
 
 package uk.gov.hmrc.mobilestartup.services
-import cats.implicits._
-import com.google.inject.name.Named
-import javax.inject.Inject
-import uk.gov.hmrc.mobilestartup.connectors.GenericConnector
+import cats.implicits.*
+
+import javax.inject.{Inject, Named}
+import uk.gov.hmrc.mobilestartup.connectors.{GenericConnector, RateLimiter}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class LiveStartupService @Inject() (
   connector:                                                                                         GenericConnector[Future],
+  @Named("cid-rate-limiter") rateLimiter:                                                            RateLimiter,
   @Named("feature.userPanelSignUp") userPanelSignUp:                                                 Boolean,
   @Named("feature.enablePushNotificationTokenRegistration") enablePushNotificationTokenRegistration: Boolean,
   @Named("feature.paperlessAlertDialogs") enablePaperlessAlertDialogs:                               Boolean,
@@ -119,6 +120,7 @@ class LiveStartupService @Inject() (
   @Named("throttleValue.SACessationThrottle") saCessationThrottle:                                   Int
 )(implicit ec:                                                                                       ExecutionContext)
     extends StartupServiceImpl[Future](connector,
+                                       rateLimiter,
                                        userPanelSignUp,
                                        enablePushNotificationTokenRegistration,
                                        enablePaperlessAlertDialogs,
