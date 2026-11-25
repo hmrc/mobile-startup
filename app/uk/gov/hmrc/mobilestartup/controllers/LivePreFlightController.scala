@@ -52,7 +52,7 @@ class LivePreFlightController @Inject() (
         }
       }.recover {
         case _: RateLimitedException =>
-          logger.info("Rate limit exceeded")
+          logger.info("Rate limit exceeded calling citizen-details")
           TooManyRequests("Rate limit exceeded")
       }
     }

@@ -52,7 +52,7 @@ class LiveStartupController @Inject() (
           service.startup(verifiedNino, journeyId, shutteredStatuses).map(Ok(_))
             .recover {
               case _: RateLimitedException =>
-                logger.info("Rate limit exceeded")
+                logger.info("Rate limit exceeded calling citizen-details")
                 TooManyRequests("Rate limit exceeded")
             }
         }
